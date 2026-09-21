@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
     Builds src/main.cpp into bin/<configuration>/unittests.exe using the MSVC compiler.
 
@@ -30,6 +30,7 @@ $rootDir   = Split-Path -Parent $PSScriptRoot
 $srcDir    = Join-Path $rootDir 'src'
 $outDir    = Join-Path (Join-Path $rootDir 'bin') $Configuration.ToLowerInvariant()
 $objDir    = Join-Path $outDir 'obj'
+$ifcDir    = Join-Path $outDir 'ifc'          # compiled module interfaces (.ifc)
 $mainFile  = Join-Path $srcDir 'main.cpp'
 $exeFile   = Join-Path $outDir 'unittests.exe'
 
@@ -38,15 +39,41 @@ if (-not (Test-Path -LiteralPath $mainFile)) {
 }
 
 if ($Clean -and (Test-Path -LiteralPath $outDir)) {
-    Write-Host "Cleaning $outDir" -ForegroundColor DarkGray
+    Write-Host "Cleaning $Configuration -> $outDir" -ForegroundColor Cyan
     Remove-Item -LiteralPath $outDir -Recurse -Force
 }
 
 New-Item -ItemType Directory -Path $objDir -Force | Out-Null
+New-Item -ItemType Directory -Path $ifcDir -Force | Out-Null
+
+# ---------------------------------------------------------------------------
+# Module interface units, in build order: list a module *after* every module it
+# imports. A name maps to its source file by path, e.g.
+# 'foundation.core' -> src\foundation\core.ixx
+# ---------------------------------------------------------------------------
+$moduleNames = @(
+    'foundation.core'
+)
+
+$modules = @(
+    $moduleNames | ForEach-Object {
+        $path = Join-Path $srcDir (($_ -replace '\.', '\') + '.ixx')
+        if (-not (Test-Path -LiteralPath $path)) {
+            throw "Module '$_' listed in `$moduleNames but its source file was not found: $path"
+        }
+
+        [pscustomobject]@{
+            Name = $_
+            Path = $path
+            Obj  = Join-Path $objDir "$_.obj"
+        }
+    }
+)
 
 # ---------------------------------------------------------------------------
 # Compiler / linker options
 # ---------------------------------------------------------------------------
+# Shared by both compile phases; /Fo and /Fe are supplied per phase.
 $compilerArgs = @(
     '/nologo'
     '/std:c++20'
@@ -56,9 +83,7 @@ $compilerArgs = @(
     '/utf-8'
     '/diagnostics:caret'
     "/I$srcDir"
-    "/Fo:$objDir\"           # intermediate .obj files
     "/Fd:$objDir\unittests.pdb"
-    "/Fe:$exeFile"
 )
 
 if ($Configuration -eq 'Debug') {
@@ -70,16 +95,47 @@ else {
     $linkerArgs = @('/LTCG', '/OPT:REF', '/OPT:ICF')
 }
 
-$sourceFiles = @($mainFile)
-
 Write-Host "Building $Configuration -> $exeFile" -ForegroundColor Cyan
 
-& cl.exe @compilerArgs @sourceFiles /link @linkerArgs
-$exitCode = $LASTEXITCODE
+function Assert-CompileSucceeded {
+    param([string] $What)
 
-if ($exitCode -ne 0) {
-    Write-Host "Build FAILED (cl.exe exit code $exitCode)" -ForegroundColor Red
-    exit $exitCode
+    if ($LASTEXITCODE -ne 0) {
+        Write-Host "Build FAILED ($What, cl.exe exit code $LASTEXITCODE)" -ForegroundColor Red
+        exit $LASTEXITCODE
+    }
 }
+
+# ---------------------------------------------------------------------------
+# Phase 1: compile each module interface unit to an .ifc (consumed by importers)
+# plus an .obj (must be linked into the final executable).
+# ---------------------------------------------------------------------------
+foreach ($module in $modules) {
+    Write-Host "  module $($module.Name)" -ForegroundColor DarkGray
+
+    & cl.exe @compilerArgs `
+        '/c' `
+        '/interface' `
+        '/ifcOutput' "$ifcDir\" `
+        '/ifcSearchDir' $ifcDir `
+        "/Fo:$($module.Obj)" `
+        "/TP" $module.Path
+
+    Assert-CompileSucceeded "module $($module.Name)"
+}
+
+# ---------------------------------------------------------------------------
+# Phase 2: compile main.cpp against those interfaces and link everything.
+# ---------------------------------------------------------------------------
+$moduleObjs = @($modules | ForEach-Object { $_.Obj })
+
+& cl.exe @compilerArgs `
+    '/ifcSearchDir' $ifcDir `
+    "/Fo:$objDir\" `
+    "/Fe:$exeFile" `
+    $mainFile @moduleObjs `
+    /link @linkerArgs
+
+Assert-CompileSucceeded 'main.cpp'
 
 Write-Host "Build succeeded: $exeFile" -ForegroundColor Green

@@ -10,8 +10,7 @@
                 "Bypass",
                 "-File",
                 "${workspaceFolder}/scripts/build_unittests.ps1",
-                "Debug",
-                "-Clean"
+                "Debug"
             ],
             "options": {
                 "cwd": "${workspaceFolder}"
@@ -23,6 +22,28 @@
                 "kind": "build",
                 "isDefault": true
             },
+            "detail": "compiler: cl.exe"
+        },
+
+        {
+            "label": "Rebuild Unittests (Debug)",
+            "type": "shell",
+            "command": "powershell ",
+            "args": [
+                "-ExecutionPolicy",
+                "Bypass",
+                "-File",
+                "${workspaceFolder}/scripts/build_unittests.ps1",
+                "Debug",
+                "-Clean"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [
+                "$msCompile"
+            ],
+            "group": "build",
             "detail": "compiler: cl.exe"
         },
 
@@ -44,10 +65,7 @@
             "problemMatcher": [
                 "$msCompile"
             ],
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            },
+            "group": "build",
             "detail": "compiler: cl.exe"
         },
     ]
