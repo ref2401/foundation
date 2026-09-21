@@ -1,0 +1,14 @@
+{
+    "C_Cpp.default.compilerPath": "cl.exe",
+
+    // Keep IntelliSense out of the build outputs. It still reads bin/ifc, which
+    // the build publishes to precisely so that the two never share a file.
+    "C_Cpp.files.exclude": {
+        "**/bin/debug": true,
+        "**/bin/release": true
+    },
+    "files.watcherExclude": {
+        "**/bin/debug/**": true,
+        "**/bin/release/**": true
+    }
+}

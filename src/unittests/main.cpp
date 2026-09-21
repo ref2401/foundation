@@ -4,7 +4,6 @@ using namespace fnd;
 
 int main()
 {
-    byte_t t{10};
-    
+    byte_t t{ 10 };
     return 0;
 }
