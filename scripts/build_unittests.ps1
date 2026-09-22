@@ -32,12 +32,7 @@ $outDir    = Join-Path (Join-Path $rootDir 'bin') $Configuration.ToLowerInvarian
 $objDir    = Join-Path $outDir 'obj'
 $ifcDir    = Join-Path $outDir 'ifc'          # compiled module interfaces (.ifc)
 $asmDir    = Join-Path $outDir 'asm'          # /Fa assembly listings
-$mainFile  = Join-Path $srcDir 'main.cpp'
 $exeFile   = Join-Path $outDir 'unittests.exe'
-
-if (-not (Test-Path -LiteralPath $mainFile)) {
-    throw "Source file not found: $mainFile"
-}
 
 if ($Clean -and (Test-Path -LiteralPath $outDir)) {
     Write-Host "Cleaning $Configuration -> $outDir" -ForegroundColor Cyan
@@ -49,17 +44,33 @@ New-Item -ItemType Directory -Path $ifcDir -Force | Out-Null
 New-Item -ItemType Directory -Path $asmDir -Force | Out-Null
 
 # ---------------------------------------------------------------------------
-# Module interface units, in build order: list a module *after* every module it
-# imports. A name maps to its source file by path, e.g.
-# 'foundation.core' -> src\foundation\core.ixx
+# Module interface units, in build order: list a unit *after* every unit it
+# imports, so an interface partition comes before the primary module interface
+# unit that re-exports it.
+#
+# A name maps to its source file by path: the module name becomes a directory
+# chain under src\, and the file in it is named after the last component of the
+# module name, with the partition name -- if any -- appended.
+# 'foundation.core'           -> src\foundation\core\core.ixx
+# 'foundation.core:api_types' -> src\foundation\core\core.api_types.ixx
 # ---------------------------------------------------------------------------
 $moduleNames = @(
+    'foundation.core:api_types'
+    'foundation.core:span'
     'foundation.core'
 )
 
 $modules = @(
     $moduleNames | ForEach-Object {
-        $path = Join-Path $srcDir (($_ -replace '\.', '\') + '.ixx')
+        $moduleName, $partitionName = ($_ -split ':', 2)
+        $nameParts = $moduleName -split '\.'
+
+        $fileName = $nameParts[-1]
+        if ($partitionName) {
+            $fileName = "$fileName.$partitionName"
+        }
+
+        $path = Join-Path (Join-Path $srcDir ($nameParts -join '\')) "$fileName.ixx"
         if (-not (Test-Path -LiteralPath $path)) {
             throw "Module '$_' listed in `$moduleNames but its source file was not found: $path"
         }
@@ -67,7 +78,38 @@ $modules = @(
         [pscustomobject]@{
             Name = $_
             Path = $path
-            Obj  = Join-Path $objDir "$_.obj"
+            # ':' is not a legal character in a Windows path, so the partition
+            # separator becomes '-' -- the same spelling cl.exe uses for the .ifc.
+            Obj  = Join-Path $objDir (($_ -replace ':', '-') + '.obj')
+        }
+    }
+)
+
+# ---------------------------------------------------------------------------
+# Non-module translation units: ordinary .cpp files that are compiled and
+# linked in alongside the modules, listed by their path relative to src\.
+# Order is irrelevant here -- unlike interface units, these have no build-order
+# dependency on one another.
+# ---------------------------------------------------------------------------
+$sourceNames = @(
+    'main.cpp'
+    'foundation\core\macros.cpp'
+)
+
+$sources = @(
+    $sourceNames | ForEach-Object {
+        $path = Join-Path $srcDir $_
+        if (-not (Test-Path -LiteralPath $path)) {
+            throw "Source '$_' listed in `$sourceNames but its file was not found: $path"
+        }
+
+        [pscustomobject]@{
+            Name = $_
+            Path = $path
+            # Flatten the relative path into the .obj name so that two sources
+            # sharing a basename in different folders cannot overwrite each
+            # other in the flat obj directory.
+            Obj  = Join-Path $objDir (($_ -replace '\\', '-' -replace '\.cpp$', '') + '.obj')
         }
     }
 )
@@ -112,7 +154,9 @@ $compilerArgs = @(
 )
 
 if ($Configuration -eq 'Debug') {
-    $compilerArgs += @('/Od', '/Zi', '/MDd', '/RTC1', '/D_DEBUG')
+    # FND_DEBUG is the project's own switch, kept separate from the CRT's
+    # _DEBUG: it is what turns FND_ASSERT into a real check rather than __noop.
+    $compilerArgs += @('/Od', '/Zi', '/MDd', '/RTC1', '/D_DEBUG', '/DFND_DEBUG')
     $linkerArgs = @('/DEBUG')
 }
 else {
@@ -133,14 +177,16 @@ function Assert-CompileSucceeded {
     }
 }
 
+
 # ---------------------------------------------------------------------------
 # Phase 1: compile each module interface unit to an .ifc (consumed by importers)
-# plus an .obj (must be linked into the final executable).
+# plus an .obj (must be linked into the final executable). /interface covers the
+# primary interface unit and interface partitions alike; cl.exe derives the .ifc
+# name from the declaration inside the file, writing 'foundation.core:api_types'
+# as foundation.core-api_types.ifc, which /ifcSearchDir then resolves on its own.
 # ---------------------------------------------------------------------------
 foreach ($module in $modules) {
-    Write-Host "  module $($module.Name)" -ForegroundColor DarkGray
-
-    & cl.exe @compilerArgs `
+    cl.exe @compilerArgs `
         '/c' `
         '/interface' `
         '/ifcOutput' "$ifcDir\" `
@@ -152,59 +198,32 @@ foreach ($module in $modules) {
 }
 
 # ---------------------------------------------------------------------------
-# Publish the interfaces to bin\ifc, the directory .vscode\c_cpp_properties.json
-# points IntelliSense at via /ifcSearchDir.
-#
-# cpptools holds a handle on every .ifc it resolves an 'import' against, so
-# pointing it straight at bin\<config>\ifc makes cl.exe fail with C3474 the next
-# time it rewrites one. Giving it its own copy keeps the two apart: a locked
-# copy costs IntelliSense a window reload, never the build.
-#
-# Debug only -- the IntelliSense configuration defines _DEBUG, so Release
-# interfaces would not match what the editor thinks it is compiling.
+# Phase 2: compile the non-module translation units. They run after phase 1 and
+# are given /ifcSearchDir, so a .cpp here is free to 'import foundation.core'
+# as well as to #include a header.
 # ---------------------------------------------------------------------------
-if ($Configuration -eq 'Debug') {
-    $ideIfcDir = Join-Path (Join-Path $rootDir 'bin') 'ifc'
-    New-Item -ItemType Directory -Path $ideIfcDir -Force | Out-Null
+foreach ($source in $sources) {
+    cl.exe @compilerArgs `
+        '/c' `
+        '/ifcSearchDir' $ifcDir `
+        "/Fo:$($source.Obj)" `
+        $source.Path
 
-    $lockedIfcs = @()
-    foreach ($ifc in Get-ChildItem -LiteralPath $ifcDir -Filter '*.ifc') {
-        $copy = Join-Path $ideIfcDir $ifc.Name
-
-        # cl.exe emits byte-identical interfaces for unchanged sources, so an
-        # equal hash means the copy is already current and the lock is harmless.
-        if (Test-Path -LiteralPath $copy) {
-            $current = (Get-FileHash -LiteralPath $ifc.FullName -Algorithm SHA256).Hash
-            if ($current -eq (Get-FileHash -LiteralPath $copy -Algorithm SHA256).Hash) {
-                continue
-            }
-        }
-
-        try {
-            Copy-Item -LiteralPath $ifc.FullName -Destination $copy -Force -ErrorAction Stop
-        }
-        catch {
-            $lockedIfcs += $ifc.Name
-        }
-    }
-
-    if ($lockedIfcs.Count -gt 0) {
-        Write-Host ("  {0} changed but IntelliSense is holding it - run 'Developer: Reload Window' to pick it up" -f ($lockedIfcs -join ', ')) -ForegroundColor Yellow
-    }
+    Assert-CompileSucceeded $source.Name
 }
 
 # ---------------------------------------------------------------------------
-# Phase 2: compile main.cpp against those interfaces and link everything.
+# Phase 3: compile main.cpp against those interfaces and link everything.
 # ---------------------------------------------------------------------------
 $moduleObjs = @($modules | ForEach-Object { $_.Obj })
+$sourceObjs = @($sources | ForEach-Object { $_.Obj })
 
-& cl.exe @compilerArgs `
+cl.exe @compilerArgs `
     '/ifcSearchDir' $ifcDir `
     "/Fo:$objDir\" `
     "/Fe:$exeFile" `
-    $mainFile @moduleObjs `
+    @moduleObjs @sourceObjs `
     /link @linkerArgs
-
-Assert-CompileSucceeded 'main.cpp'
+Assert-CompileSucceeded 'Link'
 
 Write-Host "Build succeeded: $exeFile" -ForegroundColor Green
