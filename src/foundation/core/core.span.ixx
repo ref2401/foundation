@@ -25,15 +25,15 @@ struct span_t final {
 };
 
 export template<typename T>
-constexpr bool operator==(const span_t<T> lhs, const span_t<T> rhs)
+constexpr bool operator==(const span_t<T> a, const span_t<T> b)
 {
-    return lhs.ptr == rhs.ptr && lhs.count == rhs.count;
+    return a.ptr == b.ptr && a.count == b.count;
 }
 
 export template<typename T>
-constexpr bool operator!=(const span_t<T> lhs, const span_t<T> rhs)
+constexpr bool operator!=(const span_t<T> a, const span_t<T> b)
 {
-    return !(lhs == rhs);
+    return !(a == b);
 }
 
 export template<typename T>

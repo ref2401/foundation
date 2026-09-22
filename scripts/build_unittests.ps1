@@ -44,43 +44,36 @@ New-Item -ItemType Directory -Path $ifcDir -Force | Out-Null
 New-Item -ItemType Directory -Path $asmDir -Force | Out-Null
 
 # ---------------------------------------------------------------------------
-# Module interface units, in build order: list a unit *after* every unit it
-# imports, so an interface partition comes before the primary module interface
-# unit that re-exports it.
+# Module interface units, listed by their path relative to src\ just like the
+# .cpp sources below. cl.exe reads the module name out of the file itself and
+# names the .ifc after it, so the script never needs to know that name -- which
+# leaves the layout on disk free of any naming rule, partitions included.
 #
-# A name maps to its source file by path: the module name becomes a directory
-# chain under src\, and the file in it is named after the last component of the
-# module name, with the partition name -- if any -- appended.
-# 'foundation.core'           -> src\foundation\core\core.ixx
-# 'foundation.core:api_types' -> src\foundation\core\core.api_types.ixx
+# Order matters here, unlike for the sources: list a unit *after* every unit it
+# imports, so an interface partition comes before the primary interface unit
+# that re-exports it, and a module comes before anything that imports it.
 # ---------------------------------------------------------------------------
 $moduleNames = @(
-    'foundation.core:api_types'
-    'foundation.core:span'
-    'foundation.core'
+    'foundation\core\core.api_types.ixx'
+    'foundation\core\core.span.ixx'
+    'foundation\core\core.ixx'
+    'unittests\core\unittests.core.ixx'
 )
 
 $modules = @(
     $moduleNames | ForEach-Object {
-        $moduleName, $partitionName = ($_ -split ':', 2)
-        $nameParts = $moduleName -split '\.'
-
-        $fileName = $nameParts[-1]
-        if ($partitionName) {
-            $fileName = "$fileName.$partitionName"
-        }
-
-        $path = Join-Path (Join-Path $srcDir ($nameParts -join '\')) "$fileName.ixx"
+        $path = Join-Path $srcDir $_
         if (-not (Test-Path -LiteralPath $path)) {
-            throw "Module '$_' listed in `$moduleNames but its source file was not found: $path"
+            throw "Module '$_' listed in `$moduleNames but its file was not found: $path"
         }
 
         [pscustomobject]@{
             Name = $_
             Path = $path
-            # ':' is not a legal character in a Windows path, so the partition
-            # separator becomes '-' -- the same spelling cl.exe uses for the .ifc.
-            Obj  = Join-Path $objDir (($_ -replace ':', '-') + '.obj')
+            # Flatten the relative path into the .obj name so that two units
+            # sharing a basename in different folders cannot overwrite each
+            # other in the flat obj directory.
+            Obj  = Join-Path $objDir (($_ -replace '\\', '-' -replace '\.ixx$', '') + '.obj')
         }
     }
 )
@@ -92,8 +85,9 @@ $modules = @(
 # dependency on one another.
 # ---------------------------------------------------------------------------
 $sourceNames = @(
-    'main.cpp'
     'foundation\core\macros.cpp'
+    'foundation\unittests.cpp'
+    'unittests\main.cpp'
 )
 
 $sources = @(

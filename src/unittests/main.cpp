@@ -1,9 +1,8 @@
-import foundation.core;
-
-using namespace fnd;
+import unittests.core;
 
 int main()
 {
-    byte_t t{ 10 };
+    fnd::unittests::run_unittests_core();
+
     return 0;
 }
