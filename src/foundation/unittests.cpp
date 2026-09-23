@@ -1,24 +1,57 @@
 #include "foundation/unittests.h"
 
 #include <stdio.h>
-#include <windows.h>
 
-namespace fnd {
+namespace fnd::unittests {
 
-void test_true(
-    const bool condition, const char_t* const message, 
-    const source_location_t srcloc)
+namespace {
+
+ulong_t g_total_unittest_count{0};
+ulong_t g_failed_unittest_count{0};
+
+
+} // namespace
+
+void initialize()
 {
-    if (condition) return;
-
-    constexpr uint_t kMessageBufferByteCount{2048};
-    char_t message_buffer[kMessageBufferByteCount];
-
-    snprintf(
-        message_buffer, kMessageBufferByteCount, 
-        "[Unittest '%s' failed]: \"%s\"; %s(%u)\n", srcloc.function_name, message,
-        srcloc.filename, srcloc.line);
-    OutputDebugStringA(message_buffer);
+    g_total_unittest_count = 0;
+    g_failed_unittest_count = 0;
 }
 
-} // namespace fnd
+bool have_all_passed()
+{
+    return g_total_unittest_count > 0 && g_failed_unittest_count == 0;
+}
+
+void print_last_run_report()
+{
+    if (g_total_unittest_count == 0) {
+        fputs("No unittests were run\n", stdout);
+        return;
+    }
+
+    const char* const message = have_all_passed()
+        ? "All unittests have passed" 
+        : "Not all unittests have passed";
+    
+    const ulong_t num = g_total_unittest_count - g_failed_unittest_count;
+    fprintf_s(
+        stdout, "%s: %llu/%llu\n", message, num, g_total_unittest_count);
+}
+
+void test_true(
+    const bool condition, const char_t* const condition_text, 
+    const source_location_t srcloc)
+{
+    ++g_total_unittest_count;
+
+    if (condition) return;
+
+    ++g_failed_unittest_count;
+    fprintf_s(
+        stdout,
+        "%s(%u): unittest failed in '%s'. \"%s\"\n", srcloc.filename, 
+        srcloc.line, srcloc.function_name, condition_text);
+}
+
+} // namespace fnd::unittests
