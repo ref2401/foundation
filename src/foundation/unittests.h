@@ -5,6 +5,8 @@ import foundation.core;
 #define FND_TEST_TRUE(condition) \
     fnd::unittests::test_true((condition), #condition, fnd::make_source_location())
 
+#define FND_TEST_FALSE(condition) FND_TEST_TRUE(!(condition))
+
 
 namespace fnd::unittests {
 

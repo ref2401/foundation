@@ -4,6 +4,10 @@ export import :span;
 
 namespace fnd {
 
+export template <typename T>
+concept PodType = 
+    __is_standard_layout(T) && __is_trivially_copyable(T);
+
 // ---------------------------------------------------------------------------
 // source_location_t
 // ---------------------------------------------------------------------------

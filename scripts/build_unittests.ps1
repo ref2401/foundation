@@ -57,6 +57,7 @@ $moduleNames = @(
     'foundation\core\core.api_types.ixx'
     'foundation\core\core.span.ixx'
     'foundation\core\core.ixx'
+    'unittests\core\unittests.core.span.ixx'
     'unittests\core\unittests.core.ixx'
 )
 
