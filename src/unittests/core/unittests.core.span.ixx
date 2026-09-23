@@ -16,10 +16,10 @@ void unittests_span_t_equality_operator()
     const span_t<const uint_t> span{expected_pointer, kExpectedCount};
     const span_t<const uint_t> span_copy{span};
 
-    FND_TEST_TRUE((span != span_t<const uint_t>{nullptr, kExpectedCount}));
-    FND_TEST_TRUE((span != span_t{expected_pointer, 16}));
-    FND_TEST_TRUE((span == span_copy));
-    FND_TEST_FALSE((span != span_copy));
+    FND_TEST_TRUE(span != span_t<const uint_t>{nullptr, kExpectedCount});
+    FND_TEST_TRUE(span != span_t{expected_pointer, 16});
+    FND_TEST_TRUE(span == span_copy);
+    FND_TEST_FALSE(span != span_copy);
 }
 
 void unittests_span_t_is_empty()

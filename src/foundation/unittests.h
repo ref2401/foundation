@@ -2,10 +2,10 @@
 import foundation.core;
 
 
-#define FND_TEST_TRUE(condition) \
-    fnd::unittests::test_true((condition), #condition, fnd::make_source_location())
+#define FND_TEST_TRUE(...) \
+    fnd::unittests::test_true((__VA_ARGS__), #__VA_ARGS__, fnd::make_source_location())
 
-#define FND_TEST_FALSE(condition) FND_TEST_TRUE(!(condition))
+#define FND_TEST_FALSE(...) FND_TEST_TRUE(!(__VA_ARGS__))
 
 
 namespace fnd::unittests {
