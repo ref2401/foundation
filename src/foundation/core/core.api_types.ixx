@@ -294,4 +294,14 @@ export FND_INLINE double_t fmod(const double_t x, const double_t y)
     return ::fmod(x, y);
 }
 
+export FND_INLINE float_t modf(const float_t x, float_t& integer)
+{
+    return ::modff(x, &integer);
+}
+
+export FND_INLINE double_t modf(const double_t x, double_t& integer)
+{
+    return ::modf(x, &integer);
+}
+
 } // namespace fnd

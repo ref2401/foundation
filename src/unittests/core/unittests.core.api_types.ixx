@@ -630,6 +630,68 @@ void unittests_core_api_types_fmod_double()
     FND_TEST_TRUE(isnan(fmod(1.0, kDoubleNaN)));
 }
 
+void unittests_core_api_types_modf_float()
+{
+    float_t integer;
+
+    // Both parts have the sign of x.
+    FND_TEST_TRUE(modf(3.75f, integer) == 0.75f);
+    FND_TEST_TRUE(integer == 3.0f);
+    FND_TEST_TRUE(modf(-3.75f, integer) == -0.75f);
+    FND_TEST_TRUE(integer == -3.0f);
+    FND_TEST_TRUE(modf(2.0f, integer) == 0.0f);
+    FND_TEST_TRUE(integer == 2.0f);
+    FND_TEST_TRUE(modf(-2.0f, integer) == 0.0f);
+    FND_TEST_TRUE(integer == -2.0f);
+    FND_TEST_TRUE(modf(0.5f, integer) == 0.5f);
+    FND_TEST_TRUE(integer == 0.0f);
+    FND_TEST_TRUE(modf(-0.5f, integer) == -0.5f);
+    FND_TEST_TRUE(integer == 0.0f);
+    FND_TEST_TRUE(modf(0.0f, integer) == 0.0f);
+    FND_TEST_TRUE(integer == 0.0f);
+    FND_TEST_TRUE(modf(kFloatMinSubnormal, integer) == kFloatMinSubnormal);
+    FND_TEST_TRUE(integer == 0.0f);
+    FND_TEST_TRUE(modf(kFloatMaxValue, integer) == 0.0f);
+    FND_TEST_TRUE(integer == kFloatMaxValue);
+    FND_TEST_TRUE(modf(kFloatInfinity, integer) == 0.0f);
+    FND_TEST_TRUE(integer == kFloatInfinity);
+    FND_TEST_TRUE(modf(-kFloatInfinity, integer) == 0.0f);
+    FND_TEST_TRUE(integer == -kFloatInfinity);
+    FND_TEST_TRUE(isnan(modf(kFloatNaN, integer)));
+    FND_TEST_TRUE(isnan(integer));
+}
+
+void unittests_core_api_types_modf_double()
+{
+    double_t integer;
+
+    // Both parts have the sign of x.
+    FND_TEST_TRUE(modf(3.75, integer) == 0.75);
+    FND_TEST_TRUE(integer == 3.0);
+    FND_TEST_TRUE(modf(-3.75, integer) == -0.75);
+    FND_TEST_TRUE(integer == -3.0);
+    FND_TEST_TRUE(modf(2.0, integer) == 0.0);
+    FND_TEST_TRUE(integer == 2.0);
+    FND_TEST_TRUE(modf(-2.0, integer) == 0.0);
+    FND_TEST_TRUE(integer == -2.0);
+    FND_TEST_TRUE(modf(0.5, integer) == 0.5);
+    FND_TEST_TRUE(integer == 0.0);
+    FND_TEST_TRUE(modf(-0.5, integer) == -0.5);
+    FND_TEST_TRUE(integer == 0.0);
+    FND_TEST_TRUE(modf(0.0, integer) == 0.0);
+    FND_TEST_TRUE(integer == 0.0);
+    FND_TEST_TRUE(modf(kDoubleMinSubnormal, integer) == kDoubleMinSubnormal);
+    FND_TEST_TRUE(integer == 0.0);
+    FND_TEST_TRUE(modf(kDoubleMaxValue, integer) == 0.0);
+    FND_TEST_TRUE(integer == kDoubleMaxValue);
+    FND_TEST_TRUE(modf(kDoubleInfinity, integer) == 0.0);
+    FND_TEST_TRUE(integer == kDoubleInfinity);
+    FND_TEST_TRUE(modf(-kDoubleInfinity, integer) == 0.0);
+    FND_TEST_TRUE(integer == -kDoubleInfinity);
+    FND_TEST_TRUE(isnan(modf(kDoubleNaN, integer)));
+    FND_TEST_TRUE(isnan(integer));
+}
+
 void unittests_core_api_types()
 {
     unittests_core_api_type_definitions();
@@ -676,6 +738,8 @@ void unittests_core_api_types()
     unittests_core_api_types_trunc_double();
     unittests_core_api_types_fmod_float();
     unittests_core_api_types_fmod_double();
+    unittests_core_api_types_modf_float();
+    unittests_core_api_types_modf_double();
 }
 
 } // namespace fnd::unittests
