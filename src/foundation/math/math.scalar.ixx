@@ -9,7 +9,7 @@ export import foundation.core;
 namespace fnd {
 
 // ---------------------------------------------------------------------------
-// abs
+// Abs
 // ---------------------------------------------------------------------------
 
 // NOTE:
@@ -56,6 +56,90 @@ export FND_INLINE float_t abs(const float_t x)
 export FND_INLINE double_t abs(const double_t x)
 {
     return ::fabs(x);
+}
+
+// ---------------------------------------------------------------------------
+// Comparison
+// ---------------------------------------------------------------------------
+
+export FND_INLINE bool approx_equal(
+    const float_t a, const float_t b, const float_t max_abs_diff = 1e-5f)
+{
+    return abs(a - b) <= max_abs_diff;
+}
+
+// ---------------------------------------------------------------------------
+// Trigonometry
+// ---------------------------------------------------------------------------
+
+export FND_INLINE float_t acos(const float_t x)
+{
+    return ::acosf(x);
+}
+
+export FND_INLINE double_t acos(const double_t x)
+{
+    return ::acos(x);
+}
+
+export FND_INLINE float_t asin(const float_t x)
+{
+    return ::asinf(x);
+}
+
+export FND_INLINE double_t asin(const double_t x)
+{
+    return ::asin(x);
+}
+
+export FND_INLINE float_t atan(const float_t x)
+{
+    return ::atanf(x);
+}
+
+export FND_INLINE double_t atan(const double_t x)
+{
+    return ::atan(x);
+}
+
+export FND_INLINE float_t atan2(const float_t y, const float_t x)
+{
+    return ::atan2f(y, x);
+}
+
+export FND_INLINE double_t atan2(const double_t y, const double_t x)
+{
+    return ::atan2(y, x);
+}
+
+export FND_INLINE float_t cos(const float_t x)
+{
+    return ::cosf(x);
+}
+
+export FND_INLINE double_t cos(const double_t x)
+{
+    return ::cos(x);
+}
+
+export FND_INLINE float_t sin(const float_t x)
+{
+    return ::sinf(x);
+}
+
+export FND_INLINE double_t sin(const double_t x)
+{
+    return ::sin(x);
+}
+
+export FND_INLINE float_t tan(const float_t x)
+{
+    return ::tanf(x);
+}
+
+export FND_INLINE double_t tan(const double_t x)
+{
+    return ::tan(x);
 }
 
 } // namespace fnd

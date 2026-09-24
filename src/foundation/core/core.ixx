@@ -1,5 +1,6 @@
 export module foundation.core;
 export import :api_types;
+export import :bits;
 export import :span;
 
 namespace fnd {
