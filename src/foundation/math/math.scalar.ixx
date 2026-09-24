@@ -155,4 +155,180 @@ export FND_INLINE double_t tan(const double_t x)
     return ::tan(x);
 }
 
+export FND_INLINE float_t saturate(const float_t x)
+{
+    return clamp(x, 0.0f, 1.0f);
+}
+
+export FND_INLINE double_t saturate(const double_t x)
+{
+    return clamp(x, 0.0, 1.0);
+}
+
+export FND_INLINE float_t lerp(
+    const float_t a, const float_t b, const float_t t)
+{
+    // NOTE: Unclamped t outside [0, 1] extrapolates.
+    return a + t * (b - a);
+}
+
+export FND_INLINE double_t lerp(
+    const double_t a, const double_t b, const double_t t)
+{
+    return a + t * (b - a);
+}
+
+export FND_INLINE float_t smoothstep(
+    const float_t edge0, const float_t edge1, const float_t x)
+{
+    FND_ASSERT(edge0 != edge1);
+    
+    const float_t t = saturate((x - edge0) / (edge1 - edge0));
+    return t * t * (3.0f - 2.0f * t);
+}
+
+export FND_INLINE double_t smoothstep(
+    const double_t edge0, const double_t edge1, const double_t x)
+{
+    FND_ASSERT(edge0 != edge1);
+
+    const double_t t = saturate((x - edge0) / (edge1 - edge0));
+    return t * t * (3.0 - 2.0 * t);
+}
+
+export FND_INLINE float_t pow(const float_t x, const float_t y)
+{
+    return ::powf(x, y);
+}
+
+export FND_INLINE double_t pow(const double_t x, const double_t y)
+{
+    return ::pow(x, y);
+}
+
+export FND_INLINE float_t rcp(const float_t x)
+{
+    FND_ASSERT(x != 0);
+    FND_ASSERT(!isnan(x));
+
+    return 1.0f / x;
+}
+
+export FND_INLINE double_t rcp(const double_t x)
+{
+    FND_ASSERT(x != 0);
+    FND_ASSERT(!isnan(x));
+
+    return 1.0 / x;
+}
+
+export FND_INLINE float_t sqrt(const float_t x)
+{
+    FND_ASSERT(x >= 0);
+
+    return ::sqrtf(x);
+}
+
+export FND_INLINE double_t sqrt(const double_t x)
+{
+    FND_ASSERT(x >= 0);
+
+    return ::sqrt(x);
+}
+
+export FND_INLINE float_t rsqrt(const float_t x)
+{
+    FND_ASSERT(x > 0);
+
+    return 1.0f / ::sqrtf(x);
+}
+
+export FND_INLINE double_t rsqrt(const double_t x)
+{
+    FND_ASSERT(x > 0);
+
+    return 1.0 / ::sqrt(x);
+}
+
+export FND_INLINE float_t exp(const float_t x)
+{
+    return ::expf(x);
+}
+
+export FND_INLINE double_t exp(const double_t x)
+{
+    return ::exp(x);
+}
+
+export FND_INLINE float_t exp2(const float_t x)
+{
+    return ::exp2f(x);
+}
+
+export FND_INLINE double_t exp2(const double_t x)
+{
+    return ::exp2(x);
+}
+
+export FND_INLINE float_t log(const float_t x)
+{
+    FND_ASSERT(x > 0);
+
+    return ::logf(x);
+}
+
+export FND_INLINE double_t log(const double_t x)
+{
+    FND_ASSERT(x > 0);
+
+    return ::log(x);
+}
+
+export FND_INLINE float_t log2(const float_t x)
+{
+    FND_ASSERT(x > 0);
+
+    return ::log2f(x);
+}
+
+export FND_INLINE double_t log2(const double_t x)
+{
+    FND_ASSERT(x > 0);
+
+    return ::log2(x);
+}
+
+export FND_INLINE float_t log10(const float_t x)
+{
+    FND_ASSERT(x > 0);
+
+    return ::log10f(x);
+}
+
+export FND_INLINE double_t log10(const double_t x)
+{
+    FND_ASSERT(x > 0);
+
+    return ::log10(x);
+}
+
+// Fractional part of |x|, in [0, 1). fracional(+-inf) is 0 and fracional(NaN) is NaN.
+export FND_INLINE float_t fracional(const float_t x)
+{
+    // NOTE:
+    // Not implemented as x - floor(x), because that returns 1 for tiny negative x. 
+    // For x = -1e-10f, floor(x) is -1, and x + 1 is 0.9999999999.
+    // That value doesn't fit in a float: the float just below 1 is 0.99999994f
+    // (1 - 2^-24), and 1.0f is closer, so the result rounds to 1.
+
+    float_t integer;
+    return abs(modf(x, integer));
+}
+
+export FND_INLINE double_t fracional(const double_t x)
+{
+    double_t integer;
+    return abs(modf(x, integer));
+}
+
 } // namespace fnd
