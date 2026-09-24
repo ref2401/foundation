@@ -1,13 +1,16 @@
 #include "foundation/core/macros.h"
 #include "foundation/unittests.h"
 import unittests.core;
-
+import unittests.math;
 
 int main()
 {
-    fnd::unittests::initialize();
-    fnd::unittests::run_unittests_core();
-    fnd::unittests::print_last_run_report();
+    using namespace fnd::unittests;
 
-    return fnd::unittests::have_all_passed() ? 0 : 1;
+    initialize();
+    run_unittests_core();
+    run_unittests_math();
+    print_last_run_report();
+
+    return have_all_passed() ? 0 : 1;
 }

@@ -18,6 +18,8 @@
     #define FND_ASSERT(condition) __noop(condition)
 #endif // defined(FND_DEBUG)
 
+#define FND_INLINE
+
 
 namespace fnd {
 

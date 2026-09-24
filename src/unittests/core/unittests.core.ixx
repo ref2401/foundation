@@ -32,6 +32,7 @@ void unittests_core_api_types()
     static_assert(long_t{-1} < long_t{0}, "long_t must be signed");
     // float
     static_assert(sizeof(float_t) == 4, "float_t must be 4 bytes");
+    static_assert(sizeof(double_t) == 8, "float_t must be 8 bytes");
 
     // ubyte_t
     static_assert(sizeof(ubyte_t) == 1, "ubyte_t must be 1 byte");
