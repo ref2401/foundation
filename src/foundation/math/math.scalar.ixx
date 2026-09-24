@@ -65,7 +65,20 @@ export FND_INLINE double_t abs(const double_t x)
 export FND_INLINE bool approx_equal(
     const float_t a, const float_t b, const float_t max_abs_diff = 1e-5f)
 {
-    return abs(a - b) <= max_abs_diff;
+    FND_ASSERT(max_abs_diff >= 0);
+
+    // NOTE:
+    // inf - inf is NaN, and abs(NaN) <= max_abs_diff is false. 
+    // Checking exact equality first makes approx_equal(inf, inf) true.
+    return a == b || abs(a - b) <= max_abs_diff;
+}
+
+export FND_INLINE bool approx_equal(
+    const double_t a, const double_t b, const double_t max_abs_diff = 1e-5)
+{
+    FND_ASSERT(max_abs_diff >= 0);
+
+    return a == b || abs(a - b) <= max_abs_diff;
 }
 
 // ---------------------------------------------------------------------------
