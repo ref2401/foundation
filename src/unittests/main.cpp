@@ -1,10 +1,12 @@
 #include "foundation/core/macros.h"
 #include "foundation/unittests.h"
+import foundation.core;
 import unittests.core;
 import unittests.math;
 
 int main()
 {
+    using namespace fnd;
     using namespace fnd::unittests;
 
     initialize();

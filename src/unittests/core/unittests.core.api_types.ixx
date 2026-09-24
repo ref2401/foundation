@@ -159,6 +159,280 @@ void unittests_core_api_types_isnan_double()
     FND_TEST_FALSE(isnan(-kDoubleInfinity));
 }
 
+// ---------------------------------------------------------------------------
+// min, max, clamp
+// ---------------------------------------------------------------------------
+
+void unittests_core_api_types_min_byte()
+{
+    static_assert(min(byte_t{1}, byte_t{2}) == 1);
+    static_assert(min(byte_t{2}, byte_t{1}) == 1);
+    static_assert(min(byte_t{-1}, byte_t{1}) == -1);
+    static_assert(min(byte_t{5}, byte_t{5}) == 5);
+    static_assert(min(kByteMinValue, kByteMaxValue) == kByteMinValue);
+    static_assert(min(kByteMaxValue, kByteMinValue) == kByteMinValue);
+}
+
+void unittests_core_api_types_min_int()
+{
+    static_assert(min(int_t{1}, int_t{2}) == 1);
+    static_assert(min(int_t{2}, int_t{1}) == 1);
+    static_assert(min(int_t{-1}, int_t{1}) == -1);
+    static_assert(min(int_t{5}, int_t{5}) == 5);
+    static_assert(min(kIntMinValue, kIntMaxValue) == kIntMinValue);
+    static_assert(min(kIntMaxValue, kIntMinValue) == kIntMinValue);
+}
+
+void unittests_core_api_types_min_long()
+{
+    static_assert(min(long_t{1}, long_t{2}) == 1);
+    static_assert(min(long_t{2}, long_t{1}) == 1);
+    static_assert(min(long_t{-1}, long_t{1}) == -1);
+    static_assert(min(long_t{5}, long_t{5}) == 5);
+    static_assert(min(kLongMinValue, kLongMaxValue) == kLongMinValue);
+    static_assert(min(kLongMaxValue, kLongMinValue) == kLongMinValue);
+}
+
+void unittests_core_api_types_min_ubyte()
+{
+    static_assert(min(ubyte_t{1}, ubyte_t{2}) == 1);
+    static_assert(min(ubyte_t{2}, ubyte_t{1}) == 1);
+    static_assert(min(ubyte_t{5}, ubyte_t{5}) == 5);
+    static_assert(min(kUByteMinValue, kUByteMaxValue) == kUByteMinValue);
+    static_assert(min(kUByteMaxValue, kUByteMinValue) == kUByteMinValue);
+}
+
+void unittests_core_api_types_min_uint()
+{
+    static_assert(min(uint_t{1}, uint_t{2}) == 1);
+    static_assert(min(uint_t{2}, uint_t{1}) == 1);
+    static_assert(min(uint_t{5}, uint_t{5}) == 5);
+    static_assert(min(kUIntMinValue, kUIntMaxValue) == kUIntMinValue);
+    static_assert(min(kUIntMaxValue, kUIntMinValue) == kUIntMinValue);
+}
+
+void unittests_core_api_types_min_ulong()
+{
+    static_assert(min(ulong_t{1}, ulong_t{2}) == 1);
+    static_assert(min(ulong_t{2}, ulong_t{1}) == 1);
+    static_assert(min(ulong_t{5}, ulong_t{5}) == 5);
+    static_assert(min(kULongMinValue, kULongMaxValue) == kULongMinValue);
+    static_assert(min(kULongMaxValue, kULongMinValue) == kULongMinValue);
+}
+
+void unittests_core_api_types_min_float()
+{
+    FND_TEST_TRUE(min(1.0f, 2.0f) == 1.0f);
+    FND_TEST_TRUE(min(2.0f, 1.0f) == 1.0f);
+    FND_TEST_TRUE(min(-1.0f, 1.0f) == -1.0f);
+    FND_TEST_TRUE(min(5.0f, 5.0f) == 5.0f);
+    FND_TEST_TRUE(min(kFloatMinValue, kFloatMaxValue) == kFloatMinValue);
+    FND_TEST_TRUE(min(-kFloatInfinity, 1.0f) == -kFloatInfinity);
+    FND_TEST_TRUE(min(kFloatInfinity, 1.0f) == 1.0f);
+    // Comparison based: if either argument is NaN, the second one is returned.
+    FND_TEST_TRUE(min(kFloatNaN, 1.0f) == 1.0f);
+    FND_TEST_TRUE(min(1.0f, kFloatNaN) == 1.0f);
+    FND_TEST_TRUE(isnan(min(kFloatNaN, kFloatNaN)));
+}
+
+void unittests_core_api_types_min_double()
+{
+    FND_TEST_TRUE(min(1.0, 2.0) == 1.0);
+    FND_TEST_TRUE(min(2.0, 1.0) == 1.0);
+    FND_TEST_TRUE(min(-1.0, 1.0) == -1.0);
+    FND_TEST_TRUE(min(5.0, 5.0) == 5.0);
+    FND_TEST_TRUE(min(kDoubleMinValue, kDoubleMaxValue) == kDoubleMinValue);
+    FND_TEST_TRUE(min(-kDoubleInfinity, 1.0) == -kDoubleInfinity);
+    FND_TEST_TRUE(min(kDoubleInfinity, 1.0) == 1.0);
+    // Comparison based: if either argument is NaN, the second one is returned.
+    FND_TEST_TRUE(min(kDoubleNaN, 1.0) == 1.0);
+    FND_TEST_TRUE(min(1.0, kDoubleNaN) == 1.0);
+    FND_TEST_TRUE(isnan(min(kDoubleNaN, kDoubleNaN)));
+}
+
+void unittests_core_api_types_max_byte()
+{
+    static_assert(max(byte_t{1}, byte_t{2}) == 2);
+    static_assert(max(byte_t{2}, byte_t{1}) == 2);
+    static_assert(max(byte_t{-1}, byte_t{1}) == 1);
+    static_assert(max(byte_t{5}, byte_t{5}) == 5);
+    static_assert(max(kByteMinValue, kByteMaxValue) == kByteMaxValue);
+    static_assert(max(kByteMaxValue, kByteMinValue) == kByteMaxValue);
+}
+
+void unittests_core_api_types_max_int()
+{
+    static_assert(max(int_t{1}, int_t{2}) == 2);
+    static_assert(max(int_t{2}, int_t{1}) == 2);
+    static_assert(max(int_t{-1}, int_t{1}) == 1);
+    static_assert(max(int_t{5}, int_t{5}) == 5);
+    static_assert(max(kIntMinValue, kIntMaxValue) == kIntMaxValue);
+    static_assert(max(kIntMaxValue, kIntMinValue) == kIntMaxValue);
+}
+
+void unittests_core_api_types_max_long()
+{
+    static_assert(max(long_t{1}, long_t{2}) == 2);
+    static_assert(max(long_t{2}, long_t{1}) == 2);
+    static_assert(max(long_t{-1}, long_t{1}) == 1);
+    static_assert(max(long_t{5}, long_t{5}) == 5);
+    static_assert(max(kLongMinValue, kLongMaxValue) == kLongMaxValue);
+    static_assert(max(kLongMaxValue, kLongMinValue) == kLongMaxValue);
+}
+
+void unittests_core_api_types_max_ubyte()
+{
+    static_assert(max(ubyte_t{1}, ubyte_t{2}) == 2);
+    static_assert(max(ubyte_t{2}, ubyte_t{1}) == 2);
+    static_assert(max(ubyte_t{5}, ubyte_t{5}) == 5);
+    static_assert(max(kUByteMinValue, kUByteMaxValue) == kUByteMaxValue);
+    static_assert(max(kUByteMaxValue, kUByteMinValue) == kUByteMaxValue);
+}
+
+void unittests_core_api_types_max_uint()
+{
+    static_assert(max(uint_t{1}, uint_t{2}) == 2);
+    static_assert(max(uint_t{2}, uint_t{1}) == 2);
+    static_assert(max(uint_t{5}, uint_t{5}) == 5);
+    static_assert(max(kUIntMinValue, kUIntMaxValue) == kUIntMaxValue);
+    static_assert(max(kUIntMaxValue, kUIntMinValue) == kUIntMaxValue);
+}
+
+void unittests_core_api_types_max_ulong()
+{
+    static_assert(max(ulong_t{1}, ulong_t{2}) == 2);
+    static_assert(max(ulong_t{2}, ulong_t{1}) == 2);
+    static_assert(max(ulong_t{5}, ulong_t{5}) == 5);
+    static_assert(max(kULongMinValue, kULongMaxValue) == kULongMaxValue);
+    static_assert(max(kULongMaxValue, kULongMinValue) == kULongMaxValue);
+}
+
+void unittests_core_api_types_max_float()
+{
+    FND_TEST_TRUE(max(1.0f, 2.0f) == 2.0f);
+    FND_TEST_TRUE(max(2.0f, 1.0f) == 2.0f);
+    FND_TEST_TRUE(max(-1.0f, 1.0f) == 1.0f);
+    FND_TEST_TRUE(max(5.0f, 5.0f) == 5.0f);
+    FND_TEST_TRUE(max(kFloatMinValue, kFloatMaxValue) == kFloatMaxValue);
+    FND_TEST_TRUE(max(kFloatInfinity, 1.0f) == kFloatInfinity);
+    FND_TEST_TRUE(max(-kFloatInfinity, 1.0f) == 1.0f);
+    // Comparison based: if either argument is NaN, the second one is returned.
+    FND_TEST_TRUE(max(kFloatNaN, 1.0f) == 1.0f);
+    FND_TEST_TRUE(max(1.0f, kFloatNaN) == 1.0f);
+    FND_TEST_TRUE(isnan(max(kFloatNaN, kFloatNaN)));
+}
+
+void unittests_core_api_types_max_double()
+{
+    FND_TEST_TRUE(max(1.0, 2.0) == 2.0);
+    FND_TEST_TRUE(max(2.0, 1.0) == 2.0);
+    FND_TEST_TRUE(max(-1.0, 1.0) == 1.0);
+    FND_TEST_TRUE(max(5.0, 5.0) == 5.0);
+    FND_TEST_TRUE(max(kDoubleMinValue, kDoubleMaxValue) == kDoubleMaxValue);
+    FND_TEST_TRUE(max(kDoubleInfinity, 1.0) == kDoubleInfinity);
+    FND_TEST_TRUE(max(-kDoubleInfinity, 1.0) == 1.0);
+    // Comparison based: if either argument is NaN, the second one is returned.
+    FND_TEST_TRUE(max(kDoubleNaN, 1.0) == 1.0);
+    FND_TEST_TRUE(max(1.0, kDoubleNaN) == 1.0);
+    FND_TEST_TRUE(isnan(max(kDoubleNaN, kDoubleNaN)));
+}
+
+void unittests_core_api_types_clamp_byte()
+{
+    static_assert(clamp(byte_t{5}, byte_t{-10}, byte_t{10}) == 5);
+    static_assert(clamp(byte_t{-20}, byte_t{-10}, byte_t{10}) == -10);
+    static_assert(clamp(byte_t{20}, byte_t{-10}, byte_t{10}) == 10);
+    static_assert(clamp(byte_t{-10}, byte_t{-10}, byte_t{10}) == -10);
+    static_assert(clamp(byte_t{10}, byte_t{-10}, byte_t{10}) == 10);
+    static_assert(clamp(byte_t{20}, byte_t{3}, byte_t{3}) == 3);
+    static_assert(clamp(kByteMinValue, kByteMinValue, kByteMaxValue) == kByteMinValue);
+    static_assert(clamp(kByteMaxValue, kByteMinValue, kByteMaxValue) == kByteMaxValue);
+}
+
+void unittests_core_api_types_clamp_int()
+{
+    static_assert(clamp(int_t{5}, int_t{-10}, int_t{10}) == 5);
+    static_assert(clamp(int_t{-20}, int_t{-10}, int_t{10}) == -10);
+    static_assert(clamp(int_t{20}, int_t{-10}, int_t{10}) == 10);
+    static_assert(clamp(int_t{-10}, int_t{-10}, int_t{10}) == -10);
+    static_assert(clamp(int_t{10}, int_t{-10}, int_t{10}) == 10);
+    static_assert(clamp(int_t{20}, int_t{3}, int_t{3}) == 3);
+    static_assert(clamp(kIntMinValue, kIntMinValue, kIntMaxValue) == kIntMinValue);
+    static_assert(clamp(kIntMaxValue, kIntMinValue, kIntMaxValue) == kIntMaxValue);
+}
+
+void unittests_core_api_types_clamp_long()
+{
+    static_assert(clamp(long_t{5}, long_t{-10}, long_t{10}) == 5);
+    static_assert(clamp(long_t{-20}, long_t{-10}, long_t{10}) == -10);
+    static_assert(clamp(long_t{20}, long_t{-10}, long_t{10}) == 10);
+    static_assert(clamp(long_t{-10}, long_t{-10}, long_t{10}) == -10);
+    static_assert(clamp(long_t{10}, long_t{-10}, long_t{10}) == 10);
+    static_assert(clamp(long_t{20}, long_t{3}, long_t{3}) == 3);
+    static_assert(clamp(kLongMinValue, kLongMinValue, kLongMaxValue) == kLongMinValue);
+    static_assert(clamp(kLongMaxValue, kLongMinValue, kLongMaxValue) == kLongMaxValue);
+}
+
+void unittests_core_api_types_clamp_ubyte()
+{
+    static_assert(clamp(ubyte_t{5}, ubyte_t{2}, ubyte_t{10}) == 5);
+    static_assert(clamp(ubyte_t{0}, ubyte_t{2}, ubyte_t{10}) == 2);
+    static_assert(clamp(ubyte_t{20}, ubyte_t{2}, ubyte_t{10}) == 10);
+    static_assert(clamp(ubyte_t{2}, ubyte_t{2}, ubyte_t{10}) == 2);
+    static_assert(clamp(ubyte_t{10}, ubyte_t{2}, ubyte_t{10}) == 10);
+    static_assert(clamp(ubyte_t{20}, ubyte_t{3}, ubyte_t{3}) == 3);
+    static_assert(clamp(kUByteMinValue, kUByteMinValue, kUByteMaxValue) == kUByteMinValue);
+    static_assert(clamp(kUByteMaxValue, kUByteMinValue, kUByteMaxValue) == kUByteMaxValue);
+}
+
+void unittests_core_api_types_clamp_uint()
+{
+    static_assert(clamp(uint_t{5}, uint_t{2}, uint_t{10}) == 5);
+    static_assert(clamp(uint_t{0}, uint_t{2}, uint_t{10}) == 2);
+    static_assert(clamp(uint_t{20}, uint_t{2}, uint_t{10}) == 10);
+    static_assert(clamp(uint_t{2}, uint_t{2}, uint_t{10}) == 2);
+    static_assert(clamp(uint_t{10}, uint_t{2}, uint_t{10}) == 10);
+    static_assert(clamp(uint_t{20}, uint_t{3}, uint_t{3}) == 3);
+    static_assert(clamp(kUIntMinValue, kUIntMinValue, kUIntMaxValue) == kUIntMinValue);
+    static_assert(clamp(kUIntMaxValue, kUIntMinValue, kUIntMaxValue) == kUIntMaxValue);
+}
+
+void unittests_core_api_types_clamp_ulong()
+{
+    static_assert(clamp(ulong_t{5}, ulong_t{2}, ulong_t{10}) == 5);
+    static_assert(clamp(ulong_t{0}, ulong_t{2}, ulong_t{10}) == 2);
+    static_assert(clamp(ulong_t{20}, ulong_t{2}, ulong_t{10}) == 10);
+    static_assert(clamp(ulong_t{2}, ulong_t{2}, ulong_t{10}) == 2);
+    static_assert(clamp(ulong_t{10}, ulong_t{2}, ulong_t{10}) == 10);
+    static_assert(clamp(ulong_t{20}, ulong_t{3}, ulong_t{3}) == 3);
+    static_assert(clamp(kULongMinValue, kULongMinValue, kULongMaxValue) == kULongMinValue);
+    static_assert(clamp(kULongMaxValue, kULongMinValue, kULongMaxValue) == kULongMaxValue);
+}
+
+void unittests_core_api_types_clamp_float()
+{
+    FND_TEST_TRUE(clamp(0.5f, -1.0f, 1.0f) == 0.5f);
+    FND_TEST_TRUE(clamp(-2.0f, -1.0f, 1.0f) == -1.0f);
+    FND_TEST_TRUE(clamp(2.0f, -1.0f, 1.0f) == 1.0f);
+    FND_TEST_TRUE(clamp(-1.0f, -1.0f, 1.0f) == -1.0f);
+    FND_TEST_TRUE(clamp(1.0f, -1.0f, 1.0f) == 1.0f);
+    FND_TEST_TRUE(clamp(2.0f, 0.5f, 0.5f) == 0.5f);
+    FND_TEST_TRUE(clamp(kFloatInfinity, -1.0f, 1.0f) == 1.0f);
+    FND_TEST_TRUE(clamp(-kFloatInfinity, -1.0f, 1.0f) == -1.0f);
+}
+
+void unittests_core_api_types_clamp_double()
+{
+    FND_TEST_TRUE(clamp(0.5, -1.0, 1.0) == 0.5);
+    FND_TEST_TRUE(clamp(-2.0, -1.0, 1.0) == -1.0);
+    FND_TEST_TRUE(clamp(2.0, -1.0, 1.0) == 1.0);
+    FND_TEST_TRUE(clamp(-1.0, -1.0, 1.0) == -1.0);
+    FND_TEST_TRUE(clamp(1.0, -1.0, 1.0) == 1.0);
+    FND_TEST_TRUE(clamp(2.0, 0.5, 0.5) == 0.5);
+    FND_TEST_TRUE(clamp(kDoubleInfinity, -1.0, 1.0) == 1.0);
+    FND_TEST_TRUE(clamp(-kDoubleInfinity, -1.0, 1.0) == -1.0);
+}
+
 void unittests_core_api_types()
 {
     unittests_core_api_type_definitions();
@@ -168,6 +442,30 @@ void unittests_core_api_types()
     unittests_core_api_types_isinf_double();
     unittests_core_api_types_isnan_float();
     unittests_core_api_types_isnan_double();
+    unittests_core_api_types_min_byte();
+    unittests_core_api_types_min_int();
+    unittests_core_api_types_min_long();
+    unittests_core_api_types_min_ubyte();
+    unittests_core_api_types_min_uint();
+    unittests_core_api_types_min_ulong();
+    unittests_core_api_types_min_float();
+    unittests_core_api_types_min_double();
+    unittests_core_api_types_max_byte();
+    unittests_core_api_types_max_int();
+    unittests_core_api_types_max_long();
+    unittests_core_api_types_max_ubyte();
+    unittests_core_api_types_max_uint();
+    unittests_core_api_types_max_ulong();
+    unittests_core_api_types_max_float();
+    unittests_core_api_types_max_double();
+    unittests_core_api_types_clamp_byte();
+    unittests_core_api_types_clamp_int();
+    unittests_core_api_types_clamp_long();
+    unittests_core_api_types_clamp_ubyte();
+    unittests_core_api_types_clamp_uint();
+    unittests_core_api_types_clamp_ulong();
+    unittests_core_api_types_clamp_float();
+    unittests_core_api_types_clamp_double();
 }
 
 } // namespace fnd::unittests

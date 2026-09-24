@@ -83,4 +83,138 @@ export FND_INLINE bool isnan(const double_t x)
     return ::isnan(x);
 }
 
+export constexpr byte_t min(const byte_t a, const byte_t b)
+{
+    return a < b ? a : b;
+}
+
+export constexpr int_t min(const int_t a, const int_t b)
+{
+    return a < b ? a : b;
+}
+
+export constexpr long_t min(const long_t a, const long_t b)
+{
+    return a < b ? a : b;
+}
+
+export constexpr ubyte_t min(const ubyte_t a, const ubyte_t b)
+{
+    return a < b ? a : b;
+}
+
+export constexpr uint_t min(const uint_t a, const uint_t b)
+{
+    return a < b ? a : b;
+}
+
+export constexpr ulong_t min(const ulong_t a, const ulong_t b)
+{
+    return a < b ? a : b;
+}
+
+export FND_INLINE float_t min(const float_t a, const float_t b)
+{
+    return isnan(b) || a < b ? a : b;
+}
+
+export FND_INLINE double_t min(const double_t a, const double_t b)
+{
+    return isnan(b) || a < b ? a : b;
+}
+
+export constexpr byte_t max(const byte_t a, const byte_t b)
+{
+    return a > b ? a : b;
+}
+
+export constexpr int_t max(const int_t a, const int_t b)
+{
+    return a > b ? a : b;
+}
+
+export constexpr long_t max(const long_t a, const long_t b)
+{
+    return a > b ? a : b;
+}
+
+export constexpr ubyte_t max(const ubyte_t a, const ubyte_t b)
+{
+    return a > b ? a : b;
+}
+
+export constexpr uint_t max(const uint_t a, const uint_t b)
+{
+    return a > b ? a : b;
+}
+
+export constexpr ulong_t max(const ulong_t a, const ulong_t b)
+{
+    return a > b ? a : b;
+}
+
+export FND_INLINE float_t max(const float_t a, const float_t b)
+{
+    return isnan(b) || a > b ? a : b;
+}
+
+export FND_INLINE double_t max(const double_t a, const double_t b)
+{
+    return isnan(b) || a > b ? a : b;
+}
+
+export constexpr byte_t clamp(const byte_t x, const byte_t lower, const byte_t upper)
+{
+    FND_ASSERT(lower <= upper);
+    return min(max(x, lower), upper);
+}
+
+export constexpr int_t clamp(const int_t x, const int_t lower, const int_t upper)
+{
+    FND_ASSERT(lower <= upper);
+    return min(max(x, lower), upper);
+}
+
+export constexpr long_t clamp(const long_t x, const long_t lower, const long_t upper)
+{
+    FND_ASSERT(lower <= upper);
+    return min(max(x, lower), upper);
+}
+
+export constexpr ubyte_t clamp(const ubyte_t x, const ubyte_t lower, const ubyte_t upper)
+{
+    FND_ASSERT(lower <= upper);
+    return min(max(x, lower), upper);
+}
+
+export constexpr uint_t clamp(const uint_t x, const uint_t lower, const uint_t upper)
+{
+    FND_ASSERT(lower <= upper);
+    return min(max(x, lower), upper);
+}
+
+export constexpr ulong_t clamp(const ulong_t x, const ulong_t lower, const ulong_t upper)
+{
+    FND_ASSERT(lower <= upper);
+    return min(max(x, lower), upper);
+}
+
+export FND_INLINE float_t clamp(const float_t x, const float_t lower, const float_t upper)
+{
+    // NOTE:
+    // The result of clamp(NaN, -1, 1) depends on how clamp is composed from min and max: 
+    // it can be -1 or 1. Rather than committing to one of those, x is asserted
+    // to not be NaN.
+    FND_ASSERT(!isnan(x)); 
+    FND_ASSERT(lower <= upper);
+    return min(max(x, lower), upper);
+}
+
+export FND_INLINE double_t clamp(const double_t x, const double_t lower, const double_t upper)
+{
+    FND_ASSERT(!isnan(x));
+    FND_ASSERT(lower <= upper);
+    return min(max(x, lower), upper);
+}
+
 } // namespace fnd
