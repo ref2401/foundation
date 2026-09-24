@@ -1,3 +1,4 @@
+#include <math.h>
 #include "foundation/core/macros.h"
 #include "foundation/unittests.h"
 import foundation.core;
@@ -8,6 +9,7 @@ int main()
 {
     using namespace fnd;
     using namespace fnd::unittests;
+
 
     initialize();
     run_unittests_core();

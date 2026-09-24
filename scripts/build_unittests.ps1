@@ -54,6 +54,7 @@ New-Item -ItemType Directory -Path $asmDir -Force | Out-Null
 # that re-exports it, and a module comes before anything that imports it.
 # ---------------------------------------------------------------------------
 $moduleNames = @(
+    'foundation\core\core.type_traits.ixx'
     'foundation\core\core.bits.ixx'
     'foundation\core\core.api_types.ixx'
     'foundation\core\core.span.ixx'

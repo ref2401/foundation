@@ -163,43 +163,50 @@ export FND_INLINE double_t max(const double_t a, const double_t b)
     return isnan(b) || a > b ? a : b;
 }
 
-export constexpr byte_t clamp(const byte_t x, const byte_t lower, const byte_t upper)
+export constexpr byte_t clamp(
+    const byte_t x, const byte_t lower, const byte_t upper)
 {
     FND_ASSERT(lower <= upper);
     return min(max(x, lower), upper);
 }
 
-export constexpr int_t clamp(const int_t x, const int_t lower, const int_t upper)
+export constexpr int_t clamp(
+    const int_t x, const int_t lower, const int_t upper)
 {
     FND_ASSERT(lower <= upper);
     return min(max(x, lower), upper);
 }
 
-export constexpr long_t clamp(const long_t x, const long_t lower, const long_t upper)
+export constexpr long_t clamp(
+    const long_t x, const long_t lower, const long_t upper)
 {
     FND_ASSERT(lower <= upper);
     return min(max(x, lower), upper);
 }
 
-export constexpr ubyte_t clamp(const ubyte_t x, const ubyte_t lower, const ubyte_t upper)
+export constexpr ubyte_t clamp(
+    const ubyte_t x, const ubyte_t lower, const ubyte_t upper)
 {
     FND_ASSERT(lower <= upper);
     return min(max(x, lower), upper);
 }
 
-export constexpr uint_t clamp(const uint_t x, const uint_t lower, const uint_t upper)
+export constexpr uint_t clamp(
+    const uint_t x, const uint_t lower, const uint_t upper)
 {
     FND_ASSERT(lower <= upper);
     return min(max(x, lower), upper);
 }
 
-export constexpr ulong_t clamp(const ulong_t x, const ulong_t lower, const ulong_t upper)
+export constexpr ulong_t clamp(
+    const ulong_t x, const ulong_t lower, const ulong_t upper)
 {
     FND_ASSERT(lower <= upper);
     return min(max(x, lower), upper);
 }
 
-export FND_INLINE float_t clamp(const float_t x, const float_t lower, const float_t upper)
+export FND_INLINE float_t clamp(
+    const float_t x, const float_t lower, const float_t upper)
 {
     // NOTE:
     // The result of clamp(NaN, -1, 1) depends on how clamp is composed from min and max: 
@@ -210,11 +217,41 @@ export FND_INLINE float_t clamp(const float_t x, const float_t lower, const floa
     return min(max(x, lower), upper);
 }
 
-export FND_INLINE double_t clamp(const double_t x, const double_t lower, const double_t upper)
+export FND_INLINE double_t clamp(
+    const double_t x, const double_t lower, const double_t upper)
 {
     FND_ASSERT(!isnan(x));
     FND_ASSERT(lower <= upper);
     return min(max(x, lower), upper);
+}
+
+// Returns -1, 0 or 1 in the type of x. Both zeros and NaN give +0.
+export constexpr byte_t sign(const byte_t x)
+{
+    return static_cast<byte_t>((x > 0) - (x < 0));
+}
+
+export constexpr int_t sign(const int_t x)
+{
+    return (x > 0) - (x < 0);
+}
+
+export constexpr long_t sign(const long_t x)
+{
+    return (x > 0) - (x < 0);
+}
+
+export FND_INLINE float_t sign(const float_t x)
+{
+    // NOTE:
+    // At compile time MSVC's constexpr evaluator treats NaN < 0 as true.
+    // The compiletime evaluation of sign(NaN) != runtime evaluation of sign(NaN)
+    return (x > 0.0f ? 1.0f : 0.0f) - (x < 0.0f ? 1.0f : 0.0f);
+}
+
+export FND_INLINE double_t sign(const double_t x)
+{
+    return (x > 0.0 ? 1.0 : 0.0) - (x < 0.0 ? 1.0 : 0.0);
 }
 
 } // namespace fnd

@@ -2,12 +2,10 @@ export module foundation.core;
 export import :api_types;
 export import :bits;
 export import :span;
+export import :type_traits;
 
 namespace fnd {
 
-export template <typename T>
-concept PodType = 
-    __is_standard_layout(T) && __is_trivially_copyable(T);
 
 // ---------------------------------------------------------------------------
 // source_location_t
