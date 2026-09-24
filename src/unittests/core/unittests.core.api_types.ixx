@@ -159,10 +159,6 @@ void unittests_core_api_types_isnan_double()
     FND_TEST_FALSE(isnan(-kDoubleInfinity));
 }
 
-// ---------------------------------------------------------------------------
-// min, max, clamp
-// ---------------------------------------------------------------------------
-
 void unittests_core_api_types_min_byte()
 {
     static_assert(min(byte_t{1}, byte_t{2}) == 1);
@@ -433,10 +429,6 @@ void unittests_core_api_types_clamp_double()
     FND_TEST_TRUE(clamp(-kDoubleInfinity, -1.0, 1.0) == -1.0);
 }
 
-// ---------------------------------------------------------------------------
-// sign
-// ---------------------------------------------------------------------------
-
 void unittests_core_api_types_sign_byte()
 {
     static_assert(sign(byte_t{0}) == 0);
@@ -494,6 +486,150 @@ void unittests_core_api_types_sign_double()
     FND_TEST_TRUE(sign(kDoubleNaN) == 0.0);
 }
 
+void unittests_core_api_types_ceil_float()
+{
+    FND_TEST_TRUE(ceil(0.0f) == 0.0f);
+    FND_TEST_TRUE(ceil(1.5f) == 2.0f);
+    FND_TEST_TRUE(ceil(-1.5f) == -1.0f);
+    FND_TEST_TRUE(ceil(2.0f) == 2.0f);
+    FND_TEST_TRUE(ceil(-2.0f) == -2.0f);
+    FND_TEST_TRUE(ceil(0.5f) == 1.0f);
+    FND_TEST_TRUE(ceil(-0.5f) == 0.0f);
+    FND_TEST_TRUE(ceil(kFloatMinSubnormal) == 1.0f);
+    FND_TEST_TRUE(ceil(-kFloatMinSubnormal) == 0.0f);
+    FND_TEST_TRUE(ceil(kFloatMaxValue) == kFloatMaxValue);
+    FND_TEST_TRUE(ceil(kFloatInfinity) == kFloatInfinity);
+    FND_TEST_TRUE(ceil(-kFloatInfinity) == -kFloatInfinity);
+    FND_TEST_TRUE(isnan(ceil(kFloatNaN)));
+}
+
+void unittests_core_api_types_ceil_double()
+{
+    FND_TEST_TRUE(ceil(0.0) == 0.0);
+    FND_TEST_TRUE(ceil(1.5) == 2.0);
+    FND_TEST_TRUE(ceil(-1.5) == -1.0);
+    FND_TEST_TRUE(ceil(2.0) == 2.0);
+    FND_TEST_TRUE(ceil(-2.0) == -2.0);
+    FND_TEST_TRUE(ceil(0.5) == 1.0);
+    FND_TEST_TRUE(ceil(-0.5) == 0.0);
+    FND_TEST_TRUE(ceil(kDoubleMinSubnormal) == 1.0);
+    FND_TEST_TRUE(ceil(-kDoubleMinSubnormal) == 0.0);
+    FND_TEST_TRUE(ceil(kDoubleMaxValue) == kDoubleMaxValue);
+    FND_TEST_TRUE(ceil(kDoubleInfinity) == kDoubleInfinity);
+    FND_TEST_TRUE(ceil(-kDoubleInfinity) == -kDoubleInfinity);
+    FND_TEST_TRUE(isnan(ceil(kDoubleNaN)));
+}
+
+void unittests_core_api_types_floor_float()
+{
+    FND_TEST_TRUE(floor(0.0f) == 0.0f);
+    FND_TEST_TRUE(floor(1.5f) == 1.0f);
+    FND_TEST_TRUE(floor(-1.5f) == -2.0f);
+    FND_TEST_TRUE(floor(2.0f) == 2.0f);
+    FND_TEST_TRUE(floor(-2.0f) == -2.0f);
+    FND_TEST_TRUE(floor(0.5f) == 0.0f);
+    FND_TEST_TRUE(floor(-0.5f) == -1.0f);
+    FND_TEST_TRUE(floor(kFloatMinSubnormal) == 0.0f);
+    FND_TEST_TRUE(floor(-kFloatMinSubnormal) == -1.0f);
+    FND_TEST_TRUE(floor(kFloatMinValue) == kFloatMinValue);
+    FND_TEST_TRUE(floor(kFloatInfinity) == kFloatInfinity);
+    FND_TEST_TRUE(floor(-kFloatInfinity) == -kFloatInfinity);
+    FND_TEST_TRUE(isnan(floor(kFloatNaN)));
+}
+
+void unittests_core_api_types_floor_double()
+{
+    FND_TEST_TRUE(floor(0.0) == 0.0);
+    FND_TEST_TRUE(floor(1.5) == 1.0);
+    FND_TEST_TRUE(floor(-1.5) == -2.0);
+    FND_TEST_TRUE(floor(2.0) == 2.0);
+    FND_TEST_TRUE(floor(-2.0) == -2.0);
+    FND_TEST_TRUE(floor(0.5) == 0.0);
+    FND_TEST_TRUE(floor(-0.5) == -1.0);
+    FND_TEST_TRUE(floor(kDoubleMinSubnormal) == 0.0);
+    FND_TEST_TRUE(floor(-kDoubleMinSubnormal) == -1.0);
+    FND_TEST_TRUE(floor(kDoubleMinValue) == kDoubleMinValue);
+    FND_TEST_TRUE(floor(kDoubleInfinity) == kDoubleInfinity);
+    FND_TEST_TRUE(floor(-kDoubleInfinity) == -kDoubleInfinity);
+    FND_TEST_TRUE(isnan(floor(kDoubleNaN)));
+}
+
+void unittests_core_api_types_trunc_float()
+{
+    FND_TEST_TRUE(trunc(0.0f) == 0.0f);
+    FND_TEST_TRUE(trunc(1.5f) == 1.0f);
+    FND_TEST_TRUE(trunc(-1.5f) == -1.0f);
+    FND_TEST_TRUE(trunc(2.0f) == 2.0f);
+    FND_TEST_TRUE(trunc(-2.0f) == -2.0f);
+    FND_TEST_TRUE(trunc(0.5f) == 0.0f);
+    FND_TEST_TRUE(trunc(-0.5f) == 0.0f);
+    FND_TEST_TRUE(trunc(kFloatMinSubnormal) == 0.0f);
+    FND_TEST_TRUE(trunc(-kFloatMinSubnormal) == 0.0f);
+    FND_TEST_TRUE(trunc(kFloatMaxValue) == kFloatMaxValue);
+    FND_TEST_TRUE(trunc(kFloatInfinity) == kFloatInfinity);
+    FND_TEST_TRUE(trunc(-kFloatInfinity) == -kFloatInfinity);
+    FND_TEST_TRUE(isnan(trunc(kFloatNaN)));
+}
+
+void unittests_core_api_types_trunc_double()
+{
+    FND_TEST_TRUE(trunc(0.0) == 0.0);
+    FND_TEST_TRUE(trunc(1.5) == 1.0);
+    FND_TEST_TRUE(trunc(-1.5) == -1.0);
+    FND_TEST_TRUE(trunc(2.0) == 2.0);
+    FND_TEST_TRUE(trunc(-2.0) == -2.0);
+    FND_TEST_TRUE(trunc(0.5) == 0.0);
+    FND_TEST_TRUE(trunc(-0.5) == 0.0);
+    FND_TEST_TRUE(trunc(kDoubleMinSubnormal) == 0.0);
+    FND_TEST_TRUE(trunc(-kDoubleMinSubnormal) == 0.0);
+    FND_TEST_TRUE(trunc(kDoubleMaxValue) == kDoubleMaxValue);
+    FND_TEST_TRUE(trunc(kDoubleInfinity) == kDoubleInfinity);
+    FND_TEST_TRUE(trunc(-kDoubleInfinity) == -kDoubleInfinity);
+    FND_TEST_TRUE(isnan(trunc(kDoubleNaN)));
+}
+
+// ---------------------------------------------------------------------------
+// fmod
+// ---------------------------------------------------------------------------
+
+void unittests_core_api_types_fmod_float()
+{
+    // The result has the sign of x.
+    FND_TEST_TRUE(fmod(7.0f, 3.0f) == 1.0f);
+    FND_TEST_TRUE(fmod(-7.0f, 3.0f) == -1.0f);
+    FND_TEST_TRUE(fmod(7.0f, -3.0f) == 1.0f);
+    FND_TEST_TRUE(fmod(-7.0f, -3.0f) == -1.0f);
+    FND_TEST_TRUE(fmod(5.5f, 2.0f) == 1.5f);
+    FND_TEST_TRUE(fmod(-5.5f, 2.0f) == -1.5f);
+    FND_TEST_TRUE(fmod(6.0f, 3.0f) == 0.0f);
+    FND_TEST_TRUE(fmod(0.0f, 3.0f) == 0.0f);
+    FND_TEST_TRUE(fmod(1.0f, 3.0f) == 1.0f);
+    FND_TEST_TRUE(fmod(1.0f, kFloatInfinity) == 1.0f);
+    FND_TEST_TRUE(isnan(fmod(1.0f, 0.0f)));
+    FND_TEST_TRUE(isnan(fmod(kFloatInfinity, 1.0f)));
+    FND_TEST_TRUE(isnan(fmod(kFloatNaN, 1.0f)));
+    FND_TEST_TRUE(isnan(fmod(1.0f, kFloatNaN)));
+}
+
+void unittests_core_api_types_fmod_double()
+{
+    // The result has the sign of x.
+    FND_TEST_TRUE(fmod(7.0, 3.0) == 1.0);
+    FND_TEST_TRUE(fmod(-7.0, 3.0) == -1.0);
+    FND_TEST_TRUE(fmod(7.0, -3.0) == 1.0);
+    FND_TEST_TRUE(fmod(-7.0, -3.0) == -1.0);
+    FND_TEST_TRUE(fmod(5.5, 2.0) == 1.5);
+    FND_TEST_TRUE(fmod(-5.5, 2.0) == -1.5);
+    FND_TEST_TRUE(fmod(6.0, 3.0) == 0.0);
+    FND_TEST_TRUE(fmod(0.0, 3.0) == 0.0);
+    FND_TEST_TRUE(fmod(1.0, 3.0) == 1.0);
+    FND_TEST_TRUE(fmod(1.0, kDoubleInfinity) == 1.0);
+    FND_TEST_TRUE(isnan(fmod(1.0, 0.0)));
+    FND_TEST_TRUE(isnan(fmod(kDoubleInfinity, 1.0)));
+    FND_TEST_TRUE(isnan(fmod(kDoubleNaN, 1.0)));
+    FND_TEST_TRUE(isnan(fmod(1.0, kDoubleNaN)));
+}
+
 void unittests_core_api_types()
 {
     unittests_core_api_type_definitions();
@@ -532,6 +668,14 @@ void unittests_core_api_types()
     unittests_core_api_types_sign_long();
     unittests_core_api_types_sign_float();
     unittests_core_api_types_sign_double();
+    unittests_core_api_types_ceil_float();
+    unittests_core_api_types_ceil_double();
+    unittests_core_api_types_floor_float();
+    unittests_core_api_types_floor_double();
+    unittests_core_api_types_trunc_float();
+    unittests_core_api_types_trunc_double();
+    unittests_core_api_types_fmod_float();
+    unittests_core_api_types_fmod_double();
 }
 
 } // namespace fnd::unittests

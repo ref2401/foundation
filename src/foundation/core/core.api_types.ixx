@@ -244,14 +244,54 @@ export constexpr long_t sign(const long_t x)
 export FND_INLINE float_t sign(const float_t x)
 {
     // NOTE:
-    // At compile time MSVC's constexpr evaluator treats NaN < 0 as true.
-    // The compiletime evaluation of sign(NaN) != runtime evaluation of sign(NaN)
+    // Not constexpr: MSVC 19.51's constant evaluator treats NaN < x and x < NaN
+    // as true, so a compile-time sign(NaN) would return -1 instead of 0.
     return (x > 0.0f ? 1.0f : 0.0f) - (x < 0.0f ? 1.0f : 0.0f);
 }
 
 export FND_INLINE double_t sign(const double_t x)
 {
     return (x > 0.0 ? 1.0 : 0.0) - (x < 0.0 ? 1.0 : 0.0);
+}
+
+export FND_INLINE float_t ceil(const float_t x)
+{
+    return ::ceilf(x);
+}
+
+export FND_INLINE double_t ceil(const double_t x)
+{
+    return ::ceil(x);
+}
+
+export FND_INLINE float_t floor(const float_t x)
+{
+    return ::floorf(x);
+}
+
+export FND_INLINE double_t floor(const double_t x)
+{
+    return ::floor(x);
+}
+
+export FND_INLINE float_t trunc(const float_t x)
+{
+    return ::truncf(x);
+}
+
+export FND_INLINE double_t trunc(const double_t x)
+{
+    return ::trunc(x);
+}
+
+export FND_INLINE float_t fmod(const float_t x, const float_t y)
+{
+    return ::fmodf(x, y);
+}
+
+export FND_INLINE double_t fmod(const double_t x, const double_t y)
+{
+    return ::fmod(x, y);
 }
 
 } // namespace fnd
