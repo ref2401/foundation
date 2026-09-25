@@ -9,7 +9,6 @@ int main()
     using namespace fnd;
     using namespace fnd::unittests;
 
-
     initialize();
     run_unittests_core();
     run_unittests_math();

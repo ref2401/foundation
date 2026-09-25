@@ -89,7 +89,7 @@ void unittests_math_scalar_atan2_double()
 
 void unittests_math_scalar_degrees_float()
 {
-    static_assert(degrees(0.0f) == 0.0f);
+    FND_TEST_TRUE(degrees(0.0f) == 0.0f);
     FND_TEST_TRUE(degrees(kFloatPi) == 180.0f);
     FND_TEST_TRUE(degrees(-kFloatPi) == -180.0f);
     FND_TEST_TRUE(degrees(kFloatPi / 2) == 90.0f);
@@ -101,7 +101,7 @@ void unittests_math_scalar_degrees_float()
 
 void unittests_math_scalar_degrees_double()
 {
-    static_assert(degrees(0.0) == 0.0);
+    FND_TEST_TRUE(degrees(0.0) == 0.0);
     FND_TEST_TRUE(degrees(kDoublePi) == 180.0);
     FND_TEST_TRUE(degrees(-kDoublePi) == -180.0);
     FND_TEST_TRUE(degrees(kDoublePi / 2) == 90.0);
@@ -113,7 +113,7 @@ void unittests_math_scalar_degrees_double()
 
 void unittests_math_scalar_radians_float()
 {
-    static_assert(radians(0.0f) == 0.0f);
+    FND_TEST_TRUE(radians(0.0f) == 0.0f);
     FND_TEST_TRUE(radians(180.0f) == kFloatPi);
     FND_TEST_TRUE(radians(-180.0f) == -kFloatPi);
     FND_TEST_TRUE(radians(90.0f) == kFloatPi / 2);
@@ -126,7 +126,7 @@ void unittests_math_scalar_radians_float()
 
 void unittests_math_scalar_radians_double()
 {
-    static_assert(radians(0.0) == 0.0);
+    FND_TEST_TRUE(radians(0.0) == 0.0);
     FND_TEST_TRUE(radians(180.0) == kDoublePi);
     FND_TEST_TRUE(radians(-180.0) == -kDoublePi);
     FND_TEST_TRUE(radians(90.0) == kDoublePi / 2);

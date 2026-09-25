@@ -8,8 +8,11 @@ namespace fnd {
 
 export template<typename T>
 struct span_t final {
-    T* ptr;
-    ulong_t count;
+    T* ptr{nullptr};
+    ulong_t count{0};
+
+    constexpr span_t() = default;
+    constexpr span_t(T* ptr, ulong_t count) : ptr{ptr}, count{count} {}
 
     constexpr T& operator[](const ulong_t index)
     {

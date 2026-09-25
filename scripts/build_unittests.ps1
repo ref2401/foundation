@@ -60,12 +60,14 @@ $moduleNames = @(
     'foundation\core\core.span.ixx'
     'foundation\core\core.ixx'
     'foundation\math\math.scalar.ixx'
+    'foundation\math\math.vector_bool.ixx'
     'foundation\math\math.ixx'
     'unittests\core\unittests.core.arithmetic_types.ixx'
     'unittests\core\unittests.core.arithmetic.ixx'
     'unittests\core\unittests.core.span.ixx'
     'unittests\core\unittests.core.ixx'
     'unittests\math\unittests.math.scalar.ixx'
+    'unittests\math\unittests.math.vector_bool.ixx'
     'unittests\math\unittests.math.ixx'
 )
 
