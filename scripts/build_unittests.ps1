@@ -55,13 +55,14 @@ New-Item -ItemType Directory -Path $asmDir -Force | Out-Null
 # ---------------------------------------------------------------------------
 $moduleNames = @(
     'foundation\core\core.type_traits.ixx'
-    'foundation\core\core.bits.ixx'
-    'foundation\core\core.api_types.ixx'
+    'foundation\core\core.arithmetic_types.ixx'
+    'foundation\core\core.arithmetic.ixx'
     'foundation\core\core.span.ixx'
     'foundation\core\core.ixx'
     'foundation\math\math.scalar.ixx'
     'foundation\math\math.ixx'
-    'unittests\core\unittests.core.api_types.ixx'
+    'unittests\core\unittests.core.arithmetic_types.ixx'
+    'unittests\core\unittests.core.arithmetic.ixx'
     'unittests\core\unittests.core.span.ixx'
     'unittests\core\unittests.core.ixx'
     'unittests\math\unittests.math.scalar.ixx'
@@ -184,8 +185,8 @@ function Assert-CompileSucceeded {
 # Phase 1: compile each module interface unit to an .ifc (consumed by importers)
 # plus an .obj (must be linked into the final executable). /interface covers the
 # primary interface unit and interface partitions alike; cl.exe derives the .ifc
-# name from the declaration inside the file, writing 'foundation.core:api_types'
-# as foundation.core-api_types.ifc, which /ifcSearchDir then resolves on its own.
+# name from the declaration inside the file, writing 'foundation.core:arithmetic_types'
+# as foundation.core-arithmetic_types.ifc, which /ifcSearchDir then resolves on its own.
 # ---------------------------------------------------------------------------
 foreach ($module in $modules) {
     cl.exe @compilerArgs `

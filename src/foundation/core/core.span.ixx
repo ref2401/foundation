@@ -2,7 +2,7 @@ module;
 #include "foundation/core/macros.h"
 
 export module foundation.core:span;
-import :api_types;
+import :arithmetic_types;
 
 namespace fnd {
 

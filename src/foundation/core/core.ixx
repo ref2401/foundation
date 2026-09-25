@@ -1,6 +1,6 @@
 export module foundation.core;
-export import :api_types;
-export import :bits;
+export import :arithmetic_types;
+export import :arithmetic;
 export import :span;
 export import :type_traits;
 

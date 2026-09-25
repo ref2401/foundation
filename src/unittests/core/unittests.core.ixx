@@ -4,7 +4,8 @@ module;
 
 
 export module unittests.core;
-import :api_types;
+import :arithmetic_types;
+import :arithmetic;
 import :span;
 
 
@@ -14,7 +15,8 @@ void unittests_source_location_t();
 
 export void run_unittests_core()
 {
-    unittests_core_api_types();
+    unittests_core_arithmetic_types();
+    unittests_core_arithmetic();
     unittests_source_location_t();
     unittests_span_t();
 }

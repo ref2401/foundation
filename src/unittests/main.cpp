@@ -1,4 +1,3 @@
-#include <math.h>
 #include "foundation/core/macros.h"
 #include "foundation/unittests.h"
 import foundation.core;

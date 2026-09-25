@@ -1,57 +1,75 @@
 module;
-#include <float.h>
 #include <math.h>
-#include <stdint.h>
 #include "foundation/core/macros.h"
 
-export module foundation.core:api_types;
-import :bits;
+export module foundation.core:arithmetic;
+import :arithmetic_types;
+
+// NOTE:
+// Arithmetic functions on the built-in types are split between this partition and
+// foundation.math by one rule: a function lives here if its result is exact
+// (no rounding: min, clamp, abs, floor, fmod, isnan, bit casts, ...), and in
+// foundation.math if it approximates a real-valued function (sin, exp, log,
+// sqrt, lerp, degrees, ...). 
+// The goal is that importing foundation.core alone
+// is enough to work with the built-in types; foundation.math is needed only
+// for numerical, geometric or graphics code.
 
 namespace fnd {
 
-// signed
-export using byte_t = ::int8_t;
-export using int_t = ::int32_t;
-export using long_t = ::int64_t;
-export using float_t = float;
-export using double_t = double;
-// unsigned
-export using ubyte_t = ::uint8_t;
-export using uint_t = ::uint32_t;
-export using ulong_t = ::uint64_t;
-// characters
-export using char_t = char;
+export template<typename TDest, typename TSrc>
+requires (sizeof(TDest) == sizeof(TSrc)
+    && __is_trivially_copyable(TDest) 
+    && __is_trivially_copyable(TSrc))
+constexpr TDest bit_cast(const TSrc& val)
+{
+    return __builtin_bit_cast(TDest, val);
+}
 
-export constexpr byte_t kByteMinValue{-128};
-export constexpr byte_t kByteMaxValue{127};
-export constexpr int_t kIntMinValue{INT32_MIN};
-export constexpr int_t kIntMaxValue{INT32_MAX};
-export constexpr long_t kLongMinValue{INT64_MIN};
-export constexpr long_t kLongMaxValue{INT64_MAX};
-export constexpr ubyte_t kUByteMinValue{0};
-export constexpr ubyte_t kUByteMaxValue{UINT8_MAX};
-export constexpr uint_t kUIntMinValue{0};
-export constexpr uint_t kUIntMaxValue{UINT32_MAX};
-export constexpr ulong_t kULongMinValue{0};
-export constexpr ulong_t kULongMaxValue{UINT64_MAX};
+export constexpr byte_t abs(const byte_t x)
+{
+    // x is promoted to int before the negation, so -x cannot overflow and no
+    // unsigned arithmetic is needed. In builds without assertions abs(-128) is
+    // 128, which the cast back to byte_t wraps to -128, as in the other overloads.
+    FND_ASSERT(x != kByteMinValue);
 
-export constexpr float_t kFloatMinValue{-FLT_MAX};
-export constexpr float_t kFloatMaxValue{FLT_MAX};
-export constexpr float_t kFloatNaN{NAN};
-export constexpr float_t kFloatInfinity{INFINITY};
-export constexpr float_t kFloatPi{3.14159265358979323846f};
-export constexpr float_t kFloatMinSubnormal{FLT_TRUE_MIN};
-export constexpr float_t kFloatMinNormal{FLT_MIN};
-export constexpr float_t kFloatEpsilon{FLT_EPSILON};
+    return static_cast<byte_t>(x < 0 ? -x : x);
+}
 
-export constexpr double_t kDoubleMinValue{-DBL_MAX};
-export constexpr double_t kDoubleMaxValue{DBL_MAX};
-export constexpr double_t kDoubleNaN{NAN};
-export constexpr double_t kDoubleInfinity{INFINITY};
-export constexpr double_t kDoublePi{3.14159265358979323846};
-export constexpr double_t kDoubleMinSubnormal{DBL_TRUE_MIN};
-export constexpr double_t kDoubleMinNormal{DBL_MIN};
-export constexpr double_t kDoubleEpsilon{DBL_EPSILON};
+export constexpr int_t abs(const int_t x)
+{
+    // NOTE:
+    // MinValue has no positive counterpart: abs(int_t{-2147483648}) would be
+    // 2147483648, but kIntMaxValue is 2147483647 (likewise for long_t). MinValue
+    // is therefore outside the domain of the integer overloads and is asserted.
+    //
+    // The negation is done in the unsigned domain, so that in builds without
+    // assertions abs(MinValue) wraps back to MinValue, as in HLSL, instead of being
+    // signed overflow (undefined behaviour in C++).
+
+    FND_ASSERT(x != kIntMinValue);
+
+    const uint_t ux = static_cast<uint_t>(x);
+    return static_cast<int_t>(x < 0 ? uint_t{0} - ux : ux);
+}
+
+export constexpr long_t abs(const long_t x)
+{
+    FND_ASSERT(x != kLongMinValue);
+
+    const ulong_t ux = static_cast<ulong_t>(x);
+    return static_cast<long_t>(x < 0 ? ulong_t{0} - ux : ux);
+}
+
+export FND_INLINE float_t abs(const float_t x)
+{
+    return ::fabsf(x);
+}
+
+export FND_INLINE double_t abs(const double_t x)
+{
+    return ::fabs(x);
+}
 
 export FND_INLINE bool isfinite(const float_t x)
 {
@@ -81,6 +99,25 @@ export FND_INLINE bool isnan(const float_t x)
 export FND_INLINE bool isnan(const double_t x)
 {
     return ::isnan(x);
+}
+
+export FND_INLINE bool approx_equal(
+    const float_t a, const float_t b, const float_t max_abs_diff = 1e-5f)
+{
+    FND_ASSERT(max_abs_diff >= 0);
+
+    // NOTE:
+    // inf - inf is NaN, and abs(NaN) <= max_abs_diff is false.
+    // Checking exact equality first makes approx_equal(inf, inf) true.
+    return a == b || abs(a - b) <= max_abs_diff;
+}
+
+export FND_INLINE bool approx_equal(
+    const double_t a, const double_t b, const double_t max_abs_diff = 1e-5)
+{
+    FND_ASSERT(max_abs_diff >= 0);
+
+    return a == b || abs(a - b) <= max_abs_diff;
 }
 
 export constexpr byte_t min(const byte_t a, const byte_t b)
@@ -225,6 +262,16 @@ export FND_INLINE double_t clamp(
     return min(max(x, lower), upper);
 }
 
+export FND_INLINE float_t saturate(const float_t x)
+{
+    return clamp(x, 0.0f, 1.0f);
+}
+
+export FND_INLINE double_t saturate(const double_t x)
+{
+    return clamp(x, 0.0, 1.0);
+}
+
 // Returns -1, 0 or 1 in the type of x. Both zeros and NaN give +0.
 export constexpr byte_t sign(const byte_t x)
 {
@@ -302,6 +349,27 @@ export FND_INLINE float_t modf(const float_t x, float_t& integer)
 export FND_INLINE double_t modf(const double_t x, double_t& integer)
 {
     return ::modf(x, &integer);
+}
+
+// Fractional part of |x|, in [0, 1). 
+// fractional(-1e-10f) = 1e-10f;
+// fractional(+-inf) is 0 and fractional(NaN) is NaN;
+export FND_INLINE float_t fractional(const float_t x)
+{
+    // NOTE:
+    // Not implemented as x - floor(x), because that returns 1 for tiny negative x. 
+    // For x = -1e-10f, floor(x) is -1, and x + 1 is 0.9999999999.
+    // That value doesn't fit in a float: the float just below 1 is 0.99999994f
+    // (1 - 2^-24), and 1.0f is closer, so the result rounds to 1.
+
+    float_t integer;
+    return abs(modf(x, integer));
+}
+
+export FND_INLINE double_t fractional(const double_t x)
+{
+    double_t integer;
+    return abs(modf(x, integer));
 }
 
 // Reinterpret the bits of x as another type of the same size, as the HLSL

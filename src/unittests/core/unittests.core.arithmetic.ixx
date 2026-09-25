@@ -2,43 +2,51 @@ module;
 #include "foundation/unittests.h"
 
 
-export module unittests.core:api_types;
+export module unittests.core:arithmetic;
 import foundation.core;
 
 namespace fnd::unittests {
 
-export void unittests_core_api_types();
+export void unittests_core_arithmetic();
 
-// ---------------------------------------------------------------------------
-// Built in types
-// ---------------------------------------------------------------------------
-
-void unittests_core_api_type_definitions()
+void unittests_core_arithmetic_abs_integer_types()
 {
     // byte_t
-    static_assert(sizeof(byte_t) == 1, "byte_t must be 1 byte");
-    static_assert(byte_t{-1} < byte_t{0}, "byte_t must be signed");
+    static_assert(abs(byte_t{0}) == 0);
+    static_assert(abs(byte_t{5}) == 5);
+    static_assert(abs(byte_t{-5}) == 5);
+    static_assert(abs(kByteMaxValue) == kByteMaxValue);
+    static_assert(abs(byte_t{-kByteMaxValue}) == kByteMaxValue);
     // int_t
-    static_assert(sizeof(int_t) == 4, "int_t must be 4 bytes");
-    static_assert(int_t{-1} < int_t{0}, "int_t must be signed");
+    static_assert(abs(int_t{0}) == 0);
+    static_assert(abs(int_t{5}) == 5);
+    static_assert(abs(int_t{-5}) == 5);
+    static_assert(abs(kIntMaxValue) == kIntMaxValue);
+    static_assert(abs(-kIntMaxValue) == kIntMaxValue);
     // long_t
-    static_assert(sizeof(long_t) == 8, "long_t must be 8 bytes");
-    static_assert(long_t{-1} < long_t{0}, "long_t must be signed");
-    // float
-    static_assert(sizeof(float_t) == 4, "float_t must be 4 bytes");
-    static_assert(sizeof(double_t) == 8, "float_t must be 8 bytes");
+    static_assert(abs(long_t{0}) == 0);
+    static_assert(abs(long_t{5}) == 5);
+    static_assert(abs(long_t{-5}) == 5);
+    static_assert(abs(kLongMaxValue) == kLongMaxValue);
+    static_assert(abs(-kLongMaxValue) == kLongMaxValue);
+}
 
-    // ubyte_t
-    static_assert(sizeof(ubyte_t) == 1, "ubyte_t must be 1 byte");
-    static_assert(ubyte_t(-1) > ubyte_t{0}, "ubyte_t must be unsigned");
-    // uint_t
-    static_assert(sizeof(uint_t) == 4, "uint_t must be 4 bytes");
-    static_assert(uint_t(-1) > uint_t{0}, "uint_t must be unsigned");
-    // ulong_t
-    static_assert(sizeof(ulong_t) == 8, "ulong_t must be 8 bytes");
-    static_assert(ulong_t(-1) > ulong_t{0}, "ulong_t must be unsigned");
-
-    static_assert(sizeof(void*) == 8, "foundation targets 64-bit only");
+void unittests_core_arithmetic_abs_float_types()
+{
+    // float_t
+    FND_TEST_TRUE(abs(0.0f) == 0.0f);
+    FND_TEST_TRUE(abs(2.5f) == 2.5f);
+    FND_TEST_TRUE(abs(-2.5f) == 2.5f);
+    FND_TEST_TRUE(sign(abs(-0.0f)) == 0);
+    FND_TEST_TRUE(abs(-kFloatInfinity) == kFloatInfinity);
+    FND_TEST_TRUE(isnan(abs(-kFloatNaN)));
+    // double_t
+    FND_TEST_TRUE(abs(0.0) == 0.0);
+    FND_TEST_TRUE(abs(2.5) == 2.5);
+    FND_TEST_TRUE(abs(-2.5) == 2.5);
+    FND_TEST_TRUE(sign(abs(-0.0)) == 0);
+    FND_TEST_TRUE(abs(-kDoubleInfinity) == kDoubleInfinity);
+    FND_TEST_TRUE(isnan(abs(-kDoubleNaN)));
 }
 
 // NOTE:
@@ -49,7 +57,7 @@ constexpr float_t kFloatNaNHigh = bit_cast<float_t>(0x7FFFFFFFu);
 constexpr double_t kDoubleNaNLow = bit_cast<double_t>(0x7FF0000000000001ull);
 constexpr double_t kDoubleNaNHigh = bit_cast<double_t>(0x7FFFFFFFFFFFFFFFull);
 
-void unittests_core_api_types_isfinite_float()
+void unittests_core_arithmetic_isfinite_float()
 {
     FND_TEST_TRUE(isfinite(0.0f));
     FND_TEST_TRUE(isfinite(-0.0f));
@@ -68,7 +76,7 @@ void unittests_core_api_types_isfinite_float()
     FND_TEST_FALSE(isfinite(kFloatNaNHigh));
 }
 
-void unittests_core_api_types_isfinite_double()
+void unittests_core_arithmetic_isfinite_double()
 {
     FND_TEST_TRUE(isfinite(0.0));
     FND_TEST_TRUE(isfinite(-0.0));
@@ -87,7 +95,7 @@ void unittests_core_api_types_isfinite_double()
     FND_TEST_FALSE(isfinite(kDoubleNaNHigh));
 }
 
-void unittests_core_api_types_isinf_float()
+void unittests_core_arithmetic_isinf_float()
 {
     FND_TEST_TRUE(isinf(kFloatInfinity));
     FND_TEST_TRUE(isinf(-kFloatInfinity));
@@ -105,7 +113,7 @@ void unittests_core_api_types_isinf_float()
     FND_TEST_FALSE(isinf(kFloatNaNHigh));
 }
 
-void unittests_core_api_types_isinf_double()
+void unittests_core_arithmetic_isinf_double()
 {
     FND_TEST_TRUE(isinf(kDoubleInfinity));
     FND_TEST_TRUE(isinf(-kDoubleInfinity));
@@ -123,7 +131,7 @@ void unittests_core_api_types_isinf_double()
     FND_TEST_FALSE(isinf(kDoubleNaNHigh));
 }
 
-void unittests_core_api_types_isnan_float()
+void unittests_core_arithmetic_isnan_float()
 {
     FND_TEST_TRUE(isnan(kFloatNaN));
     FND_TEST_TRUE(isnan(-kFloatNaN));
@@ -141,7 +149,7 @@ void unittests_core_api_types_isnan_float()
     FND_TEST_FALSE(isnan(-kFloatInfinity));
 }
 
-void unittests_core_api_types_isnan_double()
+void unittests_core_arithmetic_isnan_double()
 {
     FND_TEST_TRUE(isnan(kDoubleNaN));
     FND_TEST_TRUE(isnan(-kDoubleNaN));
@@ -159,7 +167,77 @@ void unittests_core_api_types_isnan_double()
     FND_TEST_FALSE(isnan(-kDoubleInfinity));
 }
 
-void unittests_core_api_types_min_byte()
+// ---------------------------------------------------------------------------
+// approx_equal
+// ---------------------------------------------------------------------------
+
+void unittests_core_arithmetic_approx_equal_float()
+{
+    FND_TEST_TRUE(approx_equal(1.0f, 1.0f));
+    FND_TEST_TRUE(approx_equal(2.0f, 2.0f));
+
+    // max_abs_diff
+    FND_TEST_TRUE(approx_equal(1.0f, 1.0f, 0.0f));
+    FND_TEST_FALSE(approx_equal(1.0f, 1.00001f, 0.0f));
+    FND_TEST_FALSE(approx_equal(1.00001f, 1.0f, 0.0f));
+    FND_TEST_TRUE(approx_equal(1.0f, 1.001f, 1.0f));
+    FND_TEST_TRUE(approx_equal(1.001f, 1.0f, 1.0f));
+    FND_TEST_TRUE(approx_equal(1.0f, 1.001f, 0.1f));
+    FND_TEST_TRUE(approx_equal(1.001f, 1.0f, 0.1f));
+
+    // inclusive boundary
+    FND_TEST_TRUE(approx_equal(1.0f, 1.5f, 0.5f)); 
+    FND_TEST_FALSE(approx_equal(1.0f, 1.5f, 0.4999f));
+
+    // across 0
+    FND_TEST_TRUE(approx_equal(-0.0f, 0.0f, 0.0f));
+    FND_TEST_TRUE(approx_equal(0.0f, -0.0f, 0.0f));
+    FND_TEST_TRUE(approx_equal(-0.5f, 0.5f, 1.0f));
+    FND_TEST_TRUE(approx_equal(0.5f, -0.5f, 1.0f));
+
+    // special value cases
+    FND_TEST_TRUE(approx_equal(kFloatInfinity, kFloatInfinity));
+    FND_TEST_TRUE(approx_equal(-kFloatInfinity, -kFloatInfinity));
+    FND_TEST_FALSE(approx_equal(kFloatInfinity, -kFloatInfinity));
+    FND_TEST_FALSE(approx_equal(0.0f, kFloatNaN));
+    FND_TEST_FALSE(approx_equal(kFloatNaN, 0.0f));
+    FND_TEST_FALSE(approx_equal(kFloatNaN, kFloatNaN));
+}
+
+void unittests_core_arithmetic_approx_equal_double()
+{
+    FND_TEST_TRUE(approx_equal(1.0, 1.0));
+    FND_TEST_TRUE(approx_equal(2.0, 2.0));
+
+    // max_abs_diff
+    FND_TEST_TRUE(approx_equal(1.0, 1.0, 0.0));
+    FND_TEST_FALSE(approx_equal(1.0, 1.00001, 0.0));
+    FND_TEST_FALSE(approx_equal(1.00001, 1.0, 0.0));
+    FND_TEST_TRUE(approx_equal(1.0, 1.001, 1.0));
+    FND_TEST_TRUE(approx_equal(1.001, 1.0, 1.0));
+    FND_TEST_TRUE(approx_equal(1.0, 1.001, 0.1));
+    FND_TEST_TRUE(approx_equal(1.001, 1.0, 0.1));
+
+    // inclusive boundary
+    FND_TEST_TRUE(approx_equal(1.0, 1.5, 0.5));
+    FND_TEST_FALSE(approx_equal(1.0, 1.5, 0.4999));
+
+    // across 0
+    FND_TEST_TRUE(approx_equal(-0.0, 0.0, 0.0));
+    FND_TEST_TRUE(approx_equal(0.0, -0.0, 0.0));
+    FND_TEST_TRUE(approx_equal(-0.5, 0.5, 1.0));
+    FND_TEST_TRUE(approx_equal(0.5, -0.5, 1.0));
+
+    // special value cases
+    FND_TEST_TRUE(approx_equal(kDoubleInfinity, kDoubleInfinity));
+    FND_TEST_TRUE(approx_equal(-kDoubleInfinity, -kDoubleInfinity));
+    FND_TEST_FALSE(approx_equal(kDoubleInfinity, -kDoubleInfinity));
+    FND_TEST_FALSE(approx_equal(0.0, kDoubleNaN));
+    FND_TEST_FALSE(approx_equal(kDoubleNaN, 0.0));
+    FND_TEST_FALSE(approx_equal(kDoubleNaN, kDoubleNaN));
+}
+
+void unittests_core_arithmetic_min_byte()
 {
     static_assert(min(byte_t{1}, byte_t{2}) == 1);
     static_assert(min(byte_t{2}, byte_t{1}) == 1);
@@ -169,7 +247,7 @@ void unittests_core_api_types_min_byte()
     static_assert(min(kByteMaxValue, kByteMinValue) == kByteMinValue);
 }
 
-void unittests_core_api_types_min_int()
+void unittests_core_arithmetic_min_int()
 {
     static_assert(min(int_t{1}, int_t{2}) == 1);
     static_assert(min(int_t{2}, int_t{1}) == 1);
@@ -179,7 +257,7 @@ void unittests_core_api_types_min_int()
     static_assert(min(kIntMaxValue, kIntMinValue) == kIntMinValue);
 }
 
-void unittests_core_api_types_min_long()
+void unittests_core_arithmetic_min_long()
 {
     static_assert(min(long_t{1}, long_t{2}) == 1);
     static_assert(min(long_t{2}, long_t{1}) == 1);
@@ -189,7 +267,7 @@ void unittests_core_api_types_min_long()
     static_assert(min(kLongMaxValue, kLongMinValue) == kLongMinValue);
 }
 
-void unittests_core_api_types_min_ubyte()
+void unittests_core_arithmetic_min_ubyte()
 {
     static_assert(min(ubyte_t{1}, ubyte_t{2}) == 1);
     static_assert(min(ubyte_t{2}, ubyte_t{1}) == 1);
@@ -198,7 +276,7 @@ void unittests_core_api_types_min_ubyte()
     static_assert(min(kUByteMaxValue, kUByteMinValue) == kUByteMinValue);
 }
 
-void unittests_core_api_types_min_uint()
+void unittests_core_arithmetic_min_uint()
 {
     static_assert(min(uint_t{1}, uint_t{2}) == 1);
     static_assert(min(uint_t{2}, uint_t{1}) == 1);
@@ -207,7 +285,7 @@ void unittests_core_api_types_min_uint()
     static_assert(min(kUIntMaxValue, kUIntMinValue) == kUIntMinValue);
 }
 
-void unittests_core_api_types_min_ulong()
+void unittests_core_arithmetic_min_ulong()
 {
     static_assert(min(ulong_t{1}, ulong_t{2}) == 1);
     static_assert(min(ulong_t{2}, ulong_t{1}) == 1);
@@ -216,7 +294,7 @@ void unittests_core_api_types_min_ulong()
     static_assert(min(kULongMaxValue, kULongMinValue) == kULongMinValue);
 }
 
-void unittests_core_api_types_min_float()
+void unittests_core_arithmetic_min_float()
 {
     FND_TEST_TRUE(min(1.0f, 2.0f) == 1.0f);
     FND_TEST_TRUE(min(2.0f, 1.0f) == 1.0f);
@@ -225,13 +303,12 @@ void unittests_core_api_types_min_float()
     FND_TEST_TRUE(min(kFloatMinValue, kFloatMaxValue) == kFloatMinValue);
     FND_TEST_TRUE(min(-kFloatInfinity, 1.0f) == -kFloatInfinity);
     FND_TEST_TRUE(min(kFloatInfinity, 1.0f) == 1.0f);
-    // Comparison based: if either argument is NaN, the second one is returned.
     FND_TEST_TRUE(min(kFloatNaN, 1.0f) == 1.0f);
     FND_TEST_TRUE(min(1.0f, kFloatNaN) == 1.0f);
     FND_TEST_TRUE(isnan(min(kFloatNaN, kFloatNaN)));
 }
 
-void unittests_core_api_types_min_double()
+void unittests_core_arithmetic_min_double()
 {
     FND_TEST_TRUE(min(1.0, 2.0) == 1.0);
     FND_TEST_TRUE(min(2.0, 1.0) == 1.0);
@@ -240,13 +317,12 @@ void unittests_core_api_types_min_double()
     FND_TEST_TRUE(min(kDoubleMinValue, kDoubleMaxValue) == kDoubleMinValue);
     FND_TEST_TRUE(min(-kDoubleInfinity, 1.0) == -kDoubleInfinity);
     FND_TEST_TRUE(min(kDoubleInfinity, 1.0) == 1.0);
-    // Comparison based: if either argument is NaN, the second one is returned.
     FND_TEST_TRUE(min(kDoubleNaN, 1.0) == 1.0);
     FND_TEST_TRUE(min(1.0, kDoubleNaN) == 1.0);
     FND_TEST_TRUE(isnan(min(kDoubleNaN, kDoubleNaN)));
 }
 
-void unittests_core_api_types_max_byte()
+void unittests_core_arithmetic_max_byte()
 {
     static_assert(max(byte_t{1}, byte_t{2}) == 2);
     static_assert(max(byte_t{2}, byte_t{1}) == 2);
@@ -256,7 +332,7 @@ void unittests_core_api_types_max_byte()
     static_assert(max(kByteMaxValue, kByteMinValue) == kByteMaxValue);
 }
 
-void unittests_core_api_types_max_int()
+void unittests_core_arithmetic_max_int()
 {
     static_assert(max(int_t{1}, int_t{2}) == 2);
     static_assert(max(int_t{2}, int_t{1}) == 2);
@@ -266,7 +342,7 @@ void unittests_core_api_types_max_int()
     static_assert(max(kIntMaxValue, kIntMinValue) == kIntMaxValue);
 }
 
-void unittests_core_api_types_max_long()
+void unittests_core_arithmetic_max_long()
 {
     static_assert(max(long_t{1}, long_t{2}) == 2);
     static_assert(max(long_t{2}, long_t{1}) == 2);
@@ -276,7 +352,7 @@ void unittests_core_api_types_max_long()
     static_assert(max(kLongMaxValue, kLongMinValue) == kLongMaxValue);
 }
 
-void unittests_core_api_types_max_ubyte()
+void unittests_core_arithmetic_max_ubyte()
 {
     static_assert(max(ubyte_t{1}, ubyte_t{2}) == 2);
     static_assert(max(ubyte_t{2}, ubyte_t{1}) == 2);
@@ -285,7 +361,7 @@ void unittests_core_api_types_max_ubyte()
     static_assert(max(kUByteMaxValue, kUByteMinValue) == kUByteMaxValue);
 }
 
-void unittests_core_api_types_max_uint()
+void unittests_core_arithmetic_max_uint()
 {
     static_assert(max(uint_t{1}, uint_t{2}) == 2);
     static_assert(max(uint_t{2}, uint_t{1}) == 2);
@@ -294,7 +370,7 @@ void unittests_core_api_types_max_uint()
     static_assert(max(kUIntMaxValue, kUIntMinValue) == kUIntMaxValue);
 }
 
-void unittests_core_api_types_max_ulong()
+void unittests_core_arithmetic_max_ulong()
 {
     static_assert(max(ulong_t{1}, ulong_t{2}) == 2);
     static_assert(max(ulong_t{2}, ulong_t{1}) == 2);
@@ -303,7 +379,7 @@ void unittests_core_api_types_max_ulong()
     static_assert(max(kULongMaxValue, kULongMinValue) == kULongMaxValue);
 }
 
-void unittests_core_api_types_max_float()
+void unittests_core_arithmetic_max_float()
 {
     FND_TEST_TRUE(max(1.0f, 2.0f) == 2.0f);
     FND_TEST_TRUE(max(2.0f, 1.0f) == 2.0f);
@@ -318,7 +394,7 @@ void unittests_core_api_types_max_float()
     FND_TEST_TRUE(isnan(max(kFloatNaN, kFloatNaN)));
 }
 
-void unittests_core_api_types_max_double()
+void unittests_core_arithmetic_max_double()
 {
     FND_TEST_TRUE(max(1.0, 2.0) == 2.0);
     FND_TEST_TRUE(max(2.0, 1.0) == 2.0);
@@ -333,7 +409,7 @@ void unittests_core_api_types_max_double()
     FND_TEST_TRUE(isnan(max(kDoubleNaN, kDoubleNaN)));
 }
 
-void unittests_core_api_types_clamp_byte()
+void unittests_core_arithmetic_clamp_byte()
 {
     static_assert(clamp(byte_t{5}, byte_t{-10}, byte_t{10}) == 5);
     static_assert(clamp(byte_t{-20}, byte_t{-10}, byte_t{10}) == -10);
@@ -345,7 +421,7 @@ void unittests_core_api_types_clamp_byte()
     static_assert(clamp(kByteMaxValue, kByteMinValue, kByteMaxValue) == kByteMaxValue);
 }
 
-void unittests_core_api_types_clamp_int()
+void unittests_core_arithmetic_clamp_int()
 {
     static_assert(clamp(int_t{5}, int_t{-10}, int_t{10}) == 5);
     static_assert(clamp(int_t{-20}, int_t{-10}, int_t{10}) == -10);
@@ -357,7 +433,7 @@ void unittests_core_api_types_clamp_int()
     static_assert(clamp(kIntMaxValue, kIntMinValue, kIntMaxValue) == kIntMaxValue);
 }
 
-void unittests_core_api_types_clamp_long()
+void unittests_core_arithmetic_clamp_long()
 {
     static_assert(clamp(long_t{5}, long_t{-10}, long_t{10}) == 5);
     static_assert(clamp(long_t{-20}, long_t{-10}, long_t{10}) == -10);
@@ -369,7 +445,7 @@ void unittests_core_api_types_clamp_long()
     static_assert(clamp(kLongMaxValue, kLongMinValue, kLongMaxValue) == kLongMaxValue);
 }
 
-void unittests_core_api_types_clamp_ubyte()
+void unittests_core_arithmetic_clamp_ubyte()
 {
     static_assert(clamp(ubyte_t{5}, ubyte_t{2}, ubyte_t{10}) == 5);
     static_assert(clamp(ubyte_t{0}, ubyte_t{2}, ubyte_t{10}) == 2);
@@ -381,7 +457,7 @@ void unittests_core_api_types_clamp_ubyte()
     static_assert(clamp(kUByteMaxValue, kUByteMinValue, kUByteMaxValue) == kUByteMaxValue);
 }
 
-void unittests_core_api_types_clamp_uint()
+void unittests_core_arithmetic_clamp_uint()
 {
     static_assert(clamp(uint_t{5}, uint_t{2}, uint_t{10}) == 5);
     static_assert(clamp(uint_t{0}, uint_t{2}, uint_t{10}) == 2);
@@ -393,7 +469,7 @@ void unittests_core_api_types_clamp_uint()
     static_assert(clamp(kUIntMaxValue, kUIntMinValue, kUIntMaxValue) == kUIntMaxValue);
 }
 
-void unittests_core_api_types_clamp_ulong()
+void unittests_core_arithmetic_clamp_ulong()
 {
     static_assert(clamp(ulong_t{5}, ulong_t{2}, ulong_t{10}) == 5);
     static_assert(clamp(ulong_t{0}, ulong_t{2}, ulong_t{10}) == 2);
@@ -405,7 +481,7 @@ void unittests_core_api_types_clamp_ulong()
     static_assert(clamp(kULongMaxValue, kULongMinValue, kULongMaxValue) == kULongMaxValue);
 }
 
-void unittests_core_api_types_clamp_float()
+void unittests_core_arithmetic_clamp_float()
 {
     FND_TEST_TRUE(clamp(0.5f, -1.0f, 1.0f) == 0.5f);
     FND_TEST_TRUE(clamp(-2.0f, -1.0f, 1.0f) == -1.0f);
@@ -417,7 +493,7 @@ void unittests_core_api_types_clamp_float()
     FND_TEST_TRUE(clamp(-kFloatInfinity, -1.0f, 1.0f) == -1.0f);
 }
 
-void unittests_core_api_types_clamp_double()
+void unittests_core_arithmetic_clamp_double()
 {
     FND_TEST_TRUE(clamp(0.5, -1.0, 1.0) == 0.5);
     FND_TEST_TRUE(clamp(-2.0, -1.0, 1.0) == -1.0);
@@ -429,7 +505,29 @@ void unittests_core_api_types_clamp_double()
     FND_TEST_TRUE(clamp(-kDoubleInfinity, -1.0, 1.0) == -1.0);
 }
 
-void unittests_core_api_types_sign_byte()
+void unittests_core_arithmetic_saturate_float()
+{
+    FND_TEST_TRUE(saturate(-1.0f) == 0.0f);
+    FND_TEST_TRUE(saturate(0.0f) == 0.0f);
+    FND_TEST_TRUE(saturate(0.25f) == 0.25f);
+    FND_TEST_TRUE(saturate(1.0f) == 1.0f);
+    FND_TEST_TRUE(saturate(2.0f) == 1.0f);
+    FND_TEST_TRUE(saturate(kFloatInfinity) == 1.0f);
+    FND_TEST_TRUE(saturate(-kFloatInfinity) == 0.0f);
+}
+
+void unittests_core_arithmetic_saturate_double()
+{
+    FND_TEST_TRUE(saturate(-1.0) == 0.0);
+    FND_TEST_TRUE(saturate(0.0) == 0.0);
+    FND_TEST_TRUE(saturate(0.25) == 0.25);
+    FND_TEST_TRUE(saturate(1.0) == 1.0);
+    FND_TEST_TRUE(saturate(2.0) == 1.0);
+    FND_TEST_TRUE(saturate(kDoubleInfinity) == 1.0);
+    FND_TEST_TRUE(saturate(-kDoubleInfinity) == 0.0);
+}
+
+void unittests_core_arithmetic_sign_byte()
 {
     static_assert(sign(byte_t{0}) == 0);
     static_assert(sign(byte_t{5}) == 1);
@@ -438,7 +536,7 @@ void unittests_core_api_types_sign_byte()
     static_assert(sign(kByteMinValue) == -1);
 }
 
-void unittests_core_api_types_sign_int()
+void unittests_core_arithmetic_sign_int()
 {
     static_assert(sign(int_t{0}) == 0);
     static_assert(sign(int_t{5}) == 1);
@@ -447,7 +545,7 @@ void unittests_core_api_types_sign_int()
     static_assert(sign(kIntMinValue) == -1);
 }
 
-void unittests_core_api_types_sign_long()
+void unittests_core_arithmetic_sign_long()
 {
     static_assert(sign(long_t{0}) == 0);
     static_assert(sign(long_t{5}) == 1);
@@ -456,7 +554,7 @@ void unittests_core_api_types_sign_long()
     static_assert(sign(kLongMinValue) == -1);
 }
 
-void unittests_core_api_types_sign_float()
+void unittests_core_arithmetic_sign_float()
 {
     FND_TEST_TRUE(sign(0.0f) == 0.0f);
     FND_TEST_TRUE(sign(-0.0f) == 0.0f);
@@ -471,7 +569,7 @@ void unittests_core_api_types_sign_float()
     FND_TEST_TRUE(sign(kFloatNaN) == 0.0f);
 }
 
-void unittests_core_api_types_sign_double()
+void unittests_core_arithmetic_sign_double()
 {
     FND_TEST_TRUE(sign(0.0) == 0.0);
     FND_TEST_TRUE(sign(-0.0) == 0.0);
@@ -486,7 +584,7 @@ void unittests_core_api_types_sign_double()
     FND_TEST_TRUE(sign(kDoubleNaN) == 0.0);
 }
 
-void unittests_core_api_types_ceil_float()
+void unittests_core_arithmetic_ceil_float()
 {
     FND_TEST_TRUE(ceil(0.0f) == 0.0f);
     FND_TEST_TRUE(ceil(1.5f) == 2.0f);
@@ -503,7 +601,7 @@ void unittests_core_api_types_ceil_float()
     FND_TEST_TRUE(isnan(ceil(kFloatNaN)));
 }
 
-void unittests_core_api_types_ceil_double()
+void unittests_core_arithmetic_ceil_double()
 {
     FND_TEST_TRUE(ceil(0.0) == 0.0);
     FND_TEST_TRUE(ceil(1.5) == 2.0);
@@ -520,7 +618,7 @@ void unittests_core_api_types_ceil_double()
     FND_TEST_TRUE(isnan(ceil(kDoubleNaN)));
 }
 
-void unittests_core_api_types_floor_float()
+void unittests_core_arithmetic_floor_float()
 {
     FND_TEST_TRUE(floor(0.0f) == 0.0f);
     FND_TEST_TRUE(floor(1.5f) == 1.0f);
@@ -537,7 +635,7 @@ void unittests_core_api_types_floor_float()
     FND_TEST_TRUE(isnan(floor(kFloatNaN)));
 }
 
-void unittests_core_api_types_floor_double()
+void unittests_core_arithmetic_floor_double()
 {
     FND_TEST_TRUE(floor(0.0) == 0.0);
     FND_TEST_TRUE(floor(1.5) == 1.0);
@@ -554,7 +652,7 @@ void unittests_core_api_types_floor_double()
     FND_TEST_TRUE(isnan(floor(kDoubleNaN)));
 }
 
-void unittests_core_api_types_trunc_float()
+void unittests_core_arithmetic_trunc_float()
 {
     FND_TEST_TRUE(trunc(0.0f) == 0.0f);
     FND_TEST_TRUE(trunc(1.5f) == 1.0f);
@@ -571,7 +669,7 @@ void unittests_core_api_types_trunc_float()
     FND_TEST_TRUE(isnan(trunc(kFloatNaN)));
 }
 
-void unittests_core_api_types_trunc_double()
+void unittests_core_arithmetic_trunc_double()
 {
     FND_TEST_TRUE(trunc(0.0) == 0.0);
     FND_TEST_TRUE(trunc(1.5) == 1.0);
@@ -592,7 +690,7 @@ void unittests_core_api_types_trunc_double()
 // fmod
 // ---------------------------------------------------------------------------
 
-void unittests_core_api_types_fmod_float()
+void unittests_core_arithmetic_fmod_float()
 {
     // The result has the sign of x.
     FND_TEST_TRUE(fmod(7.0f, 3.0f) == 1.0f);
@@ -611,7 +709,7 @@ void unittests_core_api_types_fmod_float()
     FND_TEST_TRUE(isnan(fmod(1.0f, kFloatNaN)));
 }
 
-void unittests_core_api_types_fmod_double()
+void unittests_core_arithmetic_fmod_double()
 {
     // The result has the sign of x.
     FND_TEST_TRUE(fmod(7.0, 3.0) == 1.0);
@@ -630,7 +728,7 @@ void unittests_core_api_types_fmod_double()
     FND_TEST_TRUE(isnan(fmod(1.0, kDoubleNaN)));
 }
 
-void unittests_core_api_types_modf_float()
+void unittests_core_arithmetic_modf_float()
 {
     float_t integer;
 
@@ -661,7 +759,7 @@ void unittests_core_api_types_modf_float()
     FND_TEST_TRUE(isnan(integer));
 }
 
-void unittests_core_api_types_modf_double()
+void unittests_core_arithmetic_modf_double()
 {
     double_t integer;
 
@@ -692,11 +790,51 @@ void unittests_core_api_types_modf_double()
     FND_TEST_TRUE(isnan(integer));
 }
 
+void unittests_core_arithmetic_fractional_float()
+{
+    FND_TEST_TRUE(fractional(0.0f) == 0.0f);
+    FND_TEST_TRUE(fractional(1.25f) == 0.25f);
+    FND_TEST_TRUE(fractional(2.0f) == 0.0f);
+    FND_TEST_TRUE(fractional(0.5f) == 0.5f);
+    // Negative x gives the fractional part of |x|.
+    FND_TEST_TRUE(fractional(-1.25f) == 0.25f);
+    FND_TEST_TRUE(fractional(-0.5f) == 0.5f);
+    FND_TEST_TRUE(fractional(-2.0f) == 0.0f);
+    // Exact even for tiny values.
+    FND_TEST_TRUE(fractional(kFloatMinSubnormal) == kFloatMinSubnormal);
+    FND_TEST_TRUE(fractional(-kFloatMinSubnormal) == kFloatMinSubnormal);
+    FND_TEST_TRUE(fractional(-1e-10f) == 1e-10f);
+    FND_TEST_TRUE(fractional(kFloatMaxValue) == 0.0f);
+    FND_TEST_TRUE(fractional(kFloatInfinity) == 0.0f);
+    FND_TEST_TRUE(fractional(-kFloatInfinity) == 0.0f);
+    FND_TEST_TRUE(isnan(fractional(kFloatNaN)));
+}
+
+void unittests_core_arithmetic_fractional_double()
+{
+    FND_TEST_TRUE(fractional(0.0) == 0.0);
+    FND_TEST_TRUE(fractional(1.25) == 0.25);
+    FND_TEST_TRUE(fractional(2.0) == 0.0);
+    FND_TEST_TRUE(fractional(0.5) == 0.5);
+    // Negative x gives the fractional part of |x|.
+    FND_TEST_TRUE(fractional(-1.25) == 0.25);
+    FND_TEST_TRUE(fractional(-0.5) == 0.5);
+    FND_TEST_TRUE(fractional(-2.0) == 0.0);
+    // Exact even for tiny values.
+    FND_TEST_TRUE(fractional(kDoubleMinSubnormal) == kDoubleMinSubnormal);
+    FND_TEST_TRUE(fractional(-kDoubleMinSubnormal) == kDoubleMinSubnormal);
+    FND_TEST_TRUE(fractional(-1e-10) == 1e-10);
+    FND_TEST_TRUE(fractional(kDoubleMaxValue) == 0.0);
+    FND_TEST_TRUE(fractional(kDoubleInfinity) == 0.0);
+    FND_TEST_TRUE(fractional(-kDoubleInfinity) == 0.0);
+    FND_TEST_TRUE(isnan(fractional(kDoubleNaN)));
+}
+
 // ---------------------------------------------------------------------------
 // asfloat, asint, asuint, asdouble, aslong, asulong
 // ---------------------------------------------------------------------------
 
-void unittests_core_api_types_asfloat_int()
+void unittests_core_arithmetic_asfloat_int()
 {
     static_assert(asfloat(int_t{0}) == 0.0f);
     static_assert(asfloat(int_t{0x3F800000}) == 1.0f);
@@ -706,7 +844,7 @@ void unittests_core_api_types_asfloat_int()
     static_assert(asfloat(int_t{1}) == kFloatMinSubnormal);
 }
 
-void unittests_core_api_types_asfloat_uint()
+void unittests_core_arithmetic_asfloat_uint()
 {
     static_assert(asfloat(0u) == 0.0f);
     static_assert(asfloat(0x3F800000u) == 1.0f);
@@ -718,7 +856,7 @@ void unittests_core_api_types_asfloat_uint()
     static_assert(asfloat(1u) == kFloatMinSubnormal);
 }
 
-void unittests_core_api_types_asint_float()
+void unittests_core_arithmetic_asint_float()
 {
     static_assert(asint(0.0f) == 0);
     static_assert(asint(-0.0f) == kIntMinValue);
@@ -727,7 +865,7 @@ void unittests_core_api_types_asint_float()
     static_assert(asint(kFloatInfinity) == 0x7F800000);
 }
 
-void unittests_core_api_types_asint_uint()
+void unittests_core_arithmetic_asint_uint()
 {
     static_assert(asint(0u) == 0);
     static_assert(asint(1u) == 1);
@@ -736,7 +874,7 @@ void unittests_core_api_types_asint_uint()
     static_assert(asint(0xFFFFFFFFu) == -1);
 }
 
-void unittests_core_api_types_asuint_float()
+void unittests_core_arithmetic_asuint_float()
 {
     static_assert(asuint(0.0f) == 0u);
     static_assert(asuint(-0.0f) == 0x80000000u);
@@ -749,7 +887,7 @@ void unittests_core_api_types_asuint_float()
     static_assert(asfloat(asuint(1.5f)) == 1.5f);
 }
 
-void unittests_core_api_types_asuint_int()
+void unittests_core_arithmetic_asuint_int()
 {
     static_assert(asuint(int_t{0}) == 0u);
     static_assert(asuint(int_t{1}) == 1u);
@@ -758,7 +896,7 @@ void unittests_core_api_types_asuint_int()
     static_assert(asuint(kIntMinValue) == 0x80000000u);
 }
 
-void unittests_core_api_types_asdouble_long()
+void unittests_core_arithmetic_asdouble_long()
 {
     static_assert(asdouble(long_t{0}) == 0.0);
     static_assert(asdouble(long_t{0x3FF0000000000000}) == 1.0);
@@ -768,7 +906,7 @@ void unittests_core_api_types_asdouble_long()
     static_assert(asdouble(long_t{1}) == kDoubleMinSubnormal);
 }
 
-void unittests_core_api_types_asdouble_ulong()
+void unittests_core_arithmetic_asdouble_ulong()
 {
     static_assert(asdouble(0ull) == 0.0);
     static_assert(asdouble(0x3FF0000000000000ull) == 1.0);
@@ -780,7 +918,7 @@ void unittests_core_api_types_asdouble_ulong()
     static_assert(asdouble(1ull) == kDoubleMinSubnormal);
 }
 
-void unittests_core_api_types_aslong_double()
+void unittests_core_arithmetic_aslong_double()
 {
     static_assert(aslong(0.0) == 0);
     static_assert(aslong(-0.0) == kLongMinValue);
@@ -789,7 +927,7 @@ void unittests_core_api_types_aslong_double()
     static_assert(aslong(kDoubleInfinity) == 0x7FF0000000000000);
 }
 
-void unittests_core_api_types_aslong_ulong()
+void unittests_core_arithmetic_aslong_ulong()
 {
     static_assert(aslong(0ull) == 0);
     static_assert(aslong(1ull) == 1);
@@ -798,7 +936,7 @@ void unittests_core_api_types_aslong_ulong()
     static_assert(aslong(0xFFFFFFFFFFFFFFFFull) == -1);
 }
 
-void unittests_core_api_types_asulong_double()
+void unittests_core_arithmetic_asulong_double()
 {
     static_assert(asulong(0.0) == 0ull);
     static_assert(asulong(-0.0) == 0x8000000000000000ull);
@@ -811,7 +949,7 @@ void unittests_core_api_types_asulong_double()
     static_assert(asdouble(asulong(1.5)) == 1.5);
 }
 
-void unittests_core_api_types_asulong_long()
+void unittests_core_arithmetic_asulong_long()
 {
     static_assert(asulong(long_t{0}) == 0ull);
     static_assert(asulong(long_t{1}) == 1ull);
@@ -820,66 +958,73 @@ void unittests_core_api_types_asulong_long()
     static_assert(asulong(kLongMinValue) == 0x8000000000000000ull);
 }
 
-void unittests_core_api_types()
+void unittests_core_arithmetic()
 {
-    unittests_core_api_type_definitions();
-    unittests_core_api_types_isfinite_float();
-    unittests_core_api_types_isfinite_double();
-    unittests_core_api_types_isinf_float();
-    unittests_core_api_types_isinf_double();
-    unittests_core_api_types_isnan_float();
-    unittests_core_api_types_isnan_double();
-    unittests_core_api_types_min_byte();
-    unittests_core_api_types_min_int();
-    unittests_core_api_types_min_long();
-    unittests_core_api_types_min_ubyte();
-    unittests_core_api_types_min_uint();
-    unittests_core_api_types_min_ulong();
-    unittests_core_api_types_min_float();
-    unittests_core_api_types_min_double();
-    unittests_core_api_types_max_byte();
-    unittests_core_api_types_max_int();
-    unittests_core_api_types_max_long();
-    unittests_core_api_types_max_ubyte();
-    unittests_core_api_types_max_uint();
-    unittests_core_api_types_max_ulong();
-    unittests_core_api_types_max_float();
-    unittests_core_api_types_max_double();
-    unittests_core_api_types_clamp_byte();
-    unittests_core_api_types_clamp_int();
-    unittests_core_api_types_clamp_long();
-    unittests_core_api_types_clamp_ubyte();
-    unittests_core_api_types_clamp_uint();
-    unittests_core_api_types_clamp_ulong();
-    unittests_core_api_types_clamp_float();
-    unittests_core_api_types_clamp_double();
-    unittests_core_api_types_sign_byte();
-    unittests_core_api_types_sign_int();
-    unittests_core_api_types_sign_long();
-    unittests_core_api_types_sign_float();
-    unittests_core_api_types_sign_double();
-    unittests_core_api_types_ceil_float();
-    unittests_core_api_types_ceil_double();
-    unittests_core_api_types_floor_float();
-    unittests_core_api_types_floor_double();
-    unittests_core_api_types_trunc_float();
-    unittests_core_api_types_trunc_double();
-    unittests_core_api_types_fmod_float();
-    unittests_core_api_types_fmod_double();
-    unittests_core_api_types_modf_float();
-    unittests_core_api_types_modf_double();
-    unittests_core_api_types_asfloat_int();
-    unittests_core_api_types_asfloat_uint();
-    unittests_core_api_types_asint_float();
-    unittests_core_api_types_asint_uint();
-    unittests_core_api_types_asuint_float();
-    unittests_core_api_types_asuint_int();
-    unittests_core_api_types_asdouble_long();
-    unittests_core_api_types_asdouble_ulong();
-    unittests_core_api_types_aslong_double();
-    unittests_core_api_types_aslong_ulong();
-    unittests_core_api_types_asulong_double();
-    unittests_core_api_types_asulong_long();
+    unittests_core_arithmetic_abs_integer_types();
+    unittests_core_arithmetic_abs_float_types();
+    unittests_core_arithmetic_isfinite_float();
+    unittests_core_arithmetic_isfinite_double();
+    unittests_core_arithmetic_isinf_float();
+    unittests_core_arithmetic_isinf_double();
+    unittests_core_arithmetic_isnan_float();
+    unittests_core_arithmetic_isnan_double();
+    unittests_core_arithmetic_approx_equal_float();
+    unittests_core_arithmetic_approx_equal_double();
+    unittests_core_arithmetic_min_byte();
+    unittests_core_arithmetic_min_int();
+    unittests_core_arithmetic_min_long();
+    unittests_core_arithmetic_min_ubyte();
+    unittests_core_arithmetic_min_uint();
+    unittests_core_arithmetic_min_ulong();
+    unittests_core_arithmetic_min_float();
+    unittests_core_arithmetic_min_double();
+    unittests_core_arithmetic_max_byte();
+    unittests_core_arithmetic_max_int();
+    unittests_core_arithmetic_max_long();
+    unittests_core_arithmetic_max_ubyte();
+    unittests_core_arithmetic_max_uint();
+    unittests_core_arithmetic_max_ulong();
+    unittests_core_arithmetic_max_float();
+    unittests_core_arithmetic_max_double();
+    unittests_core_arithmetic_clamp_byte();
+    unittests_core_arithmetic_clamp_int();
+    unittests_core_arithmetic_clamp_long();
+    unittests_core_arithmetic_clamp_ubyte();
+    unittests_core_arithmetic_clamp_uint();
+    unittests_core_arithmetic_clamp_ulong();
+    unittests_core_arithmetic_clamp_float();
+    unittests_core_arithmetic_clamp_double();
+    unittests_core_arithmetic_saturate_float();
+    unittests_core_arithmetic_saturate_double();
+    unittests_core_arithmetic_sign_byte();
+    unittests_core_arithmetic_sign_int();
+    unittests_core_arithmetic_sign_long();
+    unittests_core_arithmetic_sign_float();
+    unittests_core_arithmetic_sign_double();
+    unittests_core_arithmetic_ceil_float();
+    unittests_core_arithmetic_ceil_double();
+    unittests_core_arithmetic_floor_float();
+    unittests_core_arithmetic_floor_double();
+    unittests_core_arithmetic_trunc_float();
+    unittests_core_arithmetic_trunc_double();
+    unittests_core_arithmetic_fmod_float();
+    unittests_core_arithmetic_fmod_double();
+    unittests_core_arithmetic_modf_float();
+    unittests_core_arithmetic_modf_double();
+    unittests_core_arithmetic_fractional_float();
+    unittests_core_arithmetic_fractional_double();
+    unittests_core_arithmetic_asfloat_int();
+    unittests_core_arithmetic_asfloat_uint();
+    unittests_core_arithmetic_asint_float();
+    unittests_core_arithmetic_asint_uint();
+    unittests_core_arithmetic_asuint_float();
+    unittests_core_arithmetic_asuint_int();
+    unittests_core_arithmetic_asdouble_long();
+    unittests_core_arithmetic_asdouble_ulong();
+    unittests_core_arithmetic_aslong_double();
+    unittests_core_arithmetic_aslong_ulong();
+    unittests_core_arithmetic_asulong_double();
+    unittests_core_arithmetic_asulong_long();
 }
 
 } // namespace fnd::unittests
