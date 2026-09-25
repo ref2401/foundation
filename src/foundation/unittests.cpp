@@ -18,7 +18,7 @@ void initialize()
     g_failed_unittest_count = 0;
 }
 
-bool have_all_passed()
+bool_t have_all_passed()
 {
     return g_total_unittest_count > 0 && g_failed_unittest_count == 0;
 }
@@ -40,7 +40,7 @@ void print_last_run_report()
 }
 
 void test_true(
-    const bool condition, const char_t* const condition_text, 
+    const bool_t condition, const char_t* const condition_text, 
     const source_location_t srcloc)
 {
     ++g_total_unittest_count;

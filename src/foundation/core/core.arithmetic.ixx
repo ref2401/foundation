@@ -71,37 +71,37 @@ export FND_INLINE double_t abs(const double_t x)
     return ::fabs(x);
 }
 
-export FND_INLINE bool isfinite(const float_t x)
+export FND_INLINE bool_t isfinite(const float_t x)
 {
     return ::isfinite(x);
 }
 
-export FND_INLINE bool isfinite(const double_t x)
+export FND_INLINE bool_t isfinite(const double_t x)
 {
     return ::isfinite(x);
 }
 
-export FND_INLINE bool isinf(const float_t x)
+export FND_INLINE bool_t isinf(const float_t x)
 {
     return ::isinf(x);
 }
 
-export FND_INLINE bool isinf(const double_t x)
+export FND_INLINE bool_t isinf(const double_t x)
 {
     return ::isinf(x);
 }
 
-export FND_INLINE bool isnan(const float_t x)
+export FND_INLINE bool_t isnan(const float_t x)
 {
     return ::isnan(x);
 }
 
-export FND_INLINE bool isnan(const double_t x)
+export FND_INLINE bool_t isnan(const double_t x)
 {
     return ::isnan(x);
 }
 
-export FND_INLINE bool approx_equal(
+export FND_INLINE bool_t approx_equal(
     const float_t a, const float_t b, const float_t max_abs_diff = 1e-5f)
 {
     FND_ASSERT(max_abs_diff >= 0);
@@ -112,7 +112,7 @@ export FND_INLINE bool approx_equal(
     return a == b || abs(a - b) <= max_abs_diff;
 }
 
-export FND_INLINE bool approx_equal(
+export FND_INLINE bool_t approx_equal(
     const double_t a, const double_t b, const double_t max_abs_diff = 1e-5)
 {
     FND_ASSERT(max_abs_diff >= 0);

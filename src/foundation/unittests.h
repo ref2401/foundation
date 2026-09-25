@@ -11,11 +11,11 @@ import foundation.core;
 namespace fnd::unittests {
 
 void initialize();
-bool have_all_passed();
+bool_t have_all_passed();
 void print_last_run_report();
 
 void test_true(
-    const bool condition, const char_t* const condition_text, 
+    const bool_t condition, const char_t* const condition_text, 
     const source_location_t srcloc);
 
 } // namespace fnd::unittests

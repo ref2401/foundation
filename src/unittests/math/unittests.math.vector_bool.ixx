@@ -14,7 +14,7 @@ export void unittests_math_vector_bool();
 // bool2_t
 // ---------------------------------------------------------------------------
 
-constexpr bool test_components(const bool2_t v, const bool x, const bool y)
+constexpr bool_t test_components(const bool2_t v, const bool_t x, const bool_t y)
 {
     return v.x == x && v.y == y;
 }
@@ -22,9 +22,9 @@ constexpr bool test_components(const bool2_t v, const bool x, const bool y)
 void unittests_math_vector_bool2_type()
 {
     static_assert(PodType<bool2_t>);
-    static_assert(sizeof(bool2_t) == 2 * sizeof(bool));
-    // The ctor(bool) is explicit: no bool (or pointer, or int) converts to bool2_t by accident.
-    static_assert(!is_convertible<bool, bool2_t>());
+    static_assert(sizeof(bool2_t) == 2 * sizeof(bool_t));
+    // The ctor(bool_t) is explicit: no bool_t (or pointer, or int) converts to bool2_t by accident.
+    static_assert(!is_convertible<bool_t, bool2_t>());
 }
 
 void unittests_math_vector_bool2_constructors()
@@ -81,7 +81,7 @@ void unittests_math_vector_bool2_equality_operator()
     FND_TEST_TRUE(test_components(tf == bool2_t{true, false}, true, true));
     FND_TEST_TRUE(test_components(tf == bool2_t{true, true}, true, false));
     FND_TEST_TRUE(test_components(tf == bool2_t{false, true}, false, false));
-    // bool on either side is compared with every component.
+    // bool_t on either side is compared with every component.
     FND_TEST_TRUE(test_components(tf == true, true, false));
     FND_TEST_TRUE(test_components(tf == false, false, true));
     FND_TEST_TRUE(test_components(true == tf, true, false));

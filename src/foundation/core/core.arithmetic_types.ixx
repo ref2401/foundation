@@ -7,6 +7,8 @@ export module foundation.core:arithmetic_types;
 
 namespace fnd {
 
+// boolean
+export using bool_t = bool;
 // signed
 export using byte_t = ::int8_t;
 export using int_t = ::int32_t;

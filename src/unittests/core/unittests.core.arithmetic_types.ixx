@@ -38,6 +38,9 @@ void unittests_core_arithmetic_type_definitions()
     static_assert(sizeof(ulong_t) == 8, "ulong_t must be 8 bytes");
     static_assert(ulong_t(-1) > ulong_t{0}, "ulong_t must be unsigned");
 
+    // bool_t
+    static_assert(sizeof(bool_t) == 1, "bool_t must be 1 byte");
+
     static_assert(sizeof(void*) == 8, "foundation targets 64-bit only");
 }
 

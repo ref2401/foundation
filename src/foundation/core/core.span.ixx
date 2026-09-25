@@ -28,19 +28,19 @@ struct span_t final {
 };
 
 export template<typename T>
-constexpr bool operator==(const span_t<T> a, const span_t<T> b)
+constexpr bool_t operator==(const span_t<T> a, const span_t<T> b)
 {
     return a.ptr == b.ptr && a.count == b.count;
 }
 
 export template<typename T>
-constexpr bool operator!=(const span_t<T> a, const span_t<T> b)
+constexpr bool_t operator!=(const span_t<T> a, const span_t<T> b)
 {
     return !(a == b);
 }
 
 export template<typename T>
-constexpr bool is_empty(const span_t<T> span)
+constexpr bool_t is_empty(const span_t<T> span)
 {
     return !span.ptr || (span.count == 0);
 }
