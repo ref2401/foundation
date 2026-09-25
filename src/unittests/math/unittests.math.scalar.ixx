@@ -206,6 +206,56 @@ void unittests_math_scalar_atan2_double()
     FND_TEST_TRUE(isnan(atan2(double_t(NAN), 1.0)));
 }
 
+void unittests_math_scalar_degrees_float()
+{
+    static_assert(degrees(0.0f) == 0.0f);
+    FND_TEST_TRUE(degrees(kFloatPi) == 180.0f);
+    FND_TEST_TRUE(degrees(-kFloatPi) == -180.0f);
+    FND_TEST_TRUE(degrees(kFloatPi / 2) == 90.0f);
+    FND_TEST_TRUE(degrees(kFloatPi * 2) == 360.0f);
+    FND_TEST_TRUE(approx_equal(degrees(1.0f), 57.2957795130823209f));
+    FND_TEST_TRUE(degrees(kFloatInfinity) == kFloatInfinity);
+    FND_TEST_TRUE(isnan(degrees(kFloatNaN)));
+}
+
+void unittests_math_scalar_degrees_double()
+{
+    static_assert(degrees(0.0) == 0.0);
+    FND_TEST_TRUE(degrees(kDoublePi) == 180.0);
+    FND_TEST_TRUE(degrees(-kDoublePi) == -180.0);
+    FND_TEST_TRUE(degrees(kDoublePi / 2) == 90.0);
+    FND_TEST_TRUE(degrees(kDoublePi * 2) == 360.0);
+    FND_TEST_TRUE(approx_equal(degrees(1.0), 57.2957795130823209));
+    FND_TEST_TRUE(degrees(kDoubleInfinity) == kDoubleInfinity);
+    FND_TEST_TRUE(isnan(degrees(kDoubleNaN)));
+}
+
+void unittests_math_scalar_radians_float()
+{
+    static_assert(radians(0.0f) == 0.0f);
+    FND_TEST_TRUE(radians(180.0f) == kFloatPi);
+    FND_TEST_TRUE(radians(-180.0f) == -kFloatPi);
+    FND_TEST_TRUE(radians(90.0f) == kFloatPi / 2);
+    FND_TEST_TRUE(radians(360.0f) == kFloatPi * 2);
+    FND_TEST_TRUE(approx_equal(radians(1.0f), 0.0174532925199432958f));
+    FND_TEST_TRUE(approx_equal(radians(degrees(1.0f)), 1.0f));
+    FND_TEST_TRUE(radians(kFloatInfinity) == kFloatInfinity);
+    FND_TEST_TRUE(isnan(radians(kFloatNaN)));
+}
+
+void unittests_math_scalar_radians_double()
+{
+    static_assert(radians(0.0) == 0.0);
+    FND_TEST_TRUE(radians(180.0) == kDoublePi);
+    FND_TEST_TRUE(radians(-180.0) == -kDoublePi);
+    FND_TEST_TRUE(radians(90.0) == kDoublePi / 2);
+    FND_TEST_TRUE(radians(360.0) == kDoublePi * 2);
+    FND_TEST_TRUE(approx_equal(radians(1.0), 0.0174532925199432958));
+    FND_TEST_TRUE(approx_equal(radians(degrees(1.0)), 1.0));
+    FND_TEST_TRUE(radians(kDoubleInfinity) == kDoubleInfinity);
+    FND_TEST_TRUE(isnan(radians(kDoubleNaN)));
+}
+
 void unittests_math_scalar_cos_float()
 {
     FND_TEST_TRUE(approx_equal(cos(0.0f), 1.0f));
@@ -526,44 +576,44 @@ void unittests_math_scalar_log10_double()
 // frac
 // ---------------------------------------------------------------------------
 
-void unittests_math_scalar_fracional_float()
+void unittests_math_scalar_fractional_float()
 {
-    FND_TEST_TRUE(fracional(0.0f) == 0.0f);
-    FND_TEST_TRUE(fracional(1.25f) == 0.25f);
-    FND_TEST_TRUE(fracional(2.0f) == 0.0f);
-    FND_TEST_TRUE(fracional(0.5f) == 0.5f);
+    FND_TEST_TRUE(fractional(0.0f) == 0.0f);
+    FND_TEST_TRUE(fractional(1.25f) == 0.25f);
+    FND_TEST_TRUE(fractional(2.0f) == 0.0f);
+    FND_TEST_TRUE(fractional(0.5f) == 0.5f);
     // Negative x gives the fractional part of |x|.
-    FND_TEST_TRUE(fracional(-1.25f) == 0.25f);
-    FND_TEST_TRUE(fracional(-0.5f) == 0.5f);
-    FND_TEST_TRUE(fracional(-2.0f) == 0.0f);
+    FND_TEST_TRUE(fractional(-1.25f) == 0.25f);
+    FND_TEST_TRUE(fractional(-0.5f) == 0.5f);
+    FND_TEST_TRUE(fractional(-2.0f) == 0.0f);
     // Exact even for tiny values.
-    FND_TEST_TRUE(fracional(kFloatMinSubnormal) == kFloatMinSubnormal);
-    FND_TEST_TRUE(fracional(-kFloatMinSubnormal) == kFloatMinSubnormal);
-    FND_TEST_TRUE(fracional(-1e-10f) == 1e-10f);
-    FND_TEST_TRUE(fracional(kFloatMaxValue) == 0.0f);
-    FND_TEST_TRUE(fracional(kFloatInfinity) == 0.0f);
-    FND_TEST_TRUE(fracional(-kFloatInfinity) == 0.0f);
-    FND_TEST_TRUE(isnan(fracional(kFloatNaN)));
+    FND_TEST_TRUE(fractional(kFloatMinSubnormal) == kFloatMinSubnormal);
+    FND_TEST_TRUE(fractional(-kFloatMinSubnormal) == kFloatMinSubnormal);
+    FND_TEST_TRUE(fractional(-1e-10f) == 1e-10f);
+    FND_TEST_TRUE(fractional(kFloatMaxValue) == 0.0f);
+    FND_TEST_TRUE(fractional(kFloatInfinity) == 0.0f);
+    FND_TEST_TRUE(fractional(-kFloatInfinity) == 0.0f);
+    FND_TEST_TRUE(isnan(fractional(kFloatNaN)));
 }
 
-void unittests_math_scalar_fracional_double()
+void unittests_math_scalar_fractional_double()
 {
-    FND_TEST_TRUE(fracional(0.0) == 0.0);
-    FND_TEST_TRUE(fracional(1.25) == 0.25);
-    FND_TEST_TRUE(fracional(2.0) == 0.0);
-    FND_TEST_TRUE(fracional(0.5) == 0.5);
+    FND_TEST_TRUE(fractional(0.0) == 0.0);
+    FND_TEST_TRUE(fractional(1.25) == 0.25);
+    FND_TEST_TRUE(fractional(2.0) == 0.0);
+    FND_TEST_TRUE(fractional(0.5) == 0.5);
     // Negative x gives the fractional part of |x|.
-    FND_TEST_TRUE(fracional(-1.25) == 0.25);
-    FND_TEST_TRUE(fracional(-0.5) == 0.5);
-    FND_TEST_TRUE(fracional(-2.0) == 0.0);
+    FND_TEST_TRUE(fractional(-1.25) == 0.25);
+    FND_TEST_TRUE(fractional(-0.5) == 0.5);
+    FND_TEST_TRUE(fractional(-2.0) == 0.0);
     // Exact even for tiny values.
-    FND_TEST_TRUE(fracional(kDoubleMinSubnormal) == kDoubleMinSubnormal);
-    FND_TEST_TRUE(fracional(-kDoubleMinSubnormal) == kDoubleMinSubnormal);
-    FND_TEST_TRUE(fracional(-1e-10) == 1e-10);
-    FND_TEST_TRUE(fracional(kDoubleMaxValue) == 0.0);
-    FND_TEST_TRUE(fracional(kDoubleInfinity) == 0.0);
-    FND_TEST_TRUE(fracional(-kDoubleInfinity) == 0.0);
-    FND_TEST_TRUE(isnan(fracional(kDoubleNaN)));
+    FND_TEST_TRUE(fractional(kDoubleMinSubnormal) == kDoubleMinSubnormal);
+    FND_TEST_TRUE(fractional(-kDoubleMinSubnormal) == kDoubleMinSubnormal);
+    FND_TEST_TRUE(fractional(-1e-10) == 1e-10);
+    FND_TEST_TRUE(fractional(kDoubleMaxValue) == 0.0);
+    FND_TEST_TRUE(fractional(kDoubleInfinity) == 0.0);
+    FND_TEST_TRUE(fractional(-kDoubleInfinity) == 0.0);
+    FND_TEST_TRUE(isnan(fractional(kDoubleNaN)));
 }
 
 void unittests_math_scalar()
@@ -582,6 +632,10 @@ void unittests_math_scalar()
     unittests_math_scalar_atan_double();
     unittests_math_scalar_atan2_float();
     unittests_math_scalar_atan2_double();
+    unittests_math_scalar_degrees_float();
+    unittests_math_scalar_degrees_double();
+    unittests_math_scalar_radians_float();
+    unittests_math_scalar_radians_double();
     unittests_math_scalar_cos_float();
     unittests_math_scalar_cos_double();
     unittests_math_scalar_sin_float();
@@ -613,8 +667,8 @@ void unittests_math_scalar()
     unittests_math_scalar_log2_double();
     unittests_math_scalar_log10_float();
     unittests_math_scalar_log10_double();
-    unittests_math_scalar_fracional_float();
-    unittests_math_scalar_fracional_double();
+    unittests_math_scalar_fractional_float();
+    unittests_math_scalar_fractional_double();
 }
 
 } // namespace fnd::unittests

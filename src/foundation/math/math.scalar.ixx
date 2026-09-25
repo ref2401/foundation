@@ -8,32 +8,33 @@ export import foundation.core;
 
 namespace fnd {
 
-// ---------------------------------------------------------------------------
-// Abs
-// ---------------------------------------------------------------------------
+export constexpr double_t kDoubleToDegrees{57.29577951308232};
+export constexpr double_t kDoubleToRadians{0.017453292519943295};
+export constexpr float_t kFloatToDegrees = static_cast<float_t>(kDoubleToDegrees);
+export constexpr float_t kFloatToRadians = static_cast<float_t>(kDoubleToRadians);
 
-// NOTE:
-// MinValue has no positive counterpart: abs(int_t{-2147483648}) would be
-// 2147483648, but kIntMaxValue is 2147483647 (likewise for long_t). MinValue
-// is therefore outside the domain of the integer overloads and is asserted.
-//
-// The negation is done in the unsigned domain, so that in builds without
-// assertions abs(MinValue) wraps back to MinValue, as in HLSL, instead of being
-// signed overflow (undefined behaviour in C++).
-//
-// byte_t could negate directly, since x is promoted to int before the
-// negation, so -x cannot overflow. It uses the same form for symmetry.
 
 export constexpr byte_t abs(const byte_t x)
 {
+    // x is promoted to int before the negation, so -x cannot overflow and no
+    // unsigned arithmetic is needed. In builds without assertions abs(-128) is
+    // 128, which the cast back to byte_t wraps to -128, as in the other overloads.
     FND_ASSERT(x != kByteMinValue);
 
-    const ubyte_t ux = static_cast<ubyte_t>(x);
-    return static_cast<byte_t>(x < 0 ? ubyte_t{0} - ux : ux);
+    return static_cast<byte_t>(x < 0 ? -x : x);
 }
 
 export constexpr int_t abs(const int_t x)
 {
+    // NOTE:
+    // MinValue has no positive counterpart: abs(int_t{-2147483648}) would be
+    // 2147483648, but kIntMaxValue is 2147483647 (likewise for long_t). MinValue
+    // is therefore outside the domain of the integer overloads and is asserted.
+    //
+    // The negation is done in the unsigned domain, so that in builds without
+    // assertions abs(MinValue) wraps back to MinValue, as in HLSL, instead of being
+    // signed overflow (undefined behaviour in C++).
+
     FND_ASSERT(x != kIntMinValue);
 
     const uint_t ux = static_cast<uint_t>(x);
@@ -58,10 +59,6 @@ export FND_INLINE double_t abs(const double_t x)
     return ::fabs(x);
 }
 
-// ---------------------------------------------------------------------------
-// Comparison
-// ---------------------------------------------------------------------------
-
 export FND_INLINE bool approx_equal(
     const float_t a, const float_t b, const float_t max_abs_diff = 1e-5f)
 {
@@ -80,10 +77,6 @@ export FND_INLINE bool approx_equal(
 
     return a == b || abs(a - b) <= max_abs_diff;
 }
-
-// ---------------------------------------------------------------------------
-// Trigonometry
-// ---------------------------------------------------------------------------
 
 export FND_INLINE float_t acos(const float_t x)
 {
@@ -123,6 +116,26 @@ export FND_INLINE float_t atan2(const float_t y, const float_t x)
 export FND_INLINE double_t atan2(const double_t y, const double_t x)
 {
     return ::atan2(y, x);
+}
+
+export constexpr float_t degrees(const float_t rads)
+{
+    return rads * kFloatToDegrees;
+}
+
+export constexpr double_t degrees(const double_t rads)
+{
+    return rads * kDoubleToDegrees;
+}
+
+export constexpr float_t radians(const float_t degs)
+{
+    return degs * kFloatToRadians;
+}
+
+export constexpr double_t radians(const double_t degs)
+{
+    return degs * kDoubleToRadians;
 }
 
 export FND_INLINE float_t cos(const float_t x)
@@ -312,8 +325,10 @@ export FND_INLINE double_t log10(const double_t x)
     return ::log10(x);
 }
 
-// Fractional part of |x|, in [0, 1). fracional(+-inf) is 0 and fracional(NaN) is NaN.
-export FND_INLINE float_t fracional(const float_t x)
+// Fractional part of |x|, in [0, 1). 
+// fractional(-1e-10f) = 1e-10f;
+// fractional(+-inf) is 0 and fractional(NaN) is NaN;
+export FND_INLINE float_t fractional(const float_t x)
 {
     // NOTE:
     // Not implemented as x - floor(x), because that returns 1 for tiny negative x. 
@@ -325,7 +340,7 @@ export FND_INLINE float_t fracional(const float_t x)
     return abs(modf(x, integer));
 }
 
-export FND_INLINE double_t fracional(const double_t x)
+export FND_INLINE double_t fractional(const double_t x)
 {
     double_t integer;
     return abs(modf(x, integer));
