@@ -692,6 +692,134 @@ void unittests_core_api_types_modf_double()
     FND_TEST_TRUE(isnan(integer));
 }
 
+// ---------------------------------------------------------------------------
+// asfloat, asint, asuint, asdouble, aslong, asulong
+// ---------------------------------------------------------------------------
+
+void unittests_core_api_types_asfloat_int()
+{
+    static_assert(asfloat(int_t{0}) == 0.0f);
+    static_assert(asfloat(int_t{0x3F800000}) == 1.0f);
+    static_assert(asfloat(static_cast<int_t>(0xBF800000u)) == -1.0f);
+    static_assert(asfloat(int_t{0x7F800000}) == kFloatInfinity);
+    // Bits, not a value conversion: 1 is the smallest subnormal, not 1.0f.
+    static_assert(asfloat(int_t{1}) == kFloatMinSubnormal);
+}
+
+void unittests_core_api_types_asfloat_uint()
+{
+    static_assert(asfloat(0u) == 0.0f);
+    static_assert(asfloat(0x3F800000u) == 1.0f);
+    static_assert(asfloat(0xBF800000u) == -1.0f);
+    static_assert(asfloat(0x7F800000u) == kFloatInfinity);
+    static_assert(asfloat(0xFF800000u) == -kFloatInfinity);
+    static_assert(asfloat(0x7F7FFFFFu) == kFloatMaxValue);
+    static_assert(asfloat(0x00800000u) == kFloatMinNormal);
+    static_assert(asfloat(1u) == kFloatMinSubnormal);
+}
+
+void unittests_core_api_types_asint_float()
+{
+    static_assert(asint(0.0f) == 0);
+    static_assert(asint(-0.0f) == kIntMinValue);
+    static_assert(asint(1.0f) == 0x3F800000);
+    static_assert(asint(-1.0f) == static_cast<int_t>(0xBF800000u));
+    static_assert(asint(kFloatInfinity) == 0x7F800000);
+}
+
+void unittests_core_api_types_asint_uint()
+{
+    static_assert(asint(0u) == 0);
+    static_assert(asint(1u) == 1);
+    static_assert(asint(0x7FFFFFFFu) == kIntMaxValue);
+    static_assert(asint(0x80000000u) == kIntMinValue);
+    static_assert(asint(0xFFFFFFFFu) == -1);
+}
+
+void unittests_core_api_types_asuint_float()
+{
+    static_assert(asuint(0.0f) == 0u);
+    static_assert(asuint(-0.0f) == 0x80000000u);
+    static_assert(asuint(1.0f) == 0x3F800000u);
+    static_assert(asuint(-1.0f) == 0xBF800000u);
+    static_assert(asuint(kFloatInfinity) == 0x7F800000u);
+    static_assert(asuint(-kFloatInfinity) == 0xFF800000u);
+    // NaN: all exponent bits set and a non-zero mantissa, whatever its sign.
+    static_assert((asuint(kFloatNaN) & 0x7FFFFFFFu) > 0x7F800000u);
+    static_assert(asfloat(asuint(1.5f)) == 1.5f);
+}
+
+void unittests_core_api_types_asuint_int()
+{
+    static_assert(asuint(int_t{0}) == 0u);
+    static_assert(asuint(int_t{1}) == 1u);
+    static_assert(asuint(int_t{-1}) == 0xFFFFFFFFu);
+    static_assert(asuint(kIntMaxValue) == 0x7FFFFFFFu);
+    static_assert(asuint(kIntMinValue) == 0x80000000u);
+}
+
+void unittests_core_api_types_asdouble_long()
+{
+    static_assert(asdouble(long_t{0}) == 0.0);
+    static_assert(asdouble(long_t{0x3FF0000000000000}) == 1.0);
+    static_assert(asdouble(static_cast<long_t>(0xBFF0000000000000ull)) == -1.0);
+    static_assert(asdouble(long_t{0x7FF0000000000000}) == kDoubleInfinity);
+    // Bits, not a value conversion: 1 is the smallest subnormal, not 1.0.
+    static_assert(asdouble(long_t{1}) == kDoubleMinSubnormal);
+}
+
+void unittests_core_api_types_asdouble_ulong()
+{
+    static_assert(asdouble(0ull) == 0.0);
+    static_assert(asdouble(0x3FF0000000000000ull) == 1.0);
+    static_assert(asdouble(0xBFF0000000000000ull) == -1.0);
+    static_assert(asdouble(0x7FF0000000000000ull) == kDoubleInfinity);
+    static_assert(asdouble(0xFFF0000000000000ull) == -kDoubleInfinity);
+    static_assert(asdouble(0x7FEFFFFFFFFFFFFFull) == kDoubleMaxValue);
+    static_assert(asdouble(0x0010000000000000ull) == kDoubleMinNormal);
+    static_assert(asdouble(1ull) == kDoubleMinSubnormal);
+}
+
+void unittests_core_api_types_aslong_double()
+{
+    static_assert(aslong(0.0) == 0);
+    static_assert(aslong(-0.0) == kLongMinValue);
+    static_assert(aslong(1.0) == 0x3FF0000000000000);
+    static_assert(aslong(-1.0) == static_cast<long_t>(0xBFF0000000000000ull));
+    static_assert(aslong(kDoubleInfinity) == 0x7FF0000000000000);
+}
+
+void unittests_core_api_types_aslong_ulong()
+{
+    static_assert(aslong(0ull) == 0);
+    static_assert(aslong(1ull) == 1);
+    static_assert(aslong(0x7FFFFFFFFFFFFFFFull) == kLongMaxValue);
+    static_assert(aslong(0x8000000000000000ull) == kLongMinValue);
+    static_assert(aslong(0xFFFFFFFFFFFFFFFFull) == -1);
+}
+
+void unittests_core_api_types_asulong_double()
+{
+    static_assert(asulong(0.0) == 0ull);
+    static_assert(asulong(-0.0) == 0x8000000000000000ull);
+    static_assert(asulong(1.0) == 0x3FF0000000000000ull);
+    static_assert(asulong(-1.0) == 0xBFF0000000000000ull);
+    static_assert(asulong(kDoubleInfinity) == 0x7FF0000000000000ull);
+    static_assert(asulong(-kDoubleInfinity) == 0xFFF0000000000000ull);
+    // NaN: all exponent bits set and a non-zero mantissa, whatever its sign.
+    static_assert((asulong(kDoubleNaN) & 0x7FFFFFFFFFFFFFFFull) > 0x7FF0000000000000ull);
+    static_assert(asdouble(asulong(1.5)) == 1.5);
+}
+
+void unittests_core_api_types_asulong_long()
+{
+    static_assert(asulong(long_t{0}) == 0ull);
+    static_assert(asulong(long_t{1}) == 1ull);
+    static_assert(asulong(long_t{-1}) == 0xFFFFFFFFFFFFFFFFull);
+    static_assert(asulong(kLongMaxValue) == 0x7FFFFFFFFFFFFFFFull);
+    static_assert(asulong(kLongMinValue) == 0x8000000000000000ull);
+}
+
 void unittests_core_api_types()
 {
     unittests_core_api_type_definitions();
@@ -740,6 +868,18 @@ void unittests_core_api_types()
     unittests_core_api_types_fmod_double();
     unittests_core_api_types_modf_float();
     unittests_core_api_types_modf_double();
+    unittests_core_api_types_asfloat_int();
+    unittests_core_api_types_asfloat_uint();
+    unittests_core_api_types_asint_float();
+    unittests_core_api_types_asint_uint();
+    unittests_core_api_types_asuint_float();
+    unittests_core_api_types_asuint_int();
+    unittests_core_api_types_asdouble_long();
+    unittests_core_api_types_asdouble_ulong();
+    unittests_core_api_types_aslong_double();
+    unittests_core_api_types_aslong_ulong();
+    unittests_core_api_types_asulong_double();
+    unittests_core_api_types_asulong_long();
 }
 
 } // namespace fnd::unittests

@@ -401,7 +401,6 @@ void unittests_math_scalar_pow_float()
     // Anything to the power 0 is 1, and 1 to any power is 1, even with NaN.
     FND_TEST_TRUE(pow(kFloatNaN, 0.0f) == 1.0f);
     FND_TEST_TRUE(pow(1.0f, kFloatNaN) == 1.0f);
-    FND_TEST_TRUE(isnan(pow(-2.0f, 0.5f)));
 }
 
 void unittests_math_scalar_pow_double()
@@ -415,7 +414,6 @@ void unittests_math_scalar_pow_double()
     // Anything to the power 0 is 1, and 1 to any power is 1, even with NaN.
     FND_TEST_TRUE(pow(kDoubleNaN, 0.0) == 1.0);
     FND_TEST_TRUE(pow(1.0, kDoubleNaN) == 1.0);
-    FND_TEST_TRUE(isnan(pow(-2.0, 0.5)));
 }
 
 void unittests_math_scalar_rcp_float()

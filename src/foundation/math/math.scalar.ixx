@@ -209,14 +209,24 @@ export FND_INLINE double_t smoothstep(
     return t * t * (3.0 - 2.0 * t);
 }
 
-export FND_INLINE float_t pow(const float_t x, const float_t y)
+export FND_INLINE float_t pow(const float_t base, const float_t exponent)
 {
-    return ::powf(x, y);
+    // NOTE:
+    // Domain errors as the C standard defines them for pow: a finite negative
+    // base with a finite non-integer exponent (the result would be complex), and
+    // 0 to the power 0.
+    FND_ASSERT(!(isfinite(base) && base < 0 && isfinite(exponent) && trunc(exponent) != exponent));
+    FND_ASSERT(!(base == 0 && exponent == 0));
+
+    return ::powf(base, exponent);
 }
 
-export FND_INLINE double_t pow(const double_t x, const double_t y)
+export FND_INLINE double_t pow(const double_t base, const double_t exponent)
 {
-    return ::pow(x, y);
+    FND_ASSERT(!(isfinite(base) && base < 0 && isfinite(exponent) && trunc(exponent) != exponent));
+    FND_ASSERT(!(base == 0 && exponent == 0));
+
+    return ::pow(base, exponent);
 }
 
 export FND_INLINE float_t rcp(const float_t x)
