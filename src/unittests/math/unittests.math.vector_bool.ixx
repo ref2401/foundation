@@ -124,6 +124,128 @@ void unittests_math_vector_bool2_logical_or_operator()
     FND_TEST_TRUE(test_components(false || tf, true, false));
 }
 
+// ---------------------------------------------------------------------------
+// bool3_t
+// ---------------------------------------------------------------------------
+
+constexpr bool_t test_components(
+    const bool3_t v, const bool_t x, const bool_t y, const bool_t z)
+{
+    return v.x == x && v.y == y && v.z == z;
+}
+
+void unittests_math_vector_bool3_type()
+{
+    static_assert(PodType<bool3_t>);
+    static_assert(sizeof(bool3_t) == 3 * sizeof(bool_t));
+    // The ctor(bool_t) is explicit: no bool_t (or pointer, or int) converts to bool3_t by accident.
+    static_assert(!is_convertible<bool_t, bool3_t>());
+}
+
+void unittests_math_vector_bool3_constructors()
+{
+    FND_TEST_TRUE(test_components(bool3_t{}, false, false, false));
+    FND_TEST_TRUE(test_components(bool3_t{true}, true, true, true));
+    FND_TEST_TRUE(test_components(bool3_t{false}, false, false, false));
+    FND_TEST_TRUE(test_components(bool3_t{true, false, false}, true, false, false));
+    FND_TEST_TRUE(test_components(bool3_t{false, true, false}, false, true, false));
+    FND_TEST_TRUE(test_components(bool3_t{false, false, true}, false, false, true));
+}
+
+void unittests_math_vector_bool3_subscript_operator()
+{
+    const bool3_t v{true, false, true};
+    FND_TEST_TRUE(v[0]);
+    FND_TEST_FALSE(v[1]);
+    FND_TEST_TRUE(v[2]);
+
+    // The non-const overload returns a reference into the vector itself.
+    bool3_t w;
+    w[2] = true;
+    FND_TEST_TRUE(test_components(w, false, false, true));
+
+    w[0] = true;
+    w[1] = true;
+    w[2] = false;
+    FND_TEST_TRUE(test_components(w, true, true, false));
+}
+
+void unittests_math_vector_bool3_not_operator()
+{
+    FND_TEST_TRUE(test_components(!bool3_t{true, false, true}, false, true, false));
+    FND_TEST_TRUE(test_components(!bool3_t{false, false, false}, true, true, true));
+    FND_TEST_TRUE(test_components(!bool3_t{true, true, true}, false, false, false));
+}
+
+void unittests_math_vector_bool3_all()
+{
+    FND_TEST_TRUE(all(bool3_t{true, true, true}));
+    FND_TEST_FALSE(all(bool3_t{false, true, true}));
+    FND_TEST_FALSE(all(bool3_t{true, false, true}));
+    FND_TEST_FALSE(all(bool3_t{true, true, false}));
+    FND_TEST_FALSE(all(bool3_t{false, false, false}));
+}
+
+void unittests_math_vector_bool3_any()
+{
+    FND_TEST_TRUE(any(bool3_t{true, true, true}));
+    FND_TEST_TRUE(any(bool3_t{true, false, false}));
+    FND_TEST_TRUE(any(bool3_t{false, true, false}));
+    FND_TEST_TRUE(any(bool3_t{false, false, true}));
+    FND_TEST_FALSE(any(bool3_t{false, false, false}));
+}
+
+void unittests_math_vector_bool3_equality_operator()
+{
+    const bool3_t tft{true, false, true};
+    FND_TEST_TRUE(test_components(tft == bool3_t{true, false, true}, true, true, true));
+    FND_TEST_TRUE(test_components(tft == bool3_t{true, true, true}, true, false, true));
+    FND_TEST_TRUE(test_components(tft == bool3_t{false, true, false}, false, false, false));
+    // bool_t on either side is compared with every component.
+    FND_TEST_TRUE(test_components(tft == true, true, false, true));
+    FND_TEST_TRUE(test_components(tft == false, false, true, false));
+    FND_TEST_TRUE(test_components(true == tft, true, false, true));
+    FND_TEST_TRUE(test_components(false == tft, false, true, false));
+}
+
+void unittests_math_vector_bool3_inequality_operator()
+{
+    const bool3_t tft{true, false, true};
+    FND_TEST_TRUE(test_components(tft != bool3_t{true, false, true}, false, false, false));
+    FND_TEST_TRUE(test_components(tft != bool3_t{true, true, true}, false, true, false));
+    FND_TEST_TRUE(test_components(tft != bool3_t{false, true, false}, true, true, true));
+    FND_TEST_TRUE(test_components(tft != true, false, true, false));
+    FND_TEST_TRUE(test_components(tft != false, true, false, true));
+    FND_TEST_TRUE(test_components(true != tft, false, true, false));
+    FND_TEST_TRUE(test_components(false != tft, true, false, true));
+}
+
+void unittests_math_vector_bool3_logical_and_operator()
+{
+    const bool3_t tft{true, false, true};
+    FND_TEST_TRUE(test_components(tft && bool3_t{true, true, true}, true, false, true));
+    FND_TEST_TRUE(test_components(tft && bool3_t{false, true, true}, false, false, true));
+    FND_TEST_TRUE(test_components(
+        bool3_t{true, true, true} && bool3_t{true, true, true}, true, true, true));
+    FND_TEST_TRUE(test_components(tft && true, true, false, true));
+    FND_TEST_TRUE(test_components(tft && false, false, false, false));
+    FND_TEST_TRUE(test_components(true && tft, true, false, true));
+    FND_TEST_TRUE(test_components(false && tft, false, false, false));
+}
+
+void unittests_math_vector_bool3_logical_or_operator()
+{
+    const bool3_t tft{true, false, true};
+    FND_TEST_TRUE(test_components(tft || bool3_t{false, false, false}, true, false, true));
+    FND_TEST_TRUE(test_components(tft || bool3_t{false, true, false}, true, true, true));
+    FND_TEST_TRUE(test_components(
+        bool3_t{false, false, false} || bool3_t{false, false, false}, false, false, false));
+    FND_TEST_TRUE(test_components(tft || true, true, true, true));
+    FND_TEST_TRUE(test_components(tft || false, true, false, true));
+    FND_TEST_TRUE(test_components(true || tft, true, true, true));
+    FND_TEST_TRUE(test_components(false || tft, true, false, true));
+}
+
 void unittests_math_vector_bool()
 {
     unittests_math_vector_bool2_type();
@@ -136,6 +258,17 @@ void unittests_math_vector_bool()
     unittests_math_vector_bool2_inequality_operator();
     unittests_math_vector_bool2_logical_and_operator();
     unittests_math_vector_bool2_logical_or_operator();
+
+    unittests_math_vector_bool3_type();
+    unittests_math_vector_bool3_constructors();
+    unittests_math_vector_bool3_subscript_operator();
+    unittests_math_vector_bool3_not_operator();
+    unittests_math_vector_bool3_all();
+    unittests_math_vector_bool3_any();
+    unittests_math_vector_bool3_equality_operator();
+    unittests_math_vector_bool3_inequality_operator();
+    unittests_math_vector_bool3_logical_and_operator();
+    unittests_math_vector_bool3_logical_or_operator();
 }
 
 } // namespace fnd::unittests
