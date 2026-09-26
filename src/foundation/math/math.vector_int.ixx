@@ -3,7 +3,6 @@ module;
 
 export module foundation.math:vector_int;
 import foundation.core;
-import :scalar;
 import :vector_bool;
 
 namespace fnd {
@@ -15,7 +14,7 @@ export struct int2_t final {
     constexpr int2_t() = default;
     constexpr explicit int2_t(const bool2_t v2) : x{v2.x}, y{v2.y} {}
     constexpr explicit int2_t(const int_t val) : x{val}, y{val} {}
-    constexpr int2_t(int_t x, int_t y) : x{x}, y{y} {}
+    constexpr int2_t(const int_t x, const int_t y) : x{x}, y{y} {}
 
     constexpr const int_t& operator[](const uint_t idx) const
     {
@@ -330,6 +329,10 @@ export constexpr int2_t operator^(const int_t val, const int2_t b)
     return int2_t{val ^ b.x, val ^ b.y};
 }
 
+// NOTE:
+// operator<< does not check the result for overflow, unlike operator*. Since
+// C++20 a left shift is defined for every value: the bits shifted out are
+// discarded, so the result wraps modulo 2^32 (kIntMaxValue << 1 is -2).
 export constexpr int2_t operator<<(const int2_t a, const int2_t b)
 {
     FND_ASSERT(all(b >= 0 && b < 32));
@@ -558,6 +561,30 @@ export constexpr int2_t clamp(const int2_t v, const int_t lower, const int_t upp
 export constexpr int2_t sign(const int2_t v)
 {
     return int2_t{sign(v.x), sign(v.y)};
+}
+
+export constexpr int_t cmin(const int2_t v)
+{
+    return min(v.x, v.y);
+}
+
+export constexpr int_t cmax(const int2_t v)
+{
+    return max(v.x, v.y);
+}
+
+export constexpr int_t csum(const int2_t v)
+{
+    FND_ASSERT(long_t{v.x} + v.y >= kIntMinValue && long_t{v.x} + v.y <= kIntMaxValue);
+
+    return v.x + v.y;
+}
+
+export constexpr int_t cmul(const int2_t v)
+{
+    FND_ASSERT(long_t{v.x} * v.y >= kIntMinValue && long_t{v.x} * v.y <= kIntMaxValue);
+
+    return v.x * v.y;
 }
 
 } // namespace fnd

@@ -351,6 +351,41 @@ void unittests_math_vector_int2_sign()
     FND_TEST_TRUE(test_components(sign(int2_t{kIntMinValue, kIntMaxValue}), -1, 1));
 }
 
+void unittests_math_vector_int2_cmin()
+{
+    FND_TEST_TRUE(cmin(int2_t{7, -3}) == -3);
+    FND_TEST_TRUE(cmin(int2_t{-3, 7}) == -3);
+    FND_TEST_TRUE(cmin(int2_t{4, 4}) == 4);
+    FND_TEST_TRUE(cmin(int2_t{kIntMaxValue, kIntMinValue}) == kIntMinValue);
+}
+
+void unittests_math_vector_int2_cmax()
+{
+    FND_TEST_TRUE(cmax(int2_t{7, -3}) == 7);
+    FND_TEST_TRUE(cmax(int2_t{-3, 7}) == 7);
+    FND_TEST_TRUE(cmax(int2_t{4, 4}) == 4);
+    FND_TEST_TRUE(cmax(int2_t{kIntMinValue, kIntMaxValue}) == kIntMaxValue);
+}
+
+void unittests_math_vector_int2_csum()
+{
+    FND_TEST_TRUE(csum(int2_t{7, -3}) == 4);
+    FND_TEST_TRUE(csum(int2_t{0, 0}) == 0);
+    FND_TEST_TRUE(csum(int2_t{-7, -3}) == -10);
+    FND_TEST_TRUE(csum(int2_t{kIntMaxValue - 1, 1}) == kIntMaxValue);
+    FND_TEST_TRUE(csum(int2_t{kIntMinValue, kIntMaxValue}) == -1);
+}
+
+void unittests_math_vector_int2_cmul()
+{
+    FND_TEST_TRUE(cmul(int2_t{7, -3}) == -21);
+    FND_TEST_TRUE(cmul(int2_t{0, kIntMaxValue}) == 0);
+    FND_TEST_TRUE(cmul(int2_t{-7, -3}) == 21);
+    // 46340^2 is the largest square that fits in int_t.
+    FND_TEST_TRUE(cmul(int2_t{46340, 46340}) == 2147395600);
+    FND_TEST_TRUE(cmul(int2_t{kIntMinValue, 1}) == kIntMinValue);
+}
+
 void unittests_math_vector_int()
 {
     unittests_math_vector_int2_type();
@@ -378,6 +413,10 @@ void unittests_math_vector_int()
     unittests_math_vector_int2_max();
     unittests_math_vector_int2_clamp();
     unittests_math_vector_int2_sign();
+    unittests_math_vector_int2_cmin();
+    unittests_math_vector_int2_cmax();
+    unittests_math_vector_int2_csum();
+    unittests_math_vector_int2_cmul();
 }
 
 } // namespace fnd::unittests
