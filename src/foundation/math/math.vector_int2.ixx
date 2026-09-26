@@ -1,7 +1,7 @@
 module;
 #include "foundation/core/macros.h"
 
-export module foundation.math:vector_int;
+export module foundation.math:vector_int2;
 import foundation.core;
 import :vector_bool;
 

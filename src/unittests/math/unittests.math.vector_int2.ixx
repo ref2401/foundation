@@ -2,13 +2,13 @@ module;
 #include "foundation/unittests.h"
 
 
-export module unittests.math:vector_int;
+export module unittests.math:vector_int2;
 import foundation.core;
 import foundation.math;
 
 namespace fnd::unittests {
 
-export void unittests_math_vector_int();
+export void unittests_math_vector_int2();
 
 // ---------------------------------------------------------------------------
 // int2_t
@@ -386,7 +386,7 @@ void unittests_math_vector_int2_cmul()
     FND_TEST_TRUE(cmul(int2_t{kIntMinValue, 1}) == kIntMinValue);
 }
 
-void unittests_math_vector_int()
+void unittests_math_vector_int2()
 {
     unittests_math_vector_int2_type();
     unittests_math_vector_int2_constructors();
