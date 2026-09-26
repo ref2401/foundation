@@ -9,6 +9,134 @@ namespace fnd::unittests {
 
 export void unittests_core_arithmetic();
 
+// ---------------------------------------------------------------------------
+// bit_cast
+// ---------------------------------------------------------------------------
+
+void unittests_core_arithmetic_bit_cast_int_to_float()
+{
+    FND_TEST_TRUE(bit_cast<float_t>(int_t{0}) == 0.0f);
+    FND_TEST_TRUE(bit_cast<float_t>(int_t{0x3F800000}) == 1.0f);
+    FND_TEST_TRUE(bit_cast<float_t>(static_cast<int_t>(0xBF800000u)) == -1.0f);
+    FND_TEST_TRUE(bit_cast<float_t>(int_t{0x7F800000}) == kFloatInfinity);
+    // Bits, not a value conversion: 1 is the smallest subnormal, not 1.0f.
+    FND_TEST_TRUE(bit_cast<float_t>(int_t{1}) == kFloatMinSubnormal);
+}
+
+void unittests_core_arithmetic_bit_cast_uint_to_float()
+{
+    FND_TEST_TRUE(bit_cast<float_t>(0u) == 0.0f);
+    FND_TEST_TRUE(bit_cast<float_t>(0x3F800000u) == 1.0f);
+    FND_TEST_TRUE(bit_cast<float_t>(0xBF800000u) == -1.0f);
+    FND_TEST_TRUE(bit_cast<float_t>(0x7F800000u) == kFloatInfinity);
+    FND_TEST_TRUE(bit_cast<float_t>(0xFF800000u) == -kFloatInfinity);
+    FND_TEST_TRUE(bit_cast<float_t>(0x7F7FFFFFu) == kFloatMaxValue);
+    FND_TEST_TRUE(bit_cast<float_t>(0x00800000u) == kFloatMinNormal);
+    FND_TEST_TRUE(bit_cast<float_t>(1u) == kFloatMinSubnormal);
+}
+
+void unittests_core_arithmetic_bit_cast_float_to_int()
+{
+    FND_TEST_TRUE(bit_cast<int_t>(0.0f) == 0);
+    FND_TEST_TRUE(bit_cast<int_t>(-0.0f) == kIntMinValue);
+    FND_TEST_TRUE(bit_cast<int_t>(1.0f) == 0x3F800000);
+    FND_TEST_TRUE(bit_cast<int_t>(-1.0f) == static_cast<int_t>(0xBF800000u));
+    FND_TEST_TRUE(bit_cast<int_t>(kFloatInfinity) == 0x7F800000);
+}
+
+void unittests_core_arithmetic_bit_cast_uint_to_int()
+{
+    FND_TEST_TRUE(bit_cast<int_t>(0u) == 0);
+    FND_TEST_TRUE(bit_cast<int_t>(1u) == 1);
+    FND_TEST_TRUE(bit_cast<int_t>(0x7FFFFFFFu) == kIntMaxValue);
+    FND_TEST_TRUE(bit_cast<int_t>(0x80000000u) == kIntMinValue);
+    FND_TEST_TRUE(bit_cast<int_t>(0xFFFFFFFFu) == -1);
+}
+
+void unittests_core_arithmetic_bit_cast_float_to_uint()
+{
+    FND_TEST_TRUE(bit_cast<uint_t>(0.0f) == 0u);
+    FND_TEST_TRUE(bit_cast<uint_t>(-0.0f) == 0x80000000u);
+    FND_TEST_TRUE(bit_cast<uint_t>(1.0f) == 0x3F800000u);
+    FND_TEST_TRUE(bit_cast<uint_t>(-1.0f) == 0xBF800000u);
+    FND_TEST_TRUE(bit_cast<uint_t>(kFloatInfinity) == 0x7F800000u);
+    FND_TEST_TRUE(bit_cast<uint_t>(-kFloatInfinity) == 0xFF800000u);
+    // NaN: all exponent bits set and a non-zero mantissa, whatever its sign.
+    FND_TEST_TRUE((bit_cast<uint_t>(kFloatNaN) & 0x7FFFFFFFu) > 0x7F800000u);
+    FND_TEST_TRUE(bit_cast<float_t>(bit_cast<uint_t>(1.5f)) == 1.5f);
+}
+
+void unittests_core_arithmetic_bit_cast_int_to_uint()
+{
+    FND_TEST_TRUE(bit_cast<uint_t>(int_t{0}) == 0u);
+    FND_TEST_TRUE(bit_cast<uint_t>(int_t{1}) == 1u);
+    FND_TEST_TRUE(bit_cast<uint_t>(int_t{-1}) == 0xFFFFFFFFu);
+    FND_TEST_TRUE(bit_cast<uint_t>(kIntMaxValue) == 0x7FFFFFFFu);
+    FND_TEST_TRUE(bit_cast<uint_t>(kIntMinValue) == 0x80000000u);
+}
+
+void unittests_core_arithmetic_bit_cast_long_to_double()
+{
+    FND_TEST_TRUE(bit_cast<double_t>(long_t{0}) == 0.0);
+    FND_TEST_TRUE(bit_cast<double_t>(long_t{0x3FF0000000000000}) == 1.0);
+    FND_TEST_TRUE(bit_cast<double_t>(static_cast<long_t>(0xBFF0000000000000ull)) == -1.0);
+    FND_TEST_TRUE(bit_cast<double_t>(long_t{0x7FF0000000000000}) == kDoubleInfinity);
+    // Bits, not a value conversion: 1 is the smallest subnormal, not 1.0.
+    FND_TEST_TRUE(bit_cast<double_t>(long_t{1}) == kDoubleMinSubnormal);
+}
+
+void unittests_core_arithmetic_bit_cast_ulong_to_double()
+{
+    FND_TEST_TRUE(bit_cast<double_t>(0ull) == 0.0);
+    FND_TEST_TRUE(bit_cast<double_t>(0x3FF0000000000000ull) == 1.0);
+    FND_TEST_TRUE(bit_cast<double_t>(0xBFF0000000000000ull) == -1.0);
+    FND_TEST_TRUE(bit_cast<double_t>(0x7FF0000000000000ull) == kDoubleInfinity);
+    FND_TEST_TRUE(bit_cast<double_t>(0xFFF0000000000000ull) == -kDoubleInfinity);
+    FND_TEST_TRUE(bit_cast<double_t>(0x7FEFFFFFFFFFFFFFull) == kDoubleMaxValue);
+    FND_TEST_TRUE(bit_cast<double_t>(0x0010000000000000ull) == kDoubleMinNormal);
+    FND_TEST_TRUE(bit_cast<double_t>(1ull) == kDoubleMinSubnormal);
+}
+
+void unittests_core_arithmetic_bit_cast_double_to_long()
+{
+    FND_TEST_TRUE(bit_cast<long_t>(0.0) == 0);
+    FND_TEST_TRUE(bit_cast<long_t>(-0.0) == kLongMinValue);
+    FND_TEST_TRUE(bit_cast<long_t>(1.0) == 0x3FF0000000000000);
+    FND_TEST_TRUE(bit_cast<long_t>(-1.0) == static_cast<long_t>(0xBFF0000000000000ull));
+    FND_TEST_TRUE(bit_cast<long_t>(kDoubleInfinity) == 0x7FF0000000000000);
+}
+
+void unittests_core_arithmetic_bit_cast_ulong_to_long()
+{
+    FND_TEST_TRUE(bit_cast<long_t>(0ull) == 0);
+    FND_TEST_TRUE(bit_cast<long_t>(1ull) == 1);
+    FND_TEST_TRUE(bit_cast<long_t>(0x7FFFFFFFFFFFFFFFull) == kLongMaxValue);
+    FND_TEST_TRUE(bit_cast<long_t>(0x8000000000000000ull) == kLongMinValue);
+    FND_TEST_TRUE(bit_cast<long_t>(0xFFFFFFFFFFFFFFFFull) == -1);
+}
+
+void unittests_core_arithmetic_bit_cast_double_to_ulong()
+{
+    FND_TEST_TRUE(bit_cast<ulong_t>(0.0) == 0ull);
+    FND_TEST_TRUE(bit_cast<ulong_t>(-0.0) == 0x8000000000000000ull);
+    FND_TEST_TRUE(bit_cast<ulong_t>(1.0) == 0x3FF0000000000000ull);
+    FND_TEST_TRUE(bit_cast<ulong_t>(-1.0) == 0xBFF0000000000000ull);
+    FND_TEST_TRUE(bit_cast<ulong_t>(kDoubleInfinity) == 0x7FF0000000000000ull);
+    FND_TEST_TRUE(bit_cast<ulong_t>(-kDoubleInfinity) == 0xFFF0000000000000ull);
+    // NaN: all exponent bits set and a non-zero mantissa, whatever its sign.
+    FND_TEST_TRUE((bit_cast<ulong_t>(kDoubleNaN) & 0x7FFFFFFFFFFFFFFFull) > 0x7FF0000000000000ull);
+    FND_TEST_TRUE(bit_cast<double_t>(bit_cast<ulong_t>(1.5)) == 1.5);
+}
+
+void unittests_core_arithmetic_bit_cast_long_to_ulong()
+{
+    FND_TEST_TRUE(bit_cast<ulong_t>(long_t{0}) == 0ull);
+    FND_TEST_TRUE(bit_cast<ulong_t>(long_t{1}) == 1ull);
+    FND_TEST_TRUE(bit_cast<ulong_t>(long_t{-1}) == 0xFFFFFFFFFFFFFFFFull);
+    FND_TEST_TRUE(bit_cast<ulong_t>(kLongMaxValue) == 0x7FFFFFFFFFFFFFFFull);
+    FND_TEST_TRUE(bit_cast<ulong_t>(kLongMinValue) == 0x8000000000000000ull);
+}
+
 void unittests_core_arithmetic_abs_integer_types()
 {
     // byte_t
@@ -830,136 +958,20 @@ void unittests_core_arithmetic_fractional_double()
     FND_TEST_TRUE(isnan(fractional(kDoubleNaN)));
 }
 
-// ---------------------------------------------------------------------------
-// asfloat, asint, asuint, asdouble, aslong, asulong
-// ---------------------------------------------------------------------------
-
-void unittests_core_arithmetic_asfloat_int()
-{
-    FND_TEST_TRUE(asfloat(int_t{0}) == 0.0f);
-    FND_TEST_TRUE(asfloat(int_t{0x3F800000}) == 1.0f);
-    FND_TEST_TRUE(asfloat(static_cast<int_t>(0xBF800000u)) == -1.0f);
-    FND_TEST_TRUE(asfloat(int_t{0x7F800000}) == kFloatInfinity);
-    // Bits, not a value conversion: 1 is the smallest subnormal, not 1.0f.
-    FND_TEST_TRUE(asfloat(int_t{1}) == kFloatMinSubnormal);
-}
-
-void unittests_core_arithmetic_asfloat_uint()
-{
-    FND_TEST_TRUE(asfloat(0u) == 0.0f);
-    FND_TEST_TRUE(asfloat(0x3F800000u) == 1.0f);
-    FND_TEST_TRUE(asfloat(0xBF800000u) == -1.0f);
-    FND_TEST_TRUE(asfloat(0x7F800000u) == kFloatInfinity);
-    FND_TEST_TRUE(asfloat(0xFF800000u) == -kFloatInfinity);
-    FND_TEST_TRUE(asfloat(0x7F7FFFFFu) == kFloatMaxValue);
-    FND_TEST_TRUE(asfloat(0x00800000u) == kFloatMinNormal);
-    FND_TEST_TRUE(asfloat(1u) == kFloatMinSubnormal);
-}
-
-void unittests_core_arithmetic_asint_float()
-{
-    FND_TEST_TRUE(asint(0.0f) == 0);
-    FND_TEST_TRUE(asint(-0.0f) == kIntMinValue);
-    FND_TEST_TRUE(asint(1.0f) == 0x3F800000);
-    FND_TEST_TRUE(asint(-1.0f) == static_cast<int_t>(0xBF800000u));
-    FND_TEST_TRUE(asint(kFloatInfinity) == 0x7F800000);
-}
-
-void unittests_core_arithmetic_asint_uint()
-{
-    FND_TEST_TRUE(asint(0u) == 0);
-    FND_TEST_TRUE(asint(1u) == 1);
-    FND_TEST_TRUE(asint(0x7FFFFFFFu) == kIntMaxValue);
-    FND_TEST_TRUE(asint(0x80000000u) == kIntMinValue);
-    FND_TEST_TRUE(asint(0xFFFFFFFFu) == -1);
-}
-
-void unittests_core_arithmetic_asuint_float()
-{
-    FND_TEST_TRUE(asuint(0.0f) == 0u);
-    FND_TEST_TRUE(asuint(-0.0f) == 0x80000000u);
-    FND_TEST_TRUE(asuint(1.0f) == 0x3F800000u);
-    FND_TEST_TRUE(asuint(-1.0f) == 0xBF800000u);
-    FND_TEST_TRUE(asuint(kFloatInfinity) == 0x7F800000u);
-    FND_TEST_TRUE(asuint(-kFloatInfinity) == 0xFF800000u);
-    // NaN: all exponent bits set and a non-zero mantissa, whatever its sign.
-    FND_TEST_TRUE((asuint(kFloatNaN) & 0x7FFFFFFFu) > 0x7F800000u);
-    FND_TEST_TRUE(asfloat(asuint(1.5f)) == 1.5f);
-}
-
-void unittests_core_arithmetic_asuint_int()
-{
-    FND_TEST_TRUE(asuint(int_t{0}) == 0u);
-    FND_TEST_TRUE(asuint(int_t{1}) == 1u);
-    FND_TEST_TRUE(asuint(int_t{-1}) == 0xFFFFFFFFu);
-    FND_TEST_TRUE(asuint(kIntMaxValue) == 0x7FFFFFFFu);
-    FND_TEST_TRUE(asuint(kIntMinValue) == 0x80000000u);
-}
-
-void unittests_core_arithmetic_asdouble_long()
-{
-    FND_TEST_TRUE(asdouble(long_t{0}) == 0.0);
-    FND_TEST_TRUE(asdouble(long_t{0x3FF0000000000000}) == 1.0);
-    FND_TEST_TRUE(asdouble(static_cast<long_t>(0xBFF0000000000000ull)) == -1.0);
-    FND_TEST_TRUE(asdouble(long_t{0x7FF0000000000000}) == kDoubleInfinity);
-    // Bits, not a value conversion: 1 is the smallest subnormal, not 1.0.
-    FND_TEST_TRUE(asdouble(long_t{1}) == kDoubleMinSubnormal);
-}
-
-void unittests_core_arithmetic_asdouble_ulong()
-{
-    FND_TEST_TRUE(asdouble(0ull) == 0.0);
-    FND_TEST_TRUE(asdouble(0x3FF0000000000000ull) == 1.0);
-    FND_TEST_TRUE(asdouble(0xBFF0000000000000ull) == -1.0);
-    FND_TEST_TRUE(asdouble(0x7FF0000000000000ull) == kDoubleInfinity);
-    FND_TEST_TRUE(asdouble(0xFFF0000000000000ull) == -kDoubleInfinity);
-    FND_TEST_TRUE(asdouble(0x7FEFFFFFFFFFFFFFull) == kDoubleMaxValue);
-    FND_TEST_TRUE(asdouble(0x0010000000000000ull) == kDoubleMinNormal);
-    FND_TEST_TRUE(asdouble(1ull) == kDoubleMinSubnormal);
-}
-
-void unittests_core_arithmetic_aslong_double()
-{
-    FND_TEST_TRUE(aslong(0.0) == 0);
-    FND_TEST_TRUE(aslong(-0.0) == kLongMinValue);
-    FND_TEST_TRUE(aslong(1.0) == 0x3FF0000000000000);
-    FND_TEST_TRUE(aslong(-1.0) == static_cast<long_t>(0xBFF0000000000000ull));
-    FND_TEST_TRUE(aslong(kDoubleInfinity) == 0x7FF0000000000000);
-}
-
-void unittests_core_arithmetic_aslong_ulong()
-{
-    FND_TEST_TRUE(aslong(0ull) == 0);
-    FND_TEST_TRUE(aslong(1ull) == 1);
-    FND_TEST_TRUE(aslong(0x7FFFFFFFFFFFFFFFull) == kLongMaxValue);
-    FND_TEST_TRUE(aslong(0x8000000000000000ull) == kLongMinValue);
-    FND_TEST_TRUE(aslong(0xFFFFFFFFFFFFFFFFull) == -1);
-}
-
-void unittests_core_arithmetic_asulong_double()
-{
-    FND_TEST_TRUE(asulong(0.0) == 0ull);
-    FND_TEST_TRUE(asulong(-0.0) == 0x8000000000000000ull);
-    FND_TEST_TRUE(asulong(1.0) == 0x3FF0000000000000ull);
-    FND_TEST_TRUE(asulong(-1.0) == 0xBFF0000000000000ull);
-    FND_TEST_TRUE(asulong(kDoubleInfinity) == 0x7FF0000000000000ull);
-    FND_TEST_TRUE(asulong(-kDoubleInfinity) == 0xFFF0000000000000ull);
-    // NaN: all exponent bits set and a non-zero mantissa, whatever its sign.
-    FND_TEST_TRUE((asulong(kDoubleNaN) & 0x7FFFFFFFFFFFFFFFull) > 0x7FF0000000000000ull);
-    FND_TEST_TRUE(asdouble(asulong(1.5)) == 1.5);
-}
-
-void unittests_core_arithmetic_asulong_long()
-{
-    FND_TEST_TRUE(asulong(long_t{0}) == 0ull);
-    FND_TEST_TRUE(asulong(long_t{1}) == 1ull);
-    FND_TEST_TRUE(asulong(long_t{-1}) == 0xFFFFFFFFFFFFFFFFull);
-    FND_TEST_TRUE(asulong(kLongMaxValue) == 0x7FFFFFFFFFFFFFFFull);
-    FND_TEST_TRUE(asulong(kLongMinValue) == 0x8000000000000000ull);
-}
-
 void unittests_core_arithmetic()
 {
+    unittests_core_arithmetic_bit_cast_int_to_float();
+    unittests_core_arithmetic_bit_cast_uint_to_float();
+    unittests_core_arithmetic_bit_cast_float_to_int();
+    unittests_core_arithmetic_bit_cast_uint_to_int();
+    unittests_core_arithmetic_bit_cast_float_to_uint();
+    unittests_core_arithmetic_bit_cast_int_to_uint();
+    unittests_core_arithmetic_bit_cast_long_to_double();
+    unittests_core_arithmetic_bit_cast_ulong_to_double();
+    unittests_core_arithmetic_bit_cast_double_to_long();
+    unittests_core_arithmetic_bit_cast_ulong_to_long();
+    unittests_core_arithmetic_bit_cast_double_to_ulong();
+    unittests_core_arithmetic_bit_cast_long_to_ulong();
     unittests_core_arithmetic_abs_integer_types();
     unittests_core_arithmetic_abs_float_types();
     unittests_core_arithmetic_isfinite_float();
@@ -1013,18 +1025,6 @@ void unittests_core_arithmetic()
     unittests_core_arithmetic_modf_double();
     unittests_core_arithmetic_fractional_float();
     unittests_core_arithmetic_fractional_double();
-    unittests_core_arithmetic_asfloat_int();
-    unittests_core_arithmetic_asfloat_uint();
-    unittests_core_arithmetic_asint_float();
-    unittests_core_arithmetic_asint_uint();
-    unittests_core_arithmetic_asuint_float();
-    unittests_core_arithmetic_asuint_int();
-    unittests_core_arithmetic_asdouble_long();
-    unittests_core_arithmetic_asdouble_ulong();
-    unittests_core_arithmetic_aslong_double();
-    unittests_core_arithmetic_aslong_ulong();
-    unittests_core_arithmetic_asulong_double();
-    unittests_core_arithmetic_asulong_long();
 }
 
 } // namespace fnd::unittests
