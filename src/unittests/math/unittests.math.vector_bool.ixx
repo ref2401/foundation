@@ -140,6 +140,8 @@ void unittests_math_vector_bool3_type()
     static_assert(sizeof(bool3_t) == 3 * sizeof(bool_t));
     // The ctor(bool_t) is explicit: no bool_t (or pointer, or int) converts to bool3_t by accident.
     static_assert(!is_convertible<bool_t, bool3_t>());
+    // Likewise, a bool2_t never widens to bool3_t silently.
+    static_assert(!is_convertible<bool2_t, bool3_t>());
 }
 
 void unittests_math_vector_bool3_constructors()
@@ -150,6 +152,11 @@ void unittests_math_vector_bool3_constructors()
     FND_TEST_TRUE(test_components(bool3_t{true, false, false}, true, false, false));
     FND_TEST_TRUE(test_components(bool3_t{false, true, false}, false, true, false));
     FND_TEST_TRUE(test_components(bool3_t{false, false, true}, false, false, true));
+    // From a bool2_t: z is false unless given.
+    FND_TEST_TRUE(test_components(bool3_t{bool2_t{true, false}}, true, false, false));
+    FND_TEST_TRUE(test_components(bool3_t{bool2_t{true, true}}, true, true, false));
+    FND_TEST_TRUE(test_components(bool3_t{bool2_t{true, false}, true}, true, false, true));
+    FND_TEST_TRUE(test_components(bool3_t{bool2_t{false, true}, false}, false, true, false));
 }
 
 void unittests_math_vector_bool3_subscript_operator()
@@ -262,6 +269,9 @@ void unittests_math_vector_bool4_type()
     static_assert(sizeof(bool4_t) == 4 * sizeof(bool_t));
     // The ctor(bool_t) is explicit: no bool_t (or pointer, or int) converts to bool4_t by accident.
     static_assert(!is_convertible<bool_t, bool4_t>());
+    // Likewise, a bool2_t or bool3_t never widens to bool4_t silently.
+    static_assert(!is_convertible<bool3_t, bool4_t>());
+    static_assert(!is_convertible<bool2_t, bool4_t>());
 }
 
 void unittests_math_vector_bool4_constructors()
@@ -273,6 +283,24 @@ void unittests_math_vector_bool4_constructors()
     FND_TEST_TRUE(test_components(bool4_t{false, true, false, false}, false, true, false, false));
     FND_TEST_TRUE(test_components(bool4_t{false, false, true, false}, false, false, true, false));
     FND_TEST_TRUE(test_components(bool4_t{false, false, false, true}, false, false, false, true));
+    // From a bool2_t: z and w are false unless given.
+    FND_TEST_TRUE(test_components(
+        bool4_t{bool2_t{true, false}}, true, false, false, false));
+    FND_TEST_TRUE(test_components(
+        bool4_t{bool2_t{true, true}, true}, true, true, true, false));
+    FND_TEST_TRUE(test_components(
+        bool4_t{bool2_t{false, true}, false, true}, false, true, false, true));
+    FND_TEST_TRUE(test_components(
+        bool4_t{bool2_t{true, false}, true, true}, true, false, true, true));
+    // From a bool3_t: w is false unless given.
+    FND_TEST_TRUE(test_components(
+        bool4_t{bool3_t{true, false, true}}, true, false, true, false));
+    FND_TEST_TRUE(test_components(
+        bool4_t{bool3_t{true, true, true}}, true, true, true, false));
+    FND_TEST_TRUE(test_components(
+        bool4_t{bool3_t{true, false, true}, true}, true, false, true, true));
+    FND_TEST_TRUE(test_components(
+        bool4_t{bool3_t{false, true, false}, false}, false, true, false, false));
 }
 
 void unittests_math_vector_bool4_subscript_operator()
