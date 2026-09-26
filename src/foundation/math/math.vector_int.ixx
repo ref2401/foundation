@@ -492,4 +492,72 @@ export constexpr int2_t& operator>>=(int2_t& a, const int_t val)
     return a;
 }
 
+export constexpr int2_t abs(const int2_t v)
+{
+    return int2_t{abs(v.x), abs(v.y)};
+}
+
+export constexpr int2_t min(const int2_t a, const int2_t b)
+{
+    return int2_t{min(a.x, b.x), min(a.y, b.y)};
+}
+
+export constexpr int2_t min(const int2_t a, const int_t val)
+{
+    return int2_t{min(a.x, val), min(a.y, val)};
+}
+
+export constexpr int2_t min(const int_t val, const int2_t b)
+{
+    return int2_t{min(val, b.x), min(val, b.y)};
+}
+
+export constexpr int2_t max(const int2_t a, const int2_t b)
+{
+    return int2_t{max(a.x, b.x), max(a.y, b.y)};
+}
+
+export constexpr int2_t max(const int2_t a, const int_t val)
+{
+    return int2_t{max(a.x, val), max(a.y, val)};
+}
+
+export constexpr int2_t max(const int_t val, const int2_t b)
+{
+    return int2_t{max(val, b.x), max(val, b.y)};
+}
+
+export constexpr int2_t clamp(const int2_t v, const int2_t lower, const int2_t upper)
+{
+    FND_ASSERT(all(lower <= upper));
+
+    return int2_t{clamp(v.x, lower.x, upper.x), clamp(v.y, lower.y, upper.y)};
+}
+
+export constexpr int2_t clamp(const int2_t v, const int2_t lower, const int_t upper)
+{
+    FND_ASSERT(all(lower <= upper));
+
+    return int2_t{clamp(v.x, lower.x, upper), clamp(v.y, lower.y, upper)};
+}
+
+export constexpr int2_t clamp(const int2_t v, const int_t lower, const int2_t upper)
+{
+    FND_ASSERT(all(lower <= upper));
+
+    return int2_t{clamp(v.x, lower, upper.x), clamp(v.y, lower, upper.y)};
+}
+
+export constexpr int2_t clamp(const int2_t v, const int_t lower, const int_t upper)
+{
+    FND_ASSERT(lower <= upper);
+
+    return int2_t{clamp(v.x, lower, upper), clamp(v.y, lower, upper)};
+}
+
+export constexpr int2_t sign(const int2_t v)
+{
+    return int2_t{sign(v.x), sign(v.y)};
+}
+
 } // namespace fnd
