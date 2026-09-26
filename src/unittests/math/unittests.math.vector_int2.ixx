@@ -276,6 +276,88 @@ void unittests_math_vector_int2_compound_assignment_operators()
     FND_TEST_TRUE(test_components(v >>= 1, 0b0001, 0b0010));
 }
 
+void unittests_math_vector_int2_compound_assignment_matches_operators()
+{
+    // a op= b must give the same result as a op b.
+    const int2_t a{7, -3};
+    const int2_t b{2, 5};
+    const int_t val{3};
+    // Shift counts must be in [0, 32).
+    const int2_t shift{1, 4};
+    const int_t shift_val{2};
+    int2_t c;
+
+    c = a;
+    c += b;
+    FND_TEST_TRUE(all(c == (a + b)));
+    c = a;
+    c += val;
+    FND_TEST_TRUE(all(c == (a + val)));
+
+    c = a;
+    c -= b;
+    FND_TEST_TRUE(all(c == (a - b)));
+    c = a;
+    c -= val;
+    FND_TEST_TRUE(all(c == (a - val)));
+
+    c = a;
+    c *= b;
+    FND_TEST_TRUE(all(c == (a * b)));
+    c = a;
+    c *= val;
+    FND_TEST_TRUE(all(c == (a * val)));
+
+    c = a;
+    c /= b;
+    FND_TEST_TRUE(all(c == (a / b)));
+    c = a;
+    c /= val;
+    FND_TEST_TRUE(all(c == (a / val)));
+
+    c = a;
+    c %= b;
+    FND_TEST_TRUE(all(c == (a % b)));
+    c = a;
+    c %= val;
+    FND_TEST_TRUE(all(c == (a % val)));
+
+    c = a;
+    c &= b;
+    FND_TEST_TRUE(all(c == (a & b)));
+    c = a;
+    c &= val;
+    FND_TEST_TRUE(all(c == (a & val)));
+
+    c = a;
+    c |= b;
+    FND_TEST_TRUE(all(c == (a | b)));
+    c = a;
+    c |= val;
+    FND_TEST_TRUE(all(c == (a | val)));
+
+    c = a;
+    c ^= b;
+    FND_TEST_TRUE(all(c == (a ^ b)));
+    c = a;
+    c ^= val;
+    FND_TEST_TRUE(all(c == (a ^ val)));
+
+    c = a;
+    c <<= shift;
+    FND_TEST_TRUE(all(c == (a << shift)));
+    c = a;
+    c <<= shift_val;
+    FND_TEST_TRUE(all(c == (a << shift_val)));
+
+    c = a;
+    c >>= shift;
+    FND_TEST_TRUE(all(c == (a >> shift)));
+    c = a;
+    c >>= shift_val;
+    FND_TEST_TRUE(all(c == (a >> shift_val)));
+}
+
 void unittests_math_vector_int2_abs()
 {
     FND_TEST_TRUE(test_components(abs(int2_t{7, -3}), 7, 3));
@@ -408,6 +490,7 @@ void unittests_math_vector_int2()
     unittests_math_vector_int2_shift_left_operator();
     unittests_math_vector_int2_shift_right_operator();
     unittests_math_vector_int2_compound_assignment_operators();
+    unittests_math_vector_int2_compound_assignment_matches_operators();
     unittests_math_vector_int2_abs();
     unittests_math_vector_int2_min();
     unittests_math_vector_int2_max();

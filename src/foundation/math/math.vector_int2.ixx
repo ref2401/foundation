@@ -72,6 +72,213 @@ export struct int2_t final {
     }
 
     constexpr int2_t operator~() const { return int2_t{~x, ~y}; }
+
+    constexpr int2_t& operator+=(const int2_t b)
+    {
+        FND_ASSERT(
+            long_t{x} + b.x >= kIntMinValue && 
+            long_t{x} + b.x <= kIntMaxValue);
+        FND_ASSERT(
+            long_t{y} + b.y >= kIntMinValue && 
+            long_t{y} + b.y <= kIntMaxValue);
+
+        x += b.x;
+        y += b.y;
+        return *this;
+    }
+
+    constexpr int2_t& operator+=(const int_t val)
+    {
+        FND_ASSERT(
+            long_t{x} + val >= kIntMinValue && 
+            long_t{x} + val <= kIntMaxValue);
+        FND_ASSERT(
+            long_t{y} + val >= kIntMinValue && 
+            long_t{y} + val <= kIntMaxValue);
+
+        x += val;
+        y += val;
+        return *this;
+    }
+
+    constexpr int2_t& operator-=(const int2_t b)
+    {
+        FND_ASSERT(
+            long_t{x} - b.x >= kIntMinValue && 
+            long_t{x} - b.x <= kIntMaxValue);
+        FND_ASSERT(
+            long_t{y} - b.y >= kIntMinValue && 
+            long_t{y} - b.y <= kIntMaxValue);
+
+        x -= b.x;
+        y -= b.y;
+        return *this;
+    }
+
+    constexpr int2_t& operator-=(const int_t val)
+    {
+        FND_ASSERT(
+            long_t{x} - val >= kIntMinValue && 
+            long_t{x} - val <= kIntMaxValue);
+        FND_ASSERT(
+            long_t{y} - val >= kIntMinValue && 
+            long_t{y} - val <= kIntMaxValue);
+
+        x -= val;
+        y -= val;
+        return *this;
+    }
+
+    constexpr int2_t& operator*=(const int2_t b)
+    {
+        FND_ASSERT(
+            long_t{x} * b.x >= kIntMinValue && 
+            long_t{x} * b.x <= kIntMaxValue);
+        FND_ASSERT(
+            long_t{y} * b.y >= kIntMinValue && 
+            long_t{y} * b.y <= kIntMaxValue);
+
+        x *= b.x;
+        y *= b.y;
+        return *this;
+    }
+
+    constexpr int2_t& operator*=(const int_t val)
+    {
+        FND_ASSERT(
+            long_t{x} * val >= kIntMinValue && 
+            long_t{x} * val <= kIntMaxValue);
+        FND_ASSERT(
+            long_t{y} * val >= kIntMinValue && 
+            long_t{y} * val <= kIntMaxValue);
+
+        x *= val;
+        y *= val;
+        return *this;
+    }
+
+    constexpr int2_t& operator/=(const int2_t b)
+    {
+        FND_ASSERT(b.x != 0 && b.y != 0);
+        FND_ASSERT(!(x == kIntMinValue && b.x == -1));
+        FND_ASSERT(!(y == kIntMinValue && b.y == -1));
+
+        x /= b.x;
+        y /= b.y;
+        return *this;
+    }
+
+    constexpr int2_t& operator/=(const int_t val)
+    {
+        FND_ASSERT(val != 0);
+        FND_ASSERT(!(val == -1 && (x == kIntMinValue || y == kIntMinValue)));
+
+        x /= val;
+        y /= val;
+        return *this;
+    }
+
+    constexpr int2_t& operator%=(const int2_t b)
+    {
+        FND_ASSERT(b.x != 0 && b.y != 0);
+        FND_ASSERT(!(x == kIntMinValue && b.x == -1));
+        FND_ASSERT(!(y == kIntMinValue && b.y == -1));
+
+        x %= b.x;
+        y %= b.y;
+        return *this;
+    }
+
+    constexpr int2_t& operator%=(const int_t val)
+    {
+        FND_ASSERT(val != 0);
+        FND_ASSERT(!(val == -1 && x == kIntMinValue));
+        FND_ASSERT(!(val == -1 && y == kIntMinValue));
+
+        x %= val;
+        y %= val;
+        return *this;
+    }
+
+    constexpr int2_t& operator&=(const int2_t b)
+    {
+        x &= b.x;
+        y &= b.y;
+        return *this;
+    }
+
+    constexpr int2_t& operator&=(const int_t val)
+    {
+        x &= val;
+        y &= val;
+        return *this;
+    }
+
+    constexpr int2_t& operator|=(const int2_t b)
+    {
+        x |= b.x;
+        y |= b.y;
+        return *this;
+    }
+
+    constexpr int2_t& operator|=(const int_t val)
+    {
+        x |= val;
+        y |= val;
+        return *this;
+    }
+
+    constexpr int2_t& operator^=(const int2_t b)
+    {
+        x ^= b.x;
+        y ^= b.y;
+        return *this;
+    }
+
+    constexpr int2_t& operator^=(const int_t val)
+    {
+        x ^= val;
+        y ^= val;
+        return *this;
+    }
+
+    constexpr int2_t& operator<<=(const int2_t b)
+    {
+        FND_ASSERT(b.x >= 0 && b.x < 32);
+        FND_ASSERT(b.y >= 0 && b.y < 32);
+
+        x <<= b.x;
+        y <<= b.y;
+        return *this;
+    }
+
+    constexpr int2_t& operator<<=(const int_t val)
+    {
+        FND_ASSERT(val >= 0 && val < 32);
+
+        x <<= val;
+        y <<= val;
+        return *this;
+    }
+
+    constexpr int2_t& operator>>=(const int2_t b)
+    {
+        FND_ASSERT(b.x >= 0 && b.x < 32);
+        FND_ASSERT(b.y >= 0 && b.y < 32);
+
+        x >>= b.x;
+        y >>= b.y;
+        return *this;
+    }
+
+    constexpr int2_t& operator>>=(const int_t val)
+    {
+        FND_ASSERT(val >= 0 && val < 32);
+
+        x >>= val;
+        y >>= val;
+        return *this;
+    }
 };
 
 export constexpr bool2_t operator==(const int2_t a, const int2_t b)
@@ -375,126 +582,6 @@ export constexpr int2_t operator>>(const int_t val, const int2_t b)
     return int2_t{val >> b.x, val >> b.y};
 }
 
-export constexpr int2_t& operator+=(int2_t& a, const int2_t b)
-{
-    a = a + b;
-    return a;
-}
-
-export constexpr int2_t& operator+=(int2_t& a, const int_t val)
-{
-    a = a + val;
-    return a;
-}
-
-export constexpr int2_t& operator-=(int2_t& a, const int2_t b)
-{
-    a = a - b;
-    return a;
-}
-
-export constexpr int2_t& operator-=(int2_t& a, const int_t val)
-{
-    a = a - val;
-    return a;
-}
-
-export constexpr int2_t& operator*=(int2_t& a, const int2_t b)
-{
-    a = a * b;
-    return a;
-}
-
-export constexpr int2_t& operator*=(int2_t& a, const int_t val)
-{
-    a = a * val;
-    return a;
-}
-
-export constexpr int2_t& operator/=(int2_t& a, const int2_t b)
-{
-    a = a / b;
-    return a;
-}
-
-export constexpr int2_t& operator/=(int2_t& a, const int_t val)
-{
-    a = a / val;
-    return a;
-}
-
-export constexpr int2_t& operator%=(int2_t& a, const int2_t b)
-{
-    a = a % b;
-    return a;
-}
-
-export constexpr int2_t& operator%=(int2_t& a, const int_t val)
-{
-    a = a % val;
-    return a;
-}
-
-export constexpr int2_t& operator&=(int2_t& a, const int2_t b)
-{
-    a = a & b;
-    return a;
-}
-
-export constexpr int2_t& operator&=(int2_t& a, const int_t val)
-{
-    a = a & val;
-    return a;
-}
-
-export constexpr int2_t& operator|=(int2_t& a, const int2_t b)
-{
-    a = a | b;
-    return a;
-}
-
-export constexpr int2_t& operator|=(int2_t& a, const int_t val)
-{
-    a = a | val;
-    return a;
-}
-
-export constexpr int2_t& operator^=(int2_t& a, const int2_t b)
-{
-    a = a ^ b;
-    return a;
-}
-
-export constexpr int2_t& operator^=(int2_t& a, const int_t val)
-{
-    a = a ^ val;
-    return a;
-}
-
-export constexpr int2_t& operator<<=(int2_t& a, const int2_t b)
-{
-    a = a << b;
-    return a;
-}
-
-export constexpr int2_t& operator<<=(int2_t& a, const int_t val)
-{
-    a = a << val;
-    return a;
-}
-
-export constexpr int2_t& operator>>=(int2_t& a, const int2_t b)
-{
-    a = a >> b;
-    return a;
-}
-
-export constexpr int2_t& operator>>=(int2_t& a, const int_t val)
-{
-    a = a >> val;
-    return a;
-}
-
 export constexpr int2_t abs(const int2_t v)
 {
     return int2_t{abs(v.x), abs(v.y)};
@@ -575,14 +662,18 @@ export constexpr int_t cmax(const int2_t v)
 
 export constexpr int_t csum(const int2_t v)
 {
-    FND_ASSERT(long_t{v.x} + v.y >= kIntMinValue && long_t{v.x} + v.y <= kIntMaxValue);
+    FND_ASSERT(
+        long_t{v.x} + v.y >= kIntMinValue && 
+        long_t{v.x} + v.y <= kIntMaxValue);
 
     return v.x + v.y;
 }
 
 export constexpr int_t cmul(const int2_t v)
 {
-    FND_ASSERT(long_t{v.x} * v.y >= kIntMinValue && long_t{v.x} * v.y <= kIntMaxValue);
+    FND_ASSERT(
+        long_t{v.x} * v.y >= kIntMinValue && 
+        long_t{v.x} * v.y <= kIntMaxValue);
 
     return v.x * v.y;
 }
