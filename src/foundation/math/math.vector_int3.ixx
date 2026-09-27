@@ -14,6 +14,7 @@ export struct int3_t final {
     int_t z{0};
 
     constexpr int3_t() = default;
+    constexpr explicit int3_t(const bool2_t v2, const int_t z = 0) : x{v2.x}, y{v2.y}, z{z} {}
     constexpr explicit int3_t(const bool3_t v3) : x{v3.x}, y{v3.y}, z{v3.z} {}
     constexpr explicit int3_t(const int_t val) : x{val}, y{val}, z{val} {}
     constexpr explicit int3_t(const int2_t v2, const int_t z = 0) : x{v2.x}, y{v2.y}, z{z} {}
