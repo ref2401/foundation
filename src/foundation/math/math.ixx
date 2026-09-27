@@ -6,3 +6,4 @@ export import :vector_int3;
 export import :vector_int4;
 export import :vector_uint2;
 export import :vector_uint3;
+export import :vector_uint4;

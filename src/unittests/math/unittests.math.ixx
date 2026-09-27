@@ -6,6 +6,7 @@ import :vector_int3;
 import :vector_int4;
 import :vector_uint2;
 import :vector_uint3;
+import :vector_uint4;
 
 namespace fnd::unittests {
 
@@ -18,6 +19,7 @@ export void run_unittests_math()
     unittests_math_vector_int4();
     unittests_math_vector_uint2();
     unittests_math_vector_uint3();
+    unittests_math_vector_uint4();
 }
 
 } // namespace fnd::unittests
