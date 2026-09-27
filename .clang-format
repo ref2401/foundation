@@ -1,0 +1,32 @@
+BasedOnStyle: Microsoft
+
+ColumnLimit: 80
+IndentWidth: 4
+ContinuationIndentWidth: 4
+UseTab: Never
+MaxEmptyLinesToKeep: 2
+
+BreakBeforeBraces: WebKit
+NamespaceIndentation: None
+FixNamespaceComments: true
+
+AllowShortFunctionsOnASingleLine: Inline
+AllowShortIfStatementsOnASingleLine: WithoutElse
+
+PointerAlignment: Left
+SpaceAfterTemplateKeyword: false
+Cpp11BracedListStyle: true
+RequiresClausePosition: OwnLine
+IndentRequiresClause: false
+
+BreakConstructorInitializers: BeforeColon
+PackConstructorInitializers: NextLine
+
+AlignAfterOpenBracket: DontAlign
+AlignOperands: DontAlign
+BreakBeforeBinaryOperators: All
+
+IndentPPDirectives: BeforeHash
+AlignEscapedNewlines: Left
+
+SortIncludes: Never
