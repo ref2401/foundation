@@ -37,6 +37,7 @@ export struct int4_t final {
     constexpr int4_t(const int_t x, const int_t y, const int_t z, const int_t w)
         : x{x}, y{y}, z{z}, w{w} {}
 
+
     constexpr const int_t& operator[](const uint_t idx) const
     {
         FND_ASSERT(idx < 4);
