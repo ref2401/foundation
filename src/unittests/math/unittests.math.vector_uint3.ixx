@@ -20,7 +20,8 @@ void unittests_math_vector_uint3_type()
 {
     static_assert(PodType<uint3_t>);
     static_assert(sizeof(uint3_t) == 3 * sizeof(uint_t));
-    // The ctor(uint_t), ctor(bool2_t, z), ctor(bool3_t) and ctor(uint2_t, z) are explicit.
+    // The ctor(uint_t), ctor(bool2_t, z), ctor(bool3_t) and ctor(uint2_t, z)
+    // are explicit.
     static_assert(!is_convertible<uint_t, uint3_t>());
     static_assert(!is_convertible<int_t, uint3_t>());
     static_assert(!is_convertible<bool2_t, uint3_t>());
@@ -37,7 +38,8 @@ void unittests_math_vector_uint3_constructors()
         test_components(uint3_t{0u, kUIntMaxValue, 1u}, 0u, kUIntMaxValue, 1u));
     // From a bool2_t: true is 1, false is 0; z is 0 unless given.
     FND_TEST_TRUE(test_components(uint3_t{bool2_t{true, false}}, 1u, 0u, 0u));
-    FND_TEST_TRUE(test_components(uint3_t{bool2_t{false, true}, 6u}, 0u, 1u, 6u));
+    FND_TEST_TRUE(
+        test_components(uint3_t{bool2_t{false, true}, 6u}, 0u, 1u, 6u));
     // From a bool3_t: true is 1, false is 0.
     FND_TEST_TRUE(
         test_components(uint3_t{bool3_t{true, false, true}}, 1u, 0u, 1u));
@@ -91,8 +93,7 @@ void unittests_math_vector_uint3_decrement_operators()
 void unittests_math_vector_uint3_equality_operators()
 {
     const uint3_t a{7u, 3u, 4u};
-    FND_TEST_TRUE(
-        all((a == uint3_t{7u, 3u, 4u}) == bool3_t{true, true, true}));
+    FND_TEST_TRUE(all((a == uint3_t{7u, 3u, 4u}) == bool3_t{true, true, true}));
     FND_TEST_TRUE(
         all((a == uint3_t{7u, 5u, 4u}) == bool3_t{true, false, true}));
     FND_TEST_TRUE(
@@ -189,7 +190,7 @@ void unittests_math_vector_uint3_multiplication_operator()
     FND_TEST_TRUE(
         test_components(uint3_t{0x80000000u, 3u, 1u} * 2u, 0u, 6u, 2u));
     FND_TEST_TRUE(test_components(
-        uint3_t{0x10000u, 0x10000u, 0x10000u} * uint3_t{0x10000u, 2u, 0x10000u}, 
+        uint3_t{0x10000u, 0x10000u, 0x10000u} * uint3_t{0x10000u, 2u, 0x10000u},
         0u, 0x20000u, 0u));
 }
 
@@ -201,9 +202,9 @@ void unittests_math_vector_uint3_division_operator()
     FND_TEST_TRUE(test_components(21u / uint3_t{2u, 5u, 4u}, 10u, 4u, 5u));
     FND_TEST_TRUE(test_components(a / 2, 3u, 1u, 2u));
     FND_TEST_TRUE(test_components(21 / uint3_t{2u, 5u, 4u}, 10u, 4u, 5u));
-    FND_TEST_TRUE(test_components(
-        uint3_t{kUIntMaxValue, 9u, 8u} / uint3_t{1u, 3u, 8u}, 
-        kUIntMaxValue, 3u, 1u));
+    FND_TEST_TRUE(
+        test_components(uint3_t{kUIntMaxValue, 9u, 8u} / uint3_t{1u, 3u, 8u},
+            kUIntMaxValue, 3u, 1u));
 }
 
 void unittests_math_vector_uint3_modulo_operator()
@@ -222,9 +223,8 @@ void unittests_math_vector_uint3_bitwise_not_operator()
 {
     FND_TEST_TRUE(test_components(
         ~uint3_t{0u, 5u, kUIntMaxValue}, kUIntMaxValue, kUIntMaxValue - 5, 0u));
-    FND_TEST_TRUE(test_components(
-        ~uint3_t{0x80000000u, 1u, 0x7FFFFFFFu}, 0x7FFFFFFFu, kUIntMaxValue - 1, 
-        0x80000000u));
+    FND_TEST_TRUE(test_components(~uint3_t{0x80000000u, 1u, 0x7FFFFFFFu},
+        0x7FFFFFFFu, kUIntMaxValue - 1, 0x80000000u));
 }
 
 void unittests_math_vector_uint3_bitwise_and_operator()
@@ -249,9 +249,8 @@ void unittests_math_vector_uint3_bitwise_or_operator()
     FND_TEST_TRUE(test_components(0b0001u | a, 0b1101u, 0b1011u, 0b1111u));
     FND_TEST_TRUE(test_components(a | 0b0001, 0b1101u, 0b1011u, 0b1111u));
     FND_TEST_TRUE(test_components(0b0001 | a, 0b1101u, 0b1011u, 0b1111u));
-    FND_TEST_TRUE(test_components(
-        uint3_t{0u, 0x7FFFFFFFu, 1u} | 0x80000000u, 0x80000000u, kUIntMaxValue, 
-        0x80000001u));
+    FND_TEST_TRUE(test_components(uint3_t{0u, 0x7FFFFFFFu, 1u} | 0x80000000u,
+        0x80000000u, kUIntMaxValue, 0x80000001u));
 }
 
 void unittests_math_vector_uint3_bitwise_xor_operator()
@@ -271,14 +270,14 @@ void unittests_math_vector_uint3_shift_left_operator()
     FND_TEST_TRUE(test_components(
         uint3_t{1u, 3u, 5u} << uint3_t{4u, 1u, 0u}, 16u, 6u, 5u));
     FND_TEST_TRUE(test_components(uint3_t{1u, 3u, 5u} << 2u, 4u, 12u, 20u));
-    FND_TEST_TRUE(test_components(
-        1u << uint3_t{0u, 31u, 4u}, 1u, 0x80000000u, 16u));
+    FND_TEST_TRUE(
+        test_components(1u << uint3_t{0u, 31u, 4u}, 1u, 0x80000000u, 16u));
     FND_TEST_TRUE(test_components(uint3_t{1u, 3u, 5u} << 2, 4u, 12u, 20u));
-    FND_TEST_TRUE(test_components(
-        1 << uint3_t{0u, 31u, 4u}, 1u, 0x80000000u, 16u));
+    FND_TEST_TRUE(
+        test_components(1 << uint3_t{0u, 31u, 4u}, 1u, 0x80000000u, 16u));
     // Bits shifted out are discarded.
-    FND_TEST_TRUE(test_components(
-        uint3_t{0x80000000u, 3u, 1u} << 1u, 0u, 6u, 2u));
+    FND_TEST_TRUE(
+        test_components(uint3_t{0x80000000u, 3u, 1u} << 1u, 0u, 6u, 2u));
 }
 
 void unittests_math_vector_uint3_shift_right_operator()
@@ -471,8 +470,8 @@ void unittests_math_vector_uint3_min()
     FND_TEST_TRUE(test_components(
         min(uint3_t{4u, 4u, 4u}, uint3_t{4u, 4u, 4u}), 4u, 4u, 4u));
     FND_TEST_TRUE(test_components(
-        min(uint3_t{0u, kUIntMaxValue, 1u}, uint3_t{kUIntMaxValue, 0u, 1u}), 
-        0u, 0u, 1u));
+        min(uint3_t{0u, kUIntMaxValue, 1u}, uint3_t{kUIntMaxValue, 0u, 1u}), 0u,
+        0u, 1u));
     // uint_t on either side is compared with every component.
     FND_TEST_TRUE(test_components(min(a, 5u), 5u, 3u, 4u));
     FND_TEST_TRUE(test_components(min(5u, a), 5u, 3u, 4u));
@@ -502,29 +501,29 @@ void unittests_math_vector_uint3_clamp()
     const uint3_t lower{0u, 2u, 1u};
     const uint3_t upper{10u, 5u, 1u};
     // Each component is clamped to its own bounds.
-    FND_TEST_TRUE(test_components(
-        clamp(uint3_t{3u, 3u, 0u}, lower, upper), 3u, 3u, 1u));
-    FND_TEST_TRUE(test_components(
-        clamp(uint3_t{0u, 1u, 5u}, lower, upper), 0u, 2u, 1u));
+    FND_TEST_TRUE(
+        test_components(clamp(uint3_t{3u, 3u, 0u}, lower, upper), 3u, 3u, 1u));
+    FND_TEST_TRUE(
+        test_components(clamp(uint3_t{0u, 1u, 5u}, lower, upper), 0u, 2u, 1u));
     FND_TEST_TRUE(test_components(
         clamp(uint3_t{20u, 6u, 1u}, lower, upper), 10u, 5u, 1u));
-    FND_TEST_TRUE(test_components(
-        clamp(uint3_t{0u, 5u, 1u}, lower, upper), 0u, 5u, 1u));
+    FND_TEST_TRUE(
+        test_components(clamp(uint3_t{0u, 5u, 1u}, lower, upper), 0u, 5u, 1u));
     FND_TEST_TRUE(test_components(
         clamp(uint3_t{20u, 1u, 1u}, lower, upper), 10u, 2u, 1u));
-    FND_TEST_TRUE(test_components(clamp(
-        uint3_t{9u, 9u, 9u}, uint3_t{3u, 3u, 3u}, uint3_t{3u, 3u, 3u}), 
+    FND_TEST_TRUE(test_components(
+        clamp(uint3_t{9u, 9u, 9u}, uint3_t{3u, 3u, 3u}, uint3_t{3u, 3u, 3u}),
         3u, 3u, 3u));
 
     // uint_t bounds apply to every component.
-    FND_TEST_TRUE(test_components(
-        clamp(uint3_t{3u, 9u, 0u}, 2u, 5u), 3u, 5u, 2u));
-    FND_TEST_TRUE(test_components(
-        clamp(uint3_t{0u, 20u, 7u}, 2u, 10u), 2u, 10u, 7u));
-    FND_TEST_TRUE(test_components(
-        clamp(uint3_t{2u, 10u, 5u}, 2u, 10u), 2u, 10u, 5u));
-    FND_TEST_TRUE(test_components(
-        clamp(uint3_t{9u, 0u, 3u}, 3u, 3u), 3u, 3u, 3u));
+    FND_TEST_TRUE(
+        test_components(clamp(uint3_t{3u, 9u, 0u}, 2u, 5u), 3u, 5u, 2u));
+    FND_TEST_TRUE(
+        test_components(clamp(uint3_t{0u, 20u, 7u}, 2u, 10u), 2u, 10u, 7u));
+    FND_TEST_TRUE(
+        test_components(clamp(uint3_t{2u, 10u, 5u}, 2u, 10u), 2u, 10u, 5u));
+    FND_TEST_TRUE(
+        test_components(clamp(uint3_t{9u, 0u, 3u}, 3u, 3u), 3u, 3u, 3u));
 
     // uint3_t lower bound, uint_t upper bound.
     FND_TEST_TRUE(test_components(
@@ -570,8 +569,8 @@ void unittests_math_vector_uint3_csum()
     FND_TEST_TRUE(csum(uint3_t{kUIntMaxValue - 2, 1u, 1u}) == kUIntMaxValue);
     // Overflow wraps around.
     FND_TEST_TRUE(csum(uint3_t{kUIntMaxValue, 1u, 0u}) == 0u);
-    FND_TEST_TRUE(csum(
-        uint3_t{kUIntMaxValue, kUIntMaxValue, kUIntMaxValue}) == kUIntMaxValue - 2);
+    FND_TEST_TRUE(csum(uint3_t{kUIntMaxValue, kUIntMaxValue, kUIntMaxValue})
+        == kUIntMaxValue - 2);
 }
 
 void unittests_math_vector_uint3_cmul()
@@ -727,8 +726,7 @@ void unittests_math_vector_uint3_matches_int3()
     FND_TEST_TRUE(same_bits(max(ia, ib), max(ua, ub)));
     FND_TEST_TRUE(same_bits(max(ia, 4), max(ua, 4u)));
     FND_TEST_TRUE(same_bits(max(4, ia), max(4u, ua)));
-    FND_TEST_TRUE(same_bits(
-        clamp(ia, int3_t{2, 4, 1}, int3_t{5, 6, 3}),
+    FND_TEST_TRUE(same_bits(clamp(ia, int3_t{2, 4, 1}, int3_t{5, 6, 3}),
         clamp(ua, uint3_t{2u, 4u, 1u}, uint3_t{5u, 6u, 3u})));
     FND_TEST_TRUE(same_bits(
         clamp(ia, int3_t{2, 4, 1}, 5), clamp(ua, uint3_t{2u, 4u, 1u}, 5u)));

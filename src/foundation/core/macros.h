@@ -3,13 +3,13 @@
 #include <stdint.h>
 
 #if defined(FND_DEBUG)
-    #define FND_ASSERT(condition)                                       \
-        do {                                                            \
-            if (!(condition)) {                                         \
-                fnd::print_assert_message(                              \
-                    #condition, __FILE__, __FUNCTION__, __LINE__);      \
-                __debugbreak();                                         \
-            }                                                           \
+    #define FND_ASSERT(condition)                                  \
+        do {                                                       \
+            if (!(condition)) {                                    \
+                fnd::print_assert_message(                         \
+                    #condition, __FILE__, __FUNCTION__, __LINE__); \
+                __debugbreak();                                    \
+            }                                                      \
         } while (0)
 #else
     // __noop parses its argument without evaluating it, which keeps the
@@ -23,8 +23,7 @@
 
 namespace fnd {
 
-void print_assert_message(
-    const char* const message, const char* const filename, 
+void print_assert_message(const char* const message, const char* const filename,
     const char* const function_name, const uint32_t line);
 
 } // namespace fnd

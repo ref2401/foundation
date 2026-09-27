@@ -13,8 +13,10 @@ export constexpr double_t kDoublePi{3.14159265358979323846};
 
 export constexpr double_t kDoubleToDegrees{57.29577951308232};
 export constexpr double_t kDoubleToRadians{0.017453292519943295};
-export constexpr float_t kFloatToDegrees = static_cast<float_t>(kDoubleToDegrees);
-export constexpr float_t kFloatToRadians = static_cast<float_t>(kDoubleToRadians);
+export constexpr float_t kFloatToDegrees
+    = static_cast<float_t>(kDoubleToDegrees);
+export constexpr float_t kFloatToRadians
+    = static_cast<float_t>(kDoubleToRadians);
 
 export FND_INLINE float_t acos(const float_t x)
 {
@@ -123,7 +125,7 @@ export FND_INLINE float_t smoothstep(
     const float_t edge0, const float_t edge1, const float_t x)
 {
     FND_ASSERT(edge0 != edge1);
-    
+
     const float_t t = saturate((x - edge0) / (edge1 - edge0));
     return t * t * (3.0f - 2.0f * t);
 }
@@ -141,9 +143,10 @@ export FND_INLINE float_t pow(const float_t base, const float_t exponent)
 {
     // NOTE:
     // Domain errors as the C standard defines them for pow: a finite negative
-    // base with a finite non-integer exponent (the result would be complex), and
-    // 0 to the power 0.
-    FND_ASSERT(!(isfinite(base) && base < 0 && isfinite(exponent) && trunc(exponent) != exponent));
+    // base with a finite non-integer exponent (the result would be complex),
+    // and 0 to the power 0.
+    FND_ASSERT(!(isfinite(base) && base < 0 && isfinite(exponent)
+        && trunc(exponent) != exponent));
     FND_ASSERT(!(base == 0 && exponent == 0));
 
     return ::powf(base, exponent);
@@ -151,7 +154,8 @@ export FND_INLINE float_t pow(const float_t base, const float_t exponent)
 
 export FND_INLINE double_t pow(const double_t base, const double_t exponent)
 {
-    FND_ASSERT(!(isfinite(base) && base < 0 && isfinite(exponent) && trunc(exponent) != exponent));
+    FND_ASSERT(!(isfinite(base) && base < 0 && isfinite(exponent)
+        && trunc(exponent) != exponent));
     FND_ASSERT(!(base == 0 && exponent == 0));
 
     return ::pow(base, exponent);

@@ -6,8 +6,7 @@ import :arithmetic_types;
 
 namespace fnd {
 
-export template<typename T>
-struct span_t final {
+export template<typename T> struct span_t final {
     T* ptr{nullptr};
     ulong_t count{0};
 
@@ -39,8 +38,7 @@ constexpr bool_t operator!=(const span_t<T> a, const span_t<T> b)
     return !(a == b);
 }
 
-export template<typename T>
-constexpr bool_t is_empty(const span_t<T> span)
+export template<typename T> constexpr bool_t is_empty(const span_t<T> span)
 {
     return !span.ptr || (span.count == 0);
 }

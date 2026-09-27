@@ -14,7 +14,8 @@ export void unittests_math_vector_int3();
 // int3_t
 // ---------------------------------------------------------------------------
 
-constexpr bool_t test_components(const int3_t v, const int_t x, const int_t y, const int_t z)
+constexpr bool_t test_components(
+    const int3_t v, const int_t x, const int_t y, const int_t z)
 {
     return v.x == x && v.y == y && v.z == z;
 }
@@ -23,7 +24,8 @@ void unittests_math_vector_int3_type()
 {
     static_assert(PodType<int3_t>);
     static_assert(sizeof(int3_t) == 3 * sizeof(int_t));
-    // The ctor(int_t), ctor(bool2_t, z), ctor(bool3_t) and ctor(int2_t, z) are explicit.
+    // The ctor(int_t), ctor(bool2_t, z), ctor(bool3_t) and ctor(int2_t, z) are
+    // explicit.
     static_assert(!is_convertible<int_t, int3_t>());
     static_assert(!is_convertible<bool2_t, int3_t>());
     static_assert(!is_convertible<bool3_t, int3_t>());
@@ -43,7 +45,8 @@ void unittests_math_vector_int3_constructors()
     FND_TEST_TRUE(test_components(int3_t{bool2_t{false, true}, 6}, 0, 1, 6));
     // From a bool3_t: true is 1, false is 0.
     FND_TEST_TRUE(test_components(int3_t{bool3_t{true, false, true}}, 1, 0, 1));
-    FND_TEST_TRUE(test_components(int3_t{bool3_t{false, true, false}}, 0, 1, 0));
+    FND_TEST_TRUE(
+        test_components(int3_t{bool3_t{false, true, false}}, 0, 1, 0));
     // From an int2_t: z is 0 unless given.
     FND_TEST_TRUE(test_components(int3_t{int2_t{3, -4}}, 3, -4, 0));
     FND_TEST_TRUE(test_components(int3_t{int2_t{3, -4}, 6}, 3, -4, 6));
@@ -99,8 +102,8 @@ void unittests_math_vector_int3_unary_minus_operator()
 {
     FND_TEST_TRUE(test_components(-int3_t{7, -3, 4}, -7, 3, -4));
     FND_TEST_TRUE(test_components(-int3_t{0, 0, 0}, 0, 0, 0));
-    FND_TEST_TRUE(test_components(
-        -int3_t{kIntMaxValue, -kIntMaxValue, 0}, -kIntMaxValue, kIntMaxValue, 0));
+    FND_TEST_TRUE(test_components(-int3_t{kIntMaxValue, -kIntMaxValue, 0},
+        -kIntMaxValue, kIntMaxValue, 0));
 }
 
 void unittests_math_vector_int3_equality_operators()
@@ -186,8 +189,9 @@ void unittests_math_vector_int3_division_operator()
     FND_TEST_TRUE(test_components(a / int3_t{2, 5, -2}, 3, 0, -2));
     FND_TEST_TRUE(test_components(a / 2, 3, -1, 2));
     FND_TEST_TRUE(test_components(21 / int3_t{2, 5, -4}, 10, 4, -5));
-    FND_TEST_TRUE(test_components(int3_t{kIntMinValue, kIntMaxValue, 9} / int3_t{1, -1, 3},
-        kIntMinValue, -kIntMaxValue, 3));
+    FND_TEST_TRUE(test_components(
+        int3_t{kIntMinValue, kIntMaxValue, 9} / int3_t{1, -1, 3}, kIntMinValue,
+        -kIntMaxValue, 3));
 }
 
 void unittests_math_vector_int3_modulo_operator()
@@ -204,32 +208,37 @@ void unittests_math_vector_int3_modulo_operator()
 void unittests_math_vector_int3_bitwise_not_operator()
 {
     FND_TEST_TRUE(test_components(~int3_t{0, -1, 5}, -1, 0, -6));
-    FND_TEST_TRUE(test_components(~int3_t{kIntMaxValue, kIntMinValue, 1}, kIntMinValue, kIntMaxValue, -2));
+    FND_TEST_TRUE(test_components(~int3_t{kIntMaxValue, kIntMinValue, 1},
+        kIntMinValue, kIntMaxValue, -2));
 }
 
 void unittests_math_vector_int3_bitwise_and_operator()
 {
     const int3_t a{0b1100, 0b1010, 0b1111};
-    FND_TEST_TRUE(test_components(a & int3_t{0b1010, 0b0110, 0b0011}, 0b1000, 0b0010, 0b0011));
+    FND_TEST_TRUE(test_components(
+        a & int3_t{0b1010, 0b0110, 0b0011}, 0b1000, 0b0010, 0b0011));
     FND_TEST_TRUE(test_components(a & 0b0110, 0b0100, 0b0010, 0b0110));
     FND_TEST_TRUE(test_components(0b0110 & a, 0b0100, 0b0010, 0b0110));
-    FND_TEST_TRUE(test_components(int3_t{-1, kIntMinValue, 0x1FF} & 0xFF, 0xFF, 0, 0xFF));
+    FND_TEST_TRUE(
+        test_components(int3_t{-1, kIntMinValue, 0x1FF} & 0xFF, 0xFF, 0, 0xFF));
 }
 
 void unittests_math_vector_int3_bitwise_or_operator()
 {
     const int3_t a{0b1100, 0b1010, 0b1111};
-    FND_TEST_TRUE(test_components(a | int3_t{0b1010, 0b0110, 0b0000}, 0b1110, 0b1110, 0b1111));
+    FND_TEST_TRUE(test_components(
+        a | int3_t{0b1010, 0b0110, 0b0000}, 0b1110, 0b1110, 0b1111));
     FND_TEST_TRUE(test_components(a | 0b0001, 0b1101, 0b1011, 0b1111));
     FND_TEST_TRUE(test_components(0b0001 | a, 0b1101, 0b1011, 0b1111));
-    FND_TEST_TRUE(test_components(
-        int3_t{0, kIntMaxValue, 1} | kIntMinValue, kIntMinValue, -1, kIntMinValue + 1));
+    FND_TEST_TRUE(test_components(int3_t{0, kIntMaxValue, 1} | kIntMinValue,
+        kIntMinValue, -1, kIntMinValue + 1));
 }
 
 void unittests_math_vector_int3_bitwise_xor_operator()
 {
     const int3_t a{0b1100, 0b1010, 0b1111};
-    FND_TEST_TRUE(test_components(a ^ int3_t{0b1010, 0b0110, 0b1111}, 0b0110, 0b1100, 0));
+    FND_TEST_TRUE(
+        test_components(a ^ int3_t{0b1010, 0b0110, 0b1111}, 0b0110, 0b1100, 0));
     FND_TEST_TRUE(test_components(a ^ 0b1111, 0b0011, 0b0101, 0));
     FND_TEST_TRUE(test_components(0b1111 ^ a, 0b0011, 0b0101, 0));
     FND_TEST_TRUE(test_components(a ^ a, 0, 0, 0));
@@ -237,7 +246,8 @@ void unittests_math_vector_int3_bitwise_xor_operator()
 
 void unittests_math_vector_int3_shift_left_operator()
 {
-    FND_TEST_TRUE(test_components(int3_t{1, 3, 5} << int3_t{4, 1, 0}, 16, 6, 5));
+    FND_TEST_TRUE(
+        test_components(int3_t{1, 3, 5} << int3_t{4, 1, 0}, 16, 6, 5));
     FND_TEST_TRUE(test_components(int3_t{1, 3, 5} << 2, 4, 12, 20));
     FND_TEST_TRUE(test_components(1 << int3_t{0, 31, 4}, 1, kIntMinValue, 16));
     FND_TEST_TRUE(test_components(int3_t{-1, -2, -3} << 1, -2, -4, -6));
@@ -245,11 +255,13 @@ void unittests_math_vector_int3_shift_left_operator()
 
 void unittests_math_vector_int3_shift_right_operator()
 {
-    FND_TEST_TRUE(test_components(int3_t{16, 6, 5} >> int3_t{4, 1, 0}, 1, 3, 5));
+    FND_TEST_TRUE(
+        test_components(int3_t{16, 6, 5} >> int3_t{4, 1, 0}, 1, 3, 5));
     // Negative values shift in sign bits.
     FND_TEST_TRUE(test_components(int3_t{-8, 8, -1} >> 1, -4, 4, -1));
     FND_TEST_TRUE(test_components(256 >> int3_t{4, 8, 0}, 16, 1, 256));
-    FND_TEST_TRUE(test_components(int3_t{kIntMinValue, kIntMaxValue, -1} >> 31, -1, 0, -1));
+    FND_TEST_TRUE(test_components(
+        int3_t{kIntMinValue, kIntMaxValue, -1} >> 31, -1, 0, -1));
 }
 
 void unittests_math_vector_int3_compound_assignment_operators()
@@ -275,19 +287,24 @@ void unittests_math_vector_int3_compound_assignment_operators()
     FND_TEST_TRUE(test_components(v %= 4, 3, 1, 2));
 
     v = int3_t{0b1100, 0b1010, 0b1111};
-    FND_TEST_TRUE(test_components(v &= int3_t{0b1010, 0b0110, 0b0011}, 0b1000, 0b0010, 0b0011));
+    FND_TEST_TRUE(test_components(
+        v &= int3_t{0b1010, 0b0110, 0b0011}, 0b1000, 0b0010, 0b0011));
     FND_TEST_TRUE(test_components(v &= 0b1000, 0b1000, 0, 0));
 
-    FND_TEST_TRUE(test_components(v |= int3_t{0b0001, 0b0010, 0b0100}, 0b1001, 0b0010, 0b0100));
+    FND_TEST_TRUE(test_components(
+        v |= int3_t{0b0001, 0b0010, 0b0100}, 0b1001, 0b0010, 0b0100));
     FND_TEST_TRUE(test_components(v |= 0b0100, 0b1101, 0b0110, 0b0100));
 
-    FND_TEST_TRUE(test_components(v ^= int3_t{0b1101, 0b0000, 0b0100}, 0, 0b0110, 0));
+    FND_TEST_TRUE(
+        test_components(v ^= int3_t{0b1101, 0b0000, 0b0100}, 0, 0b0110, 0));
     FND_TEST_TRUE(test_components(v ^= 0b0011, 0b0011, 0b0101, 0b0011));
 
-    FND_TEST_TRUE(test_components(v <<= int3_t{1, 2, 3}, 0b0110, 0b10100, 0b11000));
+    FND_TEST_TRUE(
+        test_components(v <<= int3_t{1, 2, 3}, 0b0110, 0b10100, 0b11000));
     FND_TEST_TRUE(test_components(v <<= 1, 0b1100, 0b101000, 0b110000));
 
-    FND_TEST_TRUE(test_components(v >>= int3_t{2, 3, 4}, 0b0011, 0b0101, 0b0011));
+    FND_TEST_TRUE(
+        test_components(v >>= int3_t{2, 3, 4}, 0b0011, 0b0101, 0b0011));
     FND_TEST_TRUE(test_components(v >>= 1, 0b0001, 0b0010, 0b0001));
 }
 
@@ -376,8 +393,8 @@ void unittests_math_vector_int3_compound_assignment_matches_operators()
 void unittests_math_vector_int3_abs()
 {
     FND_TEST_TRUE(test_components(abs(int3_t{7, -3, 0}), 7, 3, 0));
-    FND_TEST_TRUE(test_components(
-        abs(int3_t{kIntMaxValue, -kIntMaxValue, -1}), kIntMaxValue, kIntMaxValue, 1));
+    FND_TEST_TRUE(test_components(abs(int3_t{kIntMaxValue, -kIntMaxValue, -1}),
+        kIntMaxValue, kIntMaxValue, 1));
 }
 
 void unittests_math_vector_int3_min()
@@ -385,9 +402,10 @@ void unittests_math_vector_int3_min()
     const int3_t a{7, -3, 4};
     FND_TEST_TRUE(test_components(min(a, int3_t{2, 5, 4}), 2, -3, 4));
     FND_TEST_TRUE(test_components(min(int3_t{2, 5, 4}, a), 2, -3, 4));
-    FND_TEST_TRUE(test_components(min(int3_t{4, 4, 4}, int3_t{4, 4, 4}), 4, 4, 4));
-    FND_TEST_TRUE(test_components(
-        min(int3_t{kIntMinValue, kIntMaxValue, 0}, int3_t{kIntMaxValue, kIntMinValue, 0}),
+    FND_TEST_TRUE(
+        test_components(min(int3_t{4, 4, 4}, int3_t{4, 4, 4}), 4, 4, 4));
+    FND_TEST_TRUE(test_components(min(int3_t{kIntMinValue, kIntMaxValue, 0},
+                                      int3_t{kIntMaxValue, kIntMinValue, 0}),
         kIntMinValue, kIntMinValue, 0));
     // int_t on either side is compared with every component.
     FND_TEST_TRUE(test_components(min(a, 0), 0, -3, 0));
@@ -401,9 +419,10 @@ void unittests_math_vector_int3_max()
     const int3_t a{7, -3, 4};
     FND_TEST_TRUE(test_components(max(a, int3_t{2, 5, 4}), 7, 5, 4));
     FND_TEST_TRUE(test_components(max(int3_t{2, 5, 4}, a), 7, 5, 4));
-    FND_TEST_TRUE(test_components(max(int3_t{4, 4, 4}, int3_t{4, 4, 4}), 4, 4, 4));
-    FND_TEST_TRUE(test_components(
-        max(int3_t{kIntMinValue, kIntMaxValue, 0}, int3_t{kIntMaxValue, kIntMinValue, 0}),
+    FND_TEST_TRUE(
+        test_components(max(int3_t{4, 4, 4}, int3_t{4, 4, 4}), 4, 4, 4));
+    FND_TEST_TRUE(test_components(max(int3_t{kIntMinValue, kIntMaxValue, 0},
+                                      int3_t{kIntMaxValue, kIntMinValue, 0}),
         kIntMaxValue, kIntMaxValue, 0));
     // int_t on either side is compared with every component.
     FND_TEST_TRUE(test_components(max(a, 0), 7, 0, 4));
@@ -417,39 +436,54 @@ void unittests_math_vector_int3_clamp()
     const int3_t lower{-10, 0, -1};
     const int3_t upper{10, 5, 1};
     // Each component is clamped to its own bounds.
-    FND_TEST_TRUE(test_components(clamp(int3_t{3, 3, 0}, lower, upper), 3, 3, 0));
-    FND_TEST_TRUE(test_components(clamp(int3_t{-20, -1, -5}, lower, upper), -10, 0, -1));
-    FND_TEST_TRUE(test_components(clamp(int3_t{20, 6, 5}, lower, upper), 10, 5, 1));
-    FND_TEST_TRUE(test_components(clamp(int3_t{-10, 5, 1}, lower, upper), -10, 5, 1));
-    FND_TEST_TRUE(test_components(clamp(int3_t{-20, 6, 0}, lower, upper), -10, 5, 0));
+    FND_TEST_TRUE(
+        test_components(clamp(int3_t{3, 3, 0}, lower, upper), 3, 3, 0));
+    FND_TEST_TRUE(
+        test_components(clamp(int3_t{-20, -1, -5}, lower, upper), -10, 0, -1));
+    FND_TEST_TRUE(
+        test_components(clamp(int3_t{20, 6, 5}, lower, upper), 10, 5, 1));
+    FND_TEST_TRUE(
+        test_components(clamp(int3_t{-10, 5, 1}, lower, upper), -10, 5, 1));
+    FND_TEST_TRUE(
+        test_components(clamp(int3_t{-20, 6, 0}, lower, upper), -10, 5, 0));
     FND_TEST_TRUE(test_components(
         clamp(int3_t{9, 9, 9}, int3_t{3, 3, 3}, int3_t{3, 3, 3}), 3, 3, 3));
 
     // int_t bounds apply to every component.
     FND_TEST_TRUE(test_components(clamp(int3_t{3, -3, 9}, 0, 5), 3, 0, 5));
-    FND_TEST_TRUE(test_components(clamp(int3_t{-20, 20, 0}, -10, 10), -10, 10, 0));
-    FND_TEST_TRUE(test_components(clamp(int3_t{-10, 10, 5}, -10, 10), -10, 10, 5));
+    FND_TEST_TRUE(
+        test_components(clamp(int3_t{-20, 20, 0}, -10, 10), -10, 10, 0));
+    FND_TEST_TRUE(
+        test_components(clamp(int3_t{-10, 10, 5}, -10, 10), -10, 10, 5));
     FND_TEST_TRUE(test_components(clamp(int3_t{9, -9, 0}, 3, 3), 3, 3, 3));
 
     // int3_t lower bound, int_t upper bound.
     FND_TEST_TRUE(test_components(
         clamp(int3_t{-20, -20, -20}, int3_t{-10, 0, -5}, 5), -10, 0, -5));
-    FND_TEST_TRUE(test_components(clamp(int3_t{20, 3, 7}, int3_t{-10, 0, -5}, 5), 5, 3, 5));
-    FND_TEST_TRUE(test_components(clamp(int3_t{-10, 5, -5}, int3_t{-10, 0, -5}, 5), -10, 5, -5));
-    FND_TEST_TRUE(test_components(clamp(int3_t{9, -9, 0}, int3_t{3, 5, 1}, 5), 5, 5, 1));
+    FND_TEST_TRUE(test_components(
+        clamp(int3_t{20, 3, 7}, int3_t{-10, 0, -5}, 5), 5, 3, 5));
+    FND_TEST_TRUE(test_components(
+        clamp(int3_t{-10, 5, -5}, int3_t{-10, 0, -5}, 5), -10, 5, -5));
+    FND_TEST_TRUE(
+        test_components(clamp(int3_t{9, -9, 0}, int3_t{3, 5, 1}, 5), 5, 5, 1));
 
     // int_t lower bound, int3_t upper bound.
-    FND_TEST_TRUE(test_components(clamp(int3_t{-20, -20, -20}, 0, int3_t{10, 5, 1}), 0, 0, 0));
-    FND_TEST_TRUE(test_components(clamp(int3_t{20, 3, 7}, 0, int3_t{10, 5, 1}), 10, 3, 1));
-    FND_TEST_TRUE(test_components(clamp(int3_t{0, 5, 1}, 0, int3_t{10, 5, 1}), 0, 5, 1));
-    FND_TEST_TRUE(test_components(clamp(int3_t{9, -9, 0}, 3, int3_t{3, 7, 4}), 3, 3, 3));
+    FND_TEST_TRUE(test_components(
+        clamp(int3_t{-20, -20, -20}, 0, int3_t{10, 5, 1}), 0, 0, 0));
+    FND_TEST_TRUE(test_components(
+        clamp(int3_t{20, 3, 7}, 0, int3_t{10, 5, 1}), 10, 3, 1));
+    FND_TEST_TRUE(
+        test_components(clamp(int3_t{0, 5, 1}, 0, int3_t{10, 5, 1}), 0, 5, 1));
+    FND_TEST_TRUE(
+        test_components(clamp(int3_t{9, -9, 0}, 3, int3_t{3, 7, 4}), 3, 3, 3));
 }
 
 void unittests_math_vector_int3_sign()
 {
     FND_TEST_TRUE(test_components(sign(int3_t{7, -3, 0}), 1, -1, 0));
     FND_TEST_TRUE(test_components(sign(int3_t{0, 5, -5}), 0, 1, -1));
-    FND_TEST_TRUE(test_components(sign(int3_t{kIntMinValue, kIntMaxValue, 0}), -1, 1, 0));
+    FND_TEST_TRUE(
+        test_components(sign(int3_t{kIntMinValue, kIntMaxValue, 0}), -1, 1, 0));
 }
 
 void unittests_math_vector_int3_cmin()

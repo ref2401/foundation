@@ -31,16 +31,14 @@ void print_last_run_report()
     }
 
     const char* const message = have_all_passed()
-        ? "All unittests have passed" 
+        ? "All unittests have passed"
         : "Not all unittests have passed";
-    
+
     const ulong_t num = g_total_unittest_count - g_failed_unittest_count;
-    fprintf_s(
-        stdout, "%s: %llu/%llu\n", message, num, g_total_unittest_count);
+    fprintf_s(stdout, "%s: %llu/%llu\n", message, num, g_total_unittest_count);
 }
 
-void test_true(
-    const bool_t condition, const char_t* const condition_text, 
+void test_true(const bool_t condition, const char_t* const condition_text,
     const source_location_t srcloc)
 {
     ++g_total_unittest_count;
@@ -48,10 +46,8 @@ void test_true(
     if (condition) return;
 
     ++g_failed_unittest_count;
-    fprintf_s(
-        stdout,
-        "%s(%u): unittest failed in '%s'. \"%s\"\n", srcloc.filename, 
-        srcloc.line, srcloc.function_name, condition_text);
+    fprintf_s(stdout, "%s(%u): unittest failed in '%s'. \"%s\"\n",
+        srcloc.filename, srcloc.line, srcloc.function_name, condition_text);
 }
 
 } // namespace fnd::unittests

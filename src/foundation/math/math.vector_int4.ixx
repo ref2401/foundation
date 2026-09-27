@@ -16,26 +16,37 @@ export struct int4_t final {
     int_t w{0};
 
     constexpr int4_t() = default;
-    
+
     constexpr explicit int4_t(
         const bool2_t v2, const int_t z = 0, const int_t w = 0)
-        : x{v2.x}, y{v2.y}, z{z}, w{w} {}
+        : x{v2.x}, y{v2.y}, z{z}, w{w}
+    {
+    }
 
-    constexpr explicit int4_t(const bool4_t v4) 
-        : x{v4.x}, y{v4.y}, z{v4.z}, w{v4.w} {}
+    constexpr explicit int4_t(const bool4_t v4)
+        : x{v4.x}, y{v4.y}, z{v4.z}, w{v4.w}
+    {
+    }
 
-    constexpr explicit int4_t(const int_t val) 
-        : x{val}, y{val}, z{val}, w{val} {}
+    constexpr explicit int4_t(const int_t val) : x{val}, y{val}, z{val}, w{val}
+    {
+    }
 
     constexpr explicit int4_t(
         const int2_t v2, const int_t z = 0, const int_t w = 0)
-        : x{v2.x}, y{v2.y}, z{z}, w{w} {}
+        : x{v2.x}, y{v2.y}, z{z}, w{w}
+    {
+    }
 
     constexpr explicit int4_t(const int3_t v3, const int_t w = 0)
-        : x{v3.x}, y{v3.y}, z{v3.z}, w{w} {}
+        : x{v3.x}, y{v3.y}, z{v3.z}, w{w}
+    {
+    }
 
     constexpr int4_t(const int_t x, const int_t y, const int_t z, const int_t w)
-        : x{x}, y{y}, z{z}, w{w} {}
+        : x{x}, y{y}, z{z}, w{w}
+    {
+    }
 
 
     constexpr const int_t& operator[](const uint_t idx) const
@@ -112,17 +123,13 @@ export struct int4_t final {
     constexpr int4_t& operator+=(const int4_t b)
     {
         FND_ASSERT(
-            long_t{x} + b.x >= kIntMinValue &&
-            long_t{x} + b.x <= kIntMaxValue);
+            long_t{x} + b.x >= kIntMinValue && long_t{x} + b.x <= kIntMaxValue);
         FND_ASSERT(
-            long_t{y} + b.y >= kIntMinValue &&
-            long_t{y} + b.y <= kIntMaxValue);
+            long_t{y} + b.y >= kIntMinValue && long_t{y} + b.y <= kIntMaxValue);
         FND_ASSERT(
-            long_t{z} + b.z >= kIntMinValue &&
-            long_t{z} + b.z <= kIntMaxValue);
+            long_t{z} + b.z >= kIntMinValue && long_t{z} + b.z <= kIntMaxValue);
         FND_ASSERT(
-            long_t{w} + b.w >= kIntMinValue &&
-            long_t{w} + b.w <= kIntMaxValue);
+            long_t{w} + b.w >= kIntMinValue && long_t{w} + b.w <= kIntMaxValue);
 
         x += b.x;
         y += b.y;
@@ -134,17 +141,13 @@ export struct int4_t final {
     constexpr int4_t& operator+=(const int_t val)
     {
         FND_ASSERT(
-            long_t{x} + val >= kIntMinValue &&
-            long_t{x} + val <= kIntMaxValue);
+            long_t{x} + val >= kIntMinValue && long_t{x} + val <= kIntMaxValue);
         FND_ASSERT(
-            long_t{y} + val >= kIntMinValue &&
-            long_t{y} + val <= kIntMaxValue);
+            long_t{y} + val >= kIntMinValue && long_t{y} + val <= kIntMaxValue);
         FND_ASSERT(
-            long_t{z} + val >= kIntMinValue &&
-            long_t{z} + val <= kIntMaxValue);
+            long_t{z} + val >= kIntMinValue && long_t{z} + val <= kIntMaxValue);
         FND_ASSERT(
-            long_t{w} + val >= kIntMinValue &&
-            long_t{w} + val <= kIntMaxValue);
+            long_t{w} + val >= kIntMinValue && long_t{w} + val <= kIntMaxValue);
 
         x += val;
         y += val;
@@ -156,17 +159,13 @@ export struct int4_t final {
     constexpr int4_t& operator-=(const int4_t b)
     {
         FND_ASSERT(
-            long_t{x} - b.x >= kIntMinValue &&
-            long_t{x} - b.x <= kIntMaxValue);
+            long_t{x} - b.x >= kIntMinValue && long_t{x} - b.x <= kIntMaxValue);
         FND_ASSERT(
-            long_t{y} - b.y >= kIntMinValue &&
-            long_t{y} - b.y <= kIntMaxValue);
+            long_t{y} - b.y >= kIntMinValue && long_t{y} - b.y <= kIntMaxValue);
         FND_ASSERT(
-            long_t{z} - b.z >= kIntMinValue &&
-            long_t{z} - b.z <= kIntMaxValue);
+            long_t{z} - b.z >= kIntMinValue && long_t{z} - b.z <= kIntMaxValue);
         FND_ASSERT(
-            long_t{w} - b.w >= kIntMinValue &&
-            long_t{w} - b.w <= kIntMaxValue);
+            long_t{w} - b.w >= kIntMinValue && long_t{w} - b.w <= kIntMaxValue);
 
         x -= b.x;
         y -= b.y;
@@ -178,17 +177,13 @@ export struct int4_t final {
     constexpr int4_t& operator-=(const int_t val)
     {
         FND_ASSERT(
-            long_t{x} - val >= kIntMinValue &&
-            long_t{x} - val <= kIntMaxValue);
+            long_t{x} - val >= kIntMinValue && long_t{x} - val <= kIntMaxValue);
         FND_ASSERT(
-            long_t{y} - val >= kIntMinValue &&
-            long_t{y} - val <= kIntMaxValue);
+            long_t{y} - val >= kIntMinValue && long_t{y} - val <= kIntMaxValue);
         FND_ASSERT(
-            long_t{z} - val >= kIntMinValue &&
-            long_t{z} - val <= kIntMaxValue);
+            long_t{z} - val >= kIntMinValue && long_t{z} - val <= kIntMaxValue);
         FND_ASSERT(
-            long_t{w} - val >= kIntMinValue &&
-            long_t{w} - val <= kIntMaxValue);
+            long_t{w} - val >= kIntMinValue && long_t{w} - val <= kIntMaxValue);
 
         x -= val;
         y -= val;
@@ -200,17 +195,13 @@ export struct int4_t final {
     constexpr int4_t& operator*=(const int4_t b)
     {
         FND_ASSERT(
-            long_t{x} * b.x >= kIntMinValue &&
-            long_t{x} * b.x <= kIntMaxValue);
+            long_t{x} * b.x >= kIntMinValue && long_t{x} * b.x <= kIntMaxValue);
         FND_ASSERT(
-            long_t{y} * b.y >= kIntMinValue &&
-            long_t{y} * b.y <= kIntMaxValue);
+            long_t{y} * b.y >= kIntMinValue && long_t{y} * b.y <= kIntMaxValue);
         FND_ASSERT(
-            long_t{z} * b.z >= kIntMinValue &&
-            long_t{z} * b.z <= kIntMaxValue);
+            long_t{z} * b.z >= kIntMinValue && long_t{z} * b.z <= kIntMaxValue);
         FND_ASSERT(
-            long_t{w} * b.w >= kIntMinValue &&
-            long_t{w} * b.w <= kIntMaxValue);
+            long_t{w} * b.w >= kIntMinValue && long_t{w} * b.w <= kIntMaxValue);
 
         x *= b.x;
         y *= b.y;
@@ -222,17 +213,13 @@ export struct int4_t final {
     constexpr int4_t& operator*=(const int_t val)
     {
         FND_ASSERT(
-            long_t{x} * val >= kIntMinValue &&
-            long_t{x} * val <= kIntMaxValue);
+            long_t{x} * val >= kIntMinValue && long_t{x} * val <= kIntMaxValue);
         FND_ASSERT(
-            long_t{y} * val >= kIntMinValue &&
-            long_t{y} * val <= kIntMaxValue);
+            long_t{y} * val >= kIntMinValue && long_t{y} * val <= kIntMaxValue);
         FND_ASSERT(
-            long_t{z} * val >= kIntMinValue &&
-            long_t{z} * val <= kIntMaxValue);
+            long_t{z} * val >= kIntMinValue && long_t{z} * val <= kIntMaxValue);
         FND_ASSERT(
-            long_t{w} * val >= kIntMinValue &&
-            long_t{w} * val <= kIntMaxValue);
+            long_t{w} * val >= kIntMinValue && long_t{w} * val <= kIntMaxValue);
 
         x *= val;
         y *= val;
@@ -499,17 +486,13 @@ export constexpr bool4_t operator>=(const int_t val, const int4_t b)
 export constexpr int4_t operator+(const int4_t a, const int4_t b)
 {
     FND_ASSERT(
-        long_t{a.x} + b.x >= kIntMinValue &&
-        long_t{a.x} + b.x <= kIntMaxValue);
+        long_t{a.x} + b.x >= kIntMinValue && long_t{a.x} + b.x <= kIntMaxValue);
     FND_ASSERT(
-        long_t{a.y} + b.y >= kIntMinValue &&
-        long_t{a.y} + b.y <= kIntMaxValue);
+        long_t{a.y} + b.y >= kIntMinValue && long_t{a.y} + b.y <= kIntMaxValue);
     FND_ASSERT(
-        long_t{a.z} + b.z >= kIntMinValue &&
-        long_t{a.z} + b.z <= kIntMaxValue);
+        long_t{a.z} + b.z >= kIntMinValue && long_t{a.z} + b.z <= kIntMaxValue);
     FND_ASSERT(
-        long_t{a.w} + b.w >= kIntMinValue &&
-        long_t{a.w} + b.w <= kIntMaxValue);
+        long_t{a.w} + b.w >= kIntMinValue && long_t{a.w} + b.w <= kIntMaxValue);
 
     return int4_t{a.x + b.x, a.y + b.y, a.z + b.z, a.w + b.w};
 }
@@ -517,17 +500,13 @@ export constexpr int4_t operator+(const int4_t a, const int4_t b)
 export constexpr int4_t operator+(const int4_t a, const int_t val)
 {
     FND_ASSERT(
-        long_t{a.x} + val >= kIntMinValue &&
-        long_t{a.x} + val <= kIntMaxValue);
+        long_t{a.x} + val >= kIntMinValue && long_t{a.x} + val <= kIntMaxValue);
     FND_ASSERT(
-        long_t{a.y} + val >= kIntMinValue &&
-        long_t{a.y} + val <= kIntMaxValue);
+        long_t{a.y} + val >= kIntMinValue && long_t{a.y} + val <= kIntMaxValue);
     FND_ASSERT(
-        long_t{a.z} + val >= kIntMinValue &&
-        long_t{a.z} + val <= kIntMaxValue);
+        long_t{a.z} + val >= kIntMinValue && long_t{a.z} + val <= kIntMaxValue);
     FND_ASSERT(
-        long_t{a.w} + val >= kIntMinValue &&
-        long_t{a.w} + val <= kIntMaxValue);
+        long_t{a.w} + val >= kIntMinValue && long_t{a.w} + val <= kIntMaxValue);
 
     return int4_t{a.x + val, a.y + val, a.z + val, a.w + val};
 }
@@ -535,17 +514,13 @@ export constexpr int4_t operator+(const int4_t a, const int_t val)
 export constexpr int4_t operator+(const int_t val, const int4_t b)
 {
     FND_ASSERT(
-        long_t{val} + b.x >= kIntMinValue &&
-        long_t{val} + b.x <= kIntMaxValue);
+        long_t{val} + b.x >= kIntMinValue && long_t{val} + b.x <= kIntMaxValue);
     FND_ASSERT(
-        long_t{val} + b.y >= kIntMinValue &&
-        long_t{val} + b.y <= kIntMaxValue);
+        long_t{val} + b.y >= kIntMinValue && long_t{val} + b.y <= kIntMaxValue);
     FND_ASSERT(
-        long_t{val} + b.z >= kIntMinValue &&
-        long_t{val} + b.z <= kIntMaxValue);
+        long_t{val} + b.z >= kIntMinValue && long_t{val} + b.z <= kIntMaxValue);
     FND_ASSERT(
-        long_t{val} + b.w >= kIntMinValue &&
-        long_t{val} + b.w <= kIntMaxValue);
+        long_t{val} + b.w >= kIntMinValue && long_t{val} + b.w <= kIntMaxValue);
 
     return int4_t{val + b.x, val + b.y, val + b.z, val + b.w};
 }
@@ -553,17 +528,13 @@ export constexpr int4_t operator+(const int_t val, const int4_t b)
 export constexpr int4_t operator-(const int4_t a, const int4_t b)
 {
     FND_ASSERT(
-        long_t{a.x} - b.x >= kIntMinValue &&
-        long_t{a.x} - b.x <= kIntMaxValue);
+        long_t{a.x} - b.x >= kIntMinValue && long_t{a.x} - b.x <= kIntMaxValue);
     FND_ASSERT(
-        long_t{a.y} - b.y >= kIntMinValue &&
-        long_t{a.y} - b.y <= kIntMaxValue);
+        long_t{a.y} - b.y >= kIntMinValue && long_t{a.y} - b.y <= kIntMaxValue);
     FND_ASSERT(
-        long_t{a.z} - b.z >= kIntMinValue &&
-        long_t{a.z} - b.z <= kIntMaxValue);
+        long_t{a.z} - b.z >= kIntMinValue && long_t{a.z} - b.z <= kIntMaxValue);
     FND_ASSERT(
-        long_t{a.w} - b.w >= kIntMinValue &&
-        long_t{a.w} - b.w <= kIntMaxValue);
+        long_t{a.w} - b.w >= kIntMinValue && long_t{a.w} - b.w <= kIntMaxValue);
 
     return int4_t{a.x - b.x, a.y - b.y, a.z - b.z, a.w - b.w};
 }
@@ -571,17 +542,13 @@ export constexpr int4_t operator-(const int4_t a, const int4_t b)
 export constexpr int4_t operator-(const int4_t a, const int_t val)
 {
     FND_ASSERT(
-        long_t{a.x} - val >= kIntMinValue &&
-        long_t{a.x} - val <= kIntMaxValue);
+        long_t{a.x} - val >= kIntMinValue && long_t{a.x} - val <= kIntMaxValue);
     FND_ASSERT(
-        long_t{a.y} - val >= kIntMinValue &&
-        long_t{a.y} - val <= kIntMaxValue);
+        long_t{a.y} - val >= kIntMinValue && long_t{a.y} - val <= kIntMaxValue);
     FND_ASSERT(
-        long_t{a.z} - val >= kIntMinValue &&
-        long_t{a.z} - val <= kIntMaxValue);
+        long_t{a.z} - val >= kIntMinValue && long_t{a.z} - val <= kIntMaxValue);
     FND_ASSERT(
-        long_t{a.w} - val >= kIntMinValue &&
-        long_t{a.w} - val <= kIntMaxValue);
+        long_t{a.w} - val >= kIntMinValue && long_t{a.w} - val <= kIntMaxValue);
 
     return int4_t{a.x - val, a.y - val, a.z - val, a.w - val};
 }
@@ -589,17 +556,13 @@ export constexpr int4_t operator-(const int4_t a, const int_t val)
 export constexpr int4_t operator-(const int_t val, const int4_t b)
 {
     FND_ASSERT(
-        long_t{val} - b.x >= kIntMinValue &&
-        long_t{val} - b.x <= kIntMaxValue);
+        long_t{val} - b.x >= kIntMinValue && long_t{val} - b.x <= kIntMaxValue);
     FND_ASSERT(
-        long_t{val} - b.y >= kIntMinValue &&
-        long_t{val} - b.y <= kIntMaxValue);
+        long_t{val} - b.y >= kIntMinValue && long_t{val} - b.y <= kIntMaxValue);
     FND_ASSERT(
-        long_t{val} - b.z >= kIntMinValue &&
-        long_t{val} - b.z <= kIntMaxValue);
+        long_t{val} - b.z >= kIntMinValue && long_t{val} - b.z <= kIntMaxValue);
     FND_ASSERT(
-        long_t{val} - b.w >= kIntMinValue &&
-        long_t{val} - b.w <= kIntMaxValue);
+        long_t{val} - b.w >= kIntMinValue && long_t{val} - b.w <= kIntMaxValue);
 
     return int4_t{val - b.x, val - b.y, val - b.z, val - b.w};
 }
@@ -607,17 +570,13 @@ export constexpr int4_t operator-(const int_t val, const int4_t b)
 export constexpr int4_t operator*(const int4_t a, const int4_t b)
 {
     FND_ASSERT(
-        long_t{a.x} * b.x >= kIntMinValue &&
-        long_t{a.x} * b.x <= kIntMaxValue);
+        long_t{a.x} * b.x >= kIntMinValue && long_t{a.x} * b.x <= kIntMaxValue);
     FND_ASSERT(
-        long_t{a.y} * b.y >= kIntMinValue &&
-        long_t{a.y} * b.y <= kIntMaxValue);
+        long_t{a.y} * b.y >= kIntMinValue && long_t{a.y} * b.y <= kIntMaxValue);
     FND_ASSERT(
-        long_t{a.z} * b.z >= kIntMinValue &&
-        long_t{a.z} * b.z <= kIntMaxValue);
+        long_t{a.z} * b.z >= kIntMinValue && long_t{a.z} * b.z <= kIntMaxValue);
     FND_ASSERT(
-        long_t{a.w} * b.w >= kIntMinValue &&
-        long_t{a.w} * b.w <= kIntMaxValue);
+        long_t{a.w} * b.w >= kIntMinValue && long_t{a.w} * b.w <= kIntMaxValue);
 
     return int4_t{a.x * b.x, a.y * b.y, a.z * b.z, a.w * b.w};
 }
@@ -625,17 +584,13 @@ export constexpr int4_t operator*(const int4_t a, const int4_t b)
 export constexpr int4_t operator*(const int4_t a, const int_t val)
 {
     FND_ASSERT(
-        long_t{a.x} * val >= kIntMinValue &&
-        long_t{a.x} * val <= kIntMaxValue);
+        long_t{a.x} * val >= kIntMinValue && long_t{a.x} * val <= kIntMaxValue);
     FND_ASSERT(
-        long_t{a.y} * val >= kIntMinValue &&
-        long_t{a.y} * val <= kIntMaxValue);
+        long_t{a.y} * val >= kIntMinValue && long_t{a.y} * val <= kIntMaxValue);
     FND_ASSERT(
-        long_t{a.z} * val >= kIntMinValue &&
-        long_t{a.z} * val <= kIntMaxValue);
+        long_t{a.z} * val >= kIntMinValue && long_t{a.z} * val <= kIntMaxValue);
     FND_ASSERT(
-        long_t{a.w} * val >= kIntMinValue &&
-        long_t{a.w} * val <= kIntMaxValue);
+        long_t{a.w} * val >= kIntMinValue && long_t{a.w} * val <= kIntMaxValue);
 
     return int4_t{a.x * val, a.y * val, a.z * val, a.w * val};
 }
@@ -643,17 +598,13 @@ export constexpr int4_t operator*(const int4_t a, const int_t val)
 export constexpr int4_t operator*(const int_t val, const int4_t b)
 {
     FND_ASSERT(
-        long_t{val} * b.x >= kIntMinValue &&
-        long_t{val} * b.x <= kIntMaxValue);
+        long_t{val} * b.x >= kIntMinValue && long_t{val} * b.x <= kIntMaxValue);
     FND_ASSERT(
-        long_t{val} * b.y >= kIntMinValue &&
-        long_t{val} * b.y <= kIntMaxValue);
+        long_t{val} * b.y >= kIntMinValue && long_t{val} * b.y <= kIntMaxValue);
     FND_ASSERT(
-        long_t{val} * b.z >= kIntMinValue &&
-        long_t{val} * b.z <= kIntMaxValue);
+        long_t{val} * b.z >= kIntMinValue && long_t{val} * b.z <= kIntMaxValue);
     FND_ASSERT(
-        long_t{val} * b.w >= kIntMinValue &&
-        long_t{val} * b.w <= kIntMaxValue);
+        long_t{val} * b.w >= kIntMinValue && long_t{val} * b.w <= kIntMaxValue);
 
     return int4_t{val * b.x, val * b.y, val * b.z, val * b.w};
 }
@@ -832,48 +783,40 @@ export constexpr int4_t max(const int_t val, const int4_t b)
     return int4_t{max(val, b.x), max(val, b.y), max(val, b.z), max(val, b.w)};
 }
 
-export constexpr int4_t clamp(const int4_t v, const int4_t lower, const int4_t upper)
+export constexpr int4_t clamp(
+    const int4_t v, const int4_t lower, const int4_t upper)
 {
     FND_ASSERT(all(lower <= upper));
 
-    return int4_t{
-        clamp(v.x, lower.x, upper.x),
-        clamp(v.y, lower.y, upper.y),
-        clamp(v.z, lower.z, upper.z),
-        clamp(v.w, lower.w, upper.w)};
+    return int4_t{clamp(v.x, lower.x, upper.x), clamp(v.y, lower.y, upper.y),
+        clamp(v.z, lower.z, upper.z), clamp(v.w, lower.w, upper.w)};
 }
 
-export constexpr int4_t clamp(const int4_t v, const int4_t lower, const int_t upper)
+export constexpr int4_t clamp(
+    const int4_t v, const int4_t lower, const int_t upper)
 {
     FND_ASSERT(all(lower <= upper));
 
-    return int4_t{
-        clamp(v.x, lower.x, upper),
-        clamp(v.y, lower.y, upper),
-        clamp(v.z, lower.z, upper),
-        clamp(v.w, lower.w, upper)};
+    return int4_t{clamp(v.x, lower.x, upper), clamp(v.y, lower.y, upper),
+        clamp(v.z, lower.z, upper), clamp(v.w, lower.w, upper)};
 }
 
-export constexpr int4_t clamp(const int4_t v, const int_t lower, const int4_t upper)
+export constexpr int4_t clamp(
+    const int4_t v, const int_t lower, const int4_t upper)
 {
     FND_ASSERT(all(lower <= upper));
 
-    return int4_t{
-        clamp(v.x, lower, upper.x),
-        clamp(v.y, lower, upper.y),
-        clamp(v.z, lower, upper.z),
-        clamp(v.w, lower, upper.w)};
+    return int4_t{clamp(v.x, lower, upper.x), clamp(v.y, lower, upper.y),
+        clamp(v.z, lower, upper.z), clamp(v.w, lower, upper.w)};
 }
 
-export constexpr int4_t clamp(const int4_t v, const int_t lower, const int_t upper)
+export constexpr int4_t clamp(
+    const int4_t v, const int_t lower, const int_t upper)
 {
     FND_ASSERT(lower <= upper);
 
-    return int4_t{
-        clamp(v.x, lower, upper),
-        clamp(v.y, lower, upper),
-        clamp(v.z, lower, upper),
-        clamp(v.w, lower, upper)};
+    return int4_t{clamp(v.x, lower, upper), clamp(v.y, lower, upper),
+        clamp(v.z, lower, upper), clamp(v.w, lower, upper)};
 }
 
 export constexpr int4_t sign(const int4_t v)
@@ -894,18 +837,15 @@ export constexpr int_t cmax(const int4_t v)
 export constexpr int_t csum(const int4_t v)
 {
     FND_ASSERT(
-        long_t{v.x} + v.y >= kIntMinValue &&
-        long_t{v.x} + v.y <= kIntMaxValue);
+        long_t{v.x} + v.y >= kIntMinValue && long_t{v.x} + v.y <= kIntMaxValue);
 
     const int_t partial1 = v.x + v.y;
-    FND_ASSERT(
-        long_t{partial1} + v.z >= kIntMinValue &&
-        long_t{partial1} + v.z <= kIntMaxValue);
+    FND_ASSERT(long_t{partial1} + v.z >= kIntMinValue
+        && long_t{partial1} + v.z <= kIntMaxValue);
 
     const int_t partial2 = partial1 + v.z;
-    FND_ASSERT(
-        long_t{partial2} + v.w >= kIntMinValue &&
-        long_t{partial2} + v.w <= kIntMaxValue);
+    FND_ASSERT(long_t{partial2} + v.w >= kIntMinValue
+        && long_t{partial2} + v.w <= kIntMaxValue);
 
     return partial2 + v.w;
 }
@@ -913,18 +853,15 @@ export constexpr int_t csum(const int4_t v)
 export constexpr int_t cmul(const int4_t v)
 {
     FND_ASSERT(
-        long_t{v.x} * v.y >= kIntMinValue &&
-        long_t{v.x} * v.y <= kIntMaxValue);
+        long_t{v.x} * v.y >= kIntMinValue && long_t{v.x} * v.y <= kIntMaxValue);
 
     const int_t partial1 = v.x * v.y;
-    FND_ASSERT(
-        long_t{partial1} * v.z >= kIntMinValue &&
-        long_t{partial1} * v.z <= kIntMaxValue);
+    FND_ASSERT(long_t{partial1} * v.z >= kIntMinValue
+        && long_t{partial1} * v.z <= kIntMaxValue);
 
     const int_t partial2 = partial1 * v.z;
-    FND_ASSERT(
-        long_t{partial2} * v.w >= kIntMinValue &&
-        long_t{partial2} * v.w <= kIntMaxValue);
+    FND_ASSERT(long_t{partial2} * v.w >= kIntMinValue
+        && long_t{partial2} * v.w <= kIntMaxValue);
 
     return partial2 * v.w;
 }

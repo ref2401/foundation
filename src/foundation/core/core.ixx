@@ -18,8 +18,8 @@ export struct source_location_t final {
 };
 
 export consteval source_location_t make_source_location(
-    const char_t* const filename = __builtin_FILE(), 
-    const char_t* const function_name = __builtin_FUNCTION(), 
+    const char_t* const filename = __builtin_FILE(),
+    const char_t* const function_name = __builtin_FUNCTION(),
     const uint_t line = __builtin_LINE())
 {
     return {filename, function_name, line};

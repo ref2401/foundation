@@ -35,10 +35,7 @@ export struct uint2_t final {
         return *this;
     }
 
-    constexpr uint2_t operator++(int)
-    {
-        return uint2_t{x++, y++};
-    }
+    constexpr uint2_t operator++(int) { return uint2_t{x++, y++}; }
 
     constexpr uint2_t& operator--()
     {
@@ -47,10 +44,7 @@ export struct uint2_t final {
         return *this;
     }
 
-    constexpr uint2_t operator--(int)
-    {
-        return uint2_t{x--, y--};
-    }
+    constexpr uint2_t operator--(int) { return uint2_t{x--, y--}; }
 
     constexpr uint2_t operator~() const { return uint2_t{~x, ~y}; }
 
@@ -833,28 +827,32 @@ export constexpr uint2_t max(const uint_t val, const uint2_t b)
     return uint2_t{max(val, b.x), max(val, b.y)};
 }
 
-export constexpr uint2_t clamp(const uint2_t v, const uint2_t lower, const uint2_t upper)
+export constexpr uint2_t clamp(
+    const uint2_t v, const uint2_t lower, const uint2_t upper)
 {
     FND_ASSERT(all(lower <= upper));
 
     return uint2_t{clamp(v.x, lower.x, upper.x), clamp(v.y, lower.y, upper.y)};
 }
 
-export constexpr uint2_t clamp(const uint2_t v, const uint2_t lower, const uint_t upper)
+export constexpr uint2_t clamp(
+    const uint2_t v, const uint2_t lower, const uint_t upper)
 {
     FND_ASSERT(all(lower <= upper));
 
     return uint2_t{clamp(v.x, lower.x, upper), clamp(v.y, lower.y, upper)};
 }
 
-export constexpr uint2_t clamp(const uint2_t v, const uint_t lower, const uint2_t upper)
+export constexpr uint2_t clamp(
+    const uint2_t v, const uint_t lower, const uint2_t upper)
 {
     FND_ASSERT(all(lower <= upper));
 
     return uint2_t{clamp(v.x, lower, upper.x), clamp(v.y, lower, upper.y)};
 }
 
-export constexpr uint2_t clamp(const uint2_t v, const uint_t lower, const uint_t upper)
+export constexpr uint2_t clamp(
+    const uint2_t v, const uint_t lower, const uint_t upper)
 {
     FND_ASSERT(lower <= upper);
 

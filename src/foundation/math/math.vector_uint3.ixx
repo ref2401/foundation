@@ -15,20 +15,24 @@ export struct uint3_t final {
 
     constexpr uint3_t() = default;
 
-    constexpr explicit uint3_t(const bool2_t v2, const uint_t z = 0) 
-        : x{v2.x}, y{v2.y}, z{z} {}
+    constexpr explicit uint3_t(const bool2_t v2, const uint_t z = 0)
+        : x{v2.x}, y{v2.y}, z{z}
+    {
+    }
 
-    constexpr explicit uint3_t(const bool3_t v3) 
-        : x{v3.x}, y{v3.y}, z{v3.z} {}
+    constexpr explicit uint3_t(const bool3_t v3) : x{v3.x}, y{v3.y}, z{v3.z} {}
 
-    constexpr explicit uint3_t(const uint_t val) 
-        : x{val}, y{val}, z{val} {}
+    constexpr explicit uint3_t(const uint_t val) : x{val}, y{val}, z{val} {}
 
-    constexpr explicit uint3_t(const uint2_t v2, const uint_t z = 0) 
-        : x{v2.x}, y{v2.y}, z{z} {}
+    constexpr explicit uint3_t(const uint2_t v2, const uint_t z = 0)
+        : x{v2.x}, y{v2.y}, z{z}
+    {
+    }
 
-    constexpr uint3_t(const uint_t x, const uint_t y, const uint_t z) 
-        : x{x}, y{y}, z{z} {}
+    constexpr uint3_t(const uint_t x, const uint_t y, const uint_t z)
+        : x{x}, y{y}, z{z}
+    {
+    }
 
     constexpr const uint_t& operator[](const uint_t idx) const
     {
@@ -49,10 +53,7 @@ export struct uint3_t final {
         return *this;
     }
 
-    constexpr uint3_t operator++(int)
-    {
-        return uint3_t{x++, y++, z++};
-    }
+    constexpr uint3_t operator++(int) { return uint3_t{x++, y++, z++}; }
 
     constexpr uint3_t& operator--()
     {
@@ -62,10 +63,7 @@ export struct uint3_t final {
         return *this;
     }
 
-    constexpr uint3_t operator--(int)
-    {
-        return uint3_t{x--, y--, z--};
-    }
+    constexpr uint3_t operator--(int) { return uint3_t{x--, y--, z--}; }
 
     constexpr uint3_t operator~() const { return uint3_t{~x, ~y, ~z}; }
 
@@ -880,43 +878,39 @@ export constexpr uint3_t max(const uint_t val, const uint3_t b)
     return uint3_t{max(val, b.x), max(val, b.y), max(val, b.z)};
 }
 
-export constexpr uint3_t clamp(const uint3_t v, const uint3_t lower, const uint3_t upper)
+export constexpr uint3_t clamp(
+    const uint3_t v, const uint3_t lower, const uint3_t upper)
 {
     FND_ASSERT(all(lower <= upper));
 
-    return uint3_t{
-        clamp(v.x, lower.x, upper.x),
-        clamp(v.y, lower.y, upper.y),
+    return uint3_t{clamp(v.x, lower.x, upper.x), clamp(v.y, lower.y, upper.y),
         clamp(v.z, lower.z, upper.z)};
 }
 
-export constexpr uint3_t clamp(const uint3_t v, const uint3_t lower, const uint_t upper)
+export constexpr uint3_t clamp(
+    const uint3_t v, const uint3_t lower, const uint_t upper)
 {
     FND_ASSERT(all(lower <= upper));
 
-    return uint3_t{
-        clamp(v.x, lower.x, upper),
-        clamp(v.y, lower.y, upper),
+    return uint3_t{clamp(v.x, lower.x, upper), clamp(v.y, lower.y, upper),
         clamp(v.z, lower.z, upper)};
 }
 
-export constexpr uint3_t clamp(const uint3_t v, const uint_t lower, const uint3_t upper)
+export constexpr uint3_t clamp(
+    const uint3_t v, const uint_t lower, const uint3_t upper)
 {
     FND_ASSERT(all(lower <= upper));
 
-    return uint3_t{
-        clamp(v.x, lower, upper.x),
-        clamp(v.y, lower, upper.y),
+    return uint3_t{clamp(v.x, lower, upper.x), clamp(v.y, lower, upper.y),
         clamp(v.z, lower, upper.z)};
 }
 
-export constexpr uint3_t clamp(const uint3_t v, const uint_t lower, const uint_t upper)
+export constexpr uint3_t clamp(
+    const uint3_t v, const uint_t lower, const uint_t upper)
 {
     FND_ASSERT(lower <= upper);
 
-    return uint3_t{
-        clamp(v.x, lower, upper),
-        clamp(v.y, lower, upper),
+    return uint3_t{clamp(v.x, lower, upper), clamp(v.y, lower, upper),
         clamp(v.z, lower, upper)};
 }
 

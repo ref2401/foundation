@@ -79,8 +79,10 @@ void unittests_core_arithmetic_bit_cast_long_to_double()
 {
     FND_TEST_TRUE(bit_cast<double_t>(long_t{0}) == 0.0);
     FND_TEST_TRUE(bit_cast<double_t>(long_t{0x3FF0000000000000}) == 1.0);
-    FND_TEST_TRUE(bit_cast<double_t>(static_cast<long_t>(0xBFF0000000000000ull)) == -1.0);
-    FND_TEST_TRUE(bit_cast<double_t>(long_t{0x7FF0000000000000}) == kDoubleInfinity);
+    FND_TEST_TRUE(
+        bit_cast<double_t>(static_cast<long_t>(0xBFF0000000000000ull)) == -1.0);
+    FND_TEST_TRUE(
+        bit_cast<double_t>(long_t{0x7FF0000000000000}) == kDoubleInfinity);
     // Bits, not a value conversion: 1 is the smallest subnormal, not 1.0.
     FND_TEST_TRUE(bit_cast<double_t>(long_t{1}) == kDoubleMinSubnormal);
 }
@@ -91,9 +93,11 @@ void unittests_core_arithmetic_bit_cast_ulong_to_double()
     FND_TEST_TRUE(bit_cast<double_t>(0x3FF0000000000000ull) == 1.0);
     FND_TEST_TRUE(bit_cast<double_t>(0xBFF0000000000000ull) == -1.0);
     FND_TEST_TRUE(bit_cast<double_t>(0x7FF0000000000000ull) == kDoubleInfinity);
-    FND_TEST_TRUE(bit_cast<double_t>(0xFFF0000000000000ull) == -kDoubleInfinity);
+    FND_TEST_TRUE(
+        bit_cast<double_t>(0xFFF0000000000000ull) == -kDoubleInfinity);
     FND_TEST_TRUE(bit_cast<double_t>(0x7FEFFFFFFFFFFFFFull) == kDoubleMaxValue);
-    FND_TEST_TRUE(bit_cast<double_t>(0x0010000000000000ull) == kDoubleMinNormal);
+    FND_TEST_TRUE(
+        bit_cast<double_t>(0x0010000000000000ull) == kDoubleMinNormal);
     FND_TEST_TRUE(bit_cast<double_t>(1ull) == kDoubleMinSubnormal);
 }
 
@@ -102,7 +106,8 @@ void unittests_core_arithmetic_bit_cast_double_to_long()
     FND_TEST_TRUE(bit_cast<long_t>(0.0) == 0);
     FND_TEST_TRUE(bit_cast<long_t>(-0.0) == kLongMinValue);
     FND_TEST_TRUE(bit_cast<long_t>(1.0) == 0x3FF0000000000000);
-    FND_TEST_TRUE(bit_cast<long_t>(-1.0) == static_cast<long_t>(0xBFF0000000000000ull));
+    FND_TEST_TRUE(
+        bit_cast<long_t>(-1.0) == static_cast<long_t>(0xBFF0000000000000ull));
     FND_TEST_TRUE(bit_cast<long_t>(kDoubleInfinity) == 0x7FF0000000000000);
 }
 
@@ -124,7 +129,8 @@ void unittests_core_arithmetic_bit_cast_double_to_ulong()
     FND_TEST_TRUE(bit_cast<ulong_t>(kDoubleInfinity) == 0x7FF0000000000000ull);
     FND_TEST_TRUE(bit_cast<ulong_t>(-kDoubleInfinity) == 0xFFF0000000000000ull);
     // NaN: all exponent bits set and a non-zero mantissa, whatever its sign.
-    FND_TEST_TRUE((bit_cast<ulong_t>(kDoubleNaN) & 0x7FFFFFFFFFFFFFFFull) > 0x7FF0000000000000ull);
+    FND_TEST_TRUE((bit_cast<ulong_t>(kDoubleNaN) & 0x7FFFFFFFFFFFFFFFull)
+        > 0x7FF0000000000000ull);
     FND_TEST_TRUE(bit_cast<double_t>(bit_cast<ulong_t>(1.5)) == 1.5);
 }
 
@@ -314,7 +320,7 @@ void unittests_core_arithmetic_approx_equal_float()
     FND_TEST_TRUE(approx_equal(1.001f, 1.0f, 0.1f));
 
     // inclusive boundary
-    FND_TEST_TRUE(approx_equal(1.0f, 1.5f, 0.5f)); 
+    FND_TEST_TRUE(approx_equal(1.0f, 1.5f, 0.5f));
     FND_TEST_FALSE(approx_equal(1.0f, 1.5f, 0.4999f));
 
     // across 0
@@ -545,8 +551,10 @@ void unittests_core_arithmetic_clamp_byte()
     FND_TEST_TRUE(clamp(byte_t{-10}, byte_t{-10}, byte_t{10}) == -10);
     FND_TEST_TRUE(clamp(byte_t{10}, byte_t{-10}, byte_t{10}) == 10);
     FND_TEST_TRUE(clamp(byte_t{20}, byte_t{3}, byte_t{3}) == 3);
-    FND_TEST_TRUE(clamp(kByteMinValue, kByteMinValue, kByteMaxValue) == kByteMinValue);
-    FND_TEST_TRUE(clamp(kByteMaxValue, kByteMinValue, kByteMaxValue) == kByteMaxValue);
+    FND_TEST_TRUE(
+        clamp(kByteMinValue, kByteMinValue, kByteMaxValue) == kByteMinValue);
+    FND_TEST_TRUE(
+        clamp(kByteMaxValue, kByteMinValue, kByteMaxValue) == kByteMaxValue);
 }
 
 void unittests_core_arithmetic_clamp_int()
@@ -557,8 +565,10 @@ void unittests_core_arithmetic_clamp_int()
     FND_TEST_TRUE(clamp(int_t{-10}, int_t{-10}, int_t{10}) == -10);
     FND_TEST_TRUE(clamp(int_t{10}, int_t{-10}, int_t{10}) == 10);
     FND_TEST_TRUE(clamp(int_t{20}, int_t{3}, int_t{3}) == 3);
-    FND_TEST_TRUE(clamp(kIntMinValue, kIntMinValue, kIntMaxValue) == kIntMinValue);
-    FND_TEST_TRUE(clamp(kIntMaxValue, kIntMinValue, kIntMaxValue) == kIntMaxValue);
+    FND_TEST_TRUE(
+        clamp(kIntMinValue, kIntMinValue, kIntMaxValue) == kIntMinValue);
+    FND_TEST_TRUE(
+        clamp(kIntMaxValue, kIntMinValue, kIntMaxValue) == kIntMaxValue);
 }
 
 void unittests_core_arithmetic_clamp_long()
@@ -569,8 +579,10 @@ void unittests_core_arithmetic_clamp_long()
     FND_TEST_TRUE(clamp(long_t{-10}, long_t{-10}, long_t{10}) == -10);
     FND_TEST_TRUE(clamp(long_t{10}, long_t{-10}, long_t{10}) == 10);
     FND_TEST_TRUE(clamp(long_t{20}, long_t{3}, long_t{3}) == 3);
-    FND_TEST_TRUE(clamp(kLongMinValue, kLongMinValue, kLongMaxValue) == kLongMinValue);
-    FND_TEST_TRUE(clamp(kLongMaxValue, kLongMinValue, kLongMaxValue) == kLongMaxValue);
+    FND_TEST_TRUE(
+        clamp(kLongMinValue, kLongMinValue, kLongMaxValue) == kLongMinValue);
+    FND_TEST_TRUE(
+        clamp(kLongMaxValue, kLongMinValue, kLongMaxValue) == kLongMaxValue);
 }
 
 void unittests_core_arithmetic_clamp_ubyte()
@@ -581,8 +593,10 @@ void unittests_core_arithmetic_clamp_ubyte()
     FND_TEST_TRUE(clamp(ubyte_t{2}, ubyte_t{2}, ubyte_t{10}) == 2);
     FND_TEST_TRUE(clamp(ubyte_t{10}, ubyte_t{2}, ubyte_t{10}) == 10);
     FND_TEST_TRUE(clamp(ubyte_t{20}, ubyte_t{3}, ubyte_t{3}) == 3);
-    FND_TEST_TRUE(clamp(kUByteMinValue, kUByteMinValue, kUByteMaxValue) == kUByteMinValue);
-    FND_TEST_TRUE(clamp(kUByteMaxValue, kUByteMinValue, kUByteMaxValue) == kUByteMaxValue);
+    FND_TEST_TRUE(clamp(kUByteMinValue, kUByteMinValue, kUByteMaxValue)
+        == kUByteMinValue);
+    FND_TEST_TRUE(clamp(kUByteMaxValue, kUByteMinValue, kUByteMaxValue)
+        == kUByteMaxValue);
 }
 
 void unittests_core_arithmetic_clamp_uint()
@@ -593,8 +607,10 @@ void unittests_core_arithmetic_clamp_uint()
     FND_TEST_TRUE(clamp(uint_t{2}, uint_t{2}, uint_t{10}) == 2);
     FND_TEST_TRUE(clamp(uint_t{10}, uint_t{2}, uint_t{10}) == 10);
     FND_TEST_TRUE(clamp(uint_t{20}, uint_t{3}, uint_t{3}) == 3);
-    FND_TEST_TRUE(clamp(kUIntMinValue, kUIntMinValue, kUIntMaxValue) == kUIntMinValue);
-    FND_TEST_TRUE(clamp(kUIntMaxValue, kUIntMinValue, kUIntMaxValue) == kUIntMaxValue);
+    FND_TEST_TRUE(
+        clamp(kUIntMinValue, kUIntMinValue, kUIntMaxValue) == kUIntMinValue);
+    FND_TEST_TRUE(
+        clamp(kUIntMaxValue, kUIntMinValue, kUIntMaxValue) == kUIntMaxValue);
 }
 
 void unittests_core_arithmetic_clamp_ulong()
@@ -605,8 +621,10 @@ void unittests_core_arithmetic_clamp_ulong()
     FND_TEST_TRUE(clamp(ulong_t{2}, ulong_t{2}, ulong_t{10}) == 2);
     FND_TEST_TRUE(clamp(ulong_t{10}, ulong_t{2}, ulong_t{10}) == 10);
     FND_TEST_TRUE(clamp(ulong_t{20}, ulong_t{3}, ulong_t{3}) == 3);
-    FND_TEST_TRUE(clamp(kULongMinValue, kULongMinValue, kULongMaxValue) == kULongMinValue);
-    FND_TEST_TRUE(clamp(kULongMaxValue, kULongMinValue, kULongMaxValue) == kULongMaxValue);
+    FND_TEST_TRUE(clamp(kULongMinValue, kULongMinValue, kULongMaxValue)
+        == kULongMinValue);
+    FND_TEST_TRUE(clamp(kULongMaxValue, kULongMinValue, kULongMaxValue)
+        == kULongMaxValue);
 }
 
 void unittests_core_arithmetic_clamp_float()

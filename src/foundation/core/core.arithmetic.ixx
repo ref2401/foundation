@@ -6,11 +6,11 @@ export module foundation.core:arithmetic;
 import :arithmetic_types;
 
 // NOTE:
-// Arithmetic functions on the built-in types are split between this partition and
-// foundation.math by one rule: a function lives here if its result is exact
+// Arithmetic functions on the built-in types are split between this partition
+// and foundation.math by one rule: a function lives here if its result is exact
 // (no rounding: min, clamp, abs, floor, fmod, isnan, bit casts, ...), and in
 // foundation.math if it approximates a real-valued function (sin, exp, log,
-// sqrt, lerp, degrees, ...). 
+// sqrt, lerp, degrees, ...).
 // The goal is that importing foundation.core alone
 // is enough to work with the built-in types; foundation.math is needed only
 // for numerical, geometric or graphics code.
@@ -18,8 +18,7 @@ import :arithmetic_types;
 namespace fnd {
 
 export template<typename TDest, typename TSrc>
-requires (sizeof(TDest) == sizeof(TSrc)
-    && __is_trivially_copyable(TDest) 
+requires(sizeof(TDest) == sizeof(TSrc) && __is_trivially_copyable(TDest)
     && __is_trivially_copyable(TSrc))
 constexpr TDest bit_cast(const TSrc& val)
 {
@@ -30,7 +29,8 @@ export constexpr byte_t abs(const byte_t x)
 {
     // x is promoted to int before the negation, so -x cannot overflow and no
     // unsigned arithmetic is needed. In builds without assertions abs(-128) is
-    // 128, which the cast back to byte_t wraps to -128, as in the other overloads.
+    // 128, which the cast back to byte_t wraps to -128, as in the other
+    // overloads.
     FND_ASSERT(x != kByteMinValue);
 
     return static_cast<byte_t>(x < 0 ? -x : x);
@@ -40,12 +40,13 @@ export constexpr int_t abs(const int_t x)
 {
     // NOTE:
     // MinValue has no positive counterpart: abs(int_t{-2147483648}) would be
-    // 2147483648, but kIntMaxValue is 2147483647 (likewise for long_t). MinValue
-    // is therefore outside the domain of the integer overloads and is asserted.
+    // 2147483648, but kIntMaxValue is 2147483647 (likewise for long_t).
+    // MinValue is therefore outside the domain of the integer overloads and is
+    // asserted.
     //
     // The negation is done in the unsigned domain, so that in builds without
-    // assertions abs(MinValue) wraps back to MinValue, as in HLSL, instead of being
-    // signed overflow (undefined behaviour in C++).
+    // assertions abs(MinValue) wraps back to MinValue, as in HLSL, instead of
+    // being signed overflow (undefined behaviour in C++).
 
     FND_ASSERT(x != kIntMinValue);
 
@@ -246,10 +247,10 @@ export FND_INLINE float_t clamp(
     const float_t x, const float_t lower, const float_t upper)
 {
     // NOTE:
-    // The result of clamp(NaN, -1, 1) depends on how clamp is composed from min and max: 
-    // it can be -1 or 1. Rather than committing to one of those, x is asserted
-    // to not be NaN.
-    FND_ASSERT(!isnan(x)); 
+    // The result of clamp(NaN, -1, 1) depends on how clamp is composed from min
+    // and max: it can be -1 or 1. Rather than committing to one of those, x is
+    // asserted to not be NaN.
+    FND_ASSERT(!isnan(x));
     FND_ASSERT(lower <= upper);
     return min(max(x, lower), upper);
 }
@@ -351,16 +352,16 @@ export FND_INLINE double_t modf(const double_t x, double_t& integer)
     return ::modf(x, &integer);
 }
 
-// Fractional part of |x|, in [0, 1). 
+// Fractional part of |x|, in [0, 1).
 // fractional(-1e-10f) = 1e-10f;
 // fractional(+-inf) is 0 and fractional(NaN) is NaN;
 export FND_INLINE float_t fractional(const float_t x)
 {
     // NOTE:
-    // Not implemented as x - floor(x), because that returns 1 for tiny negative x. 
-    // For x = -1e-10f, floor(x) is -1, and x + 1 is 0.9999999999.
-    // That value doesn't fit in a float: the float just below 1 is 0.99999994f
-    // (1 - 2^-24), and 1.0f is closer, so the result rounds to 1.
+    // Not implemented as x - floor(x), because that returns 1 for tiny negative
+    // x. For x = -1e-10f, floor(x) is -1, and x + 1 is 0.9999999999. That value
+    // doesn't fit in a float: the float just below 1 is 0.99999994f (1 -
+    // 2^-24), and 1.0f is closer, so the result rounds to 1.
 
     float_t integer;
     return abs(modf(x, integer));

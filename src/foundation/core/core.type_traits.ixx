@@ -3,12 +3,10 @@ import :arithmetic_types;
 
 namespace fnd {
 
-export template <typename T>
-concept PodType = 
-    __is_standard_layout(T) && __is_trivially_copyable(T);
+export template<typename T>
+concept PodType = __is_standard_layout(T) && __is_trivially_copyable(T);
 
-export template<typename TSrc, typename TDest>
-constexpr bool_t is_convertible() 
+export template<typename TSrc, typename TDest> constexpr bool_t is_convertible()
 {
     return __is_convertible_to(TSrc, TDest);
 }

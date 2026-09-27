@@ -24,8 +24,8 @@ void unittests_math_vector_int4_type()
 {
     static_assert(PodType<int4_t>);
     static_assert(sizeof(int4_t) == 4 * sizeof(int_t));
-    // The ctor(int_t), ctor(bool2_t, z, w), ctor(bool4_t), ctor(int2_t, z, w) and
-    // ctor(int3_t, w) are explicit.
+    // The ctor(int_t), ctor(bool2_t, z, w), ctor(bool4_t), ctor(int2_t, z, w)
+    // and ctor(int3_t, w) are explicit.
     static_assert(!is_convertible<int_t, int4_t>());
     static_assert(!is_convertible<bool2_t, int4_t>());
     static_assert(!is_convertible<bool4_t, int4_t>());
@@ -39,15 +39,18 @@ void unittests_math_vector_int4_constructors()
     FND_TEST_TRUE(test_components(int4_t{5}, 5, 5, 5, 5));
     FND_TEST_TRUE(test_components(int4_t{-5}, -5, -5, -5, -5));
     FND_TEST_TRUE(test_components(int4_t{3, -4, 6, -8}, 3, -4, 6, -8));
-    FND_TEST_TRUE(test_components(
-        int4_t{kIntMinValue, kIntMaxValue, 0, 1}, kIntMinValue, kIntMaxValue, 0, 1));
+    FND_TEST_TRUE(test_components(int4_t{kIntMinValue, kIntMaxValue, 0, 1},
+        kIntMinValue, kIntMaxValue, 0, 1));
     // From a bool2_t: true is 1, false is 0; z and w are 0 unless given.
     FND_TEST_TRUE(test_components(int4_t{bool2_t{true, false}}, 1, 0, 0, 0));
     FND_TEST_TRUE(test_components(int4_t{bool2_t{false, true}, 6}, 0, 1, 6, 0));
-    FND_TEST_TRUE(test_components(int4_t{bool2_t{true, true}, 6, -8}, 1, 1, 6, -8));
+    FND_TEST_TRUE(
+        test_components(int4_t{bool2_t{true, true}, 6, -8}, 1, 1, 6, -8));
     // From a bool4_t: true is 1, false is 0.
-    FND_TEST_TRUE(test_components(int4_t{bool4_t{true, false, true, false}}, 1, 0, 1, 0));
-    FND_TEST_TRUE(test_components(int4_t{bool4_t{false, true, false, true}}, 0, 1, 0, 1));
+    FND_TEST_TRUE(
+        test_components(int4_t{bool4_t{true, false, true, false}}, 1, 0, 1, 0));
+    FND_TEST_TRUE(
+        test_components(int4_t{bool4_t{false, true, false, true}}, 0, 1, 0, 1));
     // From an int2_t: z and w are 0 unless given.
     FND_TEST_TRUE(test_components(int4_t{int2_t{3, -4}}, 3, -4, 0, 0));
     FND_TEST_TRUE(test_components(int4_t{int2_t{3, -4}, 6}, 3, -4, 6, 0));
@@ -86,7 +89,8 @@ void unittests_math_vector_int4_increment_operators()
 
     int4_t limits{kIntMaxValue - 1, kIntMinValue, 0, -1};
     ++limits;
-    FND_TEST_TRUE(test_components(limits, kIntMaxValue, kIntMinValue + 1, 1, 0));
+    FND_TEST_TRUE(
+        test_components(limits, kIntMaxValue, kIntMinValue + 1, 1, 0));
 }
 
 void unittests_math_vector_int4_decrement_operators()
@@ -101,29 +105,36 @@ void unittests_math_vector_int4_decrement_operators()
 
     int4_t limits{kIntMinValue + 1, kIntMaxValue, 0, 1};
     --limits;
-    FND_TEST_TRUE(test_components(limits, kIntMinValue, kIntMaxValue - 1, -1, 0));
+    FND_TEST_TRUE(
+        test_components(limits, kIntMinValue, kIntMaxValue - 1, -1, 0));
 }
 
 void unittests_math_vector_int4_unary_minus_operator()
 {
     FND_TEST_TRUE(test_components(-int4_t{7, -3, 4, -6}, -7, 3, -4, 6));
     FND_TEST_TRUE(test_components(-int4_t{0, 0, 0, 0}, 0, 0, 0, 0));
-    FND_TEST_TRUE(test_components(
-        -int4_t{kIntMaxValue, -kIntMaxValue, 0, 1}, -kIntMaxValue, kIntMaxValue, 0, -1));
+    FND_TEST_TRUE(test_components(-int4_t{kIntMaxValue, -kIntMaxValue, 0, 1},
+        -kIntMaxValue, kIntMaxValue, 0, -1));
 }
 
 void unittests_math_vector_int4_equality_operators()
 {
     const int4_t a{7, -3, 4, -6};
-    FND_TEST_TRUE(all((a == int4_t{7, -3, 4, -6}) == bool4_t{true, true, true, true}));
-    FND_TEST_TRUE(all((a == int4_t{7, 5, 4, 6}) == bool4_t{true, false, true, false}));
-    FND_TEST_TRUE(all((a == int4_t{2, 5, 1, 0}) == bool4_t{false, false, false, false}));
+    FND_TEST_TRUE(
+        all((a == int4_t{7, -3, 4, -6}) == bool4_t{true, true, true, true}));
+    FND_TEST_TRUE(
+        all((a == int4_t{7, 5, 4, 6}) == bool4_t{true, false, true, false}));
+    FND_TEST_TRUE(
+        all((a == int4_t{2, 5, 1, 0}) == bool4_t{false, false, false, false}));
     FND_TEST_TRUE(all((a == 7) == bool4_t{true, false, false, false}));
     FND_TEST_TRUE(all((-6 == a) == bool4_t{false, false, false, true}));
 
-    FND_TEST_TRUE(all((a != int4_t{7, -3, 4, -6}) == bool4_t{false, false, false, false}));
-    FND_TEST_TRUE(all((a != int4_t{7, 5, 4, 6}) == bool4_t{false, true, false, true}));
-    FND_TEST_TRUE(all((a != int4_t{2, 5, 1, 0}) == bool4_t{true, true, true, true}));
+    FND_TEST_TRUE(all(
+        (a != int4_t{7, -3, 4, -6}) == bool4_t{false, false, false, false}));
+    FND_TEST_TRUE(
+        all((a != int4_t{7, 5, 4, 6}) == bool4_t{false, true, false, true}));
+    FND_TEST_TRUE(
+        all((a != int4_t{2, 5, 1, 0}) == bool4_t{true, true, true, true}));
     FND_TEST_TRUE(all((a != 7) == bool4_t{false, true, true, true}));
     FND_TEST_TRUE(all((-6 != a) == bool4_t{true, true, true, false}));
 }
@@ -184,8 +195,8 @@ void unittests_math_vector_int4_multiplication_operator()
     FND_TEST_TRUE(test_components(a * 2, 14, -6, 8, -12));
     FND_TEST_TRUE(test_components(2 * a, 14, -6, 8, -12));
     // 46340^2 is the largest square that fits in int_t.
-    FND_TEST_TRUE(test_components(
-        int4_t{46340, -46340, 1, -1} * 46340, 2147395600, -2147395600, 46340, -46340));
+    FND_TEST_TRUE(test_components(int4_t{46340, -46340, 1, -1} * 46340,
+        2147395600, -2147395600, 46340, -46340));
 }
 
 void unittests_math_vector_int4_division_operator()
@@ -207,16 +218,16 @@ void unittests_math_vector_int4_modulo_operator()
     FND_TEST_TRUE(test_components(a % int4_t{2, 5, -3, 4}, 1, -3, 1, -2));
     FND_TEST_TRUE(test_components(a % 2, 1, -1, 0, 0));
     FND_TEST_TRUE(test_components(21 % int4_t{2, 5, -4, -21}, 1, 1, 1, 0));
-    FND_TEST_TRUE(test_components(
-        int4_t{kIntMinValue, 7, -7, kIntMaxValue} % int4_t{kIntMaxValue, -2, 3, kIntMaxValue},
+    FND_TEST_TRUE(test_components(int4_t{kIntMinValue, 7, -7, kIntMaxValue}
+            % int4_t{kIntMaxValue, -2, 3, kIntMaxValue},
         -1, 1, -1, 0));
 }
 
 void unittests_math_vector_int4_bitwise_not_operator()
 {
     FND_TEST_TRUE(test_components(~int4_t{0, -1, 5, -6}, -1, 0, -6, 5));
-    FND_TEST_TRUE(test_components(
-        ~int4_t{kIntMaxValue, kIntMinValue, 1, -2}, kIntMinValue, kIntMaxValue, -2, 1));
+    FND_TEST_TRUE(test_components(~int4_t{kIntMaxValue, kIntMinValue, 1, -2},
+        kIntMinValue, kIntMaxValue, -2, 1));
 }
 
 void unittests_math_vector_int4_bitwise_and_operator()
@@ -233,12 +244,12 @@ void unittests_math_vector_int4_bitwise_and_operator()
 void unittests_math_vector_int4_bitwise_or_operator()
 {
     const int4_t a{0b1100, 0b1010, 0b1111, 0b0000};
-    FND_TEST_TRUE(test_components(
-        a | int4_t{0b1010, 0b0110, 0b0000, 0b0001}, 0b1110, 0b1110, 0b1111, 0b0001));
+    FND_TEST_TRUE(test_components(a | int4_t{0b1010, 0b0110, 0b0000, 0b0001},
+        0b1110, 0b1110, 0b1111, 0b0001));
     FND_TEST_TRUE(test_components(a | 0b0001, 0b1101, 0b1011, 0b1111, 0b0001));
     FND_TEST_TRUE(test_components(0b0001 | a, 0b1101, 0b1011, 0b1111, 0b0001));
-    FND_TEST_TRUE(test_components(
-        int4_t{0, kIntMaxValue, 1, -2} | kIntMinValue, kIntMinValue, -1, kIntMinValue + 1, -2));
+    FND_TEST_TRUE(test_components(int4_t{0, kIntMaxValue, 1, -2} | kIntMinValue,
+        kIntMinValue, -1, kIntMinValue + 1, -2));
 }
 
 void unittests_math_vector_int4_bitwise_xor_operator()
@@ -253,15 +264,18 @@ void unittests_math_vector_int4_bitwise_xor_operator()
 
 void unittests_math_vector_int4_shift_left_operator()
 {
-    FND_TEST_TRUE(test_components(int4_t{1, 3, 5, -1} << int4_t{4, 1, 0, 3}, 16, 6, 5, -8));
+    FND_TEST_TRUE(test_components(
+        int4_t{1, 3, 5, -1} << int4_t{4, 1, 0, 3}, 16, 6, 5, -8));
     FND_TEST_TRUE(test_components(int4_t{1, 3, 5, -1} << 2, 4, 12, 20, -4));
-    FND_TEST_TRUE(test_components(1 << int4_t{0, 31, 4, 1}, 1, kIntMinValue, 16, 2));
+    FND_TEST_TRUE(
+        test_components(1 << int4_t{0, 31, 4, 1}, 1, kIntMinValue, 16, 2));
     FND_TEST_TRUE(test_components(int4_t{-1, -2, -3, -4} << 1, -2, -4, -6, -8));
 }
 
 void unittests_math_vector_int4_shift_right_operator()
 {
-    FND_TEST_TRUE(test_components(int4_t{16, 6, 5, -8} >> int4_t{4, 1, 0, 3}, 1, 3, 5, -1));
+    FND_TEST_TRUE(test_components(
+        int4_t{16, 6, 5, -8} >> int4_t{4, 1, 0, 3}, 1, 3, 5, -1));
     // Negative values shift in sign bits.
     FND_TEST_TRUE(test_components(int4_t{-8, 8, -1, 1} >> 1, -4, 4, -1, 0));
     FND_TEST_TRUE(test_components(256 >> int4_t{4, 8, 0, 9}, 16, 1, 256, 0));
@@ -292,12 +306,12 @@ void unittests_math_vector_int4_compound_assignment_operators()
     FND_TEST_TRUE(test_components(v %= 4, 3, 1, 2, 3));
 
     v = int4_t{0b1100, 0b1010, 0b1111, 0b0000};
-    FND_TEST_TRUE(test_components(
-        v &= int4_t{0b1010, 0b0110, 0b0011, 0b1111}, 0b1000, 0b0010, 0b0011, 0));
+    FND_TEST_TRUE(test_components(v &= int4_t{0b1010, 0b0110, 0b0011, 0b1111},
+        0b1000, 0b0010, 0b0011, 0));
     FND_TEST_TRUE(test_components(v &= 0b1000, 0b1000, 0, 0, 0));
 
-    FND_TEST_TRUE(test_components(
-        v |= int4_t{0b0001, 0b0010, 0b0100, 0b1000}, 0b1001, 0b0010, 0b0100, 0b1000));
+    FND_TEST_TRUE(test_components(v |= int4_t{0b0001, 0b0010, 0b0100, 0b1000},
+        0b1001, 0b0010, 0b0100, 0b1000));
     FND_TEST_TRUE(test_components(v |= 0b0100, 0b1101, 0b0110, 0b0100, 0b1100));
 
     FND_TEST_TRUE(test_components(
@@ -308,7 +322,8 @@ void unittests_math_vector_int4_compound_assignment_operators()
         v <<= int4_t{1, 2, 3, 1}, 0b0110, 0b10100, 0b11000, 0b0110));
     FND_TEST_TRUE(test_components(v <<= 1, 0b1100, 0b101000, 0b110000, 0b1100));
 
-    FND_TEST_TRUE(test_components(v >>= int4_t{2, 3, 4, 2}, 0b0011, 0b0101, 0b0011, 0b0011));
+    FND_TEST_TRUE(test_components(
+        v >>= int4_t{2, 3, 4, 2}, 0b0011, 0b0101, 0b0011, 0b0011));
     FND_TEST_TRUE(test_components(v >>= 1, 0b0001, 0b0010, 0b0001, 0b0001));
 }
 
@@ -397,8 +412,9 @@ void unittests_math_vector_int4_compound_assignment_matches_operators()
 void unittests_math_vector_int4_abs()
 {
     FND_TEST_TRUE(test_components(abs(int4_t{7, -3, 0, -1}), 7, 3, 0, 1));
-    FND_TEST_TRUE(test_components(
-        abs(int4_t{kIntMaxValue, -kIntMaxValue, -1, 1}), kIntMaxValue, kIntMaxValue, 1, 1));
+    FND_TEST_TRUE(
+        test_components(abs(int4_t{kIntMaxValue, -kIntMaxValue, -1, 1}),
+            kIntMaxValue, kIntMaxValue, 1, 1));
 }
 
 void unittests_math_vector_int4_min()
@@ -406,10 +422,12 @@ void unittests_math_vector_int4_min()
     const int4_t a{7, -3, 4, -6};
     FND_TEST_TRUE(test_components(min(a, int4_t{2, 5, 4, -7}), 2, -3, 4, -7));
     FND_TEST_TRUE(test_components(min(int4_t{2, 5, 4, -7}, a), 2, -3, 4, -7));
-    FND_TEST_TRUE(test_components(min(int4_t{4, 4, 4, 4}, int4_t{4, 4, 4, 4}), 4, 4, 4, 4));
     FND_TEST_TRUE(test_components(
-        min(int4_t{kIntMinValue, kIntMaxValue, 0, 1}, int4_t{kIntMaxValue, kIntMinValue, 0, -1}),
-        kIntMinValue, kIntMinValue, 0, -1));
+        min(int4_t{4, 4, 4, 4}, int4_t{4, 4, 4, 4}), 4, 4, 4, 4));
+    FND_TEST_TRUE(
+        test_components(min(int4_t{kIntMinValue, kIntMaxValue, 0, 1},
+                            int4_t{kIntMaxValue, kIntMinValue, 0, -1}),
+            kIntMinValue, kIntMinValue, 0, -1));
     // int_t on either side is compared with every component.
     FND_TEST_TRUE(test_components(min(a, 0), 0, -3, 0, -6));
     FND_TEST_TRUE(test_components(min(0, a), 0, -3, 0, -6));
@@ -422,10 +440,12 @@ void unittests_math_vector_int4_max()
     const int4_t a{7, -3, 4, -6};
     FND_TEST_TRUE(test_components(max(a, int4_t{2, 5, 4, -7}), 7, 5, 4, -6));
     FND_TEST_TRUE(test_components(max(int4_t{2, 5, 4, -7}, a), 7, 5, 4, -6));
-    FND_TEST_TRUE(test_components(max(int4_t{4, 4, 4, 4}, int4_t{4, 4, 4, 4}), 4, 4, 4, 4));
     FND_TEST_TRUE(test_components(
-        max(int4_t{kIntMinValue, kIntMaxValue, 0, 1}, int4_t{kIntMaxValue, kIntMinValue, 0, -1}),
-        kIntMaxValue, kIntMaxValue, 0, 1));
+        max(int4_t{4, 4, 4, 4}, int4_t{4, 4, 4, 4}), 4, 4, 4, 4));
+    FND_TEST_TRUE(
+        test_components(max(int4_t{kIntMinValue, kIntMaxValue, 0, 1},
+                            int4_t{kIntMaxValue, kIntMinValue, 0, -1}),
+            kIntMaxValue, kIntMaxValue, 0, 1));
     // int_t on either side is compared with every component.
     FND_TEST_TRUE(test_components(max(a, 0), 7, 0, 4, 0));
     FND_TEST_TRUE(test_components(max(0, a), 7, 0, 4, 0));
@@ -438,23 +458,34 @@ void unittests_math_vector_int4_clamp()
     const int4_t lower{-10, 0, -1, 2};
     const int4_t upper{10, 5, 1, 2};
     // Each component is clamped to its own bounds.
-    FND_TEST_TRUE(test_components(clamp(int4_t{3, 3, 0, 0}, lower, upper), 3, 3, 0, 2));
-    FND_TEST_TRUE(test_components(clamp(int4_t{-20, -1, -5, 9}, lower, upper), -10, 0, -1, 2));
-    FND_TEST_TRUE(test_components(clamp(int4_t{20, 6, 5, -9}, lower, upper), 10, 5, 1, 2));
-    FND_TEST_TRUE(test_components(clamp(int4_t{-10, 5, 1, 2}, lower, upper), -10, 5, 1, 2));
-    FND_TEST_TRUE(test_components(clamp(int4_t{-20, 6, 0, 2}, lower, upper), -10, 5, 0, 2));
+    FND_TEST_TRUE(
+        test_components(clamp(int4_t{3, 3, 0, 0}, lower, upper), 3, 3, 0, 2));
     FND_TEST_TRUE(test_components(
-        clamp(int4_t{9, 9, 9, 9}, int4_t{3, 3, 3, 3}, int4_t{3, 3, 3, 3}), 3, 3, 3, 3));
+        clamp(int4_t{-20, -1, -5, 9}, lower, upper), -10, 0, -1, 2));
+    FND_TEST_TRUE(test_components(
+        clamp(int4_t{20, 6, 5, -9}, lower, upper), 10, 5, 1, 2));
+    FND_TEST_TRUE(test_components(
+        clamp(int4_t{-10, 5, 1, 2}, lower, upper), -10, 5, 1, 2));
+    FND_TEST_TRUE(test_components(
+        clamp(int4_t{-20, 6, 0, 2}, lower, upper), -10, 5, 0, 2));
+    FND_TEST_TRUE(test_components(
+        clamp(int4_t{9, 9, 9, 9}, int4_t{3, 3, 3, 3}, int4_t{3, 3, 3, 3}), 3, 3,
+        3, 3));
 
     // int_t bounds apply to every component.
-    FND_TEST_TRUE(test_components(clamp(int4_t{3, -3, 9, 5}, 0, 5), 3, 0, 5, 5));
-    FND_TEST_TRUE(test_components(clamp(int4_t{-20, 20, 0, -10}, -10, 10), -10, 10, 0, -10));
-    FND_TEST_TRUE(test_components(clamp(int4_t{-10, 10, 5, -5}, -10, 10), -10, 10, 5, -5));
-    FND_TEST_TRUE(test_components(clamp(int4_t{9, -9, 0, 3}, 3, 3), 3, 3, 3, 3));
+    FND_TEST_TRUE(
+        test_components(clamp(int4_t{3, -3, 9, 5}, 0, 5), 3, 0, 5, 5));
+    FND_TEST_TRUE(test_components(
+        clamp(int4_t{-20, 20, 0, -10}, -10, 10), -10, 10, 0, -10));
+    FND_TEST_TRUE(test_components(
+        clamp(int4_t{-10, 10, 5, -5}, -10, 10), -10, 10, 5, -5));
+    FND_TEST_TRUE(
+        test_components(clamp(int4_t{9, -9, 0, 3}, 3, 3), 3, 3, 3, 3));
 
     // int4_t lower bound, int_t upper bound.
     FND_TEST_TRUE(test_components(
-        clamp(int4_t{-20, -20, -20, -20}, int4_t{-10, 0, -5, 5}, 5), -10, 0, -5, 5));
+        clamp(int4_t{-20, -20, -20, -20}, int4_t{-10, 0, -5, 5}, 5), -10, 0, -5,
+        5));
     FND_TEST_TRUE(test_components(
         clamp(int4_t{20, 3, 7, 0}, int4_t{-10, 0, -5, 5}, 5), 5, 3, 5, 5));
     FND_TEST_TRUE(test_components(
@@ -477,7 +508,8 @@ void unittests_math_vector_int4_sign()
 {
     FND_TEST_TRUE(test_components(sign(int4_t{7, -3, 0, -1}), 1, -1, 0, -1));
     FND_TEST_TRUE(test_components(sign(int4_t{0, 5, -5, 0}), 0, 1, -1, 0));
-    FND_TEST_TRUE(test_components(sign(int4_t{kIntMinValue, kIntMaxValue, 0, 1}), -1, 1, 0, 1));
+    FND_TEST_TRUE(test_components(
+        sign(int4_t{kIntMinValue, kIntMaxValue, 0, 1}), -1, 1, 0, 1));
 }
 
 void unittests_math_vector_int4_cmin()
@@ -488,7 +520,8 @@ void unittests_math_vector_int4_cmin()
     FND_TEST_TRUE(cmin(int4_t{7, 4, -3, 5}) == -3);
     FND_TEST_TRUE(cmin(int4_t{7, 4, 5, -3}) == -3);
     FND_TEST_TRUE(cmin(int4_t{4, 4, 4, 4}) == 4);
-    FND_TEST_TRUE(cmin(int4_t{kIntMaxValue, 0, kIntMinValue, 1}) == kIntMinValue);
+    FND_TEST_TRUE(
+        cmin(int4_t{kIntMaxValue, 0, kIntMinValue, 1}) == kIntMinValue);
 }
 
 void unittests_math_vector_int4_cmax()
@@ -499,7 +532,8 @@ void unittests_math_vector_int4_cmax()
     FND_TEST_TRUE(cmax(int4_t{4, -3, 9, 5}) == 9);
     FND_TEST_TRUE(cmax(int4_t{4, -3, 5, 9}) == 9);
     FND_TEST_TRUE(cmax(int4_t{4, 4, 4, 4}) == 4);
-    FND_TEST_TRUE(cmax(int4_t{kIntMinValue, 0, kIntMaxValue, 1}) == kIntMaxValue);
+    FND_TEST_TRUE(
+        cmax(int4_t{kIntMinValue, 0, kIntMaxValue, 1}) == kIntMaxValue);
 }
 
 void unittests_math_vector_int4_csum()
@@ -514,7 +548,8 @@ void unittests_math_vector_int4_csum()
 void unittests_math_vector_int4_cmul()
 {
     FND_TEST_TRUE(cmul(int4_t{7, -3, 2, -1}) == 42);
-    FND_TEST_TRUE(cmul(int4_t{0, kIntMaxValue, kIntMaxValue, kIntMaxValue}) == 0);
+    FND_TEST_TRUE(
+        cmul(int4_t{0, kIntMaxValue, kIntMaxValue, kIntMaxValue}) == 0);
     FND_TEST_TRUE(cmul(int4_t{-7, -3, -2, -1}) == 42);
     // 215^4 is the largest fourth power that fits in int_t.
     FND_TEST_TRUE(cmul(int4_t{215, 215, 215, 215}) == 2136750625);

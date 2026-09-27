@@ -19,24 +19,36 @@ export struct uint4_t final {
 
     constexpr explicit uint4_t(
         const bool2_t v2, const uint_t z = 0, const uint_t w = 0)
-        : x{v2.x}, y{v2.y}, z{z}, w{w} {}
+        : x{v2.x}, y{v2.y}, z{z}, w{w}
+    {
+    }
 
     constexpr explicit uint4_t(const bool4_t v4)
-        : x{v4.x}, y{v4.y}, z{v4.z}, w{v4.w} {}
+        : x{v4.x}, y{v4.y}, z{v4.z}, w{v4.w}
+    {
+    }
 
     constexpr explicit uint4_t(const uint_t val)
-        : x{val}, y{val}, z{val}, w{val} {}
+        : x{val}, y{val}, z{val}, w{val}
+    {
+    }
 
     constexpr explicit uint4_t(
         const uint2_t v2, const uint_t z = 0, const uint_t w = 0)
-        : x{v2.x}, y{v2.y}, z{z}, w{w} {}
+        : x{v2.x}, y{v2.y}, z{z}, w{w}
+    {
+    }
 
     constexpr explicit uint4_t(const uint3_t v3, const uint_t w = 0)
-        : x{v3.x}, y{v3.y}, z{v3.z}, w{w} {}
+        : x{v3.x}, y{v3.y}, z{v3.z}, w{w}
+    {
+    }
 
     constexpr uint4_t(
         const uint_t x, const uint_t y, const uint_t z, const uint_t w)
-        : x{x}, y{y}, z{z}, w{w} {}
+        : x{x}, y{y}, z{z}, w{w}
+    {
+    }
 
     constexpr const uint_t& operator[](const uint_t idx) const
     {
@@ -58,10 +70,7 @@ export struct uint4_t final {
         return *this;
     }
 
-    constexpr uint4_t operator++(int)
-    {
-        return uint4_t{x++, y++, z++, w++};
-    }
+    constexpr uint4_t operator++(int) { return uint4_t{x++, y++, z++, w++}; }
 
     constexpr uint4_t& operator--()
     {
@@ -72,10 +81,7 @@ export struct uint4_t final {
         return *this;
     }
 
-    constexpr uint4_t operator--(int)
-    {
-        return uint4_t{x--, y--, z--, w--};
-    }
+    constexpr uint4_t operator--(int) { return uint4_t{x--, y--, z--, w--}; }
 
     constexpr uint4_t operator~() const { return uint4_t{~x, ~y, ~z, ~w}; }
 
@@ -927,11 +933,8 @@ export constexpr uint4_t clamp(
 {
     FND_ASSERT(all(lower <= upper));
 
-    return uint4_t{
-        clamp(v.x, lower.x, upper.x),
-        clamp(v.y, lower.y, upper.y),
-        clamp(v.z, lower.z, upper.z),
-        clamp(v.w, lower.w, upper.w)};
+    return uint4_t{clamp(v.x, lower.x, upper.x), clamp(v.y, lower.y, upper.y),
+        clamp(v.z, lower.z, upper.z), clamp(v.w, lower.w, upper.w)};
 }
 
 export constexpr uint4_t clamp(
@@ -939,11 +942,8 @@ export constexpr uint4_t clamp(
 {
     FND_ASSERT(all(lower <= upper));
 
-    return uint4_t{
-        clamp(v.x, lower.x, upper),
-        clamp(v.y, lower.y, upper),
-        clamp(v.z, lower.z, upper),
-        clamp(v.w, lower.w, upper)};
+    return uint4_t{clamp(v.x, lower.x, upper), clamp(v.y, lower.y, upper),
+        clamp(v.z, lower.z, upper), clamp(v.w, lower.w, upper)};
 }
 
 export constexpr uint4_t clamp(
@@ -951,11 +951,8 @@ export constexpr uint4_t clamp(
 {
     FND_ASSERT(all(lower <= upper));
 
-    return uint4_t{
-        clamp(v.x, lower, upper.x),
-        clamp(v.y, lower, upper.y),
-        clamp(v.z, lower, upper.z),
-        clamp(v.w, lower, upper.w)};
+    return uint4_t{clamp(v.x, lower, upper.x), clamp(v.y, lower, upper.y),
+        clamp(v.z, lower, upper.z), clamp(v.w, lower, upper.w)};
 }
 
 export constexpr uint4_t clamp(
@@ -963,11 +960,8 @@ export constexpr uint4_t clamp(
 {
     FND_ASSERT(lower <= upper);
 
-    return uint4_t{
-        clamp(v.x, lower, upper),
-        clamp(v.y, lower, upper),
-        clamp(v.z, lower, upper),
-        clamp(v.w, lower, upper)};
+    return uint4_t{clamp(v.x, lower, upper), clamp(v.y, lower, upper),
+        clamp(v.z, lower, upper), clamp(v.w, lower, upper)};
 }
 
 export constexpr uint_t cmin(const uint4_t v)
