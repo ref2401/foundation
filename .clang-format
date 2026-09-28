@@ -6,7 +6,7 @@ ContinuationIndentWidth: 4
 UseTab: Never
 MaxEmptyLinesToKeep: 2
 
-BreakBeforeBraces: WebKit
+BreakBeforeBraces: Stroustrup
 NamespaceIndentation: None
 FixNamespaceComments: true
 
@@ -25,6 +25,7 @@ PackConstructorInitializers: NextLine
 AlignAfterOpenBracket: DontAlign
 AlignOperands: DontAlign
 BreakBeforeBinaryOperators: All
+BreakAfterOpenBracketBracedList: true
 
 IndentPPDirectives: BeforeHash
 AlignEscapedNewlines: Left

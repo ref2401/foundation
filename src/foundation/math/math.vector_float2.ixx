@@ -323,6 +323,33 @@ export FND_INLINE float2_t acos(const float2_t v)
     return float2_t{acos(v.x), acos(v.y)};
 }
 
+export FND_INLINE bool2_t approx_equal(
+    const float2_t a, const float2_t b, const float_t max_abs_diff = 1e-5f)
+{
+    FND_ASSERT(max_abs_diff >= 0);
+    return bool2_t{
+        approx_equal(a.x, b.x, max_abs_diff),
+        approx_equal(a.y, b.y, max_abs_diff)};
+}
+
+export FND_INLINE bool2_t approx_equal(
+    const float2_t a, const float_t scalar, const float_t max_abs_diff = 1e-5f)
+{
+    FND_ASSERT(max_abs_diff >= 0);
+    return bool2_t{
+        approx_equal(a.x, scalar, max_abs_diff),
+        approx_equal(a.y, scalar, max_abs_diff)};
+}
+
+export FND_INLINE bool2_t approx_equal(
+    const float_t scalar, const float2_t b, const float_t max_abs_diff = 1e-5f)
+{
+    FND_ASSERT(max_abs_diff >= 0);
+    return bool2_t{
+        approx_equal(scalar, b.x, max_abs_diff),
+        approx_equal(scalar, b.y, max_abs_diff)};
+}
+
 export FND_INLINE float2_t asin(const float2_t v)
 {
     return float2_t{asin(v.x), asin(v.y)};
@@ -405,6 +432,23 @@ export constexpr float2_t degrees(const float2_t v)
     return float2_t{degrees(v.x), degrees(v.y)};
 }
 
+export constexpr float_t distance_sqr(const float2_t a, const float2_t b)
+{
+    const float2_t d = a - b;
+    return d.x * d.x + d.y * d.y;
+}
+
+export FND_INLINE float_t distance(const float2_t a, const float2_t b)
+{
+    const float_t d2 = distance_sqr(a, b);
+    return sqrt(d2);
+}
+
+export constexpr float_t dot(const float2_t a, const float2_t b)
+{
+    return a.x * b.x + a.y * b.y;
+}
+
 export FND_INLINE float2_t exp(const float2_t v)
 {
     return float2_t{exp(v.x), exp(v.y)};
@@ -438,6 +482,31 @@ export FND_INLINE float2_t fmod(const float_t val, const float2_t b)
 export FND_INLINE float2_t fractional(const float2_t v)
 {
     return float2_t{fractional(v.x), fractional(v.y)};
+}
+
+export FND_INLINE bool2_t isfinite(const float2_t v)
+{
+    return bool2_t{isfinite(v.x), isfinite(v.y)};
+}
+
+export FND_INLINE bool2_t isinf(const float2_t v)
+{
+    return bool2_t{isinf(v.x), isinf(v.y)};
+}
+
+export FND_INLINE bool2_t isnan(const float2_t v)
+{
+    return bool2_t{isnan(v.x), isnan(v.y)};
+}
+
+export constexpr float_t length_sqr(const float2_t v)
+{
+    return v.x * v.x + v.y * v.y;
+}
+
+export FND_INLINE float_t length(const float2_t v)
+{
+    return sqrt(length_sqr(v));
 }
 
 export FND_INLINE float2_t lerp(
@@ -495,6 +564,31 @@ export FND_INLINE float2_t min(const float2_t a, const float_t val)
 export FND_INLINE float2_t min(const float_t val, const float2_t b)
 {
     return float2_t{min(val, b.x), min(val, b.y)};
+}
+
+export FND_INLINE float2_t normalize(const float2_t v)
+{
+    const float_t l2 = length_sqr(v);
+    FND_ASSERT(l2 > kFloatMinNormal);
+
+    return v * rsqrt(l2);
+}
+
+export FND_INLINE float2_t normalize_safe(
+    const float2_t v, const float2_t default_value = float2_t{})
+{
+    FND_ASSERT(all(!isnan(v)));
+
+    const float_t l2 = length_sqr(v);
+    if (l2 > kFloatMinNormal) {
+        const float2_t nv = v * rsqrt(l2);
+        FND_ASSERT(all(!isnan(nv))); // post condition
+
+        return nv;
+    }
+    else {
+        return default_value;
+    }
 }
 
 export FND_INLINE float2_t pow(const float2_t base, const float2_t exponent)

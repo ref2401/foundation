@@ -297,6 +297,31 @@ void unittests_math_vector_float2_inverse_trigonometry()
     FND_TEST_TRUE(approx_equal(acos(float2_t{-1.0f, 1.0f}).x, kFloatPi));
 }
 
+void unittests_math_vector_float2_approx_equal()
+{
+    const float2_t v{1.0f, -2.0f};
+    FND_TEST_TRUE(all(approx_equal(v, v)));
+    FND_TEST_TRUE(all(approx_equal(v, float2_t{1.000001f, -2.000001f})));
+    // Each component is compared on its own.
+    FND_TEST_TRUE(
+        all(approx_equal(v, float2_t{1.1f, -2.0f}) == bool2_t{false, true}));
+    FND_TEST_TRUE(
+        all(approx_equal(v, float2_t{1.0f, -2.1f}) == bool2_t{true, false}));
+    // max_abs_diff; the boundary is inclusive.
+    FND_TEST_TRUE(all(approx_equal(v, float2_t{1.5f, -2.5f}, 0.5f)));
+    FND_TEST_TRUE(all(approx_equal(v, float2_t{1.5f, -2.25f}, 0.25f)
+        == bool2_t{false, true}));
+    FND_TEST_TRUE(all(approx_equal(v, float2_t{1.0f, -2.0f}, 0.0f)));
+    // float_t on either side is compared with every component.
+    FND_TEST_TRUE(all(approx_equal(v, 1.0f) == bool2_t{true, false}));
+    FND_TEST_TRUE(all(approx_equal(1.0f, v) == bool2_t{true, false}));
+    FND_TEST_TRUE(all(approx_equal(float2_t{-1.5f, -2.5f}, -2.0f, 0.5f)));
+    FND_TEST_TRUE(all(approx_equal(-2.0f, float2_t{-1.5f, -2.5f}, 0.5f)));
+    // inf equals inf and NaN equals nothing, as for the float_t approx_equal.
+    const float2_t n{kFloatInfinity, kFloatNaN};
+    FND_TEST_TRUE(all(approx_equal(n, n) == bool2_t{true, false}));
+}
+
 void unittests_math_vector_float2_ceil()
 {
     FND_TEST_TRUE(test_components(ceil(float2_t{2.25f, -2.75f}), 3.0f, -2.0f));
@@ -414,6 +439,58 @@ void unittests_math_vector_float2_degrees_radians()
         radians(float2_t{1.0f, -2.0f}), radians(1.0f), radians(-2.0f)));
 }
 
+void unittests_math_vector_float2_distance_sqr()
+{
+    const float2_t a{1.0f, 2.0f};
+    const float2_t b{4.0f, 6.0f};
+    FND_TEST_TRUE(distance_sqr(a, a) == 0.0f);
+    FND_TEST_TRUE(distance_sqr(a, b) == 25.0f);
+    FND_TEST_TRUE(distance_sqr(b, a) == 25.0f);
+    FND_TEST_TRUE(
+        distance_sqr(float2_t{-1.0f, 0.0f}, float2_t{1.0f, 0.0f}) == 4.0f);
+    FND_TEST_TRUE(
+        distance_sqr(a, float2_t{kFloatInfinity, 2.0f}) == kFloatInfinity);
+    FND_TEST_TRUE(isnan(distance_sqr(float2_t{kFloatNaN, 0.0f}, a)));
+}
+
+void unittests_math_vector_float2_distance()
+{
+    const float2_t a{1.0f, 2.0f};
+    const float2_t b{4.0f, 6.0f};
+    FND_TEST_TRUE(distance(a, a) == 0.0f);
+    FND_TEST_TRUE(distance(a, b) == 5.0f);
+    FND_TEST_TRUE(distance(b, a) == 5.0f);
+    FND_TEST_TRUE(
+        distance(float2_t{-1.5f, 0.0f}, float2_t{1.5f, 0.0f}) == 3.0f);
+    // distance(a, b) is the length of a - b.
+    const float2_t c{-2.0f, 7.5f};
+    FND_TEST_TRUE(distance(a, c) == length(a - c));
+    FND_TEST_TRUE(
+        distance(a, float2_t{kFloatInfinity, 2.0f}) == kFloatInfinity);
+}
+
+void unittests_math_vector_float2_dot()
+{
+    const float2_t a{2.5f, -1.0f};
+    const float2_t b{-3.0f, 4.0f};
+    FND_TEST_TRUE(dot(a, b) == -11.5f);
+    FND_TEST_TRUE(dot(b, a) == -11.5f);
+    FND_TEST_TRUE(dot(float2_t{1.0f, 2.0f}, float2_t{3.0f, 4.0f}) == 11.0f);
+    // Perpendicular vectors.
+    FND_TEST_TRUE(dot(float2_t{2.0f, 0.0f}, float2_t{0.0f, -5.0f}) == 0.0f);
+    FND_TEST_TRUE(dot(float2_t{1.0f, 1.0f}, float2_t{-1.0f, 1.0f}) == 0.0f);
+    // dot(v, v) is the squared length.
+    FND_TEST_TRUE(dot(a, a) == 7.25f);
+    FND_TEST_TRUE(dot(a, a) == length_sqr(a));
+    // The true result 1e40 is out of range.
+    FND_TEST_TRUE(
+        dot(float2_t{1e20f, 0.0f}, float2_t{1e20f, 0.0f}) == kFloatInfinity);
+    FND_TEST_TRUE(isnan(dot(float2_t{kFloatNaN, 1.0f}, float2_t{1.0f, 1.0f})));
+    // inf * 0 is NaN.
+    FND_TEST_TRUE(
+        isnan(dot(float2_t{kFloatInfinity, 0.0f}, float2_t{0.0f, 1.0f})));
+}
+
 void unittests_math_vector_float2_exp_log()
 {
     FND_TEST_TRUE(
@@ -476,6 +553,63 @@ void unittests_math_vector_float2_fractional()
     FND_TEST_TRUE(isnan(fractional(float2_t{kFloatNaN, 1.0f}).x));
 }
 
+void unittests_math_vector_float2_isfinite()
+{
+    FND_TEST_TRUE(all(isfinite(float2_t{0.0f, -2.5f}) == bool2_t{true, true}));
+    FND_TEST_TRUE(all(isfinite(float2_t{kFloatMinValue, kFloatMaxValue}) == bool2_t{true, true}));
+    FND_TEST_TRUE(all(isfinite(float2_t{kFloatMinSubnormal, -0.0f}) == bool2_t{true, true}));
+    FND_TEST_TRUE(all(isfinite(float2_t{kFloatInfinity, 1.0f}) == bool2_t{false, true}));
+    FND_TEST_TRUE(all(isfinite(float2_t{1.0f, -kFloatInfinity}) == bool2_t{true, false}));
+    FND_TEST_TRUE(all(isfinite(float2_t{kFloatNaN, 1.0f}) == bool2_t{false, true}));
+    FND_TEST_TRUE(all(isfinite(float2_t{kFloatNaN, kFloatInfinity}) == bool2_t{false, false}));
+}
+
+void unittests_math_vector_float2_isinf()
+{
+    FND_TEST_TRUE(all(isinf(float2_t{kFloatInfinity, -kFloatInfinity}) == bool2_t{true, true}));
+    FND_TEST_TRUE(all(isinf(float2_t{kFloatInfinity, 1.0f}) == bool2_t{true, false}));
+    FND_TEST_TRUE(all(isinf(float2_t{1.0f, -kFloatInfinity}) == bool2_t{false, true}));
+    FND_TEST_TRUE(all(isinf(float2_t{kFloatMinValue, kFloatMaxValue}) == bool2_t{false, false}));
+    FND_TEST_TRUE(all(isinf(float2_t{0.0f, kFloatMinSubnormal}) == bool2_t{false, false}));
+    // NaN is not infinite.
+    FND_TEST_TRUE(all(isinf(float2_t{kFloatNaN, kFloatInfinity}) == bool2_t{false, true}));
+}
+
+void unittests_math_vector_float2_isnan()
+{
+    FND_TEST_TRUE(all(isnan(float2_t{kFloatNaN, kFloatNaN}) == bool2_t{true, true}));
+    FND_TEST_TRUE(all(isnan(float2_t{kFloatNaN, 1.0f}) == bool2_t{true, false}));
+    FND_TEST_TRUE(all(isnan(float2_t{1.0f, -kFloatNaN}) == bool2_t{false, true}));
+    FND_TEST_TRUE(all(isnan(float2_t{0.0f, -2.5f}) == bool2_t{false, false}));
+    FND_TEST_TRUE(all(isnan(float2_t{kFloatInfinity, -kFloatInfinity}) == bool2_t{false, false}));
+    FND_TEST_TRUE(all(isnan(float2_t{kFloatMinValue, kFloatMinSubnormal}) == bool2_t{false, false}));
+    // NaN produced by arithmetic, not only the constant.
+    const float2_t inf{kFloatInfinity, 1.0f};
+    FND_TEST_TRUE(all(isnan(inf - inf) == bool2_t{true, false}));
+}
+
+void unittests_math_vector_float2_length_sqr()
+{
+    FND_TEST_TRUE(length_sqr(float2_t{}) == 0.0f);
+    FND_TEST_TRUE(length_sqr(float2_t{3.0f, -4.0f}) == 25.0f);
+    FND_TEST_TRUE(length_sqr(float2_t{-0.5f, 0.0f}) == 0.25f);
+    // The true result 1e40 is out of range.
+    FND_TEST_TRUE(length_sqr(float2_t{1e20f, 0.0f}) == kFloatInfinity);
+    FND_TEST_TRUE(
+        length_sqr(float2_t{1.0f, -kFloatInfinity}) == kFloatInfinity);
+    FND_TEST_TRUE(isnan(length_sqr(float2_t{kFloatNaN, 1.0f})));
+}
+
+void unittests_math_vector_float2_length()
+{
+    FND_TEST_TRUE(length(float2_t{}) == 0.0f);
+    FND_TEST_TRUE(length(float2_t{3.0f, -4.0f}) == 5.0f);
+    FND_TEST_TRUE(length(float2_t{0.0f, -2.5f}) == 2.5f);
+    FND_TEST_TRUE(length(float2_t{1.0f, 1.0f}) == sqrt(2.0f));
+    FND_TEST_TRUE(length(float2_t{kFloatInfinity, 1.0f}) == kFloatInfinity);
+    FND_TEST_TRUE(length(float2_t{1.0f, -kFloatInfinity}) == kFloatInfinity);
+}
+
 void unittests_math_vector_float2_lerp()
 {
     const float2_t a{0.0f, 10.0f};
@@ -530,6 +664,53 @@ void unittests_math_vector_float2_min()
     // A NaN argument is ignored, as for the float_t min.
     FND_TEST_TRUE(test_components(
         min(float2_t{kFloatNaN, 1.0f}, float2_t{2.0f, kFloatNaN}), 2.0f, 1.0f));
+}
+
+void unittests_math_vector_float2_normalize()
+{
+    FND_TEST_TRUE(test_components(normalize(float2_t{5.0f, 0.0f}), 1.0f, 0.0f));
+    FND_TEST_TRUE(
+        test_components(normalize(float2_t{0.0f, -0.5f}), 0.0f, -1.0f));
+    FND_TEST_TRUE(test_components(normalize(float2_t{0.0f, 1.0f}), 0.0f, 1.0f));
+    FND_TEST_TRUE(all(
+        approx_equal(normalize(float2_t{3.0f, -4.0f}), float2_t{0.6f, -0.8f})));
+    FND_TEST_TRUE(all(approx_equal(normalize(float2_t{-1.0f, 1.0f}),
+        float2_t{-0.70710678f, 0.70710678f})));
+    // The result has unit length and keeps the direction of v.
+    const float2_t v{-2.5f, 7.0f};
+    const float2_t n = normalize(v);
+    FND_TEST_TRUE(approx_equal(length(n), 1.0f));
+    FND_TEST_TRUE(all(approx_equal(n * length(v), v)));
+    // Large and small vectors whose squared length is still a normal float.
+    FND_TEST_TRUE(all(
+        approx_equal(normalize(float2_t{1e19f, 0.0f}), float2_t{1.0f, 0.0f})));
+    FND_TEST_TRUE(all(
+        approx_equal(normalize(float2_t{0.0f, 1e-18f}), float2_t{0.0f, 1.0f})));
+}
+
+void unittests_math_vector_float2_normalize_safe()
+{
+    // A zero vector gives default_value.
+    FND_TEST_TRUE(test_components(normalize_safe(float2_t{}), 0.0f, 0.0f));
+    FND_TEST_TRUE(test_components(
+        normalize_safe(float2_t{-0.0f, 0.0f}, float2_t{1.0f, 0.0f}), 1.0f,
+        0.0f));
+    // So does a vector whose squared length does not exceed kFloatMinNormal.
+    FND_TEST_TRUE(test_components(
+        normalize_safe(float2_t{1e-20f, 0.0f}, float2_t{0.0f, -1.0f}), 0.0f,
+        -1.0f));
+    FND_TEST_TRUE(test_components(
+        normalize_safe(float2_t{kFloatMinSubnormal, kFloatMinSubnormal},
+            float2_t{0.0f, -1.0f}),
+        0.0f, -1.0f));
+    // Any other vector is normalized and default_value is ignored.
+    const float2_t d{9.0f, 9.0f};
+    FND_TEST_TRUE(
+        test_components(normalize_safe(float2_t{5.0f, 0.0f}, d), 1.0f, 0.0f));
+    FND_TEST_TRUE(all(approx_equal(
+        normalize_safe(float2_t{3.0f, -4.0f}, d), float2_t{0.6f, -0.8f})));
+    const float2_t v{-2.5f, 7.0f};
+    FND_TEST_TRUE(all(normalize_safe(v, d) == normalize(v)));
 }
 
 void unittests_math_vector_float2_pow()
@@ -622,6 +803,7 @@ void unittests_math_vector_float2()
     unittests_math_vector_float2_division_operator();
     unittests_math_vector_float2_abs();
     unittests_math_vector_float2_inverse_trigonometry();
+    unittests_math_vector_float2_approx_equal();
     unittests_math_vector_float2_ceil();
     unittests_math_vector_float2_clamp();
     unittests_math_vector_float2_cmax();
@@ -630,13 +812,23 @@ void unittests_math_vector_float2()
     unittests_math_vector_float2_trigonometry();
     unittests_math_vector_float2_csum();
     unittests_math_vector_float2_degrees_radians();
+    unittests_math_vector_float2_distance_sqr();
+    unittests_math_vector_float2_distance();
+    unittests_math_vector_float2_dot();
     unittests_math_vector_float2_exp_log();
     unittests_math_vector_float2_floor();
     unittests_math_vector_float2_fmod();
     unittests_math_vector_float2_fractional();
+    unittests_math_vector_float2_isfinite();
+    unittests_math_vector_float2_isinf();
+    unittests_math_vector_float2_isnan();
+    unittests_math_vector_float2_length_sqr();
+    unittests_math_vector_float2_length();
     unittests_math_vector_float2_lerp();
     unittests_math_vector_float2_max();
     unittests_math_vector_float2_min();
+    unittests_math_vector_float2_normalize();
+    unittests_math_vector_float2_normalize_safe();
     unittests_math_vector_float2_pow();
     unittests_math_vector_float2_rcp_sqrt_rsqrt();
     unittests_math_vector_float2_saturate();
