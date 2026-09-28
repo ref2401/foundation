@@ -17,14 +17,6 @@ import :arithmetic_types;
 
 namespace fnd {
 
-export template<typename TDest, typename TSrc>
-requires(sizeof(TDest) == sizeof(TSrc) && __is_trivially_copyable(TDest)
-    && __is_trivially_copyable(TSrc))
-constexpr TDest bit_cast(const TSrc& val)
-{
-    return __builtin_bit_cast(TDest, val);
-}
-
 export constexpr byte_t abs(const byte_t x)
 {
     // x is promoted to int before the negation, so -x cannot overflow and no
@@ -72,6 +64,63 @@ export FND_INLINE double_t abs(const double_t x)
     return ::fabs(x);
 }
 
+export FND_INLINE bool_t approx_equal(
+    const float_t a, const float_t b, const float_t max_abs_diff = 1e-5f)
+{
+    FND_ASSERT(max_abs_diff >= 0);
+
+    // NOTE:
+    // inf - inf is NaN, and abs(NaN) <= max_abs_diff is false.
+    // Checking exact equality first makes approx_equal(inf, inf) true.
+    return a == b || abs(a - b) <= max_abs_diff;
+}
+
+export FND_INLINE bool_t approx_equal(
+    const double_t a, const double_t b, const double_t max_abs_diff = 1e-5)
+{
+    FND_ASSERT(max_abs_diff >= 0);
+
+    return a == b || abs(a - b) <= max_abs_diff;
+}
+
+export template<typename TDest, typename TSrc>
+requires(sizeof(TDest) == sizeof(TSrc) && __is_trivially_copyable(TDest)
+    && __is_trivially_copyable(TSrc))
+constexpr TDest bit_cast(const TSrc& val)
+{
+    return __builtin_bit_cast(TDest, val);
+}
+
+export FND_INLINE float_t ceil(const float_t x)
+{
+    return ::ceilf(x);
+}
+
+export FND_INLINE double_t ceil(const double_t x)
+{
+    return ::ceil(x);
+}
+
+export FND_INLINE float_t floor(const float_t x)
+{
+    return ::floorf(x);
+}
+
+export FND_INLINE double_t floor(const double_t x)
+{
+    return ::floor(x);
+}
+
+export FND_INLINE float_t fmod(const float_t x, const float_t y)
+{
+    return ::fmodf(x, y);
+}
+
+export FND_INLINE double_t fmod(const double_t x, const double_t y)
+{
+    return ::fmod(x, y);
+}
+
 export FND_INLINE bool_t isfinite(const float_t x)
 {
     return ::isfinite(x);
@@ -100,65 +149,6 @@ export FND_INLINE bool_t isnan(const float_t x)
 export FND_INLINE bool_t isnan(const double_t x)
 {
     return ::isnan(x);
-}
-
-export FND_INLINE bool_t approx_equal(
-    const float_t a, const float_t b, const float_t max_abs_diff = 1e-5f)
-{
-    FND_ASSERT(max_abs_diff >= 0);
-
-    // NOTE:
-    // inf - inf is NaN, and abs(NaN) <= max_abs_diff is false.
-    // Checking exact equality first makes approx_equal(inf, inf) true.
-    return a == b || abs(a - b) <= max_abs_diff;
-}
-
-export FND_INLINE bool_t approx_equal(
-    const double_t a, const double_t b, const double_t max_abs_diff = 1e-5)
-{
-    FND_ASSERT(max_abs_diff >= 0);
-
-    return a == b || abs(a - b) <= max_abs_diff;
-}
-
-export constexpr byte_t min(const byte_t a, const byte_t b)
-{
-    return a < b ? a : b;
-}
-
-export constexpr int_t min(const int_t a, const int_t b)
-{
-    return a < b ? a : b;
-}
-
-export constexpr long_t min(const long_t a, const long_t b)
-{
-    return a < b ? a : b;
-}
-
-export constexpr ubyte_t min(const ubyte_t a, const ubyte_t b)
-{
-    return a < b ? a : b;
-}
-
-export constexpr uint_t min(const uint_t a, const uint_t b)
-{
-    return a < b ? a : b;
-}
-
-export constexpr ulong_t min(const ulong_t a, const ulong_t b)
-{
-    return a < b ? a : b;
-}
-
-export FND_INLINE float_t min(const float_t a, const float_t b)
-{
-    return isnan(b) || a < b ? a : b;
-}
-
-export FND_INLINE double_t min(const double_t a, const double_t b)
-{
-    return isnan(b) || a < b ? a : b;
 }
 
 export constexpr byte_t max(const byte_t a, const byte_t b)
@@ -199,6 +189,46 @@ export FND_INLINE float_t max(const float_t a, const float_t b)
 export FND_INLINE double_t max(const double_t a, const double_t b)
 {
     return isnan(b) || a > b ? a : b;
+}
+
+export constexpr byte_t min(const byte_t a, const byte_t b)
+{
+    return a < b ? a : b;
+}
+
+export constexpr int_t min(const int_t a, const int_t b)
+{
+    return a < b ? a : b;
+}
+
+export constexpr long_t min(const long_t a, const long_t b)
+{
+    return a < b ? a : b;
+}
+
+export constexpr ubyte_t min(const ubyte_t a, const ubyte_t b)
+{
+    return a < b ? a : b;
+}
+
+export constexpr uint_t min(const uint_t a, const uint_t b)
+{
+    return a < b ? a : b;
+}
+
+export constexpr ulong_t min(const ulong_t a, const ulong_t b)
+{
+    return a < b ? a : b;
+}
+
+export FND_INLINE float_t min(const float_t a, const float_t b)
+{
+    return isnan(b) || a < b ? a : b;
+}
+
+export FND_INLINE double_t min(const double_t a, const double_t b)
+{
+    return isnan(b) || a < b ? a : b;
 }
 
 export constexpr byte_t clamp(
@@ -263,6 +293,37 @@ export FND_INLINE double_t clamp(
     return min(max(x, lower), upper);
 }
 
+export FND_INLINE float_t modf(const float_t x, float_t& integer)
+{
+    return ::modff(x, &integer);
+}
+
+export FND_INLINE double_t modf(const double_t x, double_t& integer)
+{
+    return ::modf(x, &integer);
+}
+
+// Fractional part of |x|, in [0, 1).
+// fractional(-1e-10f) = 1e-10f;
+// fractional(+-inf) is 0 and fractional(NaN) is NaN;
+export FND_INLINE float_t fractional(const float_t x)
+{
+    // NOTE:
+    // Not implemented as x - floor(x), because that returns 1 for tiny negative
+    // x. For x = -1e-10f, floor(x) is -1, and x + 1 is 0.9999999999. That value
+    // doesn't fit in a float: the float just below 1 is 0.99999994f (1 -
+    // 2^-24), and 1.0f is closer, so the result rounds to 1.
+
+    float_t integer;
+    return abs(modf(x, integer));
+}
+
+export FND_INLINE double_t fractional(const double_t x)
+{
+    double_t integer;
+    return abs(modf(x, integer));
+}
+
 export FND_INLINE float_t saturate(const float_t x)
 {
     return clamp(x, 0.0f, 1.0f);
@@ -302,26 +363,6 @@ export FND_INLINE double_t sign(const double_t x)
     return (x > 0.0 ? 1.0 : 0.0) - (x < 0.0 ? 1.0 : 0.0);
 }
 
-export FND_INLINE float_t ceil(const float_t x)
-{
-    return ::ceilf(x);
-}
-
-export FND_INLINE double_t ceil(const double_t x)
-{
-    return ::ceil(x);
-}
-
-export FND_INLINE float_t floor(const float_t x)
-{
-    return ::floorf(x);
-}
-
-export FND_INLINE double_t floor(const double_t x)
-{
-    return ::floor(x);
-}
-
 export FND_INLINE float_t trunc(const float_t x)
 {
     return ::truncf(x);
@@ -330,47 +371,6 @@ export FND_INLINE float_t trunc(const float_t x)
 export FND_INLINE double_t trunc(const double_t x)
 {
     return ::trunc(x);
-}
-
-export FND_INLINE float_t fmod(const float_t x, const float_t y)
-{
-    return ::fmodf(x, y);
-}
-
-export FND_INLINE double_t fmod(const double_t x, const double_t y)
-{
-    return ::fmod(x, y);
-}
-
-export FND_INLINE float_t modf(const float_t x, float_t& integer)
-{
-    return ::modff(x, &integer);
-}
-
-export FND_INLINE double_t modf(const double_t x, double_t& integer)
-{
-    return ::modf(x, &integer);
-}
-
-// Fractional part of |x|, in [0, 1).
-// fractional(-1e-10f) = 1e-10f;
-// fractional(+-inf) is 0 and fractional(NaN) is NaN;
-export FND_INLINE float_t fractional(const float_t x)
-{
-    // NOTE:
-    // Not implemented as x - floor(x), because that returns 1 for tiny negative
-    // x. For x = -1e-10f, floor(x) is -1, and x + 1 is 0.9999999999. That value
-    // doesn't fit in a float: the float just below 1 is 0.99999994f (1 -
-    // 2^-24), and 1.0f is closer, so the result rounds to 1.
-
-    float_t integer;
-    return abs(modf(x, integer));
-}
-
-export FND_INLINE double_t fractional(const double_t x)
-{
-    double_t integer;
-    return abs(modf(x, integer));
 }
 
 } // namespace fnd

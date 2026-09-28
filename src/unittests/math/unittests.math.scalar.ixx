@@ -9,10 +9,6 @@ namespace fnd::unittests {
 
 export void unittests_math_scalar();
 
-// ---------------------------------------------------------------------------
-// Trigonometry
-// ---------------------------------------------------------------------------
-
 void unittests_math_scalar_acos_float()
 {
     FND_TEST_TRUE(approx_equal(acos(1.0f), 0.0f));
@@ -181,10 +177,6 @@ void unittests_math_scalar_tan_double()
     FND_TEST_TRUE(isnan(tan(kDoubleInfinity)));
 }
 
-// ---------------------------------------------------------------------------
-// Interpolation
-// ---------------------------------------------------------------------------
-
 void unittests_math_scalar_lerp_float()
 {
     FND_TEST_TRUE(lerp(0.0f, 10.0f, 0.0f) == 0.0f);
@@ -240,10 +232,6 @@ void unittests_math_scalar_smoothstep_double()
     FND_TEST_TRUE(smoothstep(1.0, 0.0, 0.25) == 0.84375);
     FND_TEST_TRUE(smoothstep(1.0, 0.0, 2.0) == 0.0);
 }
-
-// ---------------------------------------------------------------------------
-// Power and roots
-// ---------------------------------------------------------------------------
 
 void unittests_math_scalar_pow_float()
 {
@@ -322,10 +310,6 @@ void unittests_math_scalar_rsqrt_double()
     FND_TEST_TRUE(approx_equal(rsqrt(2.0), 0.70710678118654752));
     FND_TEST_TRUE(rsqrt(kDoubleInfinity) == 0.0);
 }
-
-// ---------------------------------------------------------------------------
-// Exponential and logarithm
-// ---------------------------------------------------------------------------
 
 void unittests_math_scalar_exp_float()
 {
