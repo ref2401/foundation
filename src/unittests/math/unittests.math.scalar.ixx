@@ -345,32 +345,32 @@ void unittests_math_scalar_sin_double()
 
 void unittests_math_scalar_smoothstep_float()
 {
-    FND_TEST_TRUE(smoothstep(0.0f, 1.0f, -1.0f) == 0.0f);
-    FND_TEST_TRUE(smoothstep(0.0f, 1.0f, 0.0f) == 0.0f);
-    FND_TEST_TRUE(smoothstep(0.0f, 1.0f, 0.25f) == 0.15625f);
-    FND_TEST_TRUE(smoothstep(0.0f, 1.0f, 0.5f) == 0.5f);
-    FND_TEST_TRUE(smoothstep(0.0f, 1.0f, 0.75f) == 0.84375f);
-    FND_TEST_TRUE(smoothstep(0.0f, 1.0f, 1.0f) == 1.0f);
-    FND_TEST_TRUE(smoothstep(0.0f, 1.0f, 2.0f) == 1.0f);
-    FND_TEST_TRUE(smoothstep(2.0f, 4.0f, 3.0f) == 0.5f);
+    FND_TEST_TRUE(smoothstep(-1.0f, 0.0f, 1.0f) == 0.0f);
+    FND_TEST_TRUE(smoothstep(0.0f, 0.0f, 1.0f) == 0.0f);
+    FND_TEST_TRUE(smoothstep(0.25f, 0.0f, 1.0f) == 0.15625f);
+    FND_TEST_TRUE(smoothstep(0.5f, 0.0f, 1.0f) == 0.5f);
+    FND_TEST_TRUE(smoothstep(0.75f, 0.0f, 1.0f) == 0.84375f);
+    FND_TEST_TRUE(smoothstep(1.0f, 0.0f, 1.0f) == 1.0f);
+    FND_TEST_TRUE(smoothstep(2.0f, 0.0f, 1.0f) == 1.0f);
+    FND_TEST_TRUE(smoothstep(3.0f, 2.0f, 4.0f) == 0.5f);
     // edge0 > edge1 reverses the curve.
-    FND_TEST_TRUE(smoothstep(1.0f, 0.0f, 0.25f) == 0.84375f);
-    FND_TEST_TRUE(smoothstep(1.0f, 0.0f, 2.0f) == 0.0f);
+    FND_TEST_TRUE(smoothstep(0.25f, 1.0f, 0.0f) == 0.84375f);
+    FND_TEST_TRUE(smoothstep(2.0f, 1.0f, 0.0f) == 0.0f);
 }
 
 void unittests_math_scalar_smoothstep_double()
 {
-    FND_TEST_TRUE(smoothstep(0.0, 1.0, -1.0) == 0.0);
-    FND_TEST_TRUE(smoothstep(0.0, 1.0, 0.0) == 0.0);
-    FND_TEST_TRUE(smoothstep(0.0, 1.0, 0.25) == 0.15625);
-    FND_TEST_TRUE(smoothstep(0.0, 1.0, 0.5) == 0.5);
-    FND_TEST_TRUE(smoothstep(0.0, 1.0, 0.75) == 0.84375);
-    FND_TEST_TRUE(smoothstep(0.0, 1.0, 1.0) == 1.0);
-    FND_TEST_TRUE(smoothstep(0.0, 1.0, 2.0) == 1.0);
-    FND_TEST_TRUE(smoothstep(2.0, 4.0, 3.0) == 0.5);
+    FND_TEST_TRUE(smoothstep(-1.0, 0.0, 1.0) == 0.0);
+    FND_TEST_TRUE(smoothstep(0.0, 0.0, 1.0) == 0.0);
+    FND_TEST_TRUE(smoothstep(0.25, 0.0, 1.0) == 0.15625);
+    FND_TEST_TRUE(smoothstep(0.5, 0.0, 1.0) == 0.5);
+    FND_TEST_TRUE(smoothstep(0.75, 0.0, 1.0) == 0.84375);
+    FND_TEST_TRUE(smoothstep(1.0, 0.0, 1.0) == 1.0);
+    FND_TEST_TRUE(smoothstep(2.0, 0.0, 1.0) == 1.0);
+    FND_TEST_TRUE(smoothstep(3.0, 2.0, 4.0) == 0.5);
     // edge0 > edge1 reverses the curve.
-    FND_TEST_TRUE(smoothstep(1.0, 0.0, 0.25) == 0.84375);
-    FND_TEST_TRUE(smoothstep(1.0, 0.0, 2.0) == 0.0);
+    FND_TEST_TRUE(smoothstep(0.25, 1.0, 0.0) == 0.84375);
+    FND_TEST_TRUE(smoothstep(2.0, 1.0, 0.0) == 0.0);
 }
 
 void unittests_math_scalar_sqrt_float()

@@ -226,7 +226,7 @@ export FND_INLINE double_t sin(const double_t x)
 }
 
 export FND_INLINE float_t smoothstep(
-    const float_t edge0, const float_t edge1, const float_t x)
+    const float_t x, const float_t edge0, const float_t edge1)
 {
     FND_ASSERT(edge0 != edge1);
 
@@ -235,7 +235,7 @@ export FND_INLINE float_t smoothstep(
 }
 
 export FND_INLINE double_t smoothstep(
-    const double_t edge0, const double_t edge1, const double_t x)
+    const double_t x, const double_t edge0, const double_t edge1)
 {
     FND_ASSERT(edge0 != edge1);
 

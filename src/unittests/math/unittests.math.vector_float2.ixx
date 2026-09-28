@@ -582,14 +582,14 @@ void unittests_math_vector_float2_smoothstep()
     const float2_t edge0{0.0f, 2.0f};
     const float2_t edge1{1.0f, 4.0f};
     FND_TEST_TRUE(test_components(
-        smoothstep(edge0, edge1, float2_t{0.25f, 3.0f}), 0.15625f, 0.5f));
+        smoothstep(float2_t{0.25f, 3.0f}, edge0, edge1), 0.15625f, 0.5f));
     FND_TEST_TRUE(test_components(
-        smoothstep(edge0, edge1, float2_t{-1.0f, 5.0f}), 0.0f, 1.0f));
+        smoothstep(float2_t{-1.0f, 5.0f}, edge0, edge1), 0.0f, 1.0f));
     // float_t edges apply to every component.
     FND_TEST_TRUE(test_components(
-        smoothstep(0.0f, 1.0f, float2_t{0.25f, 0.75f}), 0.15625f, 0.84375f));
+        smoothstep(float2_t{0.25f, 0.75f}, 0.0f, 1.0f), 0.15625f, 0.84375f));
     FND_TEST_TRUE(test_components(
-        smoothstep(0.0f, 1.0f, float2_t{-1.0f, 2.0f}), 0.0f, 1.0f));
+        smoothstep(float2_t{-1.0f, 2.0f}, 0.0f, 1.0f), 0.0f, 1.0f));
 }
 
 void unittests_math_vector_float2_trunc()

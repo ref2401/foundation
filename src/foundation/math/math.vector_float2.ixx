@@ -538,17 +538,17 @@ export FND_INLINE float2_t sin(const float2_t v)
 }
 
 export FND_INLINE float2_t smoothstep(
-    const float2_t edge0, const float2_t edge1, const float2_t x)
+    const float2_t x, const float2_t edge0, const float2_t edge1)
 {
     return float2_t{
-        smoothstep(edge0.x, edge1.x, x.x), smoothstep(edge0.y, edge1.y, x.y)};
+        smoothstep(x.x, edge0.x, edge1.x), smoothstep(x.y, edge0.y, edge1.y)};
 }
 
 export FND_INLINE float2_t smoothstep(
-    const float_t edge0, const float_t edge1, const float2_t x)
+    const float2_t x, const float_t edge0, const float_t edge1)
 {
     return float2_t{
-        smoothstep(edge0, edge1, x.x), smoothstep(edge0, edge1, x.y)};
+        smoothstep(x.x, edge0, edge1), smoothstep(x.y, edge0, edge1)};
 }
 
 export FND_INLINE float2_t sqrt(const float2_t v)
