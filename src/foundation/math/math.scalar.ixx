@@ -115,13 +115,13 @@ export FND_INLINE float_t lerp(
     //   away from a.
     // - One multiplication instead of two.
 
-    return a * (1.0f - t) + b * t;
+    return a * (1 - t) + b * t;
 }
 
 export FND_INLINE double_t lerp(
     const double_t a, const double_t b, const double_t t)
 {
-    return a * (1.0 - t) + b * t;
+    return a * (1 - t) + b * t;
 }
 
 export FND_INLINE float_t log(const float_t x)
