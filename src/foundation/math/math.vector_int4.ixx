@@ -398,24 +398,24 @@ export constexpr bool4_t operator==(const int4_t a, const int4_t b)
     return bool4_t{a.x == b.x, a.y == b.y, a.z == b.z, a.w == b.w};
 }
 
-export constexpr bool4_t operator!=(const int4_t a, const int4_t b)
-{
-    return !(a == b);
-}
-
 export constexpr bool4_t operator==(const int4_t a, const int_t val)
 {
     return bool4_t{a.x == val, a.y == val, a.z == val, a.w == val};
 }
 
-export constexpr bool4_t operator!=(const int4_t a, const int_t val)
-{
-    return !(a == val);
-}
-
 export constexpr bool4_t operator==(const int_t val, const int4_t b)
 {
     return bool4_t{val == b.x, val == b.y, val == b.z, val == b.w};
+}
+
+export constexpr bool4_t operator!=(const int4_t a, const int4_t b)
+{
+    return !(a == b);
+}
+
+export constexpr bool4_t operator!=(const int4_t a, const int_t val)
+{
+    return !(a == val);
 }
 
 export constexpr bool4_t operator!=(const int_t val, const int4_t b)
@@ -481,6 +481,63 @@ export constexpr bool4_t operator>=(const int4_t a, const int_t val)
 export constexpr bool4_t operator>=(const int_t val, const int4_t b)
 {
     return bool4_t{val >= b.x, val >= b.y, val >= b.z, val >= b.w};
+}
+
+export constexpr int4_t operator&(const int4_t a, const int4_t b)
+{
+    return int4_t{a.x & b.x, a.y & b.y, a.z & b.z, a.w & b.w};
+}
+
+export constexpr int4_t operator&(const int4_t a, const int_t val)
+{
+    return int4_t{a.x & val, a.y & val, a.z & val, a.w & val};
+}
+
+export constexpr int4_t operator&(const int_t val, const int4_t b)
+{
+    return int4_t{val & b.x, val & b.y, val & b.z, val & b.w};
+}
+
+export constexpr int4_t operator*(const int4_t a, const int4_t b)
+{
+    FND_ASSERT(
+        long_t{a.x} * b.x >= kIntMinValue && long_t{a.x} * b.x <= kIntMaxValue);
+    FND_ASSERT(
+        long_t{a.y} * b.y >= kIntMinValue && long_t{a.y} * b.y <= kIntMaxValue);
+    FND_ASSERT(
+        long_t{a.z} * b.z >= kIntMinValue && long_t{a.z} * b.z <= kIntMaxValue);
+    FND_ASSERT(
+        long_t{a.w} * b.w >= kIntMinValue && long_t{a.w} * b.w <= kIntMaxValue);
+
+    return int4_t{a.x * b.x, a.y * b.y, a.z * b.z, a.w * b.w};
+}
+
+export constexpr int4_t operator*(const int4_t a, const int_t val)
+{
+    FND_ASSERT(
+        long_t{a.x} * val >= kIntMinValue && long_t{a.x} * val <= kIntMaxValue);
+    FND_ASSERT(
+        long_t{a.y} * val >= kIntMinValue && long_t{a.y} * val <= kIntMaxValue);
+    FND_ASSERT(
+        long_t{a.z} * val >= kIntMinValue && long_t{a.z} * val <= kIntMaxValue);
+    FND_ASSERT(
+        long_t{a.w} * val >= kIntMinValue && long_t{a.w} * val <= kIntMaxValue);
+
+    return int4_t{a.x * val, a.y * val, a.z * val, a.w * val};
+}
+
+export constexpr int4_t operator*(const int_t val, const int4_t b)
+{
+    FND_ASSERT(
+        long_t{val} * b.x >= kIntMinValue && long_t{val} * b.x <= kIntMaxValue);
+    FND_ASSERT(
+        long_t{val} * b.y >= kIntMinValue && long_t{val} * b.y <= kIntMaxValue);
+    FND_ASSERT(
+        long_t{val} * b.z >= kIntMinValue && long_t{val} * b.z <= kIntMaxValue);
+    FND_ASSERT(
+        long_t{val} * b.w >= kIntMinValue && long_t{val} * b.w <= kIntMaxValue);
+
+    return int4_t{val * b.x, val * b.y, val * b.z, val * b.w};
 }
 
 export constexpr int4_t operator+(const int4_t a, const int4_t b)
@@ -567,72 +624,6 @@ export constexpr int4_t operator-(const int_t val, const int4_t b)
     return int4_t{val - b.x, val - b.y, val - b.z, val - b.w};
 }
 
-export constexpr int4_t operator*(const int4_t a, const int4_t b)
-{
-    FND_ASSERT(
-        long_t{a.x} * b.x >= kIntMinValue && long_t{a.x} * b.x <= kIntMaxValue);
-    FND_ASSERT(
-        long_t{a.y} * b.y >= kIntMinValue && long_t{a.y} * b.y <= kIntMaxValue);
-    FND_ASSERT(
-        long_t{a.z} * b.z >= kIntMinValue && long_t{a.z} * b.z <= kIntMaxValue);
-    FND_ASSERT(
-        long_t{a.w} * b.w >= kIntMinValue && long_t{a.w} * b.w <= kIntMaxValue);
-
-    return int4_t{a.x * b.x, a.y * b.y, a.z * b.z, a.w * b.w};
-}
-
-export constexpr int4_t operator*(const int4_t a, const int_t val)
-{
-    FND_ASSERT(
-        long_t{a.x} * val >= kIntMinValue && long_t{a.x} * val <= kIntMaxValue);
-    FND_ASSERT(
-        long_t{a.y} * val >= kIntMinValue && long_t{a.y} * val <= kIntMaxValue);
-    FND_ASSERT(
-        long_t{a.z} * val >= kIntMinValue && long_t{a.z} * val <= kIntMaxValue);
-    FND_ASSERT(
-        long_t{a.w} * val >= kIntMinValue && long_t{a.w} * val <= kIntMaxValue);
-
-    return int4_t{a.x * val, a.y * val, a.z * val, a.w * val};
-}
-
-export constexpr int4_t operator*(const int_t val, const int4_t b)
-{
-    FND_ASSERT(
-        long_t{val} * b.x >= kIntMinValue && long_t{val} * b.x <= kIntMaxValue);
-    FND_ASSERT(
-        long_t{val} * b.y >= kIntMinValue && long_t{val} * b.y <= kIntMaxValue);
-    FND_ASSERT(
-        long_t{val} * b.z >= kIntMinValue && long_t{val} * b.z <= kIntMaxValue);
-    FND_ASSERT(
-        long_t{val} * b.w >= kIntMinValue && long_t{val} * b.w <= kIntMaxValue);
-
-    return int4_t{val * b.x, val * b.y, val * b.z, val * b.w};
-}
-
-export constexpr int4_t operator/(const int4_t a, const int4_t b)
-{
-    FND_ASSERT(all(b != 0));
-    FND_ASSERT(!any(a == kIntMinValue && b == -1));
-
-    return int4_t{a.x / b.x, a.y / b.y, a.z / b.z, a.w / b.w};
-}
-
-export constexpr int4_t operator/(const int4_t a, const int_t val)
-{
-    FND_ASSERT(val != 0);
-    FND_ASSERT(!(val == -1 && any(a == kIntMinValue)));
-
-    return int4_t{a.x / val, a.y / val, a.z / val, a.w / val};
-}
-
-export constexpr int4_t operator/(const int_t val, const int4_t b)
-{
-    FND_ASSERT(all(b != 0));
-    FND_ASSERT(!(val == kIntMinValue && any(b == -1)));
-
-    return int4_t{val / b.x, val / b.y, val / b.z, val / b.w};
-}
-
 export constexpr int4_t operator%(const int4_t a, const int4_t b)
 {
     FND_ASSERT(all(b != 0));
@@ -657,49 +648,28 @@ export constexpr int4_t operator%(const int_t val, const int4_t b)
     return int4_t{val % b.x, val % b.y, val % b.z, val % b.w};
 }
 
-export constexpr int4_t operator&(const int4_t a, const int4_t b)
+export constexpr int4_t operator/(const int4_t a, const int4_t b)
 {
-    return int4_t{a.x & b.x, a.y & b.y, a.z & b.z, a.w & b.w};
+    FND_ASSERT(all(b != 0));
+    FND_ASSERT(!any(a == kIntMinValue && b == -1));
+
+    return int4_t{a.x / b.x, a.y / b.y, a.z / b.z, a.w / b.w};
 }
 
-export constexpr int4_t operator&(const int4_t a, const int_t val)
+export constexpr int4_t operator/(const int4_t a, const int_t val)
 {
-    return int4_t{a.x & val, a.y & val, a.z & val, a.w & val};
+    FND_ASSERT(val != 0);
+    FND_ASSERT(!(val == -1 && any(a == kIntMinValue)));
+
+    return int4_t{a.x / val, a.y / val, a.z / val, a.w / val};
 }
 
-export constexpr int4_t operator&(const int_t val, const int4_t b)
+export constexpr int4_t operator/(const int_t val, const int4_t b)
 {
-    return int4_t{val & b.x, val & b.y, val & b.z, val & b.w};
-}
+    FND_ASSERT(all(b != 0));
+    FND_ASSERT(!(val == kIntMinValue && any(b == -1)));
 
-export constexpr int4_t operator|(const int4_t a, const int4_t b)
-{
-    return int4_t{a.x | b.x, a.y | b.y, a.z | b.z, a.w | b.w};
-}
-
-export constexpr int4_t operator|(const int4_t a, const int_t val)
-{
-    return int4_t{a.x | val, a.y | val, a.z | val, a.w | val};
-}
-
-export constexpr int4_t operator|(const int_t val, const int4_t b)
-{
-    return int4_t{val | b.x, val | b.y, val | b.z, val | b.w};
-}
-
-export constexpr int4_t operator^(const int4_t a, const int4_t b)
-{
-    return int4_t{a.x ^ b.x, a.y ^ b.y, a.z ^ b.z, a.w ^ b.w};
-}
-
-export constexpr int4_t operator^(const int4_t a, const int_t val)
-{
-    return int4_t{a.x ^ val, a.y ^ val, a.z ^ val, a.w ^ val};
-}
-
-export constexpr int4_t operator^(const int_t val, const int4_t b)
-{
-    return int4_t{val ^ b.x, val ^ b.y, val ^ b.z, val ^ b.w};
+    return int4_t{val / b.x, val / b.y, val / b.z, val / b.w};
 }
 
 // NOTE:
@@ -748,39 +718,39 @@ export constexpr int4_t operator>>(const int_t val, const int4_t b)
     return int4_t{val >> b.x, val >> b.y, val >> b.z, val >> b.w};
 }
 
+export constexpr int4_t operator^(const int4_t a, const int4_t b)
+{
+    return int4_t{a.x ^ b.x, a.y ^ b.y, a.z ^ b.z, a.w ^ b.w};
+}
+
+export constexpr int4_t operator^(const int4_t a, const int_t val)
+{
+    return int4_t{a.x ^ val, a.y ^ val, a.z ^ val, a.w ^ val};
+}
+
+export constexpr int4_t operator^(const int_t val, const int4_t b)
+{
+    return int4_t{val ^ b.x, val ^ b.y, val ^ b.z, val ^ b.w};
+}
+
+export constexpr int4_t operator|(const int4_t a, const int4_t b)
+{
+    return int4_t{a.x | b.x, a.y | b.y, a.z | b.z, a.w | b.w};
+}
+
+export constexpr int4_t operator|(const int4_t a, const int_t val)
+{
+    return int4_t{a.x | val, a.y | val, a.z | val, a.w | val};
+}
+
+export constexpr int4_t operator|(const int_t val, const int4_t b)
+{
+    return int4_t{val | b.x, val | b.y, val | b.z, val | b.w};
+}
+
 export constexpr int4_t abs(const int4_t v)
 {
     return int4_t{abs(v.x), abs(v.y), abs(v.z), abs(v.w)};
-}
-
-export constexpr int4_t min(const int4_t a, const int4_t b)
-{
-    return int4_t{min(a.x, b.x), min(a.y, b.y), min(a.z, b.z), min(a.w, b.w)};
-}
-
-export constexpr int4_t min(const int4_t a, const int_t val)
-{
-    return int4_t{min(a.x, val), min(a.y, val), min(a.z, val), min(a.w, val)};
-}
-
-export constexpr int4_t min(const int_t val, const int4_t b)
-{
-    return int4_t{min(val, b.x), min(val, b.y), min(val, b.z), min(val, b.w)};
-}
-
-export constexpr int4_t max(const int4_t a, const int4_t b)
-{
-    return int4_t{max(a.x, b.x), max(a.y, b.y), max(a.z, b.z), max(a.w, b.w)};
-}
-
-export constexpr int4_t max(const int4_t a, const int_t val)
-{
-    return int4_t{max(a.x, val), max(a.y, val), max(a.z, val), max(a.w, val)};
-}
-
-export constexpr int4_t max(const int_t val, const int4_t b)
-{
-    return int4_t{max(val, b.x), max(val, b.y), max(val, b.z), max(val, b.w)};
 }
 
 export constexpr int4_t clamp(
@@ -819,9 +789,9 @@ export constexpr int4_t clamp(
         clamp(v.z, lower, upper), clamp(v.w, lower, upper)};
 }
 
-export constexpr int4_t sign(const int4_t v)
+export constexpr int_t cmax(const int4_t v)
 {
-    return int4_t{sign(v.x), sign(v.y), sign(v.z), sign(v.w)};
+    return max(max(max(v.x, v.y), v.z), v.w);
 }
 
 export constexpr int_t cmin(const int4_t v)
@@ -829,9 +799,20 @@ export constexpr int_t cmin(const int4_t v)
     return min(min(min(v.x, v.y), v.z), v.w);
 }
 
-export constexpr int_t cmax(const int4_t v)
+export constexpr int_t cmul(const int4_t v)
 {
-    return max(max(max(v.x, v.y), v.z), v.w);
+    FND_ASSERT(
+        long_t{v.x} * v.y >= kIntMinValue && long_t{v.x} * v.y <= kIntMaxValue);
+
+    const int_t partial1 = v.x * v.y;
+    FND_ASSERT(long_t{partial1} * v.z >= kIntMinValue
+        && long_t{partial1} * v.z <= kIntMaxValue);
+
+    const int_t partial2 = partial1 * v.z;
+    FND_ASSERT(long_t{partial2} * v.w >= kIntMinValue
+        && long_t{partial2} * v.w <= kIntMaxValue);
+
+    return partial2 * v.w;
 }
 
 export constexpr int_t csum(const int4_t v)
@@ -850,20 +831,39 @@ export constexpr int_t csum(const int4_t v)
     return partial2 + v.w;
 }
 
-export constexpr int_t cmul(const int4_t v)
+export constexpr int4_t max(const int4_t a, const int4_t b)
 {
-    FND_ASSERT(
-        long_t{v.x} * v.y >= kIntMinValue && long_t{v.x} * v.y <= kIntMaxValue);
+    return int4_t{max(a.x, b.x), max(a.y, b.y), max(a.z, b.z), max(a.w, b.w)};
+}
 
-    const int_t partial1 = v.x * v.y;
-    FND_ASSERT(long_t{partial1} * v.z >= kIntMinValue
-        && long_t{partial1} * v.z <= kIntMaxValue);
+export constexpr int4_t max(const int4_t a, const int_t val)
+{
+    return int4_t{max(a.x, val), max(a.y, val), max(a.z, val), max(a.w, val)};
+}
 
-    const int_t partial2 = partial1 * v.z;
-    FND_ASSERT(long_t{partial2} * v.w >= kIntMinValue
-        && long_t{partial2} * v.w <= kIntMaxValue);
+export constexpr int4_t max(const int_t val, const int4_t b)
+{
+    return int4_t{max(val, b.x), max(val, b.y), max(val, b.z), max(val, b.w)};
+}
 
-    return partial2 * v.w;
+export constexpr int4_t min(const int4_t a, const int4_t b)
+{
+    return int4_t{min(a.x, b.x), min(a.y, b.y), min(a.z, b.z), min(a.w, b.w)};
+}
+
+export constexpr int4_t min(const int4_t a, const int_t val)
+{
+    return int4_t{min(a.x, val), min(a.y, val), min(a.z, val), min(a.w, val)};
+}
+
+export constexpr int4_t min(const int_t val, const int4_t b)
+{
+    return int4_t{min(val, b.x), min(val, b.y), min(val, b.z), min(val, b.w)};
+}
+
+export constexpr int4_t sign(const int4_t v)
+{
+    return int4_t{sign(v.x), sign(v.y), sign(v.z), sign(v.w)};
 }
 
 } // namespace fnd
