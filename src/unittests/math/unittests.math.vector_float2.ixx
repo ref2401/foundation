@@ -759,6 +759,40 @@ void unittests_math_vector_float2_min()
         min(float2_t{kFloatNaN, 1.0f}, float2_t{2.0f, kFloatNaN}), 2.0f, 1.0f));
 }
 
+void unittests_math_vector_float2_modf()
+{
+    float2_t vi;
+
+    // Both parts have the sign of the component.
+    FND_TEST_TRUE(
+        test_components(modf(float2_t{3.75f, -3.75f}, vi), 0.75f, -0.75f));
+    FND_TEST_TRUE(test_components(vi, 3.0f, -3.0f));
+    FND_TEST_TRUE(test_components(modf(float2_t{-2.0f, 2.0f}, vi), 0.0f, 0.0f));
+    FND_TEST_TRUE(test_components(vi, -2.0f, 2.0f));
+    FND_TEST_TRUE(
+        test_components(modf(float2_t{0.5f, -0.5f}, vi), 0.5f, -0.5f));
+    FND_TEST_TRUE(test_components(vi, 0.0f, 0.0f));
+    FND_TEST_TRUE(test_components(modf(float2_t{0.0f, kFloatMinSubnormal}, vi),
+        0.0f, kFloatMinSubnormal));
+    FND_TEST_TRUE(test_components(vi, 0.0f, 0.0f));
+    FND_TEST_TRUE(test_components(modf(float2_t{kFloatMaxValue, -1.25f}, vi),
+        0.0f, -0.25f));
+    FND_TEST_TRUE(test_components(vi, kFloatMaxValue, -1.0f));
+    FND_TEST_TRUE(test_components(
+        modf(float2_t{kFloatInfinity, -kFloatInfinity}, vi), 0.0f, 0.0f));
+    FND_TEST_TRUE(test_components(vi, kFloatInfinity, -kFloatInfinity));
+    // A NaN component gives NaN in both parts and does not affect the other.
+    const float2_t frac = modf(float2_t{kFloatNaN, 7.5f}, vi);
+    FND_TEST_TRUE(isnan(frac.x));
+    FND_TEST_TRUE(isnan(vi.x));
+    FND_TEST_TRUE(frac.y == 0.5f);
+    FND_TEST_TRUE(vi.y == 7.0f);
+    // The parts add up to the input.
+    const float2_t v{-123.625f, 0.375f};
+    const float2_t vf = modf(v, vi);
+    FND_TEST_TRUE(all(vf + vi == v));
+}
+
 void unittests_math_vector_float2_normalize()
 {
     FND_TEST_TRUE(test_components(normalize(float2_t{5.0f, 0.0f}), 1.0f, 0.0f));
@@ -954,6 +988,7 @@ void unittests_math_vector_float2()
     unittests_math_vector_float2_lerp();
     unittests_math_vector_float2_max();
     unittests_math_vector_float2_min();
+    unittests_math_vector_float2_modf();
     unittests_math_vector_float2_normalize();
     unittests_math_vector_float2_normalize_safe();
     unittests_math_vector_float2_pow();

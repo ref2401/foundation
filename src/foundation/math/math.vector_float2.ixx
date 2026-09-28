@@ -566,6 +566,13 @@ export FND_INLINE float2_t min(const float_t scalar, const float2_t b)
     return float2_t{min(scalar, b.x), min(scalar, b.y)};
 }
 
+// Splits each component into its fractional part (returned) and its integer
+// part (stored in vi). Both parts have the sign of the component.
+export FND_INLINE float2_t modf(const float2_t v, float2_t& vi)
+{
+    return float2_t{modf(v.x, vi.x), modf(v.y, vi.y)};
+}
+
 export FND_INLINE float2_t normalize(const float2_t v)
 {
     const float_t l2 = length_sqr(v);
@@ -578,6 +585,7 @@ export FND_INLINE float2_t normalize_safe(
     const float2_t v, const float2_t default_value = float2_t{})
 {
     FND_ASSERT(all(!isnan(v)));
+    FND_ASSERT(all(!isnan(default_value)));
 
     float2_t res_vec = default_value;
     const float_t l2 = length_sqr(v);
