@@ -77,6 +77,19 @@ void unittests_math_vector_bool2_any()
     FND_TEST_FALSE(any(bool2_t{false, false}));
 }
 
+void unittests_math_vector_bool2_logical_and_operator()
+{
+    const bool2_t tf{true, false};
+    FND_TEST_TRUE(test_components(tf && bool2_t{true, true}, true, false));
+    FND_TEST_TRUE(test_components(tf && bool2_t{false, true}, false, false));
+    FND_TEST_TRUE(test_components(
+        bool2_t{true, true} && bool2_t{true, true}, true, true));
+    FND_TEST_TRUE(test_components(tf && true, true, false));
+    FND_TEST_TRUE(test_components(tf && false, false, false));
+    FND_TEST_TRUE(test_components(true && tf, true, false));
+    FND_TEST_TRUE(test_components(false && tf, false, false));
+}
+
 void unittests_math_vector_bool2_equality_operator()
 {
     const bool2_t tf{true, false};
@@ -100,19 +113,6 @@ void unittests_math_vector_bool2_inequality_operator()
     FND_TEST_TRUE(test_components(tf != false, true, false));
     FND_TEST_TRUE(test_components(true != tf, false, true));
     FND_TEST_TRUE(test_components(false != tf, true, false));
-}
-
-void unittests_math_vector_bool2_logical_and_operator()
-{
-    const bool2_t tf{true, false};
-    FND_TEST_TRUE(test_components(tf && bool2_t{true, true}, true, false));
-    FND_TEST_TRUE(test_components(tf && bool2_t{false, true}, false, false));
-    FND_TEST_TRUE(test_components(
-        bool2_t{true, true} && bool2_t{true, true}, true, true));
-    FND_TEST_TRUE(test_components(tf && true, true, false));
-    FND_TEST_TRUE(test_components(tf && false, false, false));
-    FND_TEST_TRUE(test_components(true && tf, true, false));
-    FND_TEST_TRUE(test_components(false && tf, false, false));
 }
 
 void unittests_math_vector_bool2_logical_or_operator()
@@ -217,6 +217,22 @@ void unittests_math_vector_bool3_any()
     FND_TEST_FALSE(any(bool3_t{false, false, false}));
 }
 
+void unittests_math_vector_bool3_logical_and_operator()
+{
+    const bool3_t tft{true, false, true};
+    FND_TEST_TRUE(
+        test_components(tft && bool3_t{true, true, true}, true, false, true));
+    FND_TEST_TRUE(
+        test_components(tft && bool3_t{false, true, true}, false, false, true));
+    FND_TEST_TRUE(
+        test_components(bool3_t{true, true, true} && bool3_t{true, true, true},
+            true, true, true));
+    FND_TEST_TRUE(test_components(tft && true, true, false, true));
+    FND_TEST_TRUE(test_components(tft && false, false, false, false));
+    FND_TEST_TRUE(test_components(true && tft, true, false, true));
+    FND_TEST_TRUE(test_components(false && tft, false, false, false));
+}
+
 void unittests_math_vector_bool3_equality_operator()
 {
     const bool3_t tft{true, false, true};
@@ -246,22 +262,6 @@ void unittests_math_vector_bool3_inequality_operator()
     FND_TEST_TRUE(test_components(tft != false, true, false, true));
     FND_TEST_TRUE(test_components(true != tft, false, true, false));
     FND_TEST_TRUE(test_components(false != tft, true, false, true));
-}
-
-void unittests_math_vector_bool3_logical_and_operator()
-{
-    const bool3_t tft{true, false, true};
-    FND_TEST_TRUE(
-        test_components(tft && bool3_t{true, true, true}, true, false, true));
-    FND_TEST_TRUE(
-        test_components(tft && bool3_t{false, true, true}, false, false, true));
-    FND_TEST_TRUE(
-        test_components(bool3_t{true, true, true} && bool3_t{true, true, true},
-            true, true, true));
-    FND_TEST_TRUE(test_components(tft && true, true, false, true));
-    FND_TEST_TRUE(test_components(tft && false, false, false, false));
-    FND_TEST_TRUE(test_components(true && tft, true, false, true));
-    FND_TEST_TRUE(test_components(false && tft, false, false, false));
 }
 
 void unittests_math_vector_bool3_logical_or_operator()
@@ -385,6 +385,22 @@ void unittests_math_vector_bool4_any()
     FND_TEST_FALSE(any(bool4_t{false, false, false, false}));
 }
 
+void unittests_math_vector_bool4_logical_and_operator()
+{
+    const bool4_t tftf{true, false, true, false};
+    FND_TEST_TRUE(test_components(
+        tftf && bool4_t{true, true, true, true}, true, false, true, false));
+    FND_TEST_TRUE(test_components(
+        tftf && bool4_t{false, true, true, true}, false, false, true, false));
+    FND_TEST_TRUE(test_components(
+        bool4_t{true, true, true, true} && bool4_t{true, true, true, true},
+        true, true, true, true));
+    FND_TEST_TRUE(test_components(tftf && true, true, false, true, false));
+    FND_TEST_TRUE(test_components(tftf && false, false, false, false, false));
+    FND_TEST_TRUE(test_components(true && tftf, true, false, true, false));
+    FND_TEST_TRUE(test_components(false && tftf, false, false, false, false));
+}
+
 void unittests_math_vector_bool4_equality_operator()
 {
     const bool4_t tftf{true, false, true, false};
@@ -416,22 +432,6 @@ void unittests_math_vector_bool4_inequality_operator()
     FND_TEST_TRUE(test_components(false != tftf, true, false, true, false));
 }
 
-void unittests_math_vector_bool4_logical_and_operator()
-{
-    const bool4_t tftf{true, false, true, false};
-    FND_TEST_TRUE(test_components(
-        tftf && bool4_t{true, true, true, true}, true, false, true, false));
-    FND_TEST_TRUE(test_components(
-        tftf && bool4_t{false, true, true, true}, false, false, true, false));
-    FND_TEST_TRUE(test_components(
-        bool4_t{true, true, true, true} && bool4_t{true, true, true, true},
-        true, true, true, true));
-    FND_TEST_TRUE(test_components(tftf && true, true, false, true, false));
-    FND_TEST_TRUE(test_components(tftf && false, false, false, false, false));
-    FND_TEST_TRUE(test_components(true && tftf, true, false, true, false));
-    FND_TEST_TRUE(test_components(false && tftf, false, false, false, false));
-}
-
 void unittests_math_vector_bool4_logical_or_operator()
 {
     const bool4_t tftf{true, false, true, false};
@@ -456,9 +456,9 @@ void unittests_math_vector_bool()
     unittests_math_vector_bool2_not_operator();
     unittests_math_vector_bool2_all();
     unittests_math_vector_bool2_any();
+    unittests_math_vector_bool2_logical_and_operator();
     unittests_math_vector_bool2_equality_operator();
     unittests_math_vector_bool2_inequality_operator();
-    unittests_math_vector_bool2_logical_and_operator();
     unittests_math_vector_bool2_logical_or_operator();
 
     unittests_math_vector_bool3_type();
@@ -467,9 +467,9 @@ void unittests_math_vector_bool()
     unittests_math_vector_bool3_not_operator();
     unittests_math_vector_bool3_all();
     unittests_math_vector_bool3_any();
+    unittests_math_vector_bool3_logical_and_operator();
     unittests_math_vector_bool3_equality_operator();
     unittests_math_vector_bool3_inequality_operator();
-    unittests_math_vector_bool3_logical_and_operator();
     unittests_math_vector_bool3_logical_or_operator();
 
     unittests_math_vector_bool4_type();
@@ -478,9 +478,9 @@ void unittests_math_vector_bool()
     unittests_math_vector_bool4_not_operator();
     unittests_math_vector_bool4_all();
     unittests_math_vector_bool4_any();
+    unittests_math_vector_bool4_logical_and_operator();
     unittests_math_vector_bool4_equality_operator();
     unittests_math_vector_bool4_inequality_operator();
-    unittests_math_vector_bool4_logical_and_operator();
     unittests_math_vector_bool4_logical_or_operator();
 }
 

@@ -42,36 +42,6 @@ export constexpr bool_t any(const bool2_t v)
     return v.x || v.y;
 }
 
-export constexpr bool2_t operator==(const bool2_t a, const bool2_t b)
-{
-    return bool2_t{a.x == b.x, a.y == b.y};
-}
-
-export constexpr bool2_t operator!=(const bool2_t a, const bool2_t b)
-{
-    return !(a == b);
-}
-
-export constexpr bool2_t operator==(const bool2_t a, const bool_t val)
-{
-    return bool2_t{a.x == val, a.y == val};
-}
-
-export constexpr bool2_t operator!=(const bool2_t a, const bool_t val)
-{
-    return !(a == val);
-}
-
-export constexpr bool2_t operator==(const bool_t val, const bool2_t b)
-{
-    return bool2_t{val == b.x, val == b.y};
-}
-
-export constexpr bool2_t operator!=(const bool_t val, const bool2_t b)
-{
-    return !(val == b);
-}
-
 // NOTE:
 // Overloaded && always evaluates both operands.
 export constexpr bool2_t operator&&(const bool2_t a, const bool2_t b)
@@ -87,6 +57,36 @@ export constexpr bool2_t operator&&(const bool2_t a, const bool_t val)
 export constexpr bool2_t operator&&(const bool_t val, const bool2_t b)
 {
     return bool2_t{val && b.x, val && b.y};
+}
+
+export constexpr bool2_t operator==(const bool2_t a, const bool2_t b)
+{
+    return bool2_t{a.x == b.x, a.y == b.y};
+}
+
+export constexpr bool2_t operator==(const bool2_t a, const bool_t val)
+{
+    return bool2_t{a.x == val, a.y == val};
+}
+
+export constexpr bool2_t operator==(const bool_t val, const bool2_t b)
+{
+    return bool2_t{val == b.x, val == b.y};
+}
+
+export constexpr bool2_t operator!=(const bool2_t a, const bool2_t b)
+{
+    return !(a == b);
+}
+
+export constexpr bool2_t operator!=(const bool2_t a, const bool_t val)
+{
+    return !(a == val);
+}
+
+export constexpr bool2_t operator!=(const bool_t val, const bool2_t b)
+{
+    return !(val == b);
 }
 
 // NOTE:
@@ -150,36 +150,6 @@ export constexpr bool_t any(const bool3_t v)
     return v.x || v.y || v.z;
 }
 
-export constexpr bool3_t operator==(const bool3_t a, const bool3_t b)
-{
-    return bool3_t{a.x == b.x, a.y == b.y, a.z == b.z};
-}
-
-export constexpr bool3_t operator!=(const bool3_t a, const bool3_t b)
-{
-    return !(a == b);
-}
-
-export constexpr bool3_t operator==(const bool3_t a, const bool_t val)
-{
-    return bool3_t{a.x == val, a.y == val, a.z == val};
-}
-
-export constexpr bool3_t operator!=(const bool3_t a, const bool_t val)
-{
-    return !(a == val);
-}
-
-export constexpr bool3_t operator==(const bool_t val, const bool3_t b)
-{
-    return bool3_t{val == b.x, val == b.y, val == b.z};
-}
-
-export constexpr bool3_t operator!=(const bool_t val, const bool3_t b)
-{
-    return !(val == b);
-}
-
 // NOTE:
 // Overloaded && always evaluates both operands.
 export constexpr bool3_t operator&&(const bool3_t a, const bool3_t b)
@@ -195,6 +165,36 @@ export constexpr bool3_t operator&&(const bool3_t a, const bool_t val)
 export constexpr bool3_t operator&&(const bool_t val, const bool3_t b)
 {
     return bool3_t{val && b.x, val && b.y, val && b.z};
+}
+
+export constexpr bool3_t operator==(const bool3_t a, const bool3_t b)
+{
+    return bool3_t{a.x == b.x, a.y == b.y, a.z == b.z};
+}
+
+export constexpr bool3_t operator==(const bool3_t a, const bool_t val)
+{
+    return bool3_t{a.x == val, a.y == val, a.z == val};
+}
+
+export constexpr bool3_t operator==(const bool_t val, const bool3_t b)
+{
+    return bool3_t{val == b.x, val == b.y, val == b.z};
+}
+
+export constexpr bool3_t operator!=(const bool3_t a, const bool3_t b)
+{
+    return !(a == b);
+}
+
+export constexpr bool3_t operator!=(const bool3_t a, const bool_t val)
+{
+    return !(a == val);
+}
+
+export constexpr bool3_t operator!=(const bool_t val, const bool3_t b)
+{
+    return !(val == b);
 }
 
 // NOTE:
@@ -268,36 +268,6 @@ export constexpr bool_t any(const bool4_t v)
     return v.x || v.y || v.z || v.w;
 }
 
-export constexpr bool4_t operator==(const bool4_t a, const bool4_t b)
-{
-    return bool4_t{a.x == b.x, a.y == b.y, a.z == b.z, a.w == b.w};
-}
-
-export constexpr bool4_t operator!=(const bool4_t a, const bool4_t b)
-{
-    return !(a == b);
-}
-
-export constexpr bool4_t operator==(const bool4_t a, const bool_t val)
-{
-    return bool4_t{a.x == val, a.y == val, a.z == val, a.w == val};
-}
-
-export constexpr bool4_t operator!=(const bool4_t a, const bool_t val)
-{
-    return !(a == val);
-}
-
-export constexpr bool4_t operator==(const bool_t val, const bool4_t b)
-{
-    return bool4_t{val == b.x, val == b.y, val == b.z, val == b.w};
-}
-
-export constexpr bool4_t operator!=(const bool_t val, const bool4_t b)
-{
-    return !(val == b);
-}
-
 // NOTE:
 // Overloaded && always evaluates both operands.
 export constexpr bool4_t operator&&(const bool4_t a, const bool4_t b)
@@ -313,6 +283,36 @@ export constexpr bool4_t operator&&(const bool4_t a, const bool_t val)
 export constexpr bool4_t operator&&(const bool_t val, const bool4_t b)
 {
     return bool4_t{val && b.x, val && b.y, val && b.z, val && b.w};
+}
+
+export constexpr bool4_t operator==(const bool4_t a, const bool4_t b)
+{
+    return bool4_t{a.x == b.x, a.y == b.y, a.z == b.z, a.w == b.w};
+}
+
+export constexpr bool4_t operator==(const bool4_t a, const bool_t val)
+{
+    return bool4_t{a.x == val, a.y == val, a.z == val, a.w == val};
+}
+
+export constexpr bool4_t operator==(const bool_t val, const bool4_t b)
+{
+    return bool4_t{val == b.x, val == b.y, val == b.z, val == b.w};
+}
+
+export constexpr bool4_t operator!=(const bool4_t a, const bool4_t b)
+{
+    return !(a == b);
+}
+
+export constexpr bool4_t operator!=(const bool4_t a, const bool_t val)
+{
+    return !(a == val);
+}
+
+export constexpr bool4_t operator!=(const bool_t val, const bool4_t b)
+{
+    return !(val == b);
 }
 
 // NOTE:
