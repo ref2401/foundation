@@ -83,6 +83,20 @@ void unittests_math_scalar_atan2_double()
     FND_TEST_TRUE(isnan(atan2(kDoubleNaN, 1.0)));
 }
 
+void unittests_math_scalar_cos_float()
+{
+    FND_TEST_TRUE(approx_equal(cos(0.0f), 1.0f));
+    FND_TEST_TRUE(approx_equal(cos(kFloatPi), -1.0f));
+    FND_TEST_TRUE(isnan(cos(kFloatInfinity)));
+}
+
+void unittests_math_scalar_cos_double()
+{
+    FND_TEST_TRUE(approx_equal(cos(0.0), 1.0));
+    FND_TEST_TRUE(approx_equal(cos(kDoublePi), -1.0));
+    FND_TEST_TRUE(isnan(cos(kDoubleInfinity)));
+}
+
 void unittests_math_scalar_degrees_float()
 {
     FND_TEST_TRUE(degrees(0.0f) == 0.0f);
@@ -105,210 +119,6 @@ void unittests_math_scalar_degrees_double()
     FND_TEST_TRUE(approx_equal(degrees(1.0), 57.2957795130823209));
     FND_TEST_TRUE(degrees(kDoubleInfinity) == kDoubleInfinity);
     FND_TEST_TRUE(isnan(degrees(kDoubleNaN)));
-}
-
-void unittests_math_scalar_radians_float()
-{
-    FND_TEST_TRUE(radians(0.0f) == 0.0f);
-    FND_TEST_TRUE(radians(180.0f) == kFloatPi);
-    FND_TEST_TRUE(radians(-180.0f) == -kFloatPi);
-    FND_TEST_TRUE(radians(90.0f) == kFloatPi / 2);
-    FND_TEST_TRUE(radians(360.0f) == kFloatPi * 2);
-    FND_TEST_TRUE(approx_equal(radians(1.0f), 0.0174532925199432958f));
-    FND_TEST_TRUE(approx_equal(radians(degrees(1.0f)), 1.0f));
-    FND_TEST_TRUE(radians(kFloatInfinity) == kFloatInfinity);
-    FND_TEST_TRUE(isnan(radians(kFloatNaN)));
-}
-
-void unittests_math_scalar_radians_double()
-{
-    FND_TEST_TRUE(radians(0.0) == 0.0);
-    FND_TEST_TRUE(radians(180.0) == kDoublePi);
-    FND_TEST_TRUE(radians(-180.0) == -kDoublePi);
-    FND_TEST_TRUE(radians(90.0) == kDoublePi / 2);
-    FND_TEST_TRUE(radians(360.0) == kDoublePi * 2);
-    FND_TEST_TRUE(approx_equal(radians(1.0), 0.0174532925199432958));
-    FND_TEST_TRUE(approx_equal(radians(degrees(1.0)), 1.0));
-    FND_TEST_TRUE(radians(kDoubleInfinity) == kDoubleInfinity);
-    FND_TEST_TRUE(isnan(radians(kDoubleNaN)));
-}
-
-void unittests_math_scalar_cos_float()
-{
-    FND_TEST_TRUE(approx_equal(cos(0.0f), 1.0f));
-    FND_TEST_TRUE(approx_equal(cos(kFloatPi), -1.0f));
-    FND_TEST_TRUE(isnan(cos(kFloatInfinity)));
-}
-
-void unittests_math_scalar_cos_double()
-{
-    FND_TEST_TRUE(approx_equal(cos(0.0), 1.0));
-    FND_TEST_TRUE(approx_equal(cos(kDoublePi), -1.0));
-    FND_TEST_TRUE(isnan(cos(kDoubleInfinity)));
-}
-
-void unittests_math_scalar_sin_float()
-{
-    FND_TEST_TRUE(approx_equal(sin(0.0f), 0.0f));
-    FND_TEST_TRUE(approx_equal(sin(kFloatPi / 2), 1.0f));
-    FND_TEST_TRUE(approx_equal(sin(-kFloatPi / 2), -1.0f));
-    FND_TEST_TRUE(isnan(sin(kFloatInfinity)));
-}
-
-void unittests_math_scalar_sin_double()
-{
-    FND_TEST_TRUE(approx_equal(sin(0.0), 0.0));
-    FND_TEST_TRUE(approx_equal(sin(kDoublePi / 2), 1.0));
-    FND_TEST_TRUE(approx_equal(sin(-kDoublePi / 2), -1.0));
-    FND_TEST_TRUE(isnan(sin(kDoubleInfinity)));
-}
-
-void unittests_math_scalar_tan_float()
-{
-    FND_TEST_TRUE(approx_equal(tan(0.0f), 0.0f));
-    FND_TEST_TRUE(approx_equal(tan(kFloatPi / 4), 1.0f));
-    FND_TEST_TRUE(isnan(tan(kFloatInfinity)));
-}
-
-void unittests_math_scalar_tan_double()
-{
-    FND_TEST_TRUE(approx_equal(tan(0.0), 0.0));
-    FND_TEST_TRUE(approx_equal(tan(kDoublePi / 4), 1.0));
-    FND_TEST_TRUE(isnan(tan(kDoubleInfinity)));
-}
-
-void unittests_math_scalar_lerp_float()
-{
-    FND_TEST_TRUE(lerp(0.0f, 10.0f, 0.0f) == 0.0f);
-    FND_TEST_TRUE(lerp(0.0f, 10.0f, 1.0f) == 10.0f);
-    FND_TEST_TRUE(lerp(0.0f, 10.0f, 0.5f) == 5.0f);
-    FND_TEST_TRUE(lerp(2.0f, 4.0f, 0.25f) == 2.5f);
-    FND_TEST_TRUE(lerp(10.0f, 0.0f, 0.25f) == 7.5f);
-    FND_TEST_TRUE(lerp(3.0f, 3.0f, 0.75f) == 3.0f);
-    // t outside [0, 1] extrapolates.
-    FND_TEST_TRUE(lerp(0.0f, 10.0f, 2.0f) == 20.0f);
-    FND_TEST_TRUE(lerp(0.0f, 10.0f, -1.0f) == -10.0f);
-}
-
-void unittests_math_scalar_lerp_double()
-{
-    FND_TEST_TRUE(lerp(0.0, 10.0, 0.0) == 0.0);
-    FND_TEST_TRUE(lerp(0.0, 10.0, 1.0) == 10.0);
-    FND_TEST_TRUE(lerp(0.0, 10.0, 0.5) == 5.0);
-    FND_TEST_TRUE(lerp(2.0, 4.0, 0.25) == 2.5);
-    FND_TEST_TRUE(lerp(10.0, 0.0, 0.25) == 7.5);
-    FND_TEST_TRUE(lerp(3.0, 3.0, 0.75) == 3.0);
-    // t outside [0, 1] extrapolates.
-    FND_TEST_TRUE(lerp(0.0, 10.0, 2.0) == 20.0);
-    FND_TEST_TRUE(lerp(0.0, 10.0, -1.0) == -10.0);
-}
-
-void unittests_math_scalar_smoothstep_float()
-{
-    FND_TEST_TRUE(smoothstep(0.0f, 1.0f, -1.0f) == 0.0f);
-    FND_TEST_TRUE(smoothstep(0.0f, 1.0f, 0.0f) == 0.0f);
-    FND_TEST_TRUE(smoothstep(0.0f, 1.0f, 0.25f) == 0.15625f);
-    FND_TEST_TRUE(smoothstep(0.0f, 1.0f, 0.5f) == 0.5f);
-    FND_TEST_TRUE(smoothstep(0.0f, 1.0f, 0.75f) == 0.84375f);
-    FND_TEST_TRUE(smoothstep(0.0f, 1.0f, 1.0f) == 1.0f);
-    FND_TEST_TRUE(smoothstep(0.0f, 1.0f, 2.0f) == 1.0f);
-    FND_TEST_TRUE(smoothstep(2.0f, 4.0f, 3.0f) == 0.5f);
-    // edge0 > edge1 reverses the curve.
-    FND_TEST_TRUE(smoothstep(1.0f, 0.0f, 0.25f) == 0.84375f);
-    FND_TEST_TRUE(smoothstep(1.0f, 0.0f, 2.0f) == 0.0f);
-}
-
-void unittests_math_scalar_smoothstep_double()
-{
-    FND_TEST_TRUE(smoothstep(0.0, 1.0, -1.0) == 0.0);
-    FND_TEST_TRUE(smoothstep(0.0, 1.0, 0.0) == 0.0);
-    FND_TEST_TRUE(smoothstep(0.0, 1.0, 0.25) == 0.15625);
-    FND_TEST_TRUE(smoothstep(0.0, 1.0, 0.5) == 0.5);
-    FND_TEST_TRUE(smoothstep(0.0, 1.0, 0.75) == 0.84375);
-    FND_TEST_TRUE(smoothstep(0.0, 1.0, 1.0) == 1.0);
-    FND_TEST_TRUE(smoothstep(0.0, 1.0, 2.0) == 1.0);
-    FND_TEST_TRUE(smoothstep(2.0, 4.0, 3.0) == 0.5);
-    // edge0 > edge1 reverses the curve.
-    FND_TEST_TRUE(smoothstep(1.0, 0.0, 0.25) == 0.84375);
-    FND_TEST_TRUE(smoothstep(1.0, 0.0, 2.0) == 0.0);
-}
-
-void unittests_math_scalar_pow_float()
-{
-    FND_TEST_TRUE(approx_equal(pow(2.0f, 10.0f), 1024.0f));
-    FND_TEST_TRUE(approx_equal(pow(2.0f, -1.0f), 0.5f));
-    FND_TEST_TRUE(approx_equal(pow(9.0f, 0.5f), 3.0f));
-    FND_TEST_TRUE(approx_equal(pow(-2.0f, 3.0f), -8.0f));
-    FND_TEST_TRUE(pow(0.0f, 2.0f) == 0.0f);
-    FND_TEST_TRUE(pow(0.0f, -1.0f) == kFloatInfinity);
-    FND_TEST_TRUE(pow(kFloatNaN, 0.0f) == 1.0f);
-    FND_TEST_TRUE(pow(1.0f, kFloatNaN) == 1.0f);
-}
-
-void unittests_math_scalar_pow_double()
-{
-    FND_TEST_TRUE(approx_equal(pow(2.0, 10.0), 1024.0));
-    FND_TEST_TRUE(approx_equal(pow(2.0, -1.0), 0.5));
-    FND_TEST_TRUE(approx_equal(pow(9.0, 0.5), 3.0));
-    FND_TEST_TRUE(approx_equal(pow(-2.0, 3.0), -8.0));
-    FND_TEST_TRUE(pow(0.0, 2.0) == 0.0);
-    FND_TEST_TRUE(pow(0.0, -1.0) == kDoubleInfinity);
-    FND_TEST_TRUE(pow(kDoubleNaN, 0.0) == 1.0);
-    FND_TEST_TRUE(pow(1.0, kDoubleNaN) == 1.0);
-}
-
-void unittests_math_scalar_rcp_float()
-{
-    FND_TEST_TRUE(rcp(1.0f) == 1.0f);
-    FND_TEST_TRUE(rcp(2.0f) == 0.5f);
-    FND_TEST_TRUE(rcp(-4.0f) == -0.25f);
-    FND_TEST_TRUE(rcp(kFloatInfinity) == 0.0f);
-}
-
-void unittests_math_scalar_rcp_double()
-{
-    FND_TEST_TRUE(rcp(1.0) == 1.0);
-    FND_TEST_TRUE(rcp(2.0) == 0.5);
-    FND_TEST_TRUE(rcp(-4.0) == -0.25);
-    FND_TEST_TRUE(rcp(kDoubleInfinity) == 0.0);
-}
-
-void unittests_math_scalar_sqrt_float()
-{
-    FND_TEST_TRUE(sqrt(0.0f) == 0.0f);
-    FND_TEST_TRUE(sqrt(1.0f) == 1.0f);
-    FND_TEST_TRUE(sqrt(4.0f) == 2.0f);
-    FND_TEST_TRUE(sqrt(0.25f) == 0.5f);
-    FND_TEST_TRUE(approx_equal(sqrt(2.0f), 1.41421356237309505f));
-    FND_TEST_TRUE(sqrt(kFloatInfinity) == kFloatInfinity);
-}
-
-void unittests_math_scalar_sqrt_double()
-{
-    FND_TEST_TRUE(sqrt(0.0) == 0.0);
-    FND_TEST_TRUE(sqrt(1.0) == 1.0);
-    FND_TEST_TRUE(sqrt(4.0) == 2.0);
-    FND_TEST_TRUE(sqrt(0.25) == 0.5);
-    FND_TEST_TRUE(approx_equal(sqrt(2.0), 1.41421356237309505));
-    FND_TEST_TRUE(sqrt(kDoubleInfinity) == kDoubleInfinity);
-}
-
-void unittests_math_scalar_rsqrt_float()
-{
-    FND_TEST_TRUE(rsqrt(1.0f) == 1.0f);
-    FND_TEST_TRUE(rsqrt(4.0f) == 0.5f);
-    FND_TEST_TRUE(rsqrt(0.25f) == 2.0f);
-    FND_TEST_TRUE(approx_equal(rsqrt(2.0f), 0.70710678118654752f));
-    FND_TEST_TRUE(rsqrt(kFloatInfinity) == 0.0f);
-}
-
-void unittests_math_scalar_rsqrt_double()
-{
-    FND_TEST_TRUE(rsqrt(1.0) == 1.0);
-    FND_TEST_TRUE(rsqrt(4.0) == 0.5);
-    FND_TEST_TRUE(rsqrt(0.25) == 2.0);
-    FND_TEST_TRUE(approx_equal(rsqrt(2.0), 0.70710678118654752));
-    FND_TEST_TRUE(rsqrt(kDoubleInfinity) == 0.0);
 }
 
 void unittests_math_scalar_exp_float()
@@ -355,6 +165,32 @@ void unittests_math_scalar_exp2_double()
     FND_TEST_TRUE(isnan(exp2(kDoubleNaN)));
 }
 
+void unittests_math_scalar_lerp_float()
+{
+    FND_TEST_TRUE(lerp(0.0f, 10.0f, 0.0f) == 0.0f);
+    FND_TEST_TRUE(lerp(0.0f, 10.0f, 1.0f) == 10.0f);
+    FND_TEST_TRUE(lerp(0.0f, 10.0f, 0.5f) == 5.0f);
+    FND_TEST_TRUE(lerp(2.0f, 4.0f, 0.25f) == 2.5f);
+    FND_TEST_TRUE(lerp(10.0f, 0.0f, 0.25f) == 7.5f);
+    FND_TEST_TRUE(lerp(3.0f, 3.0f, 0.75f) == 3.0f);
+    // t outside [0, 1] extrapolates.
+    FND_TEST_TRUE(lerp(0.0f, 10.0f, 2.0f) == 20.0f);
+    FND_TEST_TRUE(lerp(0.0f, 10.0f, -1.0f) == -10.0f);
+}
+
+void unittests_math_scalar_lerp_double()
+{
+    FND_TEST_TRUE(lerp(0.0, 10.0, 0.0) == 0.0);
+    FND_TEST_TRUE(lerp(0.0, 10.0, 1.0) == 10.0);
+    FND_TEST_TRUE(lerp(0.0, 10.0, 0.5) == 5.0);
+    FND_TEST_TRUE(lerp(2.0, 4.0, 0.25) == 2.5);
+    FND_TEST_TRUE(lerp(10.0, 0.0, 0.25) == 7.5);
+    FND_TEST_TRUE(lerp(3.0, 3.0, 0.75) == 3.0);
+    // t outside [0, 1] extrapolates.
+    FND_TEST_TRUE(lerp(0.0, 10.0, 2.0) == 20.0);
+    FND_TEST_TRUE(lerp(0.0, 10.0, -1.0) == -10.0);
+}
+
 void unittests_math_scalar_log_float()
 {
     FND_TEST_TRUE(log(1.0f) == 0.0f);
@@ -369,24 +205,6 @@ void unittests_math_scalar_log_double()
     FND_TEST_TRUE(approx_equal(log(2.71828182845904524), 1.0));
     FND_TEST_TRUE(approx_equal(log(2.0), 0.69314718055994531));
     FND_TEST_TRUE(log(kDoubleInfinity) == kDoubleInfinity);
-}
-
-void unittests_math_scalar_log2_float()
-{
-    FND_TEST_TRUE(log2(1.0f) == 0.0f);
-    FND_TEST_TRUE(approx_equal(log2(2.0f), 1.0f));
-    FND_TEST_TRUE(approx_equal(log2(1024.0f), 10.0f));
-    FND_TEST_TRUE(approx_equal(log2(0.5f), -1.0f));
-    FND_TEST_TRUE(log2(kFloatInfinity) == kFloatInfinity);
-}
-
-void unittests_math_scalar_log2_double()
-{
-    FND_TEST_TRUE(log2(1.0) == 0.0);
-    FND_TEST_TRUE(approx_equal(log2(2.0), 1.0));
-    FND_TEST_TRUE(approx_equal(log2(1024.0), 10.0));
-    FND_TEST_TRUE(approx_equal(log2(0.5), -1.0));
-    FND_TEST_TRUE(log2(kDoubleInfinity) == kDoubleInfinity);
 }
 
 void unittests_math_scalar_log10_float()
@@ -407,6 +225,188 @@ void unittests_math_scalar_log10_double()
     FND_TEST_TRUE(log10(kDoubleInfinity) == kDoubleInfinity);
 }
 
+void unittests_math_scalar_log2_float()
+{
+    FND_TEST_TRUE(log2(1.0f) == 0.0f);
+    FND_TEST_TRUE(approx_equal(log2(2.0f), 1.0f));
+    FND_TEST_TRUE(approx_equal(log2(1024.0f), 10.0f));
+    FND_TEST_TRUE(approx_equal(log2(0.5f), -1.0f));
+    FND_TEST_TRUE(log2(kFloatInfinity) == kFloatInfinity);
+}
+
+void unittests_math_scalar_log2_double()
+{
+    FND_TEST_TRUE(log2(1.0) == 0.0);
+    FND_TEST_TRUE(approx_equal(log2(2.0), 1.0));
+    FND_TEST_TRUE(approx_equal(log2(1024.0), 10.0));
+    FND_TEST_TRUE(approx_equal(log2(0.5), -1.0));
+    FND_TEST_TRUE(log2(kDoubleInfinity) == kDoubleInfinity);
+}
+
+void unittests_math_scalar_pow_float()
+{
+    FND_TEST_TRUE(approx_equal(pow(2.0f, 10.0f), 1024.0f));
+    FND_TEST_TRUE(approx_equal(pow(2.0f, -1.0f), 0.5f));
+    FND_TEST_TRUE(approx_equal(pow(9.0f, 0.5f), 3.0f));
+    FND_TEST_TRUE(approx_equal(pow(-2.0f, 3.0f), -8.0f));
+    FND_TEST_TRUE(pow(0.0f, 2.0f) == 0.0f);
+    FND_TEST_TRUE(pow(0.0f, -1.0f) == kFloatInfinity);
+    FND_TEST_TRUE(pow(kFloatNaN, 0.0f) == 1.0f);
+    FND_TEST_TRUE(pow(1.0f, kFloatNaN) == 1.0f);
+}
+
+void unittests_math_scalar_pow_double()
+{
+    FND_TEST_TRUE(approx_equal(pow(2.0, 10.0), 1024.0));
+    FND_TEST_TRUE(approx_equal(pow(2.0, -1.0), 0.5));
+    FND_TEST_TRUE(approx_equal(pow(9.0, 0.5), 3.0));
+    FND_TEST_TRUE(approx_equal(pow(-2.0, 3.0), -8.0));
+    FND_TEST_TRUE(pow(0.0, 2.0) == 0.0);
+    FND_TEST_TRUE(pow(0.0, -1.0) == kDoubleInfinity);
+    FND_TEST_TRUE(pow(kDoubleNaN, 0.0) == 1.0);
+    FND_TEST_TRUE(pow(1.0, kDoubleNaN) == 1.0);
+}
+
+void unittests_math_scalar_radians_float()
+{
+    FND_TEST_TRUE(radians(0.0f) == 0.0f);
+    FND_TEST_TRUE(radians(180.0f) == kFloatPi);
+    FND_TEST_TRUE(radians(-180.0f) == -kFloatPi);
+    FND_TEST_TRUE(radians(90.0f) == kFloatPi / 2);
+    FND_TEST_TRUE(radians(360.0f) == kFloatPi * 2);
+    FND_TEST_TRUE(approx_equal(radians(1.0f), 0.0174532925199432958f));
+    FND_TEST_TRUE(approx_equal(radians(degrees(1.0f)), 1.0f));
+    FND_TEST_TRUE(radians(kFloatInfinity) == kFloatInfinity);
+    FND_TEST_TRUE(isnan(radians(kFloatNaN)));
+}
+
+void unittests_math_scalar_radians_double()
+{
+    FND_TEST_TRUE(radians(0.0) == 0.0);
+    FND_TEST_TRUE(radians(180.0) == kDoublePi);
+    FND_TEST_TRUE(radians(-180.0) == -kDoublePi);
+    FND_TEST_TRUE(radians(90.0) == kDoublePi / 2);
+    FND_TEST_TRUE(radians(360.0) == kDoublePi * 2);
+    FND_TEST_TRUE(approx_equal(radians(1.0), 0.0174532925199432958));
+    FND_TEST_TRUE(approx_equal(radians(degrees(1.0)), 1.0));
+    FND_TEST_TRUE(radians(kDoubleInfinity) == kDoubleInfinity);
+    FND_TEST_TRUE(isnan(radians(kDoubleNaN)));
+}
+
+void unittests_math_scalar_rcp_float()
+{
+    FND_TEST_TRUE(rcp(1.0f) == 1.0f);
+    FND_TEST_TRUE(rcp(2.0f) == 0.5f);
+    FND_TEST_TRUE(rcp(-4.0f) == -0.25f);
+    FND_TEST_TRUE(rcp(kFloatInfinity) == 0.0f);
+}
+
+void unittests_math_scalar_rcp_double()
+{
+    FND_TEST_TRUE(rcp(1.0) == 1.0);
+    FND_TEST_TRUE(rcp(2.0) == 0.5);
+    FND_TEST_TRUE(rcp(-4.0) == -0.25);
+    FND_TEST_TRUE(rcp(kDoubleInfinity) == 0.0);
+}
+
+void unittests_math_scalar_rsqrt_float()
+{
+    FND_TEST_TRUE(rsqrt(1.0f) == 1.0f);
+    FND_TEST_TRUE(rsqrt(4.0f) == 0.5f);
+    FND_TEST_TRUE(rsqrt(0.25f) == 2.0f);
+    FND_TEST_TRUE(approx_equal(rsqrt(2.0f), 0.70710678118654752f));
+    FND_TEST_TRUE(rsqrt(kFloatInfinity) == 0.0f);
+}
+
+void unittests_math_scalar_rsqrt_double()
+{
+    FND_TEST_TRUE(rsqrt(1.0) == 1.0);
+    FND_TEST_TRUE(rsqrt(4.0) == 0.5);
+    FND_TEST_TRUE(rsqrt(0.25) == 2.0);
+    FND_TEST_TRUE(approx_equal(rsqrt(2.0), 0.70710678118654752));
+    FND_TEST_TRUE(rsqrt(kDoubleInfinity) == 0.0);
+}
+
+void unittests_math_scalar_sin_float()
+{
+    FND_TEST_TRUE(approx_equal(sin(0.0f), 0.0f));
+    FND_TEST_TRUE(approx_equal(sin(kFloatPi / 2), 1.0f));
+    FND_TEST_TRUE(approx_equal(sin(-kFloatPi / 2), -1.0f));
+    FND_TEST_TRUE(isnan(sin(kFloatInfinity)));
+}
+
+void unittests_math_scalar_sin_double()
+{
+    FND_TEST_TRUE(approx_equal(sin(0.0), 0.0));
+    FND_TEST_TRUE(approx_equal(sin(kDoublePi / 2), 1.0));
+    FND_TEST_TRUE(approx_equal(sin(-kDoublePi / 2), -1.0));
+    FND_TEST_TRUE(isnan(sin(kDoubleInfinity)));
+}
+
+void unittests_math_scalar_smoothstep_float()
+{
+    FND_TEST_TRUE(smoothstep(0.0f, 1.0f, -1.0f) == 0.0f);
+    FND_TEST_TRUE(smoothstep(0.0f, 1.0f, 0.0f) == 0.0f);
+    FND_TEST_TRUE(smoothstep(0.0f, 1.0f, 0.25f) == 0.15625f);
+    FND_TEST_TRUE(smoothstep(0.0f, 1.0f, 0.5f) == 0.5f);
+    FND_TEST_TRUE(smoothstep(0.0f, 1.0f, 0.75f) == 0.84375f);
+    FND_TEST_TRUE(smoothstep(0.0f, 1.0f, 1.0f) == 1.0f);
+    FND_TEST_TRUE(smoothstep(0.0f, 1.0f, 2.0f) == 1.0f);
+    FND_TEST_TRUE(smoothstep(2.0f, 4.0f, 3.0f) == 0.5f);
+    // edge0 > edge1 reverses the curve.
+    FND_TEST_TRUE(smoothstep(1.0f, 0.0f, 0.25f) == 0.84375f);
+    FND_TEST_TRUE(smoothstep(1.0f, 0.0f, 2.0f) == 0.0f);
+}
+
+void unittests_math_scalar_smoothstep_double()
+{
+    FND_TEST_TRUE(smoothstep(0.0, 1.0, -1.0) == 0.0);
+    FND_TEST_TRUE(smoothstep(0.0, 1.0, 0.0) == 0.0);
+    FND_TEST_TRUE(smoothstep(0.0, 1.0, 0.25) == 0.15625);
+    FND_TEST_TRUE(smoothstep(0.0, 1.0, 0.5) == 0.5);
+    FND_TEST_TRUE(smoothstep(0.0, 1.0, 0.75) == 0.84375);
+    FND_TEST_TRUE(smoothstep(0.0, 1.0, 1.0) == 1.0);
+    FND_TEST_TRUE(smoothstep(0.0, 1.0, 2.0) == 1.0);
+    FND_TEST_TRUE(smoothstep(2.0, 4.0, 3.0) == 0.5);
+    // edge0 > edge1 reverses the curve.
+    FND_TEST_TRUE(smoothstep(1.0, 0.0, 0.25) == 0.84375);
+    FND_TEST_TRUE(smoothstep(1.0, 0.0, 2.0) == 0.0);
+}
+
+void unittests_math_scalar_sqrt_float()
+{
+    FND_TEST_TRUE(sqrt(0.0f) == 0.0f);
+    FND_TEST_TRUE(sqrt(1.0f) == 1.0f);
+    FND_TEST_TRUE(sqrt(4.0f) == 2.0f);
+    FND_TEST_TRUE(sqrt(0.25f) == 0.5f);
+    FND_TEST_TRUE(approx_equal(sqrt(2.0f), 1.41421356237309505f));
+    FND_TEST_TRUE(sqrt(kFloatInfinity) == kFloatInfinity);
+}
+
+void unittests_math_scalar_sqrt_double()
+{
+    FND_TEST_TRUE(sqrt(0.0) == 0.0);
+    FND_TEST_TRUE(sqrt(1.0) == 1.0);
+    FND_TEST_TRUE(sqrt(4.0) == 2.0);
+    FND_TEST_TRUE(sqrt(0.25) == 0.5);
+    FND_TEST_TRUE(approx_equal(sqrt(2.0), 1.41421356237309505));
+    FND_TEST_TRUE(sqrt(kDoubleInfinity) == kDoubleInfinity);
+}
+
+void unittests_math_scalar_tan_float()
+{
+    FND_TEST_TRUE(approx_equal(tan(0.0f), 0.0f));
+    FND_TEST_TRUE(approx_equal(tan(kFloatPi / 4), 1.0f));
+    FND_TEST_TRUE(isnan(tan(kFloatInfinity)));
+}
+
+void unittests_math_scalar_tan_double()
+{
+    FND_TEST_TRUE(approx_equal(tan(0.0), 0.0));
+    FND_TEST_TRUE(approx_equal(tan(kDoublePi / 4), 1.0));
+    FND_TEST_TRUE(isnan(tan(kDoubleInfinity)));
+}
+
 void unittests_math_scalar()
 {
     unittests_math_scalar_acos_float();
@@ -417,39 +417,38 @@ void unittests_math_scalar()
     unittests_math_scalar_atan_double();
     unittests_math_scalar_atan2_float();
     unittests_math_scalar_atan2_double();
-    unittests_math_scalar_degrees_float();
-    unittests_math_scalar_degrees_double();
-    unittests_math_scalar_radians_float();
-    unittests_math_scalar_radians_double();
     unittests_math_scalar_cos_float();
     unittests_math_scalar_cos_double();
-    unittests_math_scalar_sin_float();
-    unittests_math_scalar_sin_double();
-    unittests_math_scalar_tan_float();
-    unittests_math_scalar_tan_double();
-
-    unittests_math_scalar_lerp_float();
-    unittests_math_scalar_lerp_double();
-    unittests_math_scalar_smoothstep_float();
-    unittests_math_scalar_smoothstep_double();
-    unittests_math_scalar_pow_float();
-    unittests_math_scalar_pow_double();
-    unittests_math_scalar_rcp_float();
-    unittests_math_scalar_rcp_double();
-    unittests_math_scalar_sqrt_float();
-    unittests_math_scalar_sqrt_double();
-    unittests_math_scalar_rsqrt_float();
-    unittests_math_scalar_rsqrt_double();
+    unittests_math_scalar_degrees_float();
+    unittests_math_scalar_degrees_double();
     unittests_math_scalar_exp_float();
     unittests_math_scalar_exp_double();
     unittests_math_scalar_exp2_float();
     unittests_math_scalar_exp2_double();
+    unittests_math_scalar_lerp_float();
+    unittests_math_scalar_lerp_double();
     unittests_math_scalar_log_float();
     unittests_math_scalar_log_double();
-    unittests_math_scalar_log2_float();
-    unittests_math_scalar_log2_double();
     unittests_math_scalar_log10_float();
     unittests_math_scalar_log10_double();
+    unittests_math_scalar_log2_float();
+    unittests_math_scalar_log2_double();
+    unittests_math_scalar_pow_float();
+    unittests_math_scalar_pow_double();
+    unittests_math_scalar_radians_float();
+    unittests_math_scalar_radians_double();
+    unittests_math_scalar_rcp_float();
+    unittests_math_scalar_rcp_double();
+    unittests_math_scalar_rsqrt_float();
+    unittests_math_scalar_rsqrt_double();
+    unittests_math_scalar_sin_float();
+    unittests_math_scalar_sin_double();
+    unittests_math_scalar_smoothstep_float();
+    unittests_math_scalar_smoothstep_double();
+    unittests_math_scalar_sqrt_float();
+    unittests_math_scalar_sqrt_double();
+    unittests_math_scalar_tan_float();
+    unittests_math_scalar_tan_double();
 }
 
 } // namespace fnd::unittests

@@ -58,26 +58,6 @@ export FND_INLINE double_t atan2(const double_t y, const double_t x)
     return ::atan2(y, x);
 }
 
-export constexpr float_t degrees(const float_t rads)
-{
-    return rads * kFloatToDegrees;
-}
-
-export constexpr double_t degrees(const double_t rads)
-{
-    return rads * kDoubleToDegrees;
-}
-
-export constexpr float_t radians(const float_t degs)
-{
-    return degs * kFloatToRadians;
-}
-
-export constexpr double_t radians(const double_t degs)
-{
-    return degs * kDoubleToRadians;
-}
-
 export FND_INLINE float_t cos(const float_t x)
 {
     return ::cosf(x);
@@ -88,24 +68,34 @@ export FND_INLINE double_t cos(const double_t x)
     return ::cos(x);
 }
 
-export FND_INLINE float_t sin(const float_t x)
+export constexpr float_t degrees(const float_t rads)
 {
-    return ::sinf(x);
+    return rads * kFloatToDegrees;
 }
 
-export FND_INLINE double_t sin(const double_t x)
+export constexpr double_t degrees(const double_t rads)
 {
-    return ::sin(x);
+    return rads * kDoubleToDegrees;
 }
 
-export FND_INLINE float_t tan(const float_t x)
+export FND_INLINE float_t exp(const float_t x)
 {
-    return ::tanf(x);
+    return ::expf(x);
 }
 
-export FND_INLINE double_t tan(const double_t x)
+export FND_INLINE double_t exp(const double_t x)
 {
-    return ::tan(x);
+    return ::exp(x);
+}
+
+export FND_INLINE float_t exp2(const float_t x)
+{
+    return ::exp2f(x);
+}
+
+export FND_INLINE double_t exp2(const double_t x)
+{
+    return ::exp2(x);
 }
 
 export FND_INLINE float_t lerp(
@@ -121,22 +111,46 @@ export FND_INLINE double_t lerp(
     return a + t * (b - a);
 }
 
-export FND_INLINE float_t smoothstep(
-    const float_t edge0, const float_t edge1, const float_t x)
+export FND_INLINE float_t log(const float_t x)
 {
-    FND_ASSERT(edge0 != edge1);
+    FND_ASSERT(x > 0);
 
-    const float_t t = saturate((x - edge0) / (edge1 - edge0));
-    return t * t * (3.0f - 2.0f * t);
+    return ::logf(x);
 }
 
-export FND_INLINE double_t smoothstep(
-    const double_t edge0, const double_t edge1, const double_t x)
+export FND_INLINE double_t log(const double_t x)
 {
-    FND_ASSERT(edge0 != edge1);
+    FND_ASSERT(x > 0);
 
-    const double_t t = saturate((x - edge0) / (edge1 - edge0));
-    return t * t * (3.0 - 2.0 * t);
+    return ::log(x);
+}
+
+export FND_INLINE float_t log10(const float_t x)
+{
+    FND_ASSERT(x > 0);
+
+    return ::log10f(x);
+}
+
+export FND_INLINE double_t log10(const double_t x)
+{
+    FND_ASSERT(x > 0);
+
+    return ::log10(x);
+}
+
+export FND_INLINE float_t log2(const float_t x)
+{
+    FND_ASSERT(x > 0);
+
+    return ::log2f(x);
+}
+
+export FND_INLINE double_t log2(const double_t x)
+{
+    FND_ASSERT(x > 0);
+
+    return ::log2(x);
 }
 
 export FND_INLINE float_t pow(const float_t base, const float_t exponent)
@@ -161,6 +175,16 @@ export FND_INLINE double_t pow(const double_t base, const double_t exponent)
     return ::pow(base, exponent);
 }
 
+export constexpr float_t radians(const float_t degs)
+{
+    return degs * kFloatToRadians;
+}
+
+export constexpr double_t radians(const double_t degs)
+{
+    return degs * kDoubleToRadians;
+}
+
 export FND_INLINE float_t rcp(const float_t x)
 {
     FND_ASSERT(x != 0);
@@ -177,20 +201,6 @@ export FND_INLINE double_t rcp(const double_t x)
     return 1.0 / x;
 }
 
-export FND_INLINE float_t sqrt(const float_t x)
-{
-    FND_ASSERT(x >= 0);
-
-    return ::sqrtf(x);
-}
-
-export FND_INLINE double_t sqrt(const double_t x)
-{
-    FND_ASSERT(x >= 0);
-
-    return ::sqrt(x);
-}
-
 export FND_INLINE float_t rsqrt(const float_t x)
 {
     FND_ASSERT(x > 0);
@@ -205,66 +215,56 @@ export FND_INLINE double_t rsqrt(const double_t x)
     return 1.0 / ::sqrt(x);
 }
 
-export FND_INLINE float_t exp(const float_t x)
+export FND_INLINE float_t sin(const float_t x)
 {
-    return ::expf(x);
+    return ::sinf(x);
 }
 
-export FND_INLINE double_t exp(const double_t x)
+export FND_INLINE double_t sin(const double_t x)
 {
-    return ::exp(x);
+    return ::sin(x);
 }
 
-export FND_INLINE float_t exp2(const float_t x)
+export FND_INLINE float_t smoothstep(
+    const float_t edge0, const float_t edge1, const float_t x)
 {
-    return ::exp2f(x);
+    FND_ASSERT(edge0 != edge1);
+
+    const float_t t = saturate((x - edge0) / (edge1 - edge0));
+    return t * t * (3.0f - 2.0f * t);
 }
 
-export FND_INLINE double_t exp2(const double_t x)
+export FND_INLINE double_t smoothstep(
+    const double_t edge0, const double_t edge1, const double_t x)
 {
-    return ::exp2(x);
+    FND_ASSERT(edge0 != edge1);
+
+    const double_t t = saturate((x - edge0) / (edge1 - edge0));
+    return t * t * (3.0 - 2.0 * t);
 }
 
-export FND_INLINE float_t log(const float_t x)
+export FND_INLINE float_t sqrt(const float_t x)
 {
-    FND_ASSERT(x > 0);
+    FND_ASSERT(x >= 0);
 
-    return ::logf(x);
+    return ::sqrtf(x);
 }
 
-export FND_INLINE double_t log(const double_t x)
+export FND_INLINE double_t sqrt(const double_t x)
 {
-    FND_ASSERT(x > 0);
+    FND_ASSERT(x >= 0);
 
-    return ::log(x);
+    return ::sqrt(x);
 }
 
-export FND_INLINE float_t log2(const float_t x)
+export FND_INLINE float_t tan(const float_t x)
 {
-    FND_ASSERT(x > 0);
-
-    return ::log2f(x);
+    return ::tanf(x);
 }
 
-export FND_INLINE double_t log2(const double_t x)
+export FND_INLINE double_t tan(const double_t x)
 {
-    FND_ASSERT(x > 0);
-
-    return ::log2(x);
-}
-
-export FND_INLINE float_t log10(const float_t x)
-{
-    FND_ASSERT(x > 0);
-
-    return ::log10f(x);
-}
-
-export FND_INLINE double_t log10(const double_t x)
-{
-    FND_ASSERT(x > 0);
-
-    return ::log10(x);
+    return ::tan(x);
 }
 
 } // namespace fnd
