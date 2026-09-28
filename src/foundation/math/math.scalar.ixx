@@ -101,14 +101,27 @@ export FND_INLINE double_t exp2(const double_t x)
 export FND_INLINE float_t lerp(
     const float_t a, const float_t b, const float_t t)
 {
-    // NOTE: Unclamped t outside [0, 1] extrapolates.
-    return a + t * (b - a);
+    // NOTE:
+    // Unclamped t outside [0, 1] extrapolates.
+    //
+    // a * (1 - t) + b * t returns exactly a when t == 0 and exactly b when
+    // t == 1. The alternative a + t * (b - a) is exact only at t == 0, but has
+    // benefits this form lacks:
+    // - Monotonic in t: when a <= b, a larger t never gives a smaller result.
+    //   Here a * (1 - t) shrinks while b * t grows, and each product is
+    //   rounded separately. For a tiny step in t the rounding errors can
+    //   outweigh the true change, and the result can step backwards.
+    // - lerp(a, a, t) == a for any t. Here a * (1 - t) + a * t can round
+    //   away from a.
+    // - One multiplication instead of two.
+
+    return a * (1.0f - t) + b * t;
 }
 
 export FND_INLINE double_t lerp(
     const double_t a, const double_t b, const double_t t)
 {
-    return a + t * (b - a);
+    return a * (1.0 - t) + b * t;
 }
 
 export FND_INLINE float_t log(const float_t x)
