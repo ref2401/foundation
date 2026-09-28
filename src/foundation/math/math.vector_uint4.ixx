@@ -578,6 +578,64 @@ export constexpr bool4_t operator>=(const int_t val, const uint4_t b)
     return bool4_t{uval >= b.x, uval >= b.y, uval >= b.z, uval >= b.w};
 }
 
+export constexpr uint4_t operator&(const uint4_t a, const uint4_t b)
+{
+    return uint4_t{a.x & b.x, a.y & b.y, a.z & b.z, a.w & b.w};
+}
+
+export constexpr uint4_t operator&(const uint4_t a, const uint_t val)
+{
+    return uint4_t{a.x & val, a.y & val, a.z & val, a.w & val};
+}
+
+export constexpr uint4_t operator&(const uint_t val, const uint4_t b)
+{
+    return uint4_t{val & b.x, val & b.y, val & b.z, val & b.w};
+}
+
+export constexpr uint4_t operator&(const uint4_t a, const int_t val)
+{
+    FND_ASSERT(val >= 0);
+
+    return uint4_t{a.x & val, a.y & val, a.z & val, a.w & val};
+}
+
+export constexpr uint4_t operator&(const int_t val, const uint4_t b)
+{
+    FND_ASSERT(val >= 0);
+
+    return uint4_t{val & b.x, val & b.y, val & b.z, val & b.w};
+}
+
+export constexpr uint4_t operator*(const uint4_t a, const uint4_t b)
+{
+    return uint4_t{a.x * b.x, a.y * b.y, a.z * b.z, a.w * b.w};
+}
+
+export constexpr uint4_t operator*(const uint4_t a, const uint_t val)
+{
+    return uint4_t{a.x * val, a.y * val, a.z * val, a.w * val};
+}
+
+export constexpr uint4_t operator*(const uint_t val, const uint4_t b)
+{
+    return uint4_t{val * b.x, val * b.y, val * b.z, val * b.w};
+}
+
+export constexpr uint4_t operator*(const uint4_t a, const int_t val)
+{
+    FND_ASSERT(val >= 0);
+
+    return uint4_t{a.x * val, a.y * val, a.z * val, a.w * val};
+}
+
+export constexpr uint4_t operator*(const int_t val, const uint4_t b)
+{
+    FND_ASSERT(val >= 0);
+
+    return uint4_t{val * b.x, val * b.y, val * b.z, val * b.w};
+}
+
 export constexpr uint4_t operator+(const uint4_t a, const uint4_t b)
 {
     return uint4_t{a.x + b.x, a.y + b.y, a.z + b.z, a.w + b.w};
@@ -636,71 +694,6 @@ export constexpr uint4_t operator-(const int_t val, const uint4_t b)
     return uint4_t{val - b.x, val - b.y, val - b.z, val - b.w};
 }
 
-export constexpr uint4_t operator*(const uint4_t a, const uint4_t b)
-{
-    return uint4_t{a.x * b.x, a.y * b.y, a.z * b.z, a.w * b.w};
-}
-
-export constexpr uint4_t operator*(const uint4_t a, const uint_t val)
-{
-    return uint4_t{a.x * val, a.y * val, a.z * val, a.w * val};
-}
-
-export constexpr uint4_t operator*(const uint_t val, const uint4_t b)
-{
-    return uint4_t{val * b.x, val * b.y, val * b.z, val * b.w};
-}
-
-export constexpr uint4_t operator*(const uint4_t a, const int_t val)
-{
-    FND_ASSERT(val >= 0);
-
-    return uint4_t{a.x * val, a.y * val, a.z * val, a.w * val};
-}
-
-export constexpr uint4_t operator*(const int_t val, const uint4_t b)
-{
-    FND_ASSERT(val >= 0);
-
-    return uint4_t{val * b.x, val * b.y, val * b.z, val * b.w};
-}
-
-export constexpr uint4_t operator/(const uint4_t a, const uint4_t b)
-{
-    FND_ASSERT(all(b != 0u));
-
-    return uint4_t{a.x / b.x, a.y / b.y, a.z / b.z, a.w / b.w};
-}
-
-export constexpr uint4_t operator/(const uint4_t a, const uint_t val)
-{
-    FND_ASSERT(val != 0);
-
-    return uint4_t{a.x / val, a.y / val, a.z / val, a.w / val};
-}
-
-export constexpr uint4_t operator/(const uint_t val, const uint4_t b)
-{
-    FND_ASSERT(all(b != 0u));
-
-    return uint4_t{val / b.x, val / b.y, val / b.z, val / b.w};
-}
-
-export constexpr uint4_t operator/(const uint4_t a, const int_t val)
-{
-    FND_ASSERT(val > 0);
-
-    return uint4_t{a.x / val, a.y / val, a.z / val, a.w / val};
-}
-
-export constexpr uint4_t operator/(const int_t val, const uint4_t b)
-{
-    FND_ASSERT(val >= 0);
-    FND_ASSERT(all(b != 0u));
-
-    return uint4_t{val / b.x, val / b.y, val / b.z, val / b.w};
-}
-
 export constexpr uint4_t operator%(const uint4_t a, const uint4_t b)
 {
     FND_ASSERT(all(b != 0u));
@@ -737,91 +730,40 @@ export constexpr uint4_t operator%(const int_t val, const uint4_t b)
     return uint4_t{val % b.x, val % b.y, val % b.z, val % b.w};
 }
 
-export constexpr uint4_t operator&(const uint4_t a, const uint4_t b)
+export constexpr uint4_t operator/(const uint4_t a, const uint4_t b)
 {
-    return uint4_t{a.x & b.x, a.y & b.y, a.z & b.z, a.w & b.w};
+    FND_ASSERT(all(b != 0u));
+
+    return uint4_t{a.x / b.x, a.y / b.y, a.z / b.z, a.w / b.w};
 }
 
-export constexpr uint4_t operator&(const uint4_t a, const uint_t val)
+export constexpr uint4_t operator/(const uint4_t a, const uint_t val)
 {
-    return uint4_t{a.x & val, a.y & val, a.z & val, a.w & val};
+    FND_ASSERT(val != 0);
+
+    return uint4_t{a.x / val, a.y / val, a.z / val, a.w / val};
 }
 
-export constexpr uint4_t operator&(const uint_t val, const uint4_t b)
+export constexpr uint4_t operator/(const uint_t val, const uint4_t b)
 {
-    return uint4_t{val & b.x, val & b.y, val & b.z, val & b.w};
+    FND_ASSERT(all(b != 0u));
+
+    return uint4_t{val / b.x, val / b.y, val / b.z, val / b.w};
 }
 
-export constexpr uint4_t operator&(const uint4_t a, const int_t val)
+export constexpr uint4_t operator/(const uint4_t a, const int_t val)
+{
+    FND_ASSERT(val > 0);
+
+    return uint4_t{a.x / val, a.y / val, a.z / val, a.w / val};
+}
+
+export constexpr uint4_t operator/(const int_t val, const uint4_t b)
 {
     FND_ASSERT(val >= 0);
+    FND_ASSERT(all(b != 0u));
 
-    return uint4_t{a.x & val, a.y & val, a.z & val, a.w & val};
-}
-
-export constexpr uint4_t operator&(const int_t val, const uint4_t b)
-{
-    FND_ASSERT(val >= 0);
-
-    return uint4_t{val & b.x, val & b.y, val & b.z, val & b.w};
-}
-
-export constexpr uint4_t operator|(const uint4_t a, const uint4_t b)
-{
-    return uint4_t{a.x | b.x, a.y | b.y, a.z | b.z, a.w | b.w};
-}
-
-export constexpr uint4_t operator|(const uint4_t a, const uint_t val)
-{
-    return uint4_t{a.x | val, a.y | val, a.z | val, a.w | val};
-}
-
-export constexpr uint4_t operator|(const uint_t val, const uint4_t b)
-{
-    return uint4_t{val | b.x, val | b.y, val | b.z, val | b.w};
-}
-
-export constexpr uint4_t operator|(const uint4_t a, const int_t val)
-{
-    FND_ASSERT(val >= 0);
-
-    return uint4_t{a.x | val, a.y | val, a.z | val, a.w | val};
-}
-
-export constexpr uint4_t operator|(const int_t val, const uint4_t b)
-{
-    FND_ASSERT(val >= 0);
-
-    return uint4_t{val | b.x, val | b.y, val | b.z, val | b.w};
-}
-
-export constexpr uint4_t operator^(const uint4_t a, const uint4_t b)
-{
-    return uint4_t{a.x ^ b.x, a.y ^ b.y, a.z ^ b.z, a.w ^ b.w};
-}
-
-export constexpr uint4_t operator^(const uint4_t a, const uint_t val)
-{
-    return uint4_t{a.x ^ val, a.y ^ val, a.z ^ val, a.w ^ val};
-}
-
-export constexpr uint4_t operator^(const uint_t val, const uint4_t b)
-{
-    return uint4_t{val ^ b.x, val ^ b.y, val ^ b.z, val ^ b.w};
-}
-
-export constexpr uint4_t operator^(const uint4_t a, const int_t val)
-{
-    FND_ASSERT(val >= 0);
-
-    return uint4_t{a.x ^ val, a.y ^ val, a.z ^ val, a.w ^ val};
-}
-
-export constexpr uint4_t operator^(const int_t val, const uint4_t b)
-{
-    FND_ASSERT(val >= 0);
-
-    return uint4_t{val ^ b.x, val ^ b.y, val ^ b.z, val ^ b.w};
+    return uint4_t{val / b.x, val / b.y, val / b.z, val / b.w};
 }
 
 export constexpr uint4_t operator<<(const uint4_t a, const uint4_t b)
@@ -898,34 +840,62 @@ export constexpr uint4_t operator>>(const int_t val, const uint4_t b)
     return uint4_t{uval >> b.x, uval >> b.y, uval >> b.z, uval >> b.w};
 }
 
-export constexpr uint4_t min(const uint4_t a, const uint4_t b)
+export constexpr uint4_t operator^(const uint4_t a, const uint4_t b)
 {
-    return uint4_t{min(a.x, b.x), min(a.y, b.y), min(a.z, b.z), min(a.w, b.w)};
+    return uint4_t{a.x ^ b.x, a.y ^ b.y, a.z ^ b.z, a.w ^ b.w};
 }
 
-export constexpr uint4_t min(const uint4_t a, const uint_t val)
+export constexpr uint4_t operator^(const uint4_t a, const uint_t val)
 {
-    return uint4_t{min(a.x, val), min(a.y, val), min(a.z, val), min(a.w, val)};
+    return uint4_t{a.x ^ val, a.y ^ val, a.z ^ val, a.w ^ val};
 }
 
-export constexpr uint4_t min(const uint_t val, const uint4_t b)
+export constexpr uint4_t operator^(const uint_t val, const uint4_t b)
 {
-    return uint4_t{min(val, b.x), min(val, b.y), min(val, b.z), min(val, b.w)};
+    return uint4_t{val ^ b.x, val ^ b.y, val ^ b.z, val ^ b.w};
 }
 
-export constexpr uint4_t max(const uint4_t a, const uint4_t b)
+export constexpr uint4_t operator^(const uint4_t a, const int_t val)
 {
-    return uint4_t{max(a.x, b.x), max(a.y, b.y), max(a.z, b.z), max(a.w, b.w)};
+    FND_ASSERT(val >= 0);
+
+    return uint4_t{a.x ^ val, a.y ^ val, a.z ^ val, a.w ^ val};
 }
 
-export constexpr uint4_t max(const uint4_t a, const uint_t val)
+export constexpr uint4_t operator^(const int_t val, const uint4_t b)
 {
-    return uint4_t{max(a.x, val), max(a.y, val), max(a.z, val), max(a.w, val)};
+    FND_ASSERT(val >= 0);
+
+    return uint4_t{val ^ b.x, val ^ b.y, val ^ b.z, val ^ b.w};
 }
 
-export constexpr uint4_t max(const uint_t val, const uint4_t b)
+export constexpr uint4_t operator|(const uint4_t a, const uint4_t b)
 {
-    return uint4_t{max(val, b.x), max(val, b.y), max(val, b.z), max(val, b.w)};
+    return uint4_t{a.x | b.x, a.y | b.y, a.z | b.z, a.w | b.w};
+}
+
+export constexpr uint4_t operator|(const uint4_t a, const uint_t val)
+{
+    return uint4_t{a.x | val, a.y | val, a.z | val, a.w | val};
+}
+
+export constexpr uint4_t operator|(const uint_t val, const uint4_t b)
+{
+    return uint4_t{val | b.x, val | b.y, val | b.z, val | b.w};
+}
+
+export constexpr uint4_t operator|(const uint4_t a, const int_t val)
+{
+    FND_ASSERT(val >= 0);
+
+    return uint4_t{a.x | val, a.y | val, a.z | val, a.w | val};
+}
+
+export constexpr uint4_t operator|(const int_t val, const uint4_t b)
+{
+    FND_ASSERT(val >= 0);
+
+    return uint4_t{val | b.x, val | b.y, val | b.z, val | b.w};
 }
 
 export constexpr uint4_t clamp(
@@ -964,14 +934,19 @@ export constexpr uint4_t clamp(
         clamp(v.z, lower, upper), clamp(v.w, lower, upper)};
 }
 
+export constexpr uint_t cmax(const uint4_t v)
+{
+    return max(max(max(v.x, v.y), v.z), v.w);
+}
+
 export constexpr uint_t cmin(const uint4_t v)
 {
     return min(min(min(v.x, v.y), v.z), v.w);
 }
 
-export constexpr uint_t cmax(const uint4_t v)
+export constexpr uint_t cmul(const uint4_t v)
 {
-    return max(max(max(v.x, v.y), v.z), v.w);
+    return v.x * v.y * v.z * v.w;
 }
 
 export constexpr uint_t csum(const uint4_t v)
@@ -979,9 +954,34 @@ export constexpr uint_t csum(const uint4_t v)
     return v.x + v.y + v.z + v.w;
 }
 
-export constexpr uint_t cmul(const uint4_t v)
+export constexpr uint4_t max(const uint4_t a, const uint4_t b)
 {
-    return v.x * v.y * v.z * v.w;
+    return uint4_t{max(a.x, b.x), max(a.y, b.y), max(a.z, b.z), max(a.w, b.w)};
+}
+
+export constexpr uint4_t max(const uint4_t a, const uint_t val)
+{
+    return uint4_t{max(a.x, val), max(a.y, val), max(a.z, val), max(a.w, val)};
+}
+
+export constexpr uint4_t max(const uint_t val, const uint4_t b)
+{
+    return uint4_t{max(val, b.x), max(val, b.y), max(val, b.z), max(val, b.w)};
+}
+
+export constexpr uint4_t min(const uint4_t a, const uint4_t b)
+{
+    return uint4_t{min(a.x, b.x), min(a.y, b.y), min(a.z, b.z), min(a.w, b.w)};
+}
+
+export constexpr uint4_t min(const uint4_t a, const uint_t val)
+{
+    return uint4_t{min(a.x, val), min(a.y, val), min(a.z, val), min(a.w, val)};
+}
+
+export constexpr uint4_t min(const uint_t val, const uint4_t b)
+{
+    return uint4_t{min(val, b.x), min(val, b.y), min(val, b.z), min(val, b.w)};
 }
 
 } // namespace fnd

@@ -107,236 +107,12 @@ void unittests_math_vector_uint4_decrement_operators()
     FND_TEST_TRUE(test_components(v, kUIntMaxValue, kUIntMaxValue - 1, 3u, 0u));
 }
 
-void unittests_math_vector_uint4_equality_operators()
-{
-    const uint4_t a{7u, 3u, 4u, 6u};
-    FND_TEST_TRUE(
-        all((a == uint4_t{7u, 3u, 4u, 6u}) == bool4_t{true, true, true, true}));
-    FND_TEST_TRUE(all(
-        (a == uint4_t{7u, 5u, 4u, 1u}) == bool4_t{true, false, true, false}));
-    FND_TEST_TRUE(all(
-        (a == uint4_t{2u, 5u, 1u, 0u}) == bool4_t{false, false, false, false}));
-    FND_TEST_TRUE(all((a == 7u) == bool4_t{true, false, false, false}));
-    FND_TEST_TRUE(all((6u == a) == bool4_t{false, false, false, true}));
-    FND_TEST_TRUE(all((a == 7) == bool4_t{true, false, false, false}));
-    FND_TEST_TRUE(all((6 == a) == bool4_t{false, false, false, true}));
-
-    FND_TEST_TRUE(all(
-        (a != uint4_t{7u, 3u, 4u, 6u}) == bool4_t{false, false, false, false}));
-    FND_TEST_TRUE(all(
-        (a != uint4_t{7u, 5u, 4u, 1u}) == bool4_t{false, true, false, true}));
-    FND_TEST_TRUE(
-        all((a != uint4_t{2u, 5u, 1u, 0u}) == bool4_t{true, true, true, true}));
-    FND_TEST_TRUE(all((a != 7u) == bool4_t{false, true, true, true}));
-    FND_TEST_TRUE(all((6u != a) == bool4_t{true, true, true, false}));
-    FND_TEST_TRUE(all((a != 7) == bool4_t{false, true, true, true}));
-    FND_TEST_TRUE(all((6 != a) == bool4_t{true, true, true, false}));
-}
-
-void unittests_math_vector_uint4_relational_operators()
-{
-    const uint4_t a{7u, 3u, 4u, 6u};
-    const uint4_t b{2u, 5u, 4u, 6u};
-    const uint4_t c{7u, 5u, 1u, 9u};
-
-    FND_TEST_TRUE(all((a < b) == bool4_t{false, true, false, false}));
-    FND_TEST_TRUE(all((a < c) == bool4_t{false, true, false, true}));
-    FND_TEST_TRUE(all((a < 5u) == bool4_t{false, true, true, false}));
-    FND_TEST_TRUE(all((5u < a) == bool4_t{true, false, false, true}));
-    FND_TEST_TRUE(all((a < 5) == bool4_t{false, true, true, false}));
-    FND_TEST_TRUE(all((5 < a) == bool4_t{true, false, false, true}));
-
-    FND_TEST_TRUE(all((a <= b) == bool4_t{false, true, true, true}));
-    FND_TEST_TRUE(all((a <= c) == bool4_t{true, true, false, true}));
-    FND_TEST_TRUE(all((a <= 4u) == bool4_t{false, true, true, false}));
-    FND_TEST_TRUE(all((7u <= a) == bool4_t{true, false, false, false}));
-    FND_TEST_TRUE(all((a <= 4) == bool4_t{false, true, true, false}));
-    FND_TEST_TRUE(all((7 <= a) == bool4_t{true, false, false, false}));
-
-    FND_TEST_TRUE(all((a > b) == bool4_t{true, false, false, false}));
-    FND_TEST_TRUE(all((a > c) == bool4_t{false, false, true, false}));
-    FND_TEST_TRUE(all((a > 5u) == bool4_t{true, false, false, true}));
-    FND_TEST_TRUE(all((5u > a) == bool4_t{false, true, true, false}));
-    FND_TEST_TRUE(all((a > 5) == bool4_t{true, false, false, true}));
-    FND_TEST_TRUE(all((5 > a) == bool4_t{false, true, true, false}));
-
-    FND_TEST_TRUE(all((a >= b) == bool4_t{true, false, true, true}));
-    FND_TEST_TRUE(all((a >= c) == bool4_t{true, false, true, false}));
-    FND_TEST_TRUE(all((a >= 7u) == bool4_t{true, false, false, false}));
-    FND_TEST_TRUE(all((4u >= a) == bool4_t{false, true, true, false}));
-    FND_TEST_TRUE(all((a >= 7) == bool4_t{true, false, false, false}));
-    FND_TEST_TRUE(all((4 >= a) == bool4_t{false, true, true, false}));
-}
-
-void unittests_math_vector_uint4_addition_operator()
-{
-    const uint4_t a{7u, 3u, 4u, 6u};
-    FND_TEST_TRUE(test_components(a + uint4_t{2u, 5u, 1u, 3u}, 9u, 8u, 5u, 9u));
-    FND_TEST_TRUE(test_components(a + 1u, 8u, 4u, 5u, 7u));
-    FND_TEST_TRUE(test_components(1u + a, 8u, 4u, 5u, 7u));
-    FND_TEST_TRUE(test_components(a + 1, 8u, 4u, 5u, 7u));
-    FND_TEST_TRUE(test_components(1 + a, 8u, 4u, 5u, 7u));
-    // Overflow wraps around.
-    FND_TEST_TRUE(test_components(
-        uint4_t{kUIntMaxValue, 1u, 0u, 2u} + uint4_t{1u, 1u, 0u, 0u}, 0u, 2u,
-        0u, 2u));
-    FND_TEST_TRUE(test_components(uint4_t{kUIntMaxValue} + 2u, 1u, 1u, 1u, 1u));
-}
-
-void unittests_math_vector_uint4_subtraction_operator()
-{
-    const uint4_t a{7u, 3u, 4u, 6u};
-    FND_TEST_TRUE(test_components(a - uint4_t{2u, 1u, 4u, 6u}, 5u, 2u, 0u, 0u));
-    FND_TEST_TRUE(test_components(a - 1u, 6u, 2u, 3u, 5u));
-    FND_TEST_TRUE(test_components(10u - a, 3u, 7u, 6u, 4u));
-    FND_TEST_TRUE(test_components(a - 1, 6u, 2u, 3u, 5u));
-    FND_TEST_TRUE(test_components(10 - a, 3u, 7u, 6u, 4u));
-    // Overflow wraps around.
-    FND_TEST_TRUE(test_components(
-        a - uint4_t{2u, 5u, 1u, 7u}, 5u, kUIntMaxValue - 1, 3u, kUIntMaxValue));
-    FND_TEST_TRUE(test_components(
-        uint4_t{0u, 5u, 1u, 2u} - 1u, kUIntMaxValue, 4u, 0u, 1u));
-}
-
-void unittests_math_vector_uint4_multiplication_operator()
-{
-    const uint4_t a{7u, 3u, 4u, 6u};
-    FND_TEST_TRUE(
-        test_components(a * uint4_t{2u, 5u, 3u, 2u}, 14u, 15u, 12u, 12u));
-    FND_TEST_TRUE(test_components(a * 2u, 14u, 6u, 8u, 12u));
-    FND_TEST_TRUE(test_components(2u * a, 14u, 6u, 8u, 12u));
-    FND_TEST_TRUE(test_components(a * 2, 14u, 6u, 8u, 12u));
-    FND_TEST_TRUE(test_components(2 * a, 14u, 6u, 8u, 12u));
-    // Overflow wraps around.
-    FND_TEST_TRUE(
-        test_components(uint4_t{0x80000000u, 3u, 1u, 0x40000000u} * 2u, 0u, 6u,
-            2u, 0x80000000u));
-    FND_TEST_TRUE(test_components(uint4_t{0x10000u, 0x10000u, 0x10000u, 3u}
-            * uint4_t{0x10000u, 2u, 0x10000u, 5u},
-        0u, 0x20000u, 0u, 15u));
-}
-
-void unittests_math_vector_uint4_division_operator()
-{
-    const uint4_t a{7u, 3u, 4u, 6u};
-    FND_TEST_TRUE(test_components(a / uint4_t{2u, 5u, 3u, 4u}, 3u, 0u, 1u, 1u));
-    FND_TEST_TRUE(test_components(a / 2u, 3u, 1u, 2u, 3u));
-    FND_TEST_TRUE(
-        test_components(21u / uint4_t{2u, 5u, 4u, 7u}, 10u, 4u, 5u, 3u));
-    FND_TEST_TRUE(test_components(a / 2, 3u, 1u, 2u, 3u));
-    FND_TEST_TRUE(
-        test_components(21 / uint4_t{2u, 5u, 4u, 7u}, 10u, 4u, 5u, 3u));
-    FND_TEST_TRUE(test_components(
-        uint4_t{kUIntMaxValue, 9u, 8u, 6u} / uint4_t{1u, 3u, 8u, 4u},
-        kUIntMaxValue, 3u, 1u, 1u));
-}
-
-void unittests_math_vector_uint4_modulo_operator()
-{
-    const uint4_t a{7u, 3u, 4u, 6u};
-    FND_TEST_TRUE(test_components(a % uint4_t{2u, 5u, 3u, 4u}, 1u, 3u, 1u, 2u));
-    FND_TEST_TRUE(test_components(a % 2u, 1u, 1u, 0u, 0u));
-    FND_TEST_TRUE(
-        test_components(21u % uint4_t{2u, 5u, 4u, 7u}, 1u, 1u, 1u, 0u));
-    FND_TEST_TRUE(test_components(a % 2, 1u, 1u, 0u, 0u));
-    FND_TEST_TRUE(
-        test_components(21 % uint4_t{2u, 5u, 4u, 7u}, 1u, 1u, 1u, 0u));
-    FND_TEST_TRUE(test_components(
-        uint4_t{kUIntMaxValue, 9u, 8u, 6u} % uint4_t{2u, 4u, 8u, 4u}, 1u, 1u,
-        0u, 2u));
-}
-
 void unittests_math_vector_uint4_bitwise_not_operator()
 {
     FND_TEST_TRUE(test_components(~uint4_t{0u, 5u, kUIntMaxValue, 1u},
         kUIntMaxValue, kUIntMaxValue - 5, 0u, kUIntMaxValue - 1));
     FND_TEST_TRUE(test_components(~uint4_t{0x80000000u, 1u, 0x7FFFFFFFu, 0u},
         0x7FFFFFFFu, kUIntMaxValue - 1, 0x80000000u, kUIntMaxValue));
-}
-
-void unittests_math_vector_uint4_bitwise_and_operator()
-{
-    const uint4_t a{0b1100u, 0b1010u, 0b1111u, 0b0000u};
-    FND_TEST_TRUE(
-        test_components(a & uint4_t{0b1010u, 0b0110u, 0b0011u, 0b1111u},
-            0b1000u, 0b0010u, 0b0011u, 0u));
-    FND_TEST_TRUE(test_components(a & 0b0110u, 0b0100u, 0b0010u, 0b0110u, 0u));
-    FND_TEST_TRUE(test_components(0b0110u & a, 0b0100u, 0b0010u, 0b0110u, 0u));
-    FND_TEST_TRUE(test_components(a & 0b0110, 0b0100u, 0b0010u, 0b0110u, 0u));
-    FND_TEST_TRUE(test_components(0b0110 & a, 0b0100u, 0b0010u, 0b0110u, 0u));
-    FND_TEST_TRUE(test_components(
-        uint4_t{kUIntMaxValue, 0x80000000u, 0x1FFu, 0x100u} & 0xFFu, 0xFFu, 0u,
-        0xFFu, 0u));
-}
-
-void unittests_math_vector_uint4_bitwise_or_operator()
-{
-    const uint4_t a{0b1100u, 0b1010u, 0b1111u, 0b0000u};
-    FND_TEST_TRUE(
-        test_components(a | uint4_t{0b1010u, 0b0110u, 0b0000u, 0b0001u},
-            0b1110u, 0b1110u, 0b1111u, 0b0001u));
-    FND_TEST_TRUE(
-        test_components(a | 0b0001u, 0b1101u, 0b1011u, 0b1111u, 0b0001u));
-    FND_TEST_TRUE(
-        test_components(0b0001u | a, 0b1101u, 0b1011u, 0b1111u, 0b0001u));
-    FND_TEST_TRUE(
-        test_components(a | 0b0001, 0b1101u, 0b1011u, 0b1111u, 0b0001u));
-    FND_TEST_TRUE(
-        test_components(0b0001 | a, 0b1101u, 0b1011u, 0b1111u, 0b0001u));
-    FND_TEST_TRUE(
-        test_components(uint4_t{0u, 0x7FFFFFFFu, 1u, 0x80000000u} | 0x80000000u,
-            0x80000000u, kUIntMaxValue, 0x80000001u, 0x80000000u));
-}
-
-void unittests_math_vector_uint4_bitwise_xor_operator()
-{
-    const uint4_t a{0b1100u, 0b1010u, 0b1111u, 0b0000u};
-    FND_TEST_TRUE(
-        test_components(a ^ uint4_t{0b1010u, 0b0110u, 0b1111u, 0b0101u},
-            0b0110u, 0b1100u, 0u, 0b0101u));
-    FND_TEST_TRUE(test_components(a ^ 0b1111u, 0b0011u, 0b0101u, 0u, 0b1111u));
-    FND_TEST_TRUE(test_components(0b1111u ^ a, 0b0011u, 0b0101u, 0u, 0b1111u));
-    FND_TEST_TRUE(test_components(a ^ 0b1111, 0b0011u, 0b0101u, 0u, 0b1111u));
-    FND_TEST_TRUE(test_components(0b1111 ^ a, 0b0011u, 0b0101u, 0u, 0b1111u));
-    FND_TEST_TRUE(test_components(a ^ a, 0u, 0u, 0u, 0u));
-}
-
-void unittests_math_vector_uint4_shift_left_operator()
-{
-    FND_TEST_TRUE(test_components(
-        uint4_t{1u, 3u, 5u, 7u} << uint4_t{4u, 1u, 0u, 2u}, 16u, 6u, 5u, 28u));
-    FND_TEST_TRUE(
-        test_components(uint4_t{1u, 3u, 5u, 7u} << 2u, 4u, 12u, 20u, 28u));
-    FND_TEST_TRUE(test_components(
-        1u << uint4_t{0u, 31u, 4u, 1u}, 1u, 0x80000000u, 16u, 2u));
-    FND_TEST_TRUE(
-        test_components(uint4_t{1u, 3u, 5u, 7u} << 2, 4u, 12u, 20u, 28u));
-    FND_TEST_TRUE(test_components(
-        1 << uint4_t{0u, 31u, 4u, 1u}, 1u, 0x80000000u, 16u, 2u));
-    // Bits shifted out are discarded.
-    FND_TEST_TRUE(
-        test_components(uint4_t{0x80000000u, 3u, 1u, 0x40000000u} << 1u, 0u, 6u,
-            2u, 0x80000000u));
-}
-
-void unittests_math_vector_uint4_shift_right_operator()
-{
-    FND_TEST_TRUE(test_components(
-        uint4_t{16u, 6u, 5u, 28u} >> uint4_t{4u, 1u, 0u, 2u}, 1u, 3u, 5u, 7u));
-    FND_TEST_TRUE(
-        test_components(uint4_t{16u, 6u, 5u, 28u} >> 1u, 8u, 3u, 2u, 14u));
-    FND_TEST_TRUE(
-        test_components(256u >> uint4_t{4u, 8u, 0u, 9u}, 16u, 1u, 256u, 0u));
-    FND_TEST_TRUE(
-        test_components(uint4_t{16u, 6u, 5u, 28u} >> 1, 8u, 3u, 2u, 14u));
-    FND_TEST_TRUE(
-        test_components(256 >> uint4_t{4u, 8u, 0u, 9u}, 16u, 1u, 256u, 0u));
-    // Zeros are shifted in, whatever the top bit is.
-    FND_TEST_TRUE(test_components(
-        uint4_t{0x80000000u, 8u, 1u, 2u} >> 1u, 0x40000000u, 4u, 0u, 1u));
-    FND_TEST_TRUE(test_components(
-        uint4_t{kUIntMaxValue, 1u, 0x80000000u, 0x7FFFFFFFu} >> 31u, 1u, 0u, 1u,
-        0u));
 }
 
 void unittests_math_vector_uint4_compound_assignment_operators()
@@ -519,42 +295,228 @@ void unittests_math_vector_uint4_compound_assignment_matches_operators()
     FND_TEST_TRUE(all(c == (a >> ishift)));
 }
 
-void unittests_math_vector_uint4_min()
+void unittests_math_vector_uint4_equality_operators()
 {
     const uint4_t a{7u, 3u, 4u, 6u};
     FND_TEST_TRUE(
-        test_components(min(a, uint4_t{2u, 5u, 4u, 1u}), 2u, 3u, 4u, 1u));
+        all((a == uint4_t{7u, 3u, 4u, 6u}) == bool4_t{true, true, true, true}));
+    FND_TEST_TRUE(all(
+        (a == uint4_t{7u, 5u, 4u, 1u}) == bool4_t{true, false, true, false}));
+    FND_TEST_TRUE(all(
+        (a == uint4_t{2u, 5u, 1u, 0u}) == bool4_t{false, false, false, false}));
+    FND_TEST_TRUE(all((a == 7u) == bool4_t{true, false, false, false}));
+    FND_TEST_TRUE(all((6u == a) == bool4_t{false, false, false, true}));
+    FND_TEST_TRUE(all((a == 7) == bool4_t{true, false, false, false}));
+    FND_TEST_TRUE(all((6 == a) == bool4_t{false, false, false, true}));
+
+    FND_TEST_TRUE(all(
+        (a != uint4_t{7u, 3u, 4u, 6u}) == bool4_t{false, false, false, false}));
+    FND_TEST_TRUE(all(
+        (a != uint4_t{7u, 5u, 4u, 1u}) == bool4_t{false, true, false, true}));
     FND_TEST_TRUE(
-        test_components(min(uint4_t{2u, 5u, 4u, 1u}, a), 2u, 3u, 4u, 1u));
-    FND_TEST_TRUE(test_components(
-        min(uint4_t{4u, 4u, 4u, 4u}, uint4_t{4u, 4u, 4u, 4u}), 4u, 4u, 4u, 4u));
-    FND_TEST_TRUE(test_components(min(uint4_t{0u, kUIntMaxValue, 1u, 2u},
-                                      uint4_t{kUIntMaxValue, 0u, 1u, 3u}),
-        0u, 0u, 1u, 2u));
-    // uint_t on either side is compared with every component.
-    FND_TEST_TRUE(test_components(min(a, 5u), 5u, 3u, 4u, 5u));
-    FND_TEST_TRUE(test_components(min(5u, a), 5u, 3u, 4u, 5u));
-    FND_TEST_TRUE(test_components(min(a, 0u), 0u, 0u, 0u, 0u));
-    FND_TEST_TRUE(test_components(min(kUIntMaxValue, a), 7u, 3u, 4u, 6u));
+        all((a != uint4_t{2u, 5u, 1u, 0u}) == bool4_t{true, true, true, true}));
+    FND_TEST_TRUE(all((a != 7u) == bool4_t{false, true, true, true}));
+    FND_TEST_TRUE(all((6u != a) == bool4_t{true, true, true, false}));
+    FND_TEST_TRUE(all((a != 7) == bool4_t{false, true, true, true}));
+    FND_TEST_TRUE(all((6 != a) == bool4_t{true, true, true, false}));
 }
 
-void unittests_math_vector_uint4_max()
+void unittests_math_vector_uint4_relational_operators()
+{
+    const uint4_t a{7u, 3u, 4u, 6u};
+    const uint4_t b{2u, 5u, 4u, 6u};
+    const uint4_t c{7u, 5u, 1u, 9u};
+
+    FND_TEST_TRUE(all((a < b) == bool4_t{false, true, false, false}));
+    FND_TEST_TRUE(all((a < c) == bool4_t{false, true, false, true}));
+    FND_TEST_TRUE(all((a < 5u) == bool4_t{false, true, true, false}));
+    FND_TEST_TRUE(all((5u < a) == bool4_t{true, false, false, true}));
+    FND_TEST_TRUE(all((a < 5) == bool4_t{false, true, true, false}));
+    FND_TEST_TRUE(all((5 < a) == bool4_t{true, false, false, true}));
+
+    FND_TEST_TRUE(all((a <= b) == bool4_t{false, true, true, true}));
+    FND_TEST_TRUE(all((a <= c) == bool4_t{true, true, false, true}));
+    FND_TEST_TRUE(all((a <= 4u) == bool4_t{false, true, true, false}));
+    FND_TEST_TRUE(all((7u <= a) == bool4_t{true, false, false, false}));
+    FND_TEST_TRUE(all((a <= 4) == bool4_t{false, true, true, false}));
+    FND_TEST_TRUE(all((7 <= a) == bool4_t{true, false, false, false}));
+
+    FND_TEST_TRUE(all((a > b) == bool4_t{true, false, false, false}));
+    FND_TEST_TRUE(all((a > c) == bool4_t{false, false, true, false}));
+    FND_TEST_TRUE(all((a > 5u) == bool4_t{true, false, false, true}));
+    FND_TEST_TRUE(all((5u > a) == bool4_t{false, true, true, false}));
+    FND_TEST_TRUE(all((a > 5) == bool4_t{true, false, false, true}));
+    FND_TEST_TRUE(all((5 > a) == bool4_t{false, true, true, false}));
+
+    FND_TEST_TRUE(all((a >= b) == bool4_t{true, false, true, true}));
+    FND_TEST_TRUE(all((a >= c) == bool4_t{true, false, true, false}));
+    FND_TEST_TRUE(all((a >= 7u) == bool4_t{true, false, false, false}));
+    FND_TEST_TRUE(all((4u >= a) == bool4_t{false, true, true, false}));
+    FND_TEST_TRUE(all((a >= 7) == bool4_t{true, false, false, false}));
+    FND_TEST_TRUE(all((4 >= a) == bool4_t{false, true, true, false}));
+}
+
+void unittests_math_vector_uint4_bitwise_and_operator()
+{
+    const uint4_t a{0b1100u, 0b1010u, 0b1111u, 0b0000u};
+    FND_TEST_TRUE(
+        test_components(a & uint4_t{0b1010u, 0b0110u, 0b0011u, 0b1111u},
+            0b1000u, 0b0010u, 0b0011u, 0u));
+    FND_TEST_TRUE(test_components(a & 0b0110u, 0b0100u, 0b0010u, 0b0110u, 0u));
+    FND_TEST_TRUE(test_components(0b0110u & a, 0b0100u, 0b0010u, 0b0110u, 0u));
+    FND_TEST_TRUE(test_components(a & 0b0110, 0b0100u, 0b0010u, 0b0110u, 0u));
+    FND_TEST_TRUE(test_components(0b0110 & a, 0b0100u, 0b0010u, 0b0110u, 0u));
+    FND_TEST_TRUE(test_components(
+        uint4_t{kUIntMaxValue, 0x80000000u, 0x1FFu, 0x100u} & 0xFFu, 0xFFu, 0u,
+        0xFFu, 0u));
+}
+
+void unittests_math_vector_uint4_multiplication_operator()
 {
     const uint4_t a{7u, 3u, 4u, 6u};
     FND_TEST_TRUE(
-        test_components(max(a, uint4_t{2u, 5u, 4u, 1u}), 7u, 5u, 4u, 6u));
+        test_components(a * uint4_t{2u, 5u, 3u, 2u}, 14u, 15u, 12u, 12u));
+    FND_TEST_TRUE(test_components(a * 2u, 14u, 6u, 8u, 12u));
+    FND_TEST_TRUE(test_components(2u * a, 14u, 6u, 8u, 12u));
+    FND_TEST_TRUE(test_components(a * 2, 14u, 6u, 8u, 12u));
+    FND_TEST_TRUE(test_components(2 * a, 14u, 6u, 8u, 12u));
+    // Overflow wraps around.
     FND_TEST_TRUE(
-        test_components(max(uint4_t{2u, 5u, 4u, 1u}, a), 7u, 5u, 4u, 6u));
+        test_components(uint4_t{0x80000000u, 3u, 1u, 0x40000000u} * 2u, 0u, 6u,
+            2u, 0x80000000u));
+    FND_TEST_TRUE(test_components(uint4_t{0x10000u, 0x10000u, 0x10000u, 3u}
+            * uint4_t{0x10000u, 2u, 0x10000u, 5u},
+        0u, 0x20000u, 0u, 15u));
+}
+
+void unittests_math_vector_uint4_addition_operator()
+{
+    const uint4_t a{7u, 3u, 4u, 6u};
+    FND_TEST_TRUE(test_components(a + uint4_t{2u, 5u, 1u, 3u}, 9u, 8u, 5u, 9u));
+    FND_TEST_TRUE(test_components(a + 1u, 8u, 4u, 5u, 7u));
+    FND_TEST_TRUE(test_components(1u + a, 8u, 4u, 5u, 7u));
+    FND_TEST_TRUE(test_components(a + 1, 8u, 4u, 5u, 7u));
+    FND_TEST_TRUE(test_components(1 + a, 8u, 4u, 5u, 7u));
+    // Overflow wraps around.
     FND_TEST_TRUE(test_components(
-        max(uint4_t{4u, 4u, 4u, 4u}, uint4_t{4u, 4u, 4u, 4u}), 4u, 4u, 4u, 4u));
-    FND_TEST_TRUE(test_components(max(uint4_t{0u, kUIntMaxValue, 1u, 2u},
-                                      uint4_t{kUIntMaxValue, 0u, 1u, 3u}),
-        kUIntMaxValue, kUIntMaxValue, 1u, 3u));
-    // uint_t on either side is compared with every component.
-    FND_TEST_TRUE(test_components(max(a, 5u), 7u, 5u, 5u, 6u));
-    FND_TEST_TRUE(test_components(max(5u, a), 7u, 5u, 5u, 6u));
-    FND_TEST_TRUE(test_components(max(a, 10u), 10u, 10u, 10u, 10u));
-    FND_TEST_TRUE(test_components(max(0u, a), 7u, 3u, 4u, 6u));
+        uint4_t{kUIntMaxValue, 1u, 0u, 2u} + uint4_t{1u, 1u, 0u, 0u}, 0u, 2u,
+        0u, 2u));
+    FND_TEST_TRUE(test_components(uint4_t{kUIntMaxValue} + 2u, 1u, 1u, 1u, 1u));
+}
+
+void unittests_math_vector_uint4_subtraction_operator()
+{
+    const uint4_t a{7u, 3u, 4u, 6u};
+    FND_TEST_TRUE(test_components(a - uint4_t{2u, 1u, 4u, 6u}, 5u, 2u, 0u, 0u));
+    FND_TEST_TRUE(test_components(a - 1u, 6u, 2u, 3u, 5u));
+    FND_TEST_TRUE(test_components(10u - a, 3u, 7u, 6u, 4u));
+    FND_TEST_TRUE(test_components(a - 1, 6u, 2u, 3u, 5u));
+    FND_TEST_TRUE(test_components(10 - a, 3u, 7u, 6u, 4u));
+    // Overflow wraps around.
+    FND_TEST_TRUE(test_components(
+        a - uint4_t{2u, 5u, 1u, 7u}, 5u, kUIntMaxValue - 1, 3u, kUIntMaxValue));
+    FND_TEST_TRUE(test_components(
+        uint4_t{0u, 5u, 1u, 2u} - 1u, kUIntMaxValue, 4u, 0u, 1u));
+}
+
+void unittests_math_vector_uint4_modulo_operator()
+{
+    const uint4_t a{7u, 3u, 4u, 6u};
+    FND_TEST_TRUE(test_components(a % uint4_t{2u, 5u, 3u, 4u}, 1u, 3u, 1u, 2u));
+    FND_TEST_TRUE(test_components(a % 2u, 1u, 1u, 0u, 0u));
+    FND_TEST_TRUE(
+        test_components(21u % uint4_t{2u, 5u, 4u, 7u}, 1u, 1u, 1u, 0u));
+    FND_TEST_TRUE(test_components(a % 2, 1u, 1u, 0u, 0u));
+    FND_TEST_TRUE(
+        test_components(21 % uint4_t{2u, 5u, 4u, 7u}, 1u, 1u, 1u, 0u));
+    FND_TEST_TRUE(test_components(
+        uint4_t{kUIntMaxValue, 9u, 8u, 6u} % uint4_t{2u, 4u, 8u, 4u}, 1u, 1u,
+        0u, 2u));
+}
+
+void unittests_math_vector_uint4_division_operator()
+{
+    const uint4_t a{7u, 3u, 4u, 6u};
+    FND_TEST_TRUE(test_components(a / uint4_t{2u, 5u, 3u, 4u}, 3u, 0u, 1u, 1u));
+    FND_TEST_TRUE(test_components(a / 2u, 3u, 1u, 2u, 3u));
+    FND_TEST_TRUE(
+        test_components(21u / uint4_t{2u, 5u, 4u, 7u}, 10u, 4u, 5u, 3u));
+    FND_TEST_TRUE(test_components(a / 2, 3u, 1u, 2u, 3u));
+    FND_TEST_TRUE(
+        test_components(21 / uint4_t{2u, 5u, 4u, 7u}, 10u, 4u, 5u, 3u));
+    FND_TEST_TRUE(test_components(
+        uint4_t{kUIntMaxValue, 9u, 8u, 6u} / uint4_t{1u, 3u, 8u, 4u},
+        kUIntMaxValue, 3u, 1u, 1u));
+}
+
+void unittests_math_vector_uint4_shift_left_operator()
+{
+    FND_TEST_TRUE(test_components(
+        uint4_t{1u, 3u, 5u, 7u} << uint4_t{4u, 1u, 0u, 2u}, 16u, 6u, 5u, 28u));
+    FND_TEST_TRUE(
+        test_components(uint4_t{1u, 3u, 5u, 7u} << 2u, 4u, 12u, 20u, 28u));
+    FND_TEST_TRUE(test_components(
+        1u << uint4_t{0u, 31u, 4u, 1u}, 1u, 0x80000000u, 16u, 2u));
+    FND_TEST_TRUE(
+        test_components(uint4_t{1u, 3u, 5u, 7u} << 2, 4u, 12u, 20u, 28u));
+    FND_TEST_TRUE(test_components(
+        1 << uint4_t{0u, 31u, 4u, 1u}, 1u, 0x80000000u, 16u, 2u));
+    // Bits shifted out are discarded.
+    FND_TEST_TRUE(
+        test_components(uint4_t{0x80000000u, 3u, 1u, 0x40000000u} << 1u, 0u, 6u,
+            2u, 0x80000000u));
+}
+
+void unittests_math_vector_uint4_shift_right_operator()
+{
+    FND_TEST_TRUE(test_components(
+        uint4_t{16u, 6u, 5u, 28u} >> uint4_t{4u, 1u, 0u, 2u}, 1u, 3u, 5u, 7u));
+    FND_TEST_TRUE(
+        test_components(uint4_t{16u, 6u, 5u, 28u} >> 1u, 8u, 3u, 2u, 14u));
+    FND_TEST_TRUE(
+        test_components(256u >> uint4_t{4u, 8u, 0u, 9u}, 16u, 1u, 256u, 0u));
+    FND_TEST_TRUE(
+        test_components(uint4_t{16u, 6u, 5u, 28u} >> 1, 8u, 3u, 2u, 14u));
+    FND_TEST_TRUE(
+        test_components(256 >> uint4_t{4u, 8u, 0u, 9u}, 16u, 1u, 256u, 0u));
+    // Zeros are shifted in, whatever the top bit is.
+    FND_TEST_TRUE(test_components(
+        uint4_t{0x80000000u, 8u, 1u, 2u} >> 1u, 0x40000000u, 4u, 0u, 1u));
+    FND_TEST_TRUE(test_components(
+        uint4_t{kUIntMaxValue, 1u, 0x80000000u, 0x7FFFFFFFu} >> 31u, 1u, 0u, 1u,
+        0u));
+}
+
+void unittests_math_vector_uint4_bitwise_xor_operator()
+{
+    const uint4_t a{0b1100u, 0b1010u, 0b1111u, 0b0000u};
+    FND_TEST_TRUE(
+        test_components(a ^ uint4_t{0b1010u, 0b0110u, 0b1111u, 0b0101u},
+            0b0110u, 0b1100u, 0u, 0b0101u));
+    FND_TEST_TRUE(test_components(a ^ 0b1111u, 0b0011u, 0b0101u, 0u, 0b1111u));
+    FND_TEST_TRUE(test_components(0b1111u ^ a, 0b0011u, 0b0101u, 0u, 0b1111u));
+    FND_TEST_TRUE(test_components(a ^ 0b1111, 0b0011u, 0b0101u, 0u, 0b1111u));
+    FND_TEST_TRUE(test_components(0b1111 ^ a, 0b0011u, 0b0101u, 0u, 0b1111u));
+    FND_TEST_TRUE(test_components(a ^ a, 0u, 0u, 0u, 0u));
+}
+
+void unittests_math_vector_uint4_bitwise_or_operator()
+{
+    const uint4_t a{0b1100u, 0b1010u, 0b1111u, 0b0000u};
+    FND_TEST_TRUE(
+        test_components(a | uint4_t{0b1010u, 0b0110u, 0b0000u, 0b0001u},
+            0b1110u, 0b1110u, 0b1111u, 0b0001u));
+    FND_TEST_TRUE(
+        test_components(a | 0b0001u, 0b1101u, 0b1011u, 0b1111u, 0b0001u));
+    FND_TEST_TRUE(
+        test_components(0b0001u | a, 0b1101u, 0b1011u, 0b1111u, 0b0001u));
+    FND_TEST_TRUE(
+        test_components(a | 0b0001, 0b1101u, 0b1011u, 0b1111u, 0b0001u));
+    FND_TEST_TRUE(
+        test_components(0b0001 | a, 0b1101u, 0b1011u, 0b1111u, 0b0001u));
+    FND_TEST_TRUE(
+        test_components(uint4_t{0u, 0x7FFFFFFFu, 1u, 0x80000000u} | 0x80000000u,
+            0x80000000u, kUIntMaxValue, 0x80000001u, 0x80000000u));
 }
 
 void unittests_math_vector_uint4_clamp()
@@ -610,6 +572,17 @@ void unittests_math_vector_uint4_clamp()
         5u));
 }
 
+void unittests_math_vector_uint4_cmax()
+{
+    // The maximum in each position.
+    FND_TEST_TRUE(cmax(uint4_t{7u, 3u, 4u, 5u}) == 7u);
+    FND_TEST_TRUE(cmax(uint4_t{3u, 7u, 4u, 5u}) == 7u);
+    FND_TEST_TRUE(cmax(uint4_t{4u, 3u, 7u, 5u}) == 7u);
+    FND_TEST_TRUE(cmax(uint4_t{4u, 3u, 5u, 7u}) == 7u);
+    FND_TEST_TRUE(cmax(uint4_t{4u, 4u, 4u, 4u}) == 4u);
+    FND_TEST_TRUE(cmax(uint4_t{0u, kUIntMaxValue, 1u, 2u}) == kUIntMaxValue);
+}
+
 void unittests_math_vector_uint4_cmin()
 {
     // The minimum in each position.
@@ -621,15 +594,16 @@ void unittests_math_vector_uint4_cmin()
     FND_TEST_TRUE(cmin(uint4_t{kUIntMaxValue, 0u, 1u, 2u}) == 0u);
 }
 
-void unittests_math_vector_uint4_cmax()
+void unittests_math_vector_uint4_cmul()
 {
-    // The maximum in each position.
-    FND_TEST_TRUE(cmax(uint4_t{7u, 3u, 4u, 5u}) == 7u);
-    FND_TEST_TRUE(cmax(uint4_t{3u, 7u, 4u, 5u}) == 7u);
-    FND_TEST_TRUE(cmax(uint4_t{4u, 3u, 7u, 5u}) == 7u);
-    FND_TEST_TRUE(cmax(uint4_t{4u, 3u, 5u, 7u}) == 7u);
-    FND_TEST_TRUE(cmax(uint4_t{4u, 4u, 4u, 4u}) == 4u);
-    FND_TEST_TRUE(cmax(uint4_t{0u, kUIntMaxValue, 1u, 2u}) == kUIntMaxValue);
+    FND_TEST_TRUE(cmul(uint4_t{7u, 3u, 2u, 1u}) == 42u);
+    FND_TEST_TRUE(
+        cmul(uint4_t{0u, kUIntMaxValue, kUIntMaxValue, kUIntMaxValue}) == 0u);
+    // 255^4 is the largest fourth power that fits in uint_t; 256^4 is 2^32.
+    FND_TEST_TRUE(cmul(uint4_t{255u, 255u, 255u, 255u}) == 4228250625u);
+    // Overflow wraps around.
+    FND_TEST_TRUE(cmul(uint4_t{256u, 256u, 256u, 256u}) == 0u);
+    FND_TEST_TRUE(cmul(uint4_t{0x80000000u, 3u, 1u, 1u}) == 0x80000000u);
 }
 
 void unittests_math_vector_uint4_csum()
@@ -643,16 +617,42 @@ void unittests_math_vector_uint4_csum()
     FND_TEST_TRUE(csum(uint4_t{kUIntMaxValue}) == kUIntMaxValue - 3);
 }
 
-void unittests_math_vector_uint4_cmul()
+void unittests_math_vector_uint4_max()
 {
-    FND_TEST_TRUE(cmul(uint4_t{7u, 3u, 2u, 1u}) == 42u);
+    const uint4_t a{7u, 3u, 4u, 6u};
     FND_TEST_TRUE(
-        cmul(uint4_t{0u, kUIntMaxValue, kUIntMaxValue, kUIntMaxValue}) == 0u);
-    // 255^4 is the largest fourth power that fits in uint_t; 256^4 is 2^32.
-    FND_TEST_TRUE(cmul(uint4_t{255u, 255u, 255u, 255u}) == 4228250625u);
-    // Overflow wraps around.
-    FND_TEST_TRUE(cmul(uint4_t{256u, 256u, 256u, 256u}) == 0u);
-    FND_TEST_TRUE(cmul(uint4_t{0x80000000u, 3u, 1u, 1u}) == 0x80000000u);
+        test_components(max(a, uint4_t{2u, 5u, 4u, 1u}), 7u, 5u, 4u, 6u));
+    FND_TEST_TRUE(
+        test_components(max(uint4_t{2u, 5u, 4u, 1u}, a), 7u, 5u, 4u, 6u));
+    FND_TEST_TRUE(test_components(
+        max(uint4_t{4u, 4u, 4u, 4u}, uint4_t{4u, 4u, 4u, 4u}), 4u, 4u, 4u, 4u));
+    FND_TEST_TRUE(test_components(max(uint4_t{0u, kUIntMaxValue, 1u, 2u},
+                                      uint4_t{kUIntMaxValue, 0u, 1u, 3u}),
+        kUIntMaxValue, kUIntMaxValue, 1u, 3u));
+    // uint_t on either side is compared with every component.
+    FND_TEST_TRUE(test_components(max(a, 5u), 7u, 5u, 5u, 6u));
+    FND_TEST_TRUE(test_components(max(5u, a), 7u, 5u, 5u, 6u));
+    FND_TEST_TRUE(test_components(max(a, 10u), 10u, 10u, 10u, 10u));
+    FND_TEST_TRUE(test_components(max(0u, a), 7u, 3u, 4u, 6u));
+}
+
+void unittests_math_vector_uint4_min()
+{
+    const uint4_t a{7u, 3u, 4u, 6u};
+    FND_TEST_TRUE(
+        test_components(min(a, uint4_t{2u, 5u, 4u, 1u}), 2u, 3u, 4u, 1u));
+    FND_TEST_TRUE(
+        test_components(min(uint4_t{2u, 5u, 4u, 1u}, a), 2u, 3u, 4u, 1u));
+    FND_TEST_TRUE(test_components(
+        min(uint4_t{4u, 4u, 4u, 4u}, uint4_t{4u, 4u, 4u, 4u}), 4u, 4u, 4u, 4u));
+    FND_TEST_TRUE(test_components(min(uint4_t{0u, kUIntMaxValue, 1u, 2u},
+                                      uint4_t{kUIntMaxValue, 0u, 1u, 3u}),
+        0u, 0u, 1u, 2u));
+    // uint_t on either side is compared with every component.
+    FND_TEST_TRUE(test_components(min(a, 5u), 5u, 3u, 4u, 5u));
+    FND_TEST_TRUE(test_components(min(5u, a), 5u, 3u, 4u, 5u));
+    FND_TEST_TRUE(test_components(min(a, 0u), 0u, 0u, 0u, 0u));
+    FND_TEST_TRUE(test_components(min(kUIntMaxValue, a), 7u, 3u, 4u, 6u));
 }
 
 // int4_t and uint4_t must agree wherever int4_t is defined: non-negative inputs
@@ -817,28 +817,28 @@ void unittests_math_vector_uint4()
     unittests_math_vector_uint4_subscript_operator();
     unittests_math_vector_uint4_increment_operators();
     unittests_math_vector_uint4_decrement_operators();
-    unittests_math_vector_uint4_equality_operators();
-    unittests_math_vector_uint4_relational_operators();
-    unittests_math_vector_uint4_addition_operator();
-    unittests_math_vector_uint4_subtraction_operator();
-    unittests_math_vector_uint4_multiplication_operator();
-    unittests_math_vector_uint4_division_operator();
-    unittests_math_vector_uint4_modulo_operator();
     unittests_math_vector_uint4_bitwise_not_operator();
-    unittests_math_vector_uint4_bitwise_and_operator();
-    unittests_math_vector_uint4_bitwise_or_operator();
-    unittests_math_vector_uint4_bitwise_xor_operator();
-    unittests_math_vector_uint4_shift_left_operator();
-    unittests_math_vector_uint4_shift_right_operator();
     unittests_math_vector_uint4_compound_assignment_operators();
     unittests_math_vector_uint4_compound_assignment_matches_operators();
-    unittests_math_vector_uint4_min();
-    unittests_math_vector_uint4_max();
+    unittests_math_vector_uint4_equality_operators();
+    unittests_math_vector_uint4_relational_operators();
+    unittests_math_vector_uint4_bitwise_and_operator();
+    unittests_math_vector_uint4_multiplication_operator();
+    unittests_math_vector_uint4_addition_operator();
+    unittests_math_vector_uint4_subtraction_operator();
+    unittests_math_vector_uint4_modulo_operator();
+    unittests_math_vector_uint4_division_operator();
+    unittests_math_vector_uint4_shift_left_operator();
+    unittests_math_vector_uint4_shift_right_operator();
+    unittests_math_vector_uint4_bitwise_xor_operator();
+    unittests_math_vector_uint4_bitwise_or_operator();
     unittests_math_vector_uint4_clamp();
-    unittests_math_vector_uint4_cmin();
     unittests_math_vector_uint4_cmax();
-    unittests_math_vector_uint4_csum();
+    unittests_math_vector_uint4_cmin();
     unittests_math_vector_uint4_cmul();
+    unittests_math_vector_uint4_csum();
+    unittests_math_vector_uint4_max();
+    unittests_math_vector_uint4_min();
     unittests_math_vector_uint4_matches_int4();
 }
 
