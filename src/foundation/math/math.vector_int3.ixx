@@ -332,24 +332,24 @@ export constexpr bool3_t operator==(const int3_t a, const int3_t b)
     return bool3_t{a.x == b.x, a.y == b.y, a.z == b.z};
 }
 
-export constexpr bool3_t operator!=(const int3_t a, const int3_t b)
-{
-    return !(a == b);
-}
-
 export constexpr bool3_t operator==(const int3_t a, const int_t val)
 {
     return bool3_t{a.x == val, a.y == val, a.z == val};
 }
 
-export constexpr bool3_t operator!=(const int3_t a, const int_t val)
-{
-    return !(a == val);
-}
-
 export constexpr bool3_t operator==(const int_t val, const int3_t b)
 {
     return bool3_t{val == b.x, val == b.y, val == b.z};
+}
+
+export constexpr bool3_t operator!=(const int3_t a, const int3_t b)
+{
+    return !(a == b);
+}
+
+export constexpr bool3_t operator!=(const int3_t a, const int_t val)
+{
+    return !(a == val);
 }
 
 export constexpr bool3_t operator!=(const int_t val, const int3_t b)
@@ -415,6 +415,57 @@ export constexpr bool3_t operator>=(const int3_t a, const int_t val)
 export constexpr bool3_t operator>=(const int_t val, const int3_t b)
 {
     return bool3_t{val >= b.x, val >= b.y, val >= b.z};
+}
+
+export constexpr int3_t operator&(const int3_t a, const int3_t b)
+{
+    return int3_t{a.x & b.x, a.y & b.y, a.z & b.z};
+}
+
+export constexpr int3_t operator&(const int3_t a, const int_t val)
+{
+    return int3_t{a.x & val, a.y & val, a.z & val};
+}
+
+export constexpr int3_t operator&(const int_t val, const int3_t b)
+{
+    return int3_t{val & b.x, val & b.y, val & b.z};
+}
+
+export constexpr int3_t operator*(const int3_t a, const int3_t b)
+{
+    FND_ASSERT(
+        long_t{a.x} * b.x >= kIntMinValue && long_t{a.x} * b.x <= kIntMaxValue);
+    FND_ASSERT(
+        long_t{a.y} * b.y >= kIntMinValue && long_t{a.y} * b.y <= kIntMaxValue);
+    FND_ASSERT(
+        long_t{a.z} * b.z >= kIntMinValue && long_t{a.z} * b.z <= kIntMaxValue);
+
+    return int3_t{a.x * b.x, a.y * b.y, a.z * b.z};
+}
+
+export constexpr int3_t operator*(const int3_t a, const int_t val)
+{
+    FND_ASSERT(
+        long_t{a.x} * val >= kIntMinValue && long_t{a.x} * val <= kIntMaxValue);
+    FND_ASSERT(
+        long_t{a.y} * val >= kIntMinValue && long_t{a.y} * val <= kIntMaxValue);
+    FND_ASSERT(
+        long_t{a.z} * val >= kIntMinValue && long_t{a.z} * val <= kIntMaxValue);
+
+    return int3_t{a.x * val, a.y * val, a.z * val};
+}
+
+export constexpr int3_t operator*(const int_t val, const int3_t b)
+{
+    FND_ASSERT(
+        long_t{val} * b.x >= kIntMinValue && long_t{val} * b.x <= kIntMaxValue);
+    FND_ASSERT(
+        long_t{val} * b.y >= kIntMinValue && long_t{val} * b.y <= kIntMaxValue);
+    FND_ASSERT(
+        long_t{val} * b.z >= kIntMinValue && long_t{val} * b.z <= kIntMaxValue);
+
+    return int3_t{val * b.x, val * b.y, val * b.z};
 }
 
 export constexpr int3_t operator+(const int3_t a, const int3_t b)
@@ -489,66 +540,6 @@ export constexpr int3_t operator-(const int_t val, const int3_t b)
     return int3_t{val - b.x, val - b.y, val - b.z};
 }
 
-export constexpr int3_t operator*(const int3_t a, const int3_t b)
-{
-    FND_ASSERT(
-        long_t{a.x} * b.x >= kIntMinValue && long_t{a.x} * b.x <= kIntMaxValue);
-    FND_ASSERT(
-        long_t{a.y} * b.y >= kIntMinValue && long_t{a.y} * b.y <= kIntMaxValue);
-    FND_ASSERT(
-        long_t{a.z} * b.z >= kIntMinValue && long_t{a.z} * b.z <= kIntMaxValue);
-
-    return int3_t{a.x * b.x, a.y * b.y, a.z * b.z};
-}
-
-export constexpr int3_t operator*(const int3_t a, const int_t val)
-{
-    FND_ASSERT(
-        long_t{a.x} * val >= kIntMinValue && long_t{a.x} * val <= kIntMaxValue);
-    FND_ASSERT(
-        long_t{a.y} * val >= kIntMinValue && long_t{a.y} * val <= kIntMaxValue);
-    FND_ASSERT(
-        long_t{a.z} * val >= kIntMinValue && long_t{a.z} * val <= kIntMaxValue);
-
-    return int3_t{a.x * val, a.y * val, a.z * val};
-}
-
-export constexpr int3_t operator*(const int_t val, const int3_t b)
-{
-    FND_ASSERT(
-        long_t{val} * b.x >= kIntMinValue && long_t{val} * b.x <= kIntMaxValue);
-    FND_ASSERT(
-        long_t{val} * b.y >= kIntMinValue && long_t{val} * b.y <= kIntMaxValue);
-    FND_ASSERT(
-        long_t{val} * b.z >= kIntMinValue && long_t{val} * b.z <= kIntMaxValue);
-
-    return int3_t{val * b.x, val * b.y, val * b.z};
-}
-
-export constexpr int3_t operator/(const int3_t a, const int3_t b)
-{
-    FND_ASSERT(all(b != 0));
-    FND_ASSERT(!any(a == kIntMinValue && b == -1));
-
-    return int3_t{a.x / b.x, a.y / b.y, a.z / b.z};
-}
-
-export constexpr int3_t operator/(const int3_t a, const int_t val)
-{
-    FND_ASSERT(val != 0);
-    FND_ASSERT(!(val == -1 && any(a == kIntMinValue)));
-
-    return int3_t{a.x / val, a.y / val, a.z / val};
-}
-
-export constexpr int3_t operator/(const int_t val, const int3_t b)
-{
-    FND_ASSERT(all(b != 0));
-    FND_ASSERT(!(val == kIntMinValue && any(b == -1)));
-
-    return int3_t{val / b.x, val / b.y, val / b.z};
-}
-
 export constexpr int3_t operator%(const int3_t a, const int3_t b)
 {
     FND_ASSERT(all(b != 0));
@@ -573,49 +564,28 @@ export constexpr int3_t operator%(const int_t val, const int3_t b)
     return int3_t{val % b.x, val % b.y, val % b.z};
 }
 
-export constexpr int3_t operator&(const int3_t a, const int3_t b)
+export constexpr int3_t operator/(const int3_t a, const int3_t b)
 {
-    return int3_t{a.x & b.x, a.y & b.y, a.z & b.z};
+    FND_ASSERT(all(b != 0));
+    FND_ASSERT(!any(a == kIntMinValue && b == -1));
+
+    return int3_t{a.x / b.x, a.y / b.y, a.z / b.z};
 }
 
-export constexpr int3_t operator&(const int3_t a, const int_t val)
+export constexpr int3_t operator/(const int3_t a, const int_t val)
 {
-    return int3_t{a.x & val, a.y & val, a.z & val};
+    FND_ASSERT(val != 0);
+    FND_ASSERT(!(val == -1 && any(a == kIntMinValue)));
+
+    return int3_t{a.x / val, a.y / val, a.z / val};
 }
 
-export constexpr int3_t operator&(const int_t val, const int3_t b)
+export constexpr int3_t operator/(const int_t val, const int3_t b)
 {
-    return int3_t{val & b.x, val & b.y, val & b.z};
-}
+    FND_ASSERT(all(b != 0));
+    FND_ASSERT(!(val == kIntMinValue && any(b == -1)));
 
-export constexpr int3_t operator|(const int3_t a, const int3_t b)
-{
-    return int3_t{a.x | b.x, a.y | b.y, a.z | b.z};
-}
-
-export constexpr int3_t operator|(const int3_t a, const int_t val)
-{
-    return int3_t{a.x | val, a.y | val, a.z | val};
-}
-
-export constexpr int3_t operator|(const int_t val, const int3_t b)
-{
-    return int3_t{val | b.x, val | b.y, val | b.z};
-}
-
-export constexpr int3_t operator^(const int3_t a, const int3_t b)
-{
-    return int3_t{a.x ^ b.x, a.y ^ b.y, a.z ^ b.z};
-}
-
-export constexpr int3_t operator^(const int3_t a, const int_t val)
-{
-    return int3_t{a.x ^ val, a.y ^ val, a.z ^ val};
-}
-
-export constexpr int3_t operator^(const int_t val, const int3_t b)
-{
-    return int3_t{val ^ b.x, val ^ b.y, val ^ b.z};
+    return int3_t{val / b.x, val / b.y, val / b.z};
 }
 
 // NOTE:
@@ -664,39 +634,39 @@ export constexpr int3_t operator>>(const int_t val, const int3_t b)
     return int3_t{val >> b.x, val >> b.y, val >> b.z};
 }
 
+export constexpr int3_t operator^(const int3_t a, const int3_t b)
+{
+    return int3_t{a.x ^ b.x, a.y ^ b.y, a.z ^ b.z};
+}
+
+export constexpr int3_t operator^(const int3_t a, const int_t val)
+{
+    return int3_t{a.x ^ val, a.y ^ val, a.z ^ val};
+}
+
+export constexpr int3_t operator^(const int_t val, const int3_t b)
+{
+    return int3_t{val ^ b.x, val ^ b.y, val ^ b.z};
+}
+
+export constexpr int3_t operator|(const int3_t a, const int3_t b)
+{
+    return int3_t{a.x | b.x, a.y | b.y, a.z | b.z};
+}
+
+export constexpr int3_t operator|(const int3_t a, const int_t val)
+{
+    return int3_t{a.x | val, a.y | val, a.z | val};
+}
+
+export constexpr int3_t operator|(const int_t val, const int3_t b)
+{
+    return int3_t{val | b.x, val | b.y, val | b.z};
+}
+
 export constexpr int3_t abs(const int3_t v)
 {
     return int3_t{abs(v.x), abs(v.y), abs(v.z)};
-}
-
-export constexpr int3_t min(const int3_t a, const int3_t b)
-{
-    return int3_t{min(a.x, b.x), min(a.y, b.y), min(a.z, b.z)};
-}
-
-export constexpr int3_t min(const int3_t a, const int_t val)
-{
-    return int3_t{min(a.x, val), min(a.y, val), min(a.z, val)};
-}
-
-export constexpr int3_t min(const int_t val, const int3_t b)
-{
-    return int3_t{min(val, b.x), min(val, b.y), min(val, b.z)};
-}
-
-export constexpr int3_t max(const int3_t a, const int3_t b)
-{
-    return int3_t{max(a.x, b.x), max(a.y, b.y), max(a.z, b.z)};
-}
-
-export constexpr int3_t max(const int3_t a, const int_t val)
-{
-    return int3_t{max(a.x, val), max(a.y, val), max(a.z, val)};
-}
-
-export constexpr int3_t max(const int_t val, const int3_t b)
-{
-    return int3_t{max(val, b.x), max(val, b.y), max(val, b.z)};
 }
 
 export constexpr int3_t clamp(
@@ -735,9 +705,9 @@ export constexpr int3_t clamp(
         clamp(v.z, lower, upper)};
 }
 
-export constexpr int3_t sign(const int3_t v)
+export constexpr int_t cmax(const int3_t v)
 {
-    return int3_t{sign(v.x), sign(v.y), sign(v.z)};
+    return max(max(v.x, v.y), v.z);
 }
 
 export constexpr int_t cmin(const int3_t v)
@@ -745,9 +715,16 @@ export constexpr int_t cmin(const int3_t v)
     return min(min(v.x, v.y), v.z);
 }
 
-export constexpr int_t cmax(const int3_t v)
+export constexpr int_t cmul(const int3_t v)
 {
-    return max(max(v.x, v.y), v.z);
+    FND_ASSERT(
+        long_t{v.x} * v.y >= kIntMinValue && long_t{v.x} * v.y <= kIntMaxValue);
+
+    const int_t partial1 = v.x * v.y;
+    FND_ASSERT(long_t{partial1} * v.z >= kIntMinValue
+        && long_t{partial1} * v.z <= kIntMaxValue);
+
+    return partial1 * v.z;
 }
 
 export constexpr int_t csum(const int3_t v)
@@ -762,16 +739,39 @@ export constexpr int_t csum(const int3_t v)
     return partial1 + v.z;
 }
 
-export constexpr int_t cmul(const int3_t v)
+export constexpr int3_t max(const int3_t a, const int3_t b)
 {
-    FND_ASSERT(
-        long_t{v.x} * v.y >= kIntMinValue && long_t{v.x} * v.y <= kIntMaxValue);
+    return int3_t{max(a.x, b.x), max(a.y, b.y), max(a.z, b.z)};
+}
 
-    const int_t partial1 = v.x * v.y;
-    FND_ASSERT(long_t{partial1} * v.z >= kIntMinValue
-        && long_t{partial1} * v.z <= kIntMaxValue);
+export constexpr int3_t max(const int3_t a, const int_t val)
+{
+    return int3_t{max(a.x, val), max(a.y, val), max(a.z, val)};
+}
 
-    return partial1 * v.z;
+export constexpr int3_t max(const int_t val, const int3_t b)
+{
+    return int3_t{max(val, b.x), max(val, b.y), max(val, b.z)};
+}
+
+export constexpr int3_t min(const int3_t a, const int3_t b)
+{
+    return int3_t{min(a.x, b.x), min(a.y, b.y), min(a.z, b.z)};
+}
+
+export constexpr int3_t min(const int3_t a, const int_t val)
+{
+    return int3_t{min(a.x, val), min(a.y, val), min(a.z, val)};
+}
+
+export constexpr int3_t min(const int_t val, const int3_t b)
+{
+    return int3_t{min(val, b.x), min(val, b.y), min(val, b.z)};
+}
+
+export constexpr int3_t sign(const int3_t v)
+{
+    return int3_t{sign(v.x), sign(v.y), sign(v.z)};
 }
 
 } // namespace fnd
