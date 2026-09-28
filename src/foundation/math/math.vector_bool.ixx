@@ -32,33 +32,6 @@ export struct bool2_t final {
     constexpr bool2_t operator!() const { return bool2_t{!x, !y}; }
 };
 
-export constexpr bool_t all(const bool2_t v)
-{
-    return v.x && v.y;
-}
-
-export constexpr bool_t any(const bool2_t v)
-{
-    return v.x || v.y;
-}
-
-// NOTE:
-// Overloaded && always evaluates both operands.
-export constexpr bool2_t operator&&(const bool2_t a, const bool2_t b)
-{
-    return bool2_t{a.x && b.x, a.y && b.y};
-}
-
-export constexpr bool2_t operator&&(const bool2_t a, const bool_t val)
-{
-    return bool2_t{a.x && val, a.y && val};
-}
-
-export constexpr bool2_t operator&&(const bool_t val, const bool2_t b)
-{
-    return bool2_t{val && b.x, val && b.y};
-}
-
 export constexpr bool2_t operator==(const bool2_t a, const bool2_t b)
 {
     return bool2_t{a.x == b.x, a.y == b.y};
@@ -90,6 +63,23 @@ export constexpr bool2_t operator!=(const bool_t val, const bool2_t b)
 }
 
 // NOTE:
+// Overloaded && always evaluates both operands.
+export constexpr bool2_t operator&&(const bool2_t a, const bool2_t b)
+{
+    return bool2_t{a.x && b.x, a.y && b.y};
+}
+
+export constexpr bool2_t operator&&(const bool2_t a, const bool_t val)
+{
+    return bool2_t{a.x && val, a.y && val};
+}
+
+export constexpr bool2_t operator&&(const bool_t val, const bool2_t b)
+{
+    return bool2_t{val && b.x, val && b.y};
+}
+
+// NOTE:
 // Overloaded || always evaluates both operands.
 export constexpr bool2_t operator||(const bool2_t a, const bool2_t b)
 {
@@ -104,6 +94,16 @@ export constexpr bool2_t operator||(const bool2_t a, const bool_t val)
 export constexpr bool2_t operator||(const bool_t val, const bool2_t b)
 {
     return bool2_t{val || b.x, val || b.y};
+}
+
+export constexpr bool_t all(const bool2_t v)
+{
+    return v.x && v.y;
+}
+
+export constexpr bool_t any(const bool2_t v)
+{
+    return v.x || v.y;
 }
 
 // ---------------------------------------------------------------------------
@@ -140,33 +140,6 @@ export struct bool3_t final {
     constexpr bool3_t operator!() const { return bool3_t{!x, !y, !z}; }
 };
 
-export constexpr bool_t all(const bool3_t v)
-{
-    return v.x && v.y && v.z;
-}
-
-export constexpr bool_t any(const bool3_t v)
-{
-    return v.x || v.y || v.z;
-}
-
-// NOTE:
-// Overloaded && always evaluates both operands.
-export constexpr bool3_t operator&&(const bool3_t a, const bool3_t b)
-{
-    return bool3_t{a.x && b.x, a.y && b.y, a.z && b.z};
-}
-
-export constexpr bool3_t operator&&(const bool3_t a, const bool_t val)
-{
-    return bool3_t{a.x && val, a.y && val, a.z && val};
-}
-
-export constexpr bool3_t operator&&(const bool_t val, const bool3_t b)
-{
-    return bool3_t{val && b.x, val && b.y, val && b.z};
-}
-
 export constexpr bool3_t operator==(const bool3_t a, const bool3_t b)
 {
     return bool3_t{a.x == b.x, a.y == b.y, a.z == b.z};
@@ -198,6 +171,23 @@ export constexpr bool3_t operator!=(const bool_t val, const bool3_t b)
 }
 
 // NOTE:
+// Overloaded && always evaluates both operands.
+export constexpr bool3_t operator&&(const bool3_t a, const bool3_t b)
+{
+    return bool3_t{a.x && b.x, a.y && b.y, a.z && b.z};
+}
+
+export constexpr bool3_t operator&&(const bool3_t a, const bool_t val)
+{
+    return bool3_t{a.x && val, a.y && val, a.z && val};
+}
+
+export constexpr bool3_t operator&&(const bool_t val, const bool3_t b)
+{
+    return bool3_t{val && b.x, val && b.y, val && b.z};
+}
+
+// NOTE:
 // Overloaded || always evaluates both operands.
 export constexpr bool3_t operator||(const bool3_t a, const bool3_t b)
 {
@@ -212,6 +202,16 @@ export constexpr bool3_t operator||(const bool3_t a, const bool_t val)
 export constexpr bool3_t operator||(const bool_t val, const bool3_t b)
 {
     return bool3_t{val || b.x, val || b.y, val || b.z};
+}
+
+export constexpr bool_t all(const bool3_t v)
+{
+    return v.x && v.y && v.z;
+}
+
+export constexpr bool_t any(const bool3_t v)
+{
+    return v.x || v.y || v.z;
 }
 
 // ---------------------------------------------------------------------------
@@ -258,33 +258,6 @@ export struct bool4_t final {
     constexpr bool4_t operator!() const { return bool4_t{!x, !y, !z, !w}; }
 };
 
-export constexpr bool_t all(const bool4_t v)
-{
-    return v.x && v.y && v.z && v.w;
-}
-
-export constexpr bool_t any(const bool4_t v)
-{
-    return v.x || v.y || v.z || v.w;
-}
-
-// NOTE:
-// Overloaded && always evaluates both operands.
-export constexpr bool4_t operator&&(const bool4_t a, const bool4_t b)
-{
-    return bool4_t{a.x && b.x, a.y && b.y, a.z && b.z, a.w && b.w};
-}
-
-export constexpr bool4_t operator&&(const bool4_t a, const bool_t val)
-{
-    return bool4_t{a.x && val, a.y && val, a.z && val, a.w && val};
-}
-
-export constexpr bool4_t operator&&(const bool_t val, const bool4_t b)
-{
-    return bool4_t{val && b.x, val && b.y, val && b.z, val && b.w};
-}
-
 export constexpr bool4_t operator==(const bool4_t a, const bool4_t b)
 {
     return bool4_t{a.x == b.x, a.y == b.y, a.z == b.z, a.w == b.w};
@@ -316,6 +289,23 @@ export constexpr bool4_t operator!=(const bool_t val, const bool4_t b)
 }
 
 // NOTE:
+// Overloaded && always evaluates both operands.
+export constexpr bool4_t operator&&(const bool4_t a, const bool4_t b)
+{
+    return bool4_t{a.x && b.x, a.y && b.y, a.z && b.z, a.w && b.w};
+}
+
+export constexpr bool4_t operator&&(const bool4_t a, const bool_t val)
+{
+    return bool4_t{a.x && val, a.y && val, a.z && val, a.w && val};
+}
+
+export constexpr bool4_t operator&&(const bool_t val, const bool4_t b)
+{
+    return bool4_t{val && b.x, val && b.y, val && b.z, val && b.w};
+}
+
+// NOTE:
 // Overloaded || always evaluates both operands.
 export constexpr bool4_t operator||(const bool4_t a, const bool4_t b)
 {
@@ -330,6 +320,16 @@ export constexpr bool4_t operator||(const bool4_t a, const bool_t val)
 export constexpr bool4_t operator||(const bool_t val, const bool4_t b)
 {
     return bool4_t{val || b.x, val || b.y, val || b.z, val || b.w};
+}
+
+export constexpr bool_t all(const bool4_t v)
+{
+    return v.x && v.y && v.z && v.w;
+}
+
+export constexpr bool_t any(const bool4_t v)
+{
+    return v.x || v.y || v.z || v.w;
 }
 
 } // namespace fnd

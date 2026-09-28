@@ -221,12 +221,195 @@ void unittests_math_vector_int2_compound_assignment_matches_operators()
     FND_TEST_TRUE(all(c == (a >> shift_val)));
 }
 
+void unittests_math_vector_int2_equality_operators()
+{
+    const int2_t a{7, -3};
+    FND_TEST_TRUE(all((a == int2_t{7, -3}) == bool2_t{true, true}));
+    FND_TEST_TRUE(all((a == int2_t{7, 5}) == bool2_t{true, false}));
+    FND_TEST_TRUE(all((a == int2_t{2, 5}) == bool2_t{false, false}));
+    FND_TEST_TRUE(all((a == 7) == bool2_t{true, false}));
+    FND_TEST_TRUE(all((-3 == a) == bool2_t{false, true}));
+
+    FND_TEST_TRUE(all((a != int2_t{7, -3}) == bool2_t{false, false}));
+    FND_TEST_TRUE(all((a != int2_t{7, 5}) == bool2_t{false, true}));
+    FND_TEST_TRUE(all((a != int2_t{2, 5}) == bool2_t{true, true}));
+    FND_TEST_TRUE(all((a != 7) == bool2_t{false, true}));
+    FND_TEST_TRUE(all((-3 != a) == bool2_t{true, false}));
+}
+
+void unittests_math_vector_int2_relational_operators()
+{
+    const int2_t a{7, -3};
+    const int2_t b{2, 5};
+    const int2_t c{7, 5};
+
+    FND_TEST_TRUE(all((a < b) == bool2_t{false, true}));
+    FND_TEST_TRUE(all((a < c) == bool2_t{false, true}));
+    FND_TEST_TRUE(all((a < 0) == bool2_t{false, true}));
+    FND_TEST_TRUE(all((0 < a) == bool2_t{true, false}));
+
+    FND_TEST_TRUE(all((a <= b) == bool2_t{false, true}));
+    FND_TEST_TRUE(all((a <= c) == bool2_t{true, true}));
+    FND_TEST_TRUE(all((a <= -3) == bool2_t{false, true}));
+    FND_TEST_TRUE(all((7 <= a) == bool2_t{true, false}));
+
+    FND_TEST_TRUE(all((a > b) == bool2_t{true, false}));
+    FND_TEST_TRUE(all((a > c) == bool2_t{false, false}));
+    FND_TEST_TRUE(all((a > 0) == bool2_t{true, false}));
+    FND_TEST_TRUE(all((0 > a) == bool2_t{false, true}));
+
+    FND_TEST_TRUE(all((a >= b) == bool2_t{true, false}));
+    FND_TEST_TRUE(all((a >= c) == bool2_t{true, false}));
+    FND_TEST_TRUE(all((a >= 7) == bool2_t{true, false}));
+    FND_TEST_TRUE(all((7 >= a) == bool2_t{true, true}));
+}
+
+void unittests_math_vector_int2_bitwise_and_operator()
+{
+    const int2_t a{0b1100, 0b1010};
+    FND_TEST_TRUE(test_components(a & int2_t{0b1010, 0b0110}, 0b1000, 0b0010));
+    FND_TEST_TRUE(test_components(a & 0b0110, 0b0100, 0b0010));
+    FND_TEST_TRUE(test_components(0b0110 & a, 0b0100, 0b0010));
+    FND_TEST_TRUE(test_components(int2_t{-1, kIntMinValue} & 0xFF, 0xFF, 0));
+}
+
+void unittests_math_vector_int2_multiplication_operator()
+{
+    const int2_t a{7, -3};
+    FND_TEST_TRUE(test_components(a * int2_t{2, 5}, 14, -15));
+    FND_TEST_TRUE(test_components(a * 2, 14, -6));
+    FND_TEST_TRUE(test_components(2 * a, 14, -6));
+    // 46340^2 is the largest square that fits in int_t.
+    FND_TEST_TRUE(test_components(
+        int2_t{46340, -46340} * 46340, 2147395600, -2147395600));
+}
+
+void unittests_math_vector_int2_addition_operator()
+{
+    const int2_t a{7, -3};
+    FND_TEST_TRUE(test_components(a + int2_t{2, 5}, 9, 2));
+    FND_TEST_TRUE(test_components(a + 1, 8, -2));
+    FND_TEST_TRUE(test_components(1 + a, 8, -2));
+    FND_TEST_TRUE(test_components(
+        int2_t{kIntMaxValue - 1, kIntMinValue + 1} + int2_t{1, -1},
+        kIntMaxValue, kIntMinValue));
+}
+
+void unittests_math_vector_int2_subtraction_operator()
+{
+    const int2_t a{7, -3};
+    FND_TEST_TRUE(test_components(a - int2_t{2, 5}, 5, -8));
+    FND_TEST_TRUE(test_components(a - 1, 6, -4));
+    FND_TEST_TRUE(test_components(1 - a, -6, 4));
+    FND_TEST_TRUE(test_components(
+        int2_t{kIntMinValue + 1, kIntMaxValue - 1} - int2_t{1, -1},
+        kIntMinValue, kIntMaxValue));
+}
+
+void unittests_math_vector_int2_modulo_operator()
+{
+    // The result has the sign of the left operand.
+    const int2_t a{7, -3};
+    FND_TEST_TRUE(test_components(a % int2_t{2, 5}, 1, -3));
+    FND_TEST_TRUE(test_components(a % 2, 1, -1));
+    FND_TEST_TRUE(test_components(21 % int2_t{2, 5}, 1, 1));
+    FND_TEST_TRUE(test_components(
+        int2_t{kIntMinValue, 7} % int2_t{kIntMaxValue, -2}, -1, 1));
+}
+
+void unittests_math_vector_int2_division_operator()
+{
+    // Division truncates toward zero.
+    const int2_t a{7, -3};
+    FND_TEST_TRUE(test_components(a / int2_t{2, 5}, 3, 0));
+    FND_TEST_TRUE(test_components(a / 2, 3, -1));
+    FND_TEST_TRUE(test_components(21 / int2_t{2, 5}, 10, 4));
+    FND_TEST_TRUE(
+        test_components(int2_t{kIntMinValue, kIntMaxValue} / int2_t{1, -1},
+            kIntMinValue, -kIntMaxValue));
+}
+
+void unittests_math_vector_int2_shift_left_operator()
+{
+    FND_TEST_TRUE(test_components(int2_t{1, 3} << int2_t{4, 1}, 16, 6));
+    FND_TEST_TRUE(test_components(int2_t{1, 3} << 2, 4, 12));
+    FND_TEST_TRUE(test_components(1 << int2_t{0, 31}, 1, kIntMinValue));
+    FND_TEST_TRUE(test_components(int2_t{-1, -2} << 1, -2, -4));
+}
+
+void unittests_math_vector_int2_shift_right_operator()
+{
+    FND_TEST_TRUE(test_components(int2_t{16, 6} >> int2_t{4, 1}, 1, 3));
+    // Negative values shift in sign bits.
+    FND_TEST_TRUE(test_components(int2_t{-8, 8} >> 1, -4, 4));
+    FND_TEST_TRUE(test_components(256 >> int2_t{4, 8}, 16, 1));
+    FND_TEST_TRUE(
+        test_components(int2_t{kIntMinValue, kIntMaxValue} >> 31, -1, 0));
+}
+
+void unittests_math_vector_int2_bitwise_xor_operator()
+{
+    const int2_t a{0b1100, 0b1010};
+    FND_TEST_TRUE(test_components(a ^ int2_t{0b1010, 0b0110}, 0b0110, 0b1100));
+    FND_TEST_TRUE(test_components(a ^ 0b1111, 0b0011, 0b0101));
+    FND_TEST_TRUE(test_components(0b1111 ^ a, 0b0011, 0b0101));
+    FND_TEST_TRUE(test_components(a ^ a, 0, 0));
+}
+
+void unittests_math_vector_int2_bitwise_or_operator()
+{
+    const int2_t a{0b1100, 0b1010};
+    FND_TEST_TRUE(test_components(a | int2_t{0b1010, 0b0110}, 0b1110, 0b1110));
+    FND_TEST_TRUE(test_components(a | 0b0001, 0b1101, 0b1011));
+    FND_TEST_TRUE(test_components(0b0001 | a, 0b1101, 0b1011));
+    FND_TEST_TRUE(test_components(
+        int2_t{0, kIntMaxValue} | kIntMinValue, kIntMinValue, -1));
+}
+
 void unittests_math_vector_int2_abs()
 {
     FND_TEST_TRUE(test_components(abs(int2_t{7, -3}), 7, 3));
     FND_TEST_TRUE(test_components(abs(int2_t{0, -0}), 0, 0));
     FND_TEST_TRUE(test_components(
         abs(int2_t{kIntMaxValue, -kIntMaxValue}), kIntMaxValue, kIntMaxValue));
+}
+
+void unittests_math_vector_int2_clamp()
+{
+    const int2_t lower{-10, 0};
+    const int2_t upper{10, 5};
+    // Each component is clamped to its own bounds.
+    FND_TEST_TRUE(test_components(clamp(int2_t{3, 3}, lower, upper), 3, 3));
+    FND_TEST_TRUE(
+        test_components(clamp(int2_t{-20, -1}, lower, upper), -10, 0));
+    FND_TEST_TRUE(test_components(clamp(int2_t{20, 6}, lower, upper), 10, 5));
+    FND_TEST_TRUE(test_components(clamp(int2_t{-10, 5}, lower, upper), -10, 5));
+    FND_TEST_TRUE(test_components(clamp(int2_t{-20, 6}, lower, upper), -10, 5));
+    FND_TEST_TRUE(
+        test_components(clamp(int2_t{9, 9}, int2_t{3, 3}, int2_t{3, 3}), 3, 3));
+
+    // int_t bounds apply to every component.
+    FND_TEST_TRUE(test_components(clamp(int2_t{3, -3}, 0, 5), 3, 0));
+    FND_TEST_TRUE(test_components(clamp(int2_t{-20, 20}, -10, 10), -10, 10));
+    FND_TEST_TRUE(test_components(clamp(int2_t{-10, 10}, -10, 10), -10, 10));
+    FND_TEST_TRUE(test_components(clamp(int2_t{9, -9}, 3, 3), 3, 3));
+
+    // int2_t lower bound, int_t upper bound.
+    FND_TEST_TRUE(
+        test_components(clamp(int2_t{-20, -20}, int2_t{-10, 0}, 5), -10, 0));
+    FND_TEST_TRUE(
+        test_components(clamp(int2_t{20, 3}, int2_t{-10, 0}, 5), 5, 3));
+    FND_TEST_TRUE(
+        test_components(clamp(int2_t{-10, 5}, int2_t{-10, 0}, 5), -10, 5));
+    FND_TEST_TRUE(test_components(clamp(int2_t{9, -9}, int2_t{3, 5}, 5), 5, 5));
+
+    // int_t lower bound, int2_t upper bound.
+    FND_TEST_TRUE(
+        test_components(clamp(int2_t{-20, -20}, 0, int2_t{10, 5}), 0, 0));
+    FND_TEST_TRUE(
+        test_components(clamp(int2_t{20, 3}, 0, int2_t{10, 5}), 10, 3));
+    FND_TEST_TRUE(test_components(clamp(int2_t{0, 5}, 0, int2_t{10, 5}), 0, 5));
+    FND_TEST_TRUE(test_components(clamp(int2_t{9, -9}, 3, int2_t{3, 7}), 3, 3));
 }
 
 void unittests_math_vector_int2_cmax()
@@ -294,189 +477,6 @@ void unittests_math_vector_int2_min()
     FND_TEST_TRUE(test_components(min(10, int2_t{7, -3}), 7, -3));
 }
 
-void unittests_math_vector_int2_bitwise_and_operator()
-{
-    const int2_t a{0b1100, 0b1010};
-    FND_TEST_TRUE(test_components(a & int2_t{0b1010, 0b0110}, 0b1000, 0b0010));
-    FND_TEST_TRUE(test_components(a & 0b0110, 0b0100, 0b0010));
-    FND_TEST_TRUE(test_components(0b0110 & a, 0b0100, 0b0010));
-    FND_TEST_TRUE(test_components(int2_t{-1, kIntMinValue} & 0xFF, 0xFF, 0));
-}
-
-void unittests_math_vector_int2_multiplication_operator()
-{
-    const int2_t a{7, -3};
-    FND_TEST_TRUE(test_components(a * int2_t{2, 5}, 14, -15));
-    FND_TEST_TRUE(test_components(a * 2, 14, -6));
-    FND_TEST_TRUE(test_components(2 * a, 14, -6));
-    // 46340^2 is the largest square that fits in int_t.
-    FND_TEST_TRUE(test_components(
-        int2_t{46340, -46340} * 46340, 2147395600, -2147395600));
-}
-
-void unittests_math_vector_int2_addition_operator()
-{
-    const int2_t a{7, -3};
-    FND_TEST_TRUE(test_components(a + int2_t{2, 5}, 9, 2));
-    FND_TEST_TRUE(test_components(a + 1, 8, -2));
-    FND_TEST_TRUE(test_components(1 + a, 8, -2));
-    FND_TEST_TRUE(test_components(
-        int2_t{kIntMaxValue - 1, kIntMinValue + 1} + int2_t{1, -1},
-        kIntMaxValue, kIntMinValue));
-}
-
-void unittests_math_vector_int2_subtraction_operator()
-{
-    const int2_t a{7, -3};
-    FND_TEST_TRUE(test_components(a - int2_t{2, 5}, 5, -8));
-    FND_TEST_TRUE(test_components(a - 1, 6, -4));
-    FND_TEST_TRUE(test_components(1 - a, -6, 4));
-    FND_TEST_TRUE(test_components(
-        int2_t{kIntMinValue + 1, kIntMaxValue - 1} - int2_t{1, -1},
-        kIntMinValue, kIntMaxValue));
-}
-
-void unittests_math_vector_int2_relational_operators()
-{
-    const int2_t a{7, -3};
-    const int2_t b{2, 5};
-    const int2_t c{7, 5};
-
-    FND_TEST_TRUE(all((a < b) == bool2_t{false, true}));
-    FND_TEST_TRUE(all((a < c) == bool2_t{false, true}));
-    FND_TEST_TRUE(all((a < 0) == bool2_t{false, true}));
-    FND_TEST_TRUE(all((0 < a) == bool2_t{true, false}));
-
-    FND_TEST_TRUE(all((a <= b) == bool2_t{false, true}));
-    FND_TEST_TRUE(all((a <= c) == bool2_t{true, true}));
-    FND_TEST_TRUE(all((a <= -3) == bool2_t{false, true}));
-    FND_TEST_TRUE(all((7 <= a) == bool2_t{true, false}));
-
-    FND_TEST_TRUE(all((a > b) == bool2_t{true, false}));
-    FND_TEST_TRUE(all((a > c) == bool2_t{false, false}));
-    FND_TEST_TRUE(all((a > 0) == bool2_t{true, false}));
-    FND_TEST_TRUE(all((0 > a) == bool2_t{false, true}));
-
-    FND_TEST_TRUE(all((a >= b) == bool2_t{true, false}));
-    FND_TEST_TRUE(all((a >= c) == bool2_t{true, false}));
-    FND_TEST_TRUE(all((a >= 7) == bool2_t{true, false}));
-    FND_TEST_TRUE(all((7 >= a) == bool2_t{true, true}));
-}
-
-void unittests_math_vector_int2_clamp()
-{
-    const int2_t lower{-10, 0};
-    const int2_t upper{10, 5};
-    // Each component is clamped to its own bounds.
-    FND_TEST_TRUE(test_components(clamp(int2_t{3, 3}, lower, upper), 3, 3));
-    FND_TEST_TRUE(
-        test_components(clamp(int2_t{-20, -1}, lower, upper), -10, 0));
-    FND_TEST_TRUE(test_components(clamp(int2_t{20, 6}, lower, upper), 10, 5));
-    FND_TEST_TRUE(test_components(clamp(int2_t{-10, 5}, lower, upper), -10, 5));
-    FND_TEST_TRUE(test_components(clamp(int2_t{-20, 6}, lower, upper), -10, 5));
-    FND_TEST_TRUE(
-        test_components(clamp(int2_t{9, 9}, int2_t{3, 3}, int2_t{3, 3}), 3, 3));
-
-    // int_t bounds apply to every component.
-    FND_TEST_TRUE(test_components(clamp(int2_t{3, -3}, 0, 5), 3, 0));
-    FND_TEST_TRUE(test_components(clamp(int2_t{-20, 20}, -10, 10), -10, 10));
-    FND_TEST_TRUE(test_components(clamp(int2_t{-10, 10}, -10, 10), -10, 10));
-    FND_TEST_TRUE(test_components(clamp(int2_t{9, -9}, 3, 3), 3, 3));
-
-    // int2_t lower bound, int_t upper bound.
-    FND_TEST_TRUE(
-        test_components(clamp(int2_t{-20, -20}, int2_t{-10, 0}, 5), -10, 0));
-    FND_TEST_TRUE(
-        test_components(clamp(int2_t{20, 3}, int2_t{-10, 0}, 5), 5, 3));
-    FND_TEST_TRUE(
-        test_components(clamp(int2_t{-10, 5}, int2_t{-10, 0}, 5), -10, 5));
-    FND_TEST_TRUE(test_components(clamp(int2_t{9, -9}, int2_t{3, 5}, 5), 5, 5));
-
-    // int_t lower bound, int2_t upper bound.
-    FND_TEST_TRUE(
-        test_components(clamp(int2_t{-20, -20}, 0, int2_t{10, 5}), 0, 0));
-    FND_TEST_TRUE(
-        test_components(clamp(int2_t{20, 3}, 0, int2_t{10, 5}), 10, 3));
-    FND_TEST_TRUE(test_components(clamp(int2_t{0, 5}, 0, int2_t{10, 5}), 0, 5));
-    FND_TEST_TRUE(test_components(clamp(int2_t{9, -9}, 3, int2_t{3, 7}), 3, 3));
-}
-
-void unittests_math_vector_int2_equality_operators()
-{
-    const int2_t a{7, -3};
-    FND_TEST_TRUE(all((a == int2_t{7, -3}) == bool2_t{true, true}));
-    FND_TEST_TRUE(all((a == int2_t{7, 5}) == bool2_t{true, false}));
-    FND_TEST_TRUE(all((a == int2_t{2, 5}) == bool2_t{false, false}));
-    FND_TEST_TRUE(all((a == 7) == bool2_t{true, false}));
-    FND_TEST_TRUE(all((-3 == a) == bool2_t{false, true}));
-
-    FND_TEST_TRUE(all((a != int2_t{7, -3}) == bool2_t{false, false}));
-    FND_TEST_TRUE(all((a != int2_t{7, 5}) == bool2_t{false, true}));
-    FND_TEST_TRUE(all((a != int2_t{2, 5}) == bool2_t{true, true}));
-    FND_TEST_TRUE(all((a != 7) == bool2_t{false, true}));
-    FND_TEST_TRUE(all((-3 != a) == bool2_t{true, false}));
-}
-
-void unittests_math_vector_int2_modulo_operator()
-{
-    // The result has the sign of the left operand.
-    const int2_t a{7, -3};
-    FND_TEST_TRUE(test_components(a % int2_t{2, 5}, 1, -3));
-    FND_TEST_TRUE(test_components(a % 2, 1, -1));
-    FND_TEST_TRUE(test_components(21 % int2_t{2, 5}, 1, 1));
-    FND_TEST_TRUE(test_components(
-        int2_t{kIntMinValue, 7} % int2_t{kIntMaxValue, -2}, -1, 1));
-}
-
-void unittests_math_vector_int2_division_operator()
-{
-    // Division truncates toward zero.
-    const int2_t a{7, -3};
-    FND_TEST_TRUE(test_components(a / int2_t{2, 5}, 3, 0));
-    FND_TEST_TRUE(test_components(a / 2, 3, -1));
-    FND_TEST_TRUE(test_components(21 / int2_t{2, 5}, 10, 4));
-    FND_TEST_TRUE(
-        test_components(int2_t{kIntMinValue, kIntMaxValue} / int2_t{1, -1},
-            kIntMinValue, -kIntMaxValue));
-}
-
-void unittests_math_vector_int2_shift_left_operator()
-{
-    FND_TEST_TRUE(test_components(int2_t{1, 3} << int2_t{4, 1}, 16, 6));
-    FND_TEST_TRUE(test_components(int2_t{1, 3} << 2, 4, 12));
-    FND_TEST_TRUE(test_components(1 << int2_t{0, 31}, 1, kIntMinValue));
-    FND_TEST_TRUE(test_components(int2_t{-1, -2} << 1, -2, -4));
-}
-
-void unittests_math_vector_int2_shift_right_operator()
-{
-    FND_TEST_TRUE(test_components(int2_t{16, 6} >> int2_t{4, 1}, 1, 3));
-    // Negative values shift in sign bits.
-    FND_TEST_TRUE(test_components(int2_t{-8, 8} >> 1, -4, 4));
-    FND_TEST_TRUE(test_components(256 >> int2_t{4, 8}, 16, 1));
-    FND_TEST_TRUE(
-        test_components(int2_t{kIntMinValue, kIntMaxValue} >> 31, -1, 0));
-}
-
-void unittests_math_vector_int2_bitwise_xor_operator()
-{
-    const int2_t a{0b1100, 0b1010};
-    FND_TEST_TRUE(test_components(a ^ int2_t{0b1010, 0b0110}, 0b0110, 0b1100));
-    FND_TEST_TRUE(test_components(a ^ 0b1111, 0b0011, 0b0101));
-    FND_TEST_TRUE(test_components(0b1111 ^ a, 0b0011, 0b0101));
-    FND_TEST_TRUE(test_components(a ^ a, 0, 0));
-}
-
-void unittests_math_vector_int2_bitwise_or_operator()
-{
-    const int2_t a{0b1100, 0b1010};
-    FND_TEST_TRUE(test_components(a | int2_t{0b1010, 0b0110}, 0b1110, 0b1110));
-    FND_TEST_TRUE(test_components(a | 0b0001, 0b1101, 0b1011));
-    FND_TEST_TRUE(test_components(0b0001 | a, 0b1101, 0b1011));
-    FND_TEST_TRUE(test_components(
-        int2_t{0, kIntMaxValue} | kIntMinValue, kIntMinValue, -1));
-}
-
 void unittests_math_vector_int2_sign()
 {
     FND_TEST_TRUE(test_components(sign(int2_t{7, -3}), 1, -1));
@@ -496,26 +496,26 @@ void unittests_math_vector_int2()
     unittests_math_vector_int2_bitwise_not_operator();
     unittests_math_vector_int2_compound_assignment_operators();
     unittests_math_vector_int2_compound_assignment_matches_operators();
-    unittests_math_vector_int2_abs();
-    unittests_math_vector_int2_cmax();
-    unittests_math_vector_int2_cmin();
-    unittests_math_vector_int2_cmul();
-    unittests_math_vector_int2_csum();
-    unittests_math_vector_int2_max();
-    unittests_math_vector_int2_min();
+    unittests_math_vector_int2_equality_operators();
+    unittests_math_vector_int2_relational_operators();
     unittests_math_vector_int2_bitwise_and_operator();
     unittests_math_vector_int2_multiplication_operator();
     unittests_math_vector_int2_addition_operator();
     unittests_math_vector_int2_subtraction_operator();
-    unittests_math_vector_int2_relational_operators();
-    unittests_math_vector_int2_clamp();
-    unittests_math_vector_int2_equality_operators();
     unittests_math_vector_int2_modulo_operator();
     unittests_math_vector_int2_division_operator();
     unittests_math_vector_int2_shift_left_operator();
     unittests_math_vector_int2_shift_right_operator();
     unittests_math_vector_int2_bitwise_xor_operator();
     unittests_math_vector_int2_bitwise_or_operator();
+    unittests_math_vector_int2_abs();
+    unittests_math_vector_int2_clamp();
+    unittests_math_vector_int2_cmax();
+    unittests_math_vector_int2_cmin();
+    unittests_math_vector_int2_cmul();
+    unittests_math_vector_int2_csum();
+    unittests_math_vector_int2_max();
+    unittests_math_vector_int2_min();
     unittests_math_vector_int2_sign();
 }
 
