@@ -19,7 +19,7 @@ export struct float2_t final {
     {
     }
 
-    constexpr explicit float2_t(const float_t val) : x{val}, y{val} {}
+    constexpr explicit float2_t(const float_t scalar) : x{scalar}, y{scalar} {}
 
     constexpr float2_t(const float_t x, const float_t y) : x{x}, y{y} {}
 
@@ -62,10 +62,10 @@ export struct float2_t final {
         return *this;
     }
 
-    constexpr float2_t& operator+=(const float_t val)
+    constexpr float2_t& operator+=(const float_t scalar)
     {
-        x += val;
-        y += val;
+        x += scalar;
+        y += scalar;
         return *this;
     }
 
@@ -76,10 +76,10 @@ export struct float2_t final {
         return *this;
     }
 
-    constexpr float2_t& operator-=(const float_t val)
+    constexpr float2_t& operator-=(const float_t scalar)
     {
-        x -= val;
-        y -= val;
+        x -= scalar;
+        y -= scalar;
         return *this;
     }
 
@@ -90,10 +90,10 @@ export struct float2_t final {
         return *this;
     }
 
-    constexpr float2_t& operator*=(const float_t val)
+    constexpr float2_t& operator*=(const float_t scalar)
     {
-        x *= val;
-        y *= val;
+        x *= scalar;
+        y *= scalar;
         return *this;
     }
 
@@ -106,12 +106,12 @@ export struct float2_t final {
         return *this;
     }
 
-    constexpr float2_t& operator/=(const float_t val)
+    constexpr float2_t& operator/=(const float_t scalar)
     {
-        FND_ASSERT(val != 0.0f);
+        FND_ASSERT(scalar != 0.0f);
 
-        x /= val;
-        y /= val;
+        x /= scalar;
+        y /= scalar;
         return *this;
     }
 
@@ -125,12 +125,12 @@ export struct float2_t final {
         return *this;
     }
 
-    FND_INLINE float2_t& operator%=(const float_t val)
+    FND_INLINE float2_t& operator%=(const float_t scalar)
     {
-        FND_ASSERT(val != 0.0f);
+        FND_ASSERT(scalar != 0.0f);
 
-        x = fmod(x, val);
-        y = fmod(y, val);
+        x = fmod(x, scalar);
+        y = fmod(y, scalar);
         return *this;
     }
 };
@@ -140,14 +140,14 @@ export constexpr bool2_t operator==(const float2_t a, const float2_t b)
     return bool2_t{a.x == b.x, a.y == b.y};
 }
 
-export constexpr bool2_t operator==(const float2_t a, const float_t val)
+export constexpr bool2_t operator==(const float2_t a, const float_t scalar)
 {
-    return bool2_t{a.x == val, a.y == val};
+    return bool2_t{a.x == scalar, a.y == scalar};
 }
 
-export constexpr bool2_t operator==(const float_t val, const float2_t b)
+export constexpr bool2_t operator==(const float_t scalar, const float2_t b)
 {
-    return bool2_t{val == b.x, val == b.y};
+    return bool2_t{scalar == b.x, scalar == b.y};
 }
 
 export constexpr bool2_t operator!=(const float2_t a, const float2_t b)
@@ -155,14 +155,14 @@ export constexpr bool2_t operator!=(const float2_t a, const float2_t b)
     return !(a == b);
 }
 
-export constexpr bool2_t operator!=(const float2_t a, const float_t val)
+export constexpr bool2_t operator!=(const float2_t a, const float_t scalar)
 {
-    return !(a == val);
+    return !(a == scalar);
 }
 
-export constexpr bool2_t operator!=(const float_t val, const float2_t b)
+export constexpr bool2_t operator!=(const float_t scalar, const float2_t b)
 {
-    return !(val == b);
+    return !(scalar == b);
 }
 
 export FND_INLINE bool2_t operator<(const float2_t a, const float2_t b)
@@ -170,14 +170,14 @@ export FND_INLINE bool2_t operator<(const float2_t a, const float2_t b)
     return bool2_t{a.x < b.x, a.y < b.y};
 }
 
-export FND_INLINE bool2_t operator<(const float2_t a, const float_t val)
+export FND_INLINE bool2_t operator<(const float2_t a, const float_t scalar)
 {
-    return bool2_t{a.x < val, a.y < val};
+    return bool2_t{a.x < scalar, a.y < scalar};
 }
 
-export FND_INLINE bool2_t operator<(const float_t val, const float2_t b)
+export FND_INLINE bool2_t operator<(const float_t scalar, const float2_t b)
 {
-    return bool2_t{val < b.x, val < b.y};
+    return bool2_t{scalar < b.x, scalar < b.y};
 }
 
 export FND_INLINE bool2_t operator<=(const float2_t a, const float2_t b)
@@ -185,14 +185,14 @@ export FND_INLINE bool2_t operator<=(const float2_t a, const float2_t b)
     return bool2_t{a.x <= b.x, a.y <= b.y};
 }
 
-export FND_INLINE bool2_t operator<=(const float2_t a, const float_t val)
+export FND_INLINE bool2_t operator<=(const float2_t a, const float_t scalar)
 {
-    return bool2_t{a.x <= val, a.y <= val};
+    return bool2_t{a.x <= scalar, a.y <= scalar};
 }
 
-export FND_INLINE bool2_t operator<=(const float_t val, const float2_t b)
+export FND_INLINE bool2_t operator<=(const float_t scalar, const float2_t b)
 {
-    return bool2_t{val <= b.x, val <= b.y};
+    return bool2_t{scalar <= b.x, scalar <= b.y};
 }
 
 export FND_INLINE bool2_t operator>(const float2_t a, const float2_t b)
@@ -200,14 +200,14 @@ export FND_INLINE bool2_t operator>(const float2_t a, const float2_t b)
     return bool2_t{a.x > b.x, a.y > b.y};
 }
 
-export FND_INLINE bool2_t operator>(const float2_t a, const float_t val)
+export FND_INLINE bool2_t operator>(const float2_t a, const float_t scalar)
 {
-    return bool2_t{a.x > val, a.y > val};
+    return bool2_t{a.x > scalar, a.y > scalar};
 }
 
-export FND_INLINE bool2_t operator>(const float_t val, const float2_t b)
+export FND_INLINE bool2_t operator>(const float_t scalar, const float2_t b)
 {
-    return bool2_t{val > b.x, val > b.y};
+    return bool2_t{scalar > b.x, scalar > b.y};
 }
 
 export FND_INLINE bool2_t operator>=(const float2_t a, const float2_t b)
@@ -215,14 +215,14 @@ export FND_INLINE bool2_t operator>=(const float2_t a, const float2_t b)
     return bool2_t{a.x >= b.x, a.y >= b.y};
 }
 
-export FND_INLINE bool2_t operator>=(const float2_t a, const float_t val)
+export FND_INLINE bool2_t operator>=(const float2_t a, const float_t scalar)
 {
-    return bool2_t{a.x >= val, a.y >= val};
+    return bool2_t{a.x >= scalar, a.y >= scalar};
 }
 
-export FND_INLINE bool2_t operator>=(const float_t val, const float2_t b)
+export FND_INLINE bool2_t operator>=(const float_t scalar, const float2_t b)
 {
-    return bool2_t{val >= b.x, val >= b.y};
+    return bool2_t{scalar >= b.x, scalar >= b.y};
 }
 
 export constexpr float2_t operator*(const float2_t a, const float2_t b)
@@ -230,14 +230,14 @@ export constexpr float2_t operator*(const float2_t a, const float2_t b)
     return float2_t{a.x * b.x, a.y * b.y};
 }
 
-export constexpr float2_t operator*(const float2_t a, const float_t val)
+export constexpr float2_t operator*(const float2_t a, const float_t scalar)
 {
-    return float2_t{a.x * val, a.y * val};
+    return float2_t{a.x * scalar, a.y * scalar};
 }
 
-export constexpr float2_t operator*(const float_t val, const float2_t b)
+export constexpr float2_t operator*(const float_t scalar, const float2_t b)
 {
-    return float2_t{val * b.x, val * b.y};
+    return float2_t{scalar * b.x, scalar * b.y};
 }
 
 export constexpr float2_t operator+(const float2_t a, const float2_t b)
@@ -245,14 +245,14 @@ export constexpr float2_t operator+(const float2_t a, const float2_t b)
     return float2_t{a.x + b.x, a.y + b.y};
 }
 
-export constexpr float2_t operator+(const float2_t a, const float_t val)
+export constexpr float2_t operator+(const float2_t a, const float_t scalar)
 {
-    return float2_t{a.x + val, a.y + val};
+    return float2_t{a.x + scalar, a.y + scalar};
 }
 
-export constexpr float2_t operator+(const float_t val, const float2_t b)
+export constexpr float2_t operator+(const float_t scalar, const float2_t b)
 {
-    return float2_t{val + b.x, val + b.y};
+    return float2_t{scalar + b.x, scalar + b.y};
 }
 
 export constexpr float2_t operator-(const float2_t a, const float2_t b)
@@ -260,14 +260,14 @@ export constexpr float2_t operator-(const float2_t a, const float2_t b)
     return float2_t{a.x - b.x, a.y - b.y};
 }
 
-export constexpr float2_t operator-(const float2_t a, const float_t val)
+export constexpr float2_t operator-(const float2_t a, const float_t scalar)
 {
-    return float2_t{a.x - val, a.y - val};
+    return float2_t{a.x - scalar, a.y - scalar};
 }
 
-export constexpr float2_t operator-(const float_t val, const float2_t b)
+export constexpr float2_t operator-(const float_t scalar, const float2_t b)
 {
-    return float2_t{val - b.x, val - b.y};
+    return float2_t{scalar - b.x, scalar - b.y};
 }
 
 // The result has the sign of the left operand, as fmod does.
@@ -278,18 +278,18 @@ export FND_INLINE float2_t operator%(const float2_t a, const float2_t b)
     return float2_t{fmod(a.x, b.x), fmod(a.y, b.y)};
 }
 
-export FND_INLINE float2_t operator%(const float2_t a, const float_t val)
+export FND_INLINE float2_t operator%(const float2_t a, const float_t scalar)
 {
-    FND_ASSERT(val != 0.0f);
+    FND_ASSERT(scalar != 0.0f);
 
-    return float2_t{fmod(a.x, val), fmod(a.y, val)};
+    return float2_t{fmod(a.x, scalar), fmod(a.y, scalar)};
 }
 
-export FND_INLINE float2_t operator%(const float_t val, const float2_t b)
+export FND_INLINE float2_t operator%(const float_t scalar, const float2_t b)
 {
     FND_ASSERT(b.x != 0.0f && b.y != 0.0f);
 
-    return float2_t{fmod(val, b.x), fmod(val, b.y)};
+    return float2_t{fmod(scalar, b.x), fmod(scalar, b.y)};
 }
 
 export constexpr float2_t operator/(const float2_t a, const float2_t b)
@@ -299,18 +299,18 @@ export constexpr float2_t operator/(const float2_t a, const float2_t b)
     return float2_t{a.x / b.x, a.y / b.y};
 }
 
-export constexpr float2_t operator/(const float2_t a, const float_t val)
+export constexpr float2_t operator/(const float2_t a, const float_t scalar)
 {
-    FND_ASSERT(val != 0.0f);
+    FND_ASSERT(scalar != 0.0f);
 
-    return float2_t{a.x / val, a.y / val};
+    return float2_t{a.x / scalar, a.y / scalar};
 }
 
-export constexpr float2_t operator/(const float_t val, const float2_t b)
+export constexpr float2_t operator/(const float_t scalar, const float2_t b)
 {
     FND_ASSERT(b.x != 0.0f && b.y != 0.0f);
 
-    return float2_t{val / b.x, val / b.y};
+    return float2_t{scalar / b.x, scalar / b.y};
 }
 
 export FND_INLINE float2_t abs(const float2_t v)
@@ -469,14 +469,14 @@ export FND_INLINE float2_t fmod(const float2_t a, const float2_t b)
     return float2_t{fmod(a.x, b.x), fmod(a.y, b.y)};
 }
 
-export FND_INLINE float2_t fmod(const float2_t a, const float_t val)
+export FND_INLINE float2_t fmod(const float2_t a, const float_t scalar)
 {
-    return float2_t{fmod(a.x, val), fmod(a.y, val)};
+    return float2_t{fmod(a.x, scalar), fmod(a.y, scalar)};
 }
 
-export FND_INLINE float2_t fmod(const float_t val, const float2_t b)
+export FND_INLINE float2_t fmod(const float_t scalar, const float2_t b)
 {
-    return float2_t{fmod(val, b.x), fmod(val, b.y)};
+    return float2_t{fmod(scalar, b.x), fmod(scalar, b.y)};
 }
 
 export FND_INLINE float2_t fractional(const float2_t v)
@@ -541,14 +541,14 @@ export FND_INLINE float2_t max(const float2_t a, const float2_t b)
     return float2_t{max(a.x, b.x), max(a.y, b.y)};
 }
 
-export FND_INLINE float2_t max(const float2_t a, const float_t val)
+export FND_INLINE float2_t max(const float2_t a, const float_t scalar)
 {
-    return float2_t{max(a.x, val), max(a.y, val)};
+    return float2_t{max(a.x, scalar), max(a.y, scalar)};
 }
 
-export FND_INLINE float2_t max(const float_t val, const float2_t b)
+export FND_INLINE float2_t max(const float_t scalar, const float2_t b)
 {
-    return float2_t{max(val, b.x), max(val, b.y)};
+    return float2_t{max(scalar, b.x), max(scalar, b.y)};
 }
 
 export FND_INLINE float2_t min(const float2_t a, const float2_t b)
@@ -556,14 +556,14 @@ export FND_INLINE float2_t min(const float2_t a, const float2_t b)
     return float2_t{min(a.x, b.x), min(a.y, b.y)};
 }
 
-export FND_INLINE float2_t min(const float2_t a, const float_t val)
+export FND_INLINE float2_t min(const float2_t a, const float_t scalar)
 {
-    return float2_t{min(a.x, val), min(a.y, val)};
+    return float2_t{min(a.x, scalar), min(a.y, scalar)};
 }
 
-export FND_INLINE float2_t min(const float_t val, const float2_t b)
+export FND_INLINE float2_t min(const float_t scalar, const float2_t b)
 {
-    return float2_t{min(val, b.x), min(val, b.y)};
+    return float2_t{min(scalar, b.x), min(scalar, b.y)};
 }
 
 export FND_INLINE float2_t normalize(const float2_t v)

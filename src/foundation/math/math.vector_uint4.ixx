@@ -28,8 +28,8 @@ export struct uint4_t final {
     {
     }
 
-    constexpr explicit uint4_t(const uint_t val)
-        : x{val}, y{val}, z{val}, w{val}
+    constexpr explicit uint4_t(const uint_t scalar)
+        : x{scalar}, y{scalar}, z{scalar}, w{scalar}
     {
     }
 
@@ -94,23 +94,23 @@ export struct uint4_t final {
         return *this;
     }
 
-    constexpr uint4_t& operator+=(const uint_t val)
+    constexpr uint4_t& operator+=(const uint_t scalar)
     {
-        x += val;
-        y += val;
-        z += val;
-        w += val;
+        x += scalar;
+        y += scalar;
+        z += scalar;
+        w += scalar;
         return *this;
     }
 
-    constexpr uint4_t& operator+=(const int_t val)
+    constexpr uint4_t& operator+=(const int_t scalar)
     {
-        FND_ASSERT(val >= 0);
+        FND_ASSERT(scalar >= 0);
 
-        x += val;
-        y += val;
-        z += val;
-        w += val;
+        x += scalar;
+        y += scalar;
+        z += scalar;
+        w += scalar;
         return *this;
     }
 
@@ -123,23 +123,23 @@ export struct uint4_t final {
         return *this;
     }
 
-    constexpr uint4_t& operator-=(const uint_t val)
+    constexpr uint4_t& operator-=(const uint_t scalar)
     {
-        x -= val;
-        y -= val;
-        z -= val;
-        w -= val;
+        x -= scalar;
+        y -= scalar;
+        z -= scalar;
+        w -= scalar;
         return *this;
     }
 
-    constexpr uint4_t& operator-=(const int_t val)
+    constexpr uint4_t& operator-=(const int_t scalar)
     {
-        FND_ASSERT(val >= 0);
+        FND_ASSERT(scalar >= 0);
 
-        x -= val;
-        y -= val;
-        z -= val;
-        w -= val;
+        x -= scalar;
+        y -= scalar;
+        z -= scalar;
+        w -= scalar;
         return *this;
     }
 
@@ -152,23 +152,23 @@ export struct uint4_t final {
         return *this;
     }
 
-    constexpr uint4_t& operator*=(const uint_t val)
+    constexpr uint4_t& operator*=(const uint_t scalar)
     {
-        x *= val;
-        y *= val;
-        z *= val;
-        w *= val;
+        x *= scalar;
+        y *= scalar;
+        z *= scalar;
+        w *= scalar;
         return *this;
     }
 
-    constexpr uint4_t& operator*=(const int_t val)
+    constexpr uint4_t& operator*=(const int_t scalar)
     {
-        FND_ASSERT(val >= 0);
+        FND_ASSERT(scalar >= 0);
 
-        x *= val;
-        y *= val;
-        z *= val;
-        w *= val;
+        x *= scalar;
+        y *= scalar;
+        z *= scalar;
+        w *= scalar;
         return *this;
     }
 
@@ -183,25 +183,25 @@ export struct uint4_t final {
         return *this;
     }
 
-    constexpr uint4_t& operator/=(const uint_t val)
+    constexpr uint4_t& operator/=(const uint_t scalar)
     {
-        FND_ASSERT(val != 0);
+        FND_ASSERT(scalar != 0);
 
-        x /= val;
-        y /= val;
-        z /= val;
-        w /= val;
+        x /= scalar;
+        y /= scalar;
+        z /= scalar;
+        w /= scalar;
         return *this;
     }
 
-    constexpr uint4_t& operator/=(const int_t val)
+    constexpr uint4_t& operator/=(const int_t scalar)
     {
-        FND_ASSERT(val > 0);
+        FND_ASSERT(scalar > 0);
 
-        x /= val;
-        y /= val;
-        z /= val;
-        w /= val;
+        x /= scalar;
+        y /= scalar;
+        z /= scalar;
+        w /= scalar;
         return *this;
     }
 
@@ -216,25 +216,25 @@ export struct uint4_t final {
         return *this;
     }
 
-    constexpr uint4_t& operator%=(const uint_t val)
+    constexpr uint4_t& operator%=(const uint_t scalar)
     {
-        FND_ASSERT(val != 0);
+        FND_ASSERT(scalar != 0);
 
-        x %= val;
-        y %= val;
-        z %= val;
-        w %= val;
+        x %= scalar;
+        y %= scalar;
+        z %= scalar;
+        w %= scalar;
         return *this;
     }
 
-    constexpr uint4_t& operator%=(const int_t val)
+    constexpr uint4_t& operator%=(const int_t scalar)
     {
-        FND_ASSERT(val > 0);
+        FND_ASSERT(scalar > 0);
 
-        x %= val;
-        y %= val;
-        z %= val;
-        w %= val;
+        x %= scalar;
+        y %= scalar;
+        z %= scalar;
+        w %= scalar;
         return *this;
     }
 
@@ -247,23 +247,23 @@ export struct uint4_t final {
         return *this;
     }
 
-    constexpr uint4_t& operator&=(const uint_t val)
+    constexpr uint4_t& operator&=(const uint_t scalar)
     {
-        x &= val;
-        y &= val;
-        z &= val;
-        w &= val;
+        x &= scalar;
+        y &= scalar;
+        z &= scalar;
+        w &= scalar;
         return *this;
     }
 
-    constexpr uint4_t& operator&=(const int_t val)
+    constexpr uint4_t& operator&=(const int_t scalar)
     {
-        FND_ASSERT(val >= 0);
+        FND_ASSERT(scalar >= 0);
 
-        x &= val;
-        y &= val;
-        z &= val;
-        w &= val;
+        x &= scalar;
+        y &= scalar;
+        z &= scalar;
+        w &= scalar;
         return *this;
     }
 
@@ -276,23 +276,23 @@ export struct uint4_t final {
         return *this;
     }
 
-    constexpr uint4_t& operator|=(const uint_t val)
+    constexpr uint4_t& operator|=(const uint_t scalar)
     {
-        x |= val;
-        y |= val;
-        z |= val;
-        w |= val;
+        x |= scalar;
+        y |= scalar;
+        z |= scalar;
+        w |= scalar;
         return *this;
     }
 
-    constexpr uint4_t& operator|=(const int_t val)
+    constexpr uint4_t& operator|=(const int_t scalar)
     {
-        FND_ASSERT(val >= 0);
+        FND_ASSERT(scalar >= 0);
 
-        x |= val;
-        y |= val;
-        z |= val;
-        w |= val;
+        x |= scalar;
+        y |= scalar;
+        z |= scalar;
+        w |= scalar;
         return *this;
     }
 
@@ -305,23 +305,23 @@ export struct uint4_t final {
         return *this;
     }
 
-    constexpr uint4_t& operator^=(const uint_t val)
+    constexpr uint4_t& operator^=(const uint_t scalar)
     {
-        x ^= val;
-        y ^= val;
-        z ^= val;
-        w ^= val;
+        x ^= scalar;
+        y ^= scalar;
+        z ^= scalar;
+        w ^= scalar;
         return *this;
     }
 
-    constexpr uint4_t& operator^=(const int_t val)
+    constexpr uint4_t& operator^=(const int_t scalar)
     {
-        FND_ASSERT(val >= 0);
+        FND_ASSERT(scalar >= 0);
 
-        x ^= val;
-        y ^= val;
-        z ^= val;
-        w ^= val;
+        x ^= scalar;
+        y ^= scalar;
+        z ^= scalar;
+        w ^= scalar;
         return *this;
     }
 
@@ -339,25 +339,25 @@ export struct uint4_t final {
         return *this;
     }
 
-    constexpr uint4_t& operator<<=(const uint_t val)
+    constexpr uint4_t& operator<<=(const uint_t scalar)
     {
-        FND_ASSERT(val < 32);
+        FND_ASSERT(scalar < 32);
 
-        x <<= val;
-        y <<= val;
-        z <<= val;
-        w <<= val;
+        x <<= scalar;
+        y <<= scalar;
+        z <<= scalar;
+        w <<= scalar;
         return *this;
     }
 
-    constexpr uint4_t& operator<<=(const int_t val)
+    constexpr uint4_t& operator<<=(const int_t scalar)
     {
-        FND_ASSERT(val >= 0 && val < 32);
+        FND_ASSERT(scalar >= 0 && scalar < 32);
 
-        x <<= val;
-        y <<= val;
-        z <<= val;
-        w <<= val;
+        x <<= scalar;
+        y <<= scalar;
+        z <<= scalar;
+        w <<= scalar;
         return *this;
     }
 
@@ -375,25 +375,25 @@ export struct uint4_t final {
         return *this;
     }
 
-    constexpr uint4_t& operator>>=(const uint_t val)
+    constexpr uint4_t& operator>>=(const uint_t scalar)
     {
-        FND_ASSERT(val < 32);
+        FND_ASSERT(scalar < 32);
 
-        x >>= val;
-        y >>= val;
-        z >>= val;
-        w >>= val;
+        x >>= scalar;
+        y >>= scalar;
+        z >>= scalar;
+        w >>= scalar;
         return *this;
     }
 
-    constexpr uint4_t& operator>>=(const int_t val)
+    constexpr uint4_t& operator>>=(const int_t scalar)
     {
-        FND_ASSERT(val >= 0 && val < 32);
+        FND_ASSERT(scalar >= 0 && scalar < 32);
 
-        x >>= val;
-        y >>= val;
-        z >>= val;
-        w >>= val;
+        x >>= scalar;
+        y >>= scalar;
+        z >>= scalar;
+        w >>= scalar;
         return *this;
     }
 };
@@ -403,29 +403,29 @@ export constexpr bool4_t operator==(const uint4_t a, const uint4_t b)
     return bool4_t{a.x == b.x, a.y == b.y, a.z == b.z, a.w == b.w};
 }
 
-export constexpr bool4_t operator==(const uint4_t a, const uint_t val)
+export constexpr bool4_t operator==(const uint4_t a, const uint_t scalar)
 {
-    return bool4_t{a.x == val, a.y == val, a.z == val, a.w == val};
+    return bool4_t{a.x == scalar, a.y == scalar, a.z == scalar, a.w == scalar};
 }
 
-export constexpr bool4_t operator==(const uint_t val, const uint4_t b)
+export constexpr bool4_t operator==(const uint_t scalar, const uint4_t b)
 {
-    return bool4_t{val == b.x, val == b.y, val == b.z, val == b.w};
+    return bool4_t{scalar == b.x, scalar == b.y, scalar == b.z, scalar == b.w};
 }
 
-export constexpr bool4_t operator==(const uint4_t a, const int_t val)
+export constexpr bool4_t operator==(const uint4_t a, const int_t scalar)
 {
-    FND_ASSERT(val >= 0);
+    FND_ASSERT(scalar >= 0);
 
-    const uint_t uval = static_cast<uint_t>(val);
+    const uint_t uval = static_cast<uint_t>(scalar);
     return bool4_t{a.x == uval, a.y == uval, a.z == uval, a.w == uval};
 }
 
-export constexpr bool4_t operator==(const int_t val, const uint4_t b)
+export constexpr bool4_t operator==(const int_t scalar, const uint4_t b)
 {
-    FND_ASSERT(val >= 0);
+    FND_ASSERT(scalar >= 0);
 
-    const uint_t uval = static_cast<uint_t>(val);
+    const uint_t uval = static_cast<uint_t>(scalar);
     return bool4_t{uval == b.x, uval == b.y, uval == b.z, uval == b.w};
 }
 
@@ -434,24 +434,24 @@ export constexpr bool4_t operator!=(const uint4_t a, const uint4_t b)
     return !(a == b);
 }
 
-export constexpr bool4_t operator!=(const uint4_t a, const uint_t val)
+export constexpr bool4_t operator!=(const uint4_t a, const uint_t scalar)
 {
-    return !(a == val);
+    return !(a == scalar);
 }
 
-export constexpr bool4_t operator!=(const uint_t val, const uint4_t b)
+export constexpr bool4_t operator!=(const uint_t scalar, const uint4_t b)
 {
-    return !(val == b);
+    return !(scalar == b);
 }
 
-export constexpr bool4_t operator!=(const uint4_t a, const int_t val)
+export constexpr bool4_t operator!=(const uint4_t a, const int_t scalar)
 {
-    return !(a == val);
+    return !(a == scalar);
 }
 
-export constexpr bool4_t operator!=(const int_t val, const uint4_t b)
+export constexpr bool4_t operator!=(const int_t scalar, const uint4_t b)
 {
-    return !(val == b);
+    return !(scalar == b);
 }
 
 export constexpr bool4_t operator<(const uint4_t a, const uint4_t b)
@@ -459,29 +459,29 @@ export constexpr bool4_t operator<(const uint4_t a, const uint4_t b)
     return bool4_t{a.x < b.x, a.y < b.y, a.z < b.z, a.w < b.w};
 }
 
-export constexpr bool4_t operator<(const uint4_t a, const uint_t val)
+export constexpr bool4_t operator<(const uint4_t a, const uint_t scalar)
 {
-    return bool4_t{a.x < val, a.y < val, a.z < val, a.w < val};
+    return bool4_t{a.x < scalar, a.y < scalar, a.z < scalar, a.w < scalar};
 }
 
-export constexpr bool4_t operator<(const uint_t val, const uint4_t b)
+export constexpr bool4_t operator<(const uint_t scalar, const uint4_t b)
 {
-    return bool4_t{val < b.x, val < b.y, val < b.z, val < b.w};
+    return bool4_t{scalar < b.x, scalar < b.y, scalar < b.z, scalar < b.w};
 }
 
-export constexpr bool4_t operator<(const uint4_t a, const int_t val)
+export constexpr bool4_t operator<(const uint4_t a, const int_t scalar)
 {
-    FND_ASSERT(val >= 0);
+    FND_ASSERT(scalar >= 0);
 
-    const uint_t uval = static_cast<uint_t>(val);
+    const uint_t uval = static_cast<uint_t>(scalar);
     return bool4_t{a.x < uval, a.y < uval, a.z < uval, a.w < uval};
 }
 
-export constexpr bool4_t operator<(const int_t val, const uint4_t b)
+export constexpr bool4_t operator<(const int_t scalar, const uint4_t b)
 {
-    FND_ASSERT(val >= 0);
+    FND_ASSERT(scalar >= 0);
 
-    const uint_t uval = static_cast<uint_t>(val);
+    const uint_t uval = static_cast<uint_t>(scalar);
     return bool4_t{uval < b.x, uval < b.y, uval < b.z, uval < b.w};
 }
 
@@ -490,29 +490,29 @@ export constexpr bool4_t operator<=(const uint4_t a, const uint4_t b)
     return bool4_t{a.x <= b.x, a.y <= b.y, a.z <= b.z, a.w <= b.w};
 }
 
-export constexpr bool4_t operator<=(const uint4_t a, const uint_t val)
+export constexpr bool4_t operator<=(const uint4_t a, const uint_t scalar)
 {
-    return bool4_t{a.x <= val, a.y <= val, a.z <= val, a.w <= val};
+    return bool4_t{a.x <= scalar, a.y <= scalar, a.z <= scalar, a.w <= scalar};
 }
 
-export constexpr bool4_t operator<=(const uint_t val, const uint4_t b)
+export constexpr bool4_t operator<=(const uint_t scalar, const uint4_t b)
 {
-    return bool4_t{val <= b.x, val <= b.y, val <= b.z, val <= b.w};
+    return bool4_t{scalar <= b.x, scalar <= b.y, scalar <= b.z, scalar <= b.w};
 }
 
-export constexpr bool4_t operator<=(const uint4_t a, const int_t val)
+export constexpr bool4_t operator<=(const uint4_t a, const int_t scalar)
 {
-    FND_ASSERT(val >= 0);
+    FND_ASSERT(scalar >= 0);
 
-    const uint_t uval = static_cast<uint_t>(val);
+    const uint_t uval = static_cast<uint_t>(scalar);
     return bool4_t{a.x <= uval, a.y <= uval, a.z <= uval, a.w <= uval};
 }
 
-export constexpr bool4_t operator<=(const int_t val, const uint4_t b)
+export constexpr bool4_t operator<=(const int_t scalar, const uint4_t b)
 {
-    FND_ASSERT(val >= 0);
+    FND_ASSERT(scalar >= 0);
 
-    const uint_t uval = static_cast<uint_t>(val);
+    const uint_t uval = static_cast<uint_t>(scalar);
     return bool4_t{uval <= b.x, uval <= b.y, uval <= b.z, uval <= b.w};
 }
 
@@ -521,29 +521,29 @@ export constexpr bool4_t operator>(const uint4_t a, const uint4_t b)
     return bool4_t{a.x > b.x, a.y > b.y, a.z > b.z, a.w > b.w};
 }
 
-export constexpr bool4_t operator>(const uint4_t a, const uint_t val)
+export constexpr bool4_t operator>(const uint4_t a, const uint_t scalar)
 {
-    return bool4_t{a.x > val, a.y > val, a.z > val, a.w > val};
+    return bool4_t{a.x > scalar, a.y > scalar, a.z > scalar, a.w > scalar};
 }
 
-export constexpr bool4_t operator>(const uint_t val, const uint4_t b)
+export constexpr bool4_t operator>(const uint_t scalar, const uint4_t b)
 {
-    return bool4_t{val > b.x, val > b.y, val > b.z, val > b.w};
+    return bool4_t{scalar > b.x, scalar > b.y, scalar > b.z, scalar > b.w};
 }
 
-export constexpr bool4_t operator>(const uint4_t a, const int_t val)
+export constexpr bool4_t operator>(const uint4_t a, const int_t scalar)
 {
-    FND_ASSERT(val >= 0);
+    FND_ASSERT(scalar >= 0);
 
-    const uint_t uval = static_cast<uint_t>(val);
+    const uint_t uval = static_cast<uint_t>(scalar);
     return bool4_t{a.x > uval, a.y > uval, a.z > uval, a.w > uval};
 }
 
-export constexpr bool4_t operator>(const int_t val, const uint4_t b)
+export constexpr bool4_t operator>(const int_t scalar, const uint4_t b)
 {
-    FND_ASSERT(val >= 0);
+    FND_ASSERT(scalar >= 0);
 
-    const uint_t uval = static_cast<uint_t>(val);
+    const uint_t uval = static_cast<uint_t>(scalar);
     return bool4_t{uval > b.x, uval > b.y, uval > b.z, uval > b.w};
 }
 
@@ -552,29 +552,29 @@ export constexpr bool4_t operator>=(const uint4_t a, const uint4_t b)
     return bool4_t{a.x >= b.x, a.y >= b.y, a.z >= b.z, a.w >= b.w};
 }
 
-export constexpr bool4_t operator>=(const uint4_t a, const uint_t val)
+export constexpr bool4_t operator>=(const uint4_t a, const uint_t scalar)
 {
-    return bool4_t{a.x >= val, a.y >= val, a.z >= val, a.w >= val};
+    return bool4_t{a.x >= scalar, a.y >= scalar, a.z >= scalar, a.w >= scalar};
 }
 
-export constexpr bool4_t operator>=(const uint_t val, const uint4_t b)
+export constexpr bool4_t operator>=(const uint_t scalar, const uint4_t b)
 {
-    return bool4_t{val >= b.x, val >= b.y, val >= b.z, val >= b.w};
+    return bool4_t{scalar >= b.x, scalar >= b.y, scalar >= b.z, scalar >= b.w};
 }
 
-export constexpr bool4_t operator>=(const uint4_t a, const int_t val)
+export constexpr bool4_t operator>=(const uint4_t a, const int_t scalar)
 {
-    FND_ASSERT(val >= 0);
+    FND_ASSERT(scalar >= 0);
 
-    const uint_t uval = static_cast<uint_t>(val);
+    const uint_t uval = static_cast<uint_t>(scalar);
     return bool4_t{a.x >= uval, a.y >= uval, a.z >= uval, a.w >= uval};
 }
 
-export constexpr bool4_t operator>=(const int_t val, const uint4_t b)
+export constexpr bool4_t operator>=(const int_t scalar, const uint4_t b)
 {
-    FND_ASSERT(val >= 0);
+    FND_ASSERT(scalar >= 0);
 
-    const uint_t uval = static_cast<uint_t>(val);
+    const uint_t uval = static_cast<uint_t>(scalar);
     return bool4_t{uval >= b.x, uval >= b.y, uval >= b.z, uval >= b.w};
 }
 
@@ -583,28 +583,28 @@ export constexpr uint4_t operator&(const uint4_t a, const uint4_t b)
     return uint4_t{a.x & b.x, a.y & b.y, a.z & b.z, a.w & b.w};
 }
 
-export constexpr uint4_t operator&(const uint4_t a, const uint_t val)
+export constexpr uint4_t operator&(const uint4_t a, const uint_t scalar)
 {
-    return uint4_t{a.x & val, a.y & val, a.z & val, a.w & val};
+    return uint4_t{a.x & scalar, a.y & scalar, a.z & scalar, a.w & scalar};
 }
 
-export constexpr uint4_t operator&(const uint_t val, const uint4_t b)
+export constexpr uint4_t operator&(const uint_t scalar, const uint4_t b)
 {
-    return uint4_t{val & b.x, val & b.y, val & b.z, val & b.w};
+    return uint4_t{scalar & b.x, scalar & b.y, scalar & b.z, scalar & b.w};
 }
 
-export constexpr uint4_t operator&(const uint4_t a, const int_t val)
+export constexpr uint4_t operator&(const uint4_t a, const int_t scalar)
 {
-    FND_ASSERT(val >= 0);
+    FND_ASSERT(scalar >= 0);
 
-    return uint4_t{a.x & val, a.y & val, a.z & val, a.w & val};
+    return uint4_t{a.x & scalar, a.y & scalar, a.z & scalar, a.w & scalar};
 }
 
-export constexpr uint4_t operator&(const int_t val, const uint4_t b)
+export constexpr uint4_t operator&(const int_t scalar, const uint4_t b)
 {
-    FND_ASSERT(val >= 0);
+    FND_ASSERT(scalar >= 0);
 
-    return uint4_t{val & b.x, val & b.y, val & b.z, val & b.w};
+    return uint4_t{scalar & b.x, scalar & b.y, scalar & b.z, scalar & b.w};
 }
 
 export constexpr uint4_t operator*(const uint4_t a, const uint4_t b)
@@ -612,28 +612,28 @@ export constexpr uint4_t operator*(const uint4_t a, const uint4_t b)
     return uint4_t{a.x * b.x, a.y * b.y, a.z * b.z, a.w * b.w};
 }
 
-export constexpr uint4_t operator*(const uint4_t a, const uint_t val)
+export constexpr uint4_t operator*(const uint4_t a, const uint_t scalar)
 {
-    return uint4_t{a.x * val, a.y * val, a.z * val, a.w * val};
+    return uint4_t{a.x * scalar, a.y * scalar, a.z * scalar, a.w * scalar};
 }
 
-export constexpr uint4_t operator*(const uint_t val, const uint4_t b)
+export constexpr uint4_t operator*(const uint_t scalar, const uint4_t b)
 {
-    return uint4_t{val * b.x, val * b.y, val * b.z, val * b.w};
+    return uint4_t{scalar * b.x, scalar * b.y, scalar * b.z, scalar * b.w};
 }
 
-export constexpr uint4_t operator*(const uint4_t a, const int_t val)
+export constexpr uint4_t operator*(const uint4_t a, const int_t scalar)
 {
-    FND_ASSERT(val >= 0);
+    FND_ASSERT(scalar >= 0);
 
-    return uint4_t{a.x * val, a.y * val, a.z * val, a.w * val};
+    return uint4_t{a.x * scalar, a.y * scalar, a.z * scalar, a.w * scalar};
 }
 
-export constexpr uint4_t operator*(const int_t val, const uint4_t b)
+export constexpr uint4_t operator*(const int_t scalar, const uint4_t b)
 {
-    FND_ASSERT(val >= 0);
+    FND_ASSERT(scalar >= 0);
 
-    return uint4_t{val * b.x, val * b.y, val * b.z, val * b.w};
+    return uint4_t{scalar * b.x, scalar * b.y, scalar * b.z, scalar * b.w};
 }
 
 export constexpr uint4_t operator+(const uint4_t a, const uint4_t b)
@@ -641,28 +641,28 @@ export constexpr uint4_t operator+(const uint4_t a, const uint4_t b)
     return uint4_t{a.x + b.x, a.y + b.y, a.z + b.z, a.w + b.w};
 }
 
-export constexpr uint4_t operator+(const uint4_t a, const uint_t val)
+export constexpr uint4_t operator+(const uint4_t a, const uint_t scalar)
 {
-    return uint4_t{a.x + val, a.y + val, a.z + val, a.w + val};
+    return uint4_t{a.x + scalar, a.y + scalar, a.z + scalar, a.w + scalar};
 }
 
-export constexpr uint4_t operator+(const uint_t val, const uint4_t b)
+export constexpr uint4_t operator+(const uint_t scalar, const uint4_t b)
 {
-    return uint4_t{val + b.x, val + b.y, val + b.z, val + b.w};
+    return uint4_t{scalar + b.x, scalar + b.y, scalar + b.z, scalar + b.w};
 }
 
-export constexpr uint4_t operator+(const uint4_t a, const int_t val)
+export constexpr uint4_t operator+(const uint4_t a, const int_t scalar)
 {
-    FND_ASSERT(val >= 0);
+    FND_ASSERT(scalar >= 0);
 
-    return uint4_t{a.x + val, a.y + val, a.z + val, a.w + val};
+    return uint4_t{a.x + scalar, a.y + scalar, a.z + scalar, a.w + scalar};
 }
 
-export constexpr uint4_t operator+(const int_t val, const uint4_t b)
+export constexpr uint4_t operator+(const int_t scalar, const uint4_t b)
 {
-    FND_ASSERT(val >= 0);
+    FND_ASSERT(scalar >= 0);
 
-    return uint4_t{val + b.x, val + b.y, val + b.z, val + b.w};
+    return uint4_t{scalar + b.x, scalar + b.y, scalar + b.z, scalar + b.w};
 }
 
 export constexpr uint4_t operator-(const uint4_t a, const uint4_t b)
@@ -670,28 +670,28 @@ export constexpr uint4_t operator-(const uint4_t a, const uint4_t b)
     return uint4_t{a.x - b.x, a.y - b.y, a.z - b.z, a.w - b.w};
 }
 
-export constexpr uint4_t operator-(const uint4_t a, const uint_t val)
+export constexpr uint4_t operator-(const uint4_t a, const uint_t scalar)
 {
-    return uint4_t{a.x - val, a.y - val, a.z - val, a.w - val};
+    return uint4_t{a.x - scalar, a.y - scalar, a.z - scalar, a.w - scalar};
 }
 
-export constexpr uint4_t operator-(const uint_t val, const uint4_t b)
+export constexpr uint4_t operator-(const uint_t scalar, const uint4_t b)
 {
-    return uint4_t{val - b.x, val - b.y, val - b.z, val - b.w};
+    return uint4_t{scalar - b.x, scalar - b.y, scalar - b.z, scalar - b.w};
 }
 
-export constexpr uint4_t operator-(const uint4_t a, const int_t val)
+export constexpr uint4_t operator-(const uint4_t a, const int_t scalar)
 {
-    FND_ASSERT(val >= 0);
+    FND_ASSERT(scalar >= 0);
 
-    return uint4_t{a.x - val, a.y - val, a.z - val, a.w - val};
+    return uint4_t{a.x - scalar, a.y - scalar, a.z - scalar, a.w - scalar};
 }
 
-export constexpr uint4_t operator-(const int_t val, const uint4_t b)
+export constexpr uint4_t operator-(const int_t scalar, const uint4_t b)
 {
-    FND_ASSERT(val >= 0);
+    FND_ASSERT(scalar >= 0);
 
-    return uint4_t{val - b.x, val - b.y, val - b.z, val - b.w};
+    return uint4_t{scalar - b.x, scalar - b.y, scalar - b.z, scalar - b.w};
 }
 
 export constexpr uint4_t operator%(const uint4_t a, const uint4_t b)
@@ -701,33 +701,33 @@ export constexpr uint4_t operator%(const uint4_t a, const uint4_t b)
     return uint4_t{a.x % b.x, a.y % b.y, a.z % b.z, a.w % b.w};
 }
 
-export constexpr uint4_t operator%(const uint4_t a, const uint_t val)
+export constexpr uint4_t operator%(const uint4_t a, const uint_t scalar)
 {
-    FND_ASSERT(val != 0);
+    FND_ASSERT(scalar != 0);
 
-    return uint4_t{a.x % val, a.y % val, a.z % val, a.w % val};
+    return uint4_t{a.x % scalar, a.y % scalar, a.z % scalar, a.w % scalar};
 }
 
-export constexpr uint4_t operator%(const uint_t val, const uint4_t b)
+export constexpr uint4_t operator%(const uint_t scalar, const uint4_t b)
 {
     FND_ASSERT(all(b != 0u));
 
-    return uint4_t{val % b.x, val % b.y, val % b.z, val % b.w};
+    return uint4_t{scalar % b.x, scalar % b.y, scalar % b.z, scalar % b.w};
 }
 
-export constexpr uint4_t operator%(const uint4_t a, const int_t val)
+export constexpr uint4_t operator%(const uint4_t a, const int_t scalar)
 {
-    FND_ASSERT(val > 0);
+    FND_ASSERT(scalar > 0);
 
-    return uint4_t{a.x % val, a.y % val, a.z % val, a.w % val};
+    return uint4_t{a.x % scalar, a.y % scalar, a.z % scalar, a.w % scalar};
 }
 
-export constexpr uint4_t operator%(const int_t val, const uint4_t b)
+export constexpr uint4_t operator%(const int_t scalar, const uint4_t b)
 {
-    FND_ASSERT(val >= 0);
+    FND_ASSERT(scalar >= 0);
     FND_ASSERT(all(b != 0u));
 
-    return uint4_t{val % b.x, val % b.y, val % b.z, val % b.w};
+    return uint4_t{scalar % b.x, scalar % b.y, scalar % b.z, scalar % b.w};
 }
 
 export constexpr uint4_t operator/(const uint4_t a, const uint4_t b)
@@ -737,33 +737,33 @@ export constexpr uint4_t operator/(const uint4_t a, const uint4_t b)
     return uint4_t{a.x / b.x, a.y / b.y, a.z / b.z, a.w / b.w};
 }
 
-export constexpr uint4_t operator/(const uint4_t a, const uint_t val)
+export constexpr uint4_t operator/(const uint4_t a, const uint_t scalar)
 {
-    FND_ASSERT(val != 0);
+    FND_ASSERT(scalar != 0);
 
-    return uint4_t{a.x / val, a.y / val, a.z / val, a.w / val};
+    return uint4_t{a.x / scalar, a.y / scalar, a.z / scalar, a.w / scalar};
 }
 
-export constexpr uint4_t operator/(const uint_t val, const uint4_t b)
+export constexpr uint4_t operator/(const uint_t scalar, const uint4_t b)
 {
     FND_ASSERT(all(b != 0u));
 
-    return uint4_t{val / b.x, val / b.y, val / b.z, val / b.w};
+    return uint4_t{scalar / b.x, scalar / b.y, scalar / b.z, scalar / b.w};
 }
 
-export constexpr uint4_t operator/(const uint4_t a, const int_t val)
+export constexpr uint4_t operator/(const uint4_t a, const int_t scalar)
 {
-    FND_ASSERT(val > 0);
+    FND_ASSERT(scalar > 0);
 
-    return uint4_t{a.x / val, a.y / val, a.z / val, a.w / val};
+    return uint4_t{a.x / scalar, a.y / scalar, a.z / scalar, a.w / scalar};
 }
 
-export constexpr uint4_t operator/(const int_t val, const uint4_t b)
+export constexpr uint4_t operator/(const int_t scalar, const uint4_t b)
 {
-    FND_ASSERT(val >= 0);
+    FND_ASSERT(scalar >= 0);
     FND_ASSERT(all(b != 0u));
 
-    return uint4_t{val / b.x, val / b.y, val / b.z, val / b.w};
+    return uint4_t{scalar / b.x, scalar / b.y, scalar / b.z, scalar / b.w};
 }
 
 export constexpr uint4_t operator<<(const uint4_t a, const uint4_t b)
@@ -773,33 +773,33 @@ export constexpr uint4_t operator<<(const uint4_t a, const uint4_t b)
     return uint4_t{a.x << b.x, a.y << b.y, a.z << b.z, a.w << b.w};
 }
 
-export constexpr uint4_t operator<<(const uint4_t a, const uint_t val)
+export constexpr uint4_t operator<<(const uint4_t a, const uint_t scalar)
 {
-    FND_ASSERT(val < 32);
+    FND_ASSERT(scalar < 32);
 
-    return uint4_t{a.x << val, a.y << val, a.z << val, a.w << val};
+    return uint4_t{a.x << scalar, a.y << scalar, a.z << scalar, a.w << scalar};
 }
 
-export constexpr uint4_t operator<<(const uint_t val, const uint4_t b)
+export constexpr uint4_t operator<<(const uint_t scalar, const uint4_t b)
 {
     FND_ASSERT(all(b < 32u));
 
-    return uint4_t{val << b.x, val << b.y, val << b.z, val << b.w};
+    return uint4_t{scalar << b.x, scalar << b.y, scalar << b.z, scalar << b.w};
 }
 
-export constexpr uint4_t operator<<(const uint4_t a, const int_t val)
+export constexpr uint4_t operator<<(const uint4_t a, const int_t scalar)
 {
-    FND_ASSERT(val >= 0 && val < 32);
+    FND_ASSERT(scalar >= 0 && scalar < 32);
 
-    return uint4_t{a.x << val, a.y << val, a.z << val, a.w << val};
+    return uint4_t{a.x << scalar, a.y << scalar, a.z << scalar, a.w << scalar};
 }
 
-export constexpr uint4_t operator<<(const int_t val, const uint4_t b)
+export constexpr uint4_t operator<<(const int_t scalar, const uint4_t b)
 {
-    FND_ASSERT(val >= 0);
+    FND_ASSERT(scalar >= 0);
     FND_ASSERT(all(b < 32u));
 
-    const uint_t uval = static_cast<uint_t>(val);
+    const uint_t uval = static_cast<uint_t>(scalar);
     return uint4_t{uval << b.x, uval << b.y, uval << b.z, uval << b.w};
 }
 
@@ -810,33 +810,33 @@ export constexpr uint4_t operator>>(const uint4_t a, const uint4_t b)
     return uint4_t{a.x >> b.x, a.y >> b.y, a.z >> b.z, a.w >> b.w};
 }
 
-export constexpr uint4_t operator>>(const uint4_t a, const uint_t val)
+export constexpr uint4_t operator>>(const uint4_t a, const uint_t scalar)
 {
-    FND_ASSERT(val < 32);
+    FND_ASSERT(scalar < 32);
 
-    return uint4_t{a.x >> val, a.y >> val, a.z >> val, a.w >> val};
+    return uint4_t{a.x >> scalar, a.y >> scalar, a.z >> scalar, a.w >> scalar};
 }
 
-export constexpr uint4_t operator>>(const uint_t val, const uint4_t b)
+export constexpr uint4_t operator>>(const uint_t scalar, const uint4_t b)
 {
     FND_ASSERT(all(b < 32u));
 
-    return uint4_t{val >> b.x, val >> b.y, val >> b.z, val >> b.w};
+    return uint4_t{scalar >> b.x, scalar >> b.y, scalar >> b.z, scalar >> b.w};
 }
 
-export constexpr uint4_t operator>>(const uint4_t a, const int_t val)
+export constexpr uint4_t operator>>(const uint4_t a, const int_t scalar)
 {
-    FND_ASSERT(val >= 0 && val < 32);
+    FND_ASSERT(scalar >= 0 && scalar < 32);
 
-    return uint4_t{a.x >> val, a.y >> val, a.z >> val, a.w >> val};
+    return uint4_t{a.x >> scalar, a.y >> scalar, a.z >> scalar, a.w >> scalar};
 }
 
-export constexpr uint4_t operator>>(const int_t val, const uint4_t b)
+export constexpr uint4_t operator>>(const int_t scalar, const uint4_t b)
 {
-    FND_ASSERT(val >= 0);
+    FND_ASSERT(scalar >= 0);
     FND_ASSERT(all(b < 32u));
 
-    const uint_t uval = static_cast<uint_t>(val);
+    const uint_t uval = static_cast<uint_t>(scalar);
     return uint4_t{uval >> b.x, uval >> b.y, uval >> b.z, uval >> b.w};
 }
 
@@ -845,28 +845,28 @@ export constexpr uint4_t operator^(const uint4_t a, const uint4_t b)
     return uint4_t{a.x ^ b.x, a.y ^ b.y, a.z ^ b.z, a.w ^ b.w};
 }
 
-export constexpr uint4_t operator^(const uint4_t a, const uint_t val)
+export constexpr uint4_t operator^(const uint4_t a, const uint_t scalar)
 {
-    return uint4_t{a.x ^ val, a.y ^ val, a.z ^ val, a.w ^ val};
+    return uint4_t{a.x ^ scalar, a.y ^ scalar, a.z ^ scalar, a.w ^ scalar};
 }
 
-export constexpr uint4_t operator^(const uint_t val, const uint4_t b)
+export constexpr uint4_t operator^(const uint_t scalar, const uint4_t b)
 {
-    return uint4_t{val ^ b.x, val ^ b.y, val ^ b.z, val ^ b.w};
+    return uint4_t{scalar ^ b.x, scalar ^ b.y, scalar ^ b.z, scalar ^ b.w};
 }
 
-export constexpr uint4_t operator^(const uint4_t a, const int_t val)
+export constexpr uint4_t operator^(const uint4_t a, const int_t scalar)
 {
-    FND_ASSERT(val >= 0);
+    FND_ASSERT(scalar >= 0);
 
-    return uint4_t{a.x ^ val, a.y ^ val, a.z ^ val, a.w ^ val};
+    return uint4_t{a.x ^ scalar, a.y ^ scalar, a.z ^ scalar, a.w ^ scalar};
 }
 
-export constexpr uint4_t operator^(const int_t val, const uint4_t b)
+export constexpr uint4_t operator^(const int_t scalar, const uint4_t b)
 {
-    FND_ASSERT(val >= 0);
+    FND_ASSERT(scalar >= 0);
 
-    return uint4_t{val ^ b.x, val ^ b.y, val ^ b.z, val ^ b.w};
+    return uint4_t{scalar ^ b.x, scalar ^ b.y, scalar ^ b.z, scalar ^ b.w};
 }
 
 export constexpr uint4_t operator|(const uint4_t a, const uint4_t b)
@@ -874,28 +874,28 @@ export constexpr uint4_t operator|(const uint4_t a, const uint4_t b)
     return uint4_t{a.x | b.x, a.y | b.y, a.z | b.z, a.w | b.w};
 }
 
-export constexpr uint4_t operator|(const uint4_t a, const uint_t val)
+export constexpr uint4_t operator|(const uint4_t a, const uint_t scalar)
 {
-    return uint4_t{a.x | val, a.y | val, a.z | val, a.w | val};
+    return uint4_t{a.x | scalar, a.y | scalar, a.z | scalar, a.w | scalar};
 }
 
-export constexpr uint4_t operator|(const uint_t val, const uint4_t b)
+export constexpr uint4_t operator|(const uint_t scalar, const uint4_t b)
 {
-    return uint4_t{val | b.x, val | b.y, val | b.z, val | b.w};
+    return uint4_t{scalar | b.x, scalar | b.y, scalar | b.z, scalar | b.w};
 }
 
-export constexpr uint4_t operator|(const uint4_t a, const int_t val)
+export constexpr uint4_t operator|(const uint4_t a, const int_t scalar)
 {
-    FND_ASSERT(val >= 0);
+    FND_ASSERT(scalar >= 0);
 
-    return uint4_t{a.x | val, a.y | val, a.z | val, a.w | val};
+    return uint4_t{a.x | scalar, a.y | scalar, a.z | scalar, a.w | scalar};
 }
 
-export constexpr uint4_t operator|(const int_t val, const uint4_t b)
+export constexpr uint4_t operator|(const int_t scalar, const uint4_t b)
 {
-    FND_ASSERT(val >= 0);
+    FND_ASSERT(scalar >= 0);
 
-    return uint4_t{val | b.x, val | b.y, val | b.z, val | b.w};
+    return uint4_t{scalar | b.x, scalar | b.y, scalar | b.z, scalar | b.w};
 }
 
 export constexpr uint4_t clamp(
@@ -959,14 +959,16 @@ export constexpr uint4_t max(const uint4_t a, const uint4_t b)
     return uint4_t{max(a.x, b.x), max(a.y, b.y), max(a.z, b.z), max(a.w, b.w)};
 }
 
-export constexpr uint4_t max(const uint4_t a, const uint_t val)
+export constexpr uint4_t max(const uint4_t a, const uint_t scalar)
 {
-    return uint4_t{max(a.x, val), max(a.y, val), max(a.z, val), max(a.w, val)};
+    return uint4_t{
+        max(a.x, scalar), max(a.y, scalar), max(a.z, scalar), max(a.w, scalar)};
 }
 
-export constexpr uint4_t max(const uint_t val, const uint4_t b)
+export constexpr uint4_t max(const uint_t scalar, const uint4_t b)
 {
-    return uint4_t{max(val, b.x), max(val, b.y), max(val, b.z), max(val, b.w)};
+    return uint4_t{
+        max(scalar, b.x), max(scalar, b.y), max(scalar, b.z), max(scalar, b.w)};
 }
 
 export constexpr uint4_t min(const uint4_t a, const uint4_t b)
@@ -974,14 +976,16 @@ export constexpr uint4_t min(const uint4_t a, const uint4_t b)
     return uint4_t{min(a.x, b.x), min(a.y, b.y), min(a.z, b.z), min(a.w, b.w)};
 }
 
-export constexpr uint4_t min(const uint4_t a, const uint_t val)
+export constexpr uint4_t min(const uint4_t a, const uint_t scalar)
 {
-    return uint4_t{min(a.x, val), min(a.y, val), min(a.z, val), min(a.w, val)};
+    return uint4_t{
+        min(a.x, scalar), min(a.y, scalar), min(a.z, scalar), min(a.w, scalar)};
 }
 
-export constexpr uint4_t min(const uint_t val, const uint4_t b)
+export constexpr uint4_t min(const uint_t scalar, const uint4_t b)
 {
-    return uint4_t{min(val, b.x), min(val, b.y), min(val, b.z), min(val, b.w)};
+    return uint4_t{
+        min(scalar, b.x), min(scalar, b.y), min(scalar, b.z), min(scalar, b.w)};
 }
 
 } // namespace fnd

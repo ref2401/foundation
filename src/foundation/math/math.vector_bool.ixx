@@ -15,7 +15,7 @@ export struct bool2_t final {
     bool_t y{false};
 
     constexpr bool2_t() = default;
-    constexpr explicit bool2_t(const bool_t val) : x{val}, y{val} {}
+    constexpr explicit bool2_t(const bool_t scalar) : x{scalar}, y{scalar} {}
     constexpr bool2_t(const bool_t x, const bool_t y) : x{x}, y{y} {}
 
     constexpr const bool_t& operator[](const uint_t idx) const
@@ -37,14 +37,14 @@ export constexpr bool2_t operator==(const bool2_t a, const bool2_t b)
     return bool2_t{a.x == b.x, a.y == b.y};
 }
 
-export constexpr bool2_t operator==(const bool2_t a, const bool_t val)
+export constexpr bool2_t operator==(const bool2_t a, const bool_t scalar)
 {
-    return bool2_t{a.x == val, a.y == val};
+    return bool2_t{a.x == scalar, a.y == scalar};
 }
 
-export constexpr bool2_t operator==(const bool_t val, const bool2_t b)
+export constexpr bool2_t operator==(const bool_t scalar, const bool2_t b)
 {
-    return bool2_t{val == b.x, val == b.y};
+    return bool2_t{scalar == b.x, scalar == b.y};
 }
 
 export constexpr bool2_t operator!=(const bool2_t a, const bool2_t b)
@@ -52,14 +52,14 @@ export constexpr bool2_t operator!=(const bool2_t a, const bool2_t b)
     return !(a == b);
 }
 
-export constexpr bool2_t operator!=(const bool2_t a, const bool_t val)
+export constexpr bool2_t operator!=(const bool2_t a, const bool_t scalar)
 {
-    return !(a == val);
+    return !(a == scalar);
 }
 
-export constexpr bool2_t operator!=(const bool_t val, const bool2_t b)
+export constexpr bool2_t operator!=(const bool_t scalar, const bool2_t b)
 {
-    return !(val == b);
+    return !(scalar == b);
 }
 
 // NOTE:
@@ -69,14 +69,14 @@ export constexpr bool2_t operator&&(const bool2_t a, const bool2_t b)
     return bool2_t{a.x && b.x, a.y && b.y};
 }
 
-export constexpr bool2_t operator&&(const bool2_t a, const bool_t val)
+export constexpr bool2_t operator&&(const bool2_t a, const bool_t scalar)
 {
-    return bool2_t{a.x && val, a.y && val};
+    return bool2_t{a.x && scalar, a.y && scalar};
 }
 
-export constexpr bool2_t operator&&(const bool_t val, const bool2_t b)
+export constexpr bool2_t operator&&(const bool_t scalar, const bool2_t b)
 {
-    return bool2_t{val && b.x, val && b.y};
+    return bool2_t{scalar && b.x, scalar && b.y};
 }
 
 // NOTE:
@@ -86,14 +86,14 @@ export constexpr bool2_t operator||(const bool2_t a, const bool2_t b)
     return bool2_t{a.x || b.x, a.y || b.y};
 }
 
-export constexpr bool2_t operator||(const bool2_t a, const bool_t val)
+export constexpr bool2_t operator||(const bool2_t a, const bool_t scalar)
 {
-    return bool2_t{a.x || val, a.y || val};
+    return bool2_t{a.x || scalar, a.y || scalar};
 }
 
-export constexpr bool2_t operator||(const bool_t val, const bool2_t b)
+export constexpr bool2_t operator||(const bool_t scalar, const bool2_t b)
 {
-    return bool2_t{val || b.x, val || b.y};
+    return bool2_t{scalar || b.x, scalar || b.y};
 }
 
 export constexpr bool_t all(const bool2_t v)
@@ -116,7 +116,10 @@ export struct bool3_t final {
     bool_t z{false};
 
     constexpr bool3_t() = default;
-    constexpr explicit bool3_t(const bool_t val) : x{val}, y{val}, z{val} {}
+    constexpr explicit bool3_t(const bool_t scalar)
+        : x{scalar}, y{scalar}, z{scalar}
+    {
+    }
     constexpr explicit bool3_t(const bool2_t v2, const bool_t z = false)
         : x{v2.x}, y{v2.y}, z{z}
     {
@@ -145,14 +148,14 @@ export constexpr bool3_t operator==(const bool3_t a, const bool3_t b)
     return bool3_t{a.x == b.x, a.y == b.y, a.z == b.z};
 }
 
-export constexpr bool3_t operator==(const bool3_t a, const bool_t val)
+export constexpr bool3_t operator==(const bool3_t a, const bool_t scalar)
 {
-    return bool3_t{a.x == val, a.y == val, a.z == val};
+    return bool3_t{a.x == scalar, a.y == scalar, a.z == scalar};
 }
 
-export constexpr bool3_t operator==(const bool_t val, const bool3_t b)
+export constexpr bool3_t operator==(const bool_t scalar, const bool3_t b)
 {
-    return bool3_t{val == b.x, val == b.y, val == b.z};
+    return bool3_t{scalar == b.x, scalar == b.y, scalar == b.z};
 }
 
 export constexpr bool3_t operator!=(const bool3_t a, const bool3_t b)
@@ -160,14 +163,14 @@ export constexpr bool3_t operator!=(const bool3_t a, const bool3_t b)
     return !(a == b);
 }
 
-export constexpr bool3_t operator!=(const bool3_t a, const bool_t val)
+export constexpr bool3_t operator!=(const bool3_t a, const bool_t scalar)
 {
-    return !(a == val);
+    return !(a == scalar);
 }
 
-export constexpr bool3_t operator!=(const bool_t val, const bool3_t b)
+export constexpr bool3_t operator!=(const bool_t scalar, const bool3_t b)
 {
-    return !(val == b);
+    return !(scalar == b);
 }
 
 // NOTE:
@@ -177,14 +180,14 @@ export constexpr bool3_t operator&&(const bool3_t a, const bool3_t b)
     return bool3_t{a.x && b.x, a.y && b.y, a.z && b.z};
 }
 
-export constexpr bool3_t operator&&(const bool3_t a, const bool_t val)
+export constexpr bool3_t operator&&(const bool3_t a, const bool_t scalar)
 {
-    return bool3_t{a.x && val, a.y && val, a.z && val};
+    return bool3_t{a.x && scalar, a.y && scalar, a.z && scalar};
 }
 
-export constexpr bool3_t operator&&(const bool_t val, const bool3_t b)
+export constexpr bool3_t operator&&(const bool_t scalar, const bool3_t b)
 {
-    return bool3_t{val && b.x, val && b.y, val && b.z};
+    return bool3_t{scalar && b.x, scalar && b.y, scalar && b.z};
 }
 
 // NOTE:
@@ -194,14 +197,14 @@ export constexpr bool3_t operator||(const bool3_t a, const bool3_t b)
     return bool3_t{a.x || b.x, a.y || b.y, a.z || b.z};
 }
 
-export constexpr bool3_t operator||(const bool3_t a, const bool_t val)
+export constexpr bool3_t operator||(const bool3_t a, const bool_t scalar)
 {
-    return bool3_t{a.x || val, a.y || val, a.z || val};
+    return bool3_t{a.x || scalar, a.y || scalar, a.z || scalar};
 }
 
-export constexpr bool3_t operator||(const bool_t val, const bool3_t b)
+export constexpr bool3_t operator||(const bool_t scalar, const bool3_t b)
 {
-    return bool3_t{val || b.x, val || b.y, val || b.z};
+    return bool3_t{scalar || b.x, scalar || b.y, scalar || b.z};
 }
 
 export constexpr bool_t all(const bool3_t v)
@@ -225,8 +228,8 @@ export struct bool4_t final {
     bool_t w{false};
 
     constexpr bool4_t() = default;
-    constexpr explicit bool4_t(const bool_t val)
-        : x{val}, y{val}, z{val}, w{val}
+    constexpr explicit bool4_t(const bool_t scalar)
+        : x{scalar}, y{scalar}, z{scalar}, w{scalar}
     {
     }
     constexpr explicit bool4_t(
@@ -263,14 +266,14 @@ export constexpr bool4_t operator==(const bool4_t a, const bool4_t b)
     return bool4_t{a.x == b.x, a.y == b.y, a.z == b.z, a.w == b.w};
 }
 
-export constexpr bool4_t operator==(const bool4_t a, const bool_t val)
+export constexpr bool4_t operator==(const bool4_t a, const bool_t scalar)
 {
-    return bool4_t{a.x == val, a.y == val, a.z == val, a.w == val};
+    return bool4_t{a.x == scalar, a.y == scalar, a.z == scalar, a.w == scalar};
 }
 
-export constexpr bool4_t operator==(const bool_t val, const bool4_t b)
+export constexpr bool4_t operator==(const bool_t scalar, const bool4_t b)
 {
-    return bool4_t{val == b.x, val == b.y, val == b.z, val == b.w};
+    return bool4_t{scalar == b.x, scalar == b.y, scalar == b.z, scalar == b.w};
 }
 
 export constexpr bool4_t operator!=(const bool4_t a, const bool4_t b)
@@ -278,14 +281,14 @@ export constexpr bool4_t operator!=(const bool4_t a, const bool4_t b)
     return !(a == b);
 }
 
-export constexpr bool4_t operator!=(const bool4_t a, const bool_t val)
+export constexpr bool4_t operator!=(const bool4_t a, const bool_t scalar)
 {
-    return !(a == val);
+    return !(a == scalar);
 }
 
-export constexpr bool4_t operator!=(const bool_t val, const bool4_t b)
+export constexpr bool4_t operator!=(const bool_t scalar, const bool4_t b)
 {
-    return !(val == b);
+    return !(scalar == b);
 }
 
 // NOTE:
@@ -295,14 +298,14 @@ export constexpr bool4_t operator&&(const bool4_t a, const bool4_t b)
     return bool4_t{a.x && b.x, a.y && b.y, a.z && b.z, a.w && b.w};
 }
 
-export constexpr bool4_t operator&&(const bool4_t a, const bool_t val)
+export constexpr bool4_t operator&&(const bool4_t a, const bool_t scalar)
 {
-    return bool4_t{a.x && val, a.y && val, a.z && val, a.w && val};
+    return bool4_t{a.x && scalar, a.y && scalar, a.z && scalar, a.w && scalar};
 }
 
-export constexpr bool4_t operator&&(const bool_t val, const bool4_t b)
+export constexpr bool4_t operator&&(const bool_t scalar, const bool4_t b)
 {
-    return bool4_t{val && b.x, val && b.y, val && b.z, val && b.w};
+    return bool4_t{scalar && b.x, scalar && b.y, scalar && b.z, scalar && b.w};
 }
 
 // NOTE:
@@ -312,14 +315,14 @@ export constexpr bool4_t operator||(const bool4_t a, const bool4_t b)
     return bool4_t{a.x || b.x, a.y || b.y, a.z || b.z, a.w || b.w};
 }
 
-export constexpr bool4_t operator||(const bool4_t a, const bool_t val)
+export constexpr bool4_t operator||(const bool4_t a, const bool_t scalar)
 {
-    return bool4_t{a.x || val, a.y || val, a.z || val, a.w || val};
+    return bool4_t{a.x || scalar, a.y || scalar, a.z || scalar, a.w || scalar};
 }
 
-export constexpr bool4_t operator||(const bool_t val, const bool4_t b)
+export constexpr bool4_t operator||(const bool_t scalar, const bool4_t b)
 {
-    return bool4_t{val || b.x, val || b.y, val || b.z, val || b.w};
+    return bool4_t{scalar || b.x, scalar || b.y, scalar || b.z, scalar || b.w};
 }
 
 export constexpr bool_t all(const bool4_t v)

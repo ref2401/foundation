@@ -11,16 +11,7 @@ import :span;
 
 namespace fnd::unittests {
 
-void unittests_source_location_t();
-
-export void run_unittests_core()
-{
-    unittests_core_arithmetic_types();
-    unittests_core_arithmetic();
-    unittests_source_location_t();
-    unittests_span_t();
-}
-
+export void run_unittests_core();
 
 // ---------------------------------------------------------------------------
 // source_location_t
@@ -46,6 +37,15 @@ void unittests_source_location_t()
 {
     unittests_source_location_t_is_pod_type();
     unittests_source_location_t_make_source_location();
+}
+
+
+void run_unittests_core()
+{
+    unittests_core_arithmetic_types();
+    unittests_core_arithmetic();
+    unittests_source_location_t();
+    unittests_span_t();
 }
 
 } // namespace fnd::unittests

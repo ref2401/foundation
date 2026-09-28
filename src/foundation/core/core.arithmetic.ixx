@@ -86,9 +86,9 @@ export FND_INLINE bool_t approx_equal(
 export template<typename TDest, typename TSrc>
 requires(sizeof(TDest) == sizeof(TSrc) && __is_trivially_copyable(TDest)
     && __is_trivially_copyable(TSrc))
-constexpr TDest bit_cast(const TSrc& val)
+constexpr TDest bit_cast(const TSrc& x)
 {
-    return __builtin_bit_cast(TDest, val);
+    return __builtin_bit_cast(TDest, x);
 }
 
 export FND_INLINE float_t ceil(const float_t x)
