@@ -14,15 +14,9 @@ export struct float2_t final {
 
     constexpr float2_t() = default;
 
-    constexpr explicit float2_t(const bool2_t v2)
-        : x{v2.x ? 1.0f : 0.0f}, y{v2.y ? 1.0f : 0.0f}
-    {
-    }
-
     constexpr explicit float2_t(const float_t scalar) : x{scalar}, y{scalar} {}
 
     constexpr float2_t(const float_t x, const float_t y) : x{x}, y{y} {}
-
 
     constexpr const float_t& operator[](const uint_t idx) const
     {

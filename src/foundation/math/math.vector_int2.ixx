@@ -12,8 +12,9 @@ export struct int2_t final {
     int_t y{0};
 
     constexpr int2_t() = default;
-    constexpr explicit int2_t(const bool2_t v2) : x{v2.x}, y{v2.y} {}
+
     constexpr explicit int2_t(const int_t scalar) : x{scalar}, y{scalar} {}
+
     constexpr int2_t(const int_t x, const int_t y) : x{x}, y{y} {}
 
     constexpr const int_t& operator[](const uint_t idx) const

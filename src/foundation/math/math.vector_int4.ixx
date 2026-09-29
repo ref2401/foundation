@@ -4,8 +4,6 @@ module;
 export module foundation.math:vector_int4;
 import foundation.core;
 import :vector_bool;
-import :vector_int2;
-import :vector_int3;
 
 namespace fnd {
 
@@ -17,30 +15,8 @@ export struct int4_t final {
 
     constexpr int4_t() = default;
 
-    constexpr explicit int4_t(
-        const bool2_t v2, const int_t z = 0, const int_t w = 0)
-        : x{v2.x}, y{v2.y}, z{z}, w{w}
-    {
-    }
-
-    constexpr explicit int4_t(const bool4_t v4)
-        : x{v4.x}, y{v4.y}, z{v4.z}, w{v4.w}
-    {
-    }
-
     constexpr explicit int4_t(const int_t scalar)
         : x{scalar}, y{scalar}, z{scalar}, w{scalar}
-    {
-    }
-
-    constexpr explicit int4_t(
-        const int2_t v2, const int_t z = 0, const int_t w = 0)
-        : x{v2.x}, y{v2.y}, z{z}, w{w}
-    {
-    }
-
-    constexpr explicit int4_t(const int3_t v3, const int_t w = 0)
-        : x{v3.x}, y{v3.y}, z{v3.z}, w{w}
     {
     }
 
@@ -48,7 +24,6 @@ export struct int4_t final {
         : x{x}, y{y}, z{z}, w{w}
     {
     }
-
 
     constexpr const int_t& operator[](const uint_t idx) const
     {

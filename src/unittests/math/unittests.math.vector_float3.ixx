@@ -27,12 +27,8 @@ void unittests_math_vector_float3_type()
 {
     static_assert(PodType<float3_t>);
     static_assert(sizeof(float3_t) == 3 * sizeof(float_t));
-    // The ctor(float_t), ctor(bool2_t), ctor(bool3_t) and ctor(float2_t) are
-    // explicit.
+    // The ctor(float_t) is explicit.
     static_assert(!is_convertible<float_t, float3_t>());
-    static_assert(!is_convertible<bool2_t, float3_t>());
-    static_assert(!is_convertible<bool3_t, float3_t>());
-    static_assert(!is_convertible<float2_t, float3_t>());
 }
 
 void unittests_math_vector_float3_constructors()
@@ -45,21 +41,6 @@ void unittests_math_vector_float3_constructors()
     FND_TEST_TRUE(
         test_components(float3_t{kFloatMinValue, kFloatMaxValue, 0.0f},
             kFloatMinValue, kFloatMaxValue, 0.0f));
-    // From a bool2_t: true is 1, false is 0; z defaults to 0.
-    FND_TEST_TRUE(
-        test_components(float3_t{bool2_t{true, false}}, 1.0f, 0.0f, 0.0f));
-    FND_TEST_TRUE(test_components(
-        float3_t{bool2_t{false, true}, -2.5f}, 0.0f, 1.0f, -2.5f));
-    // From a bool3_t.
-    FND_TEST_TRUE(test_components(
-        float3_t{bool3_t{true, false, true}}, 1.0f, 0.0f, 1.0f));
-    FND_TEST_TRUE(test_components(
-        float3_t{bool3_t{false, true, false}}, 0.0f, 1.0f, 0.0f));
-    // From a float2_t; z defaults to 0.
-    FND_TEST_TRUE(
-        test_components(float3_t{float2_t{3.0f, -4.5f}}, 3.0f, -4.5f, 0.0f));
-    FND_TEST_TRUE(test_components(
-        float3_t{float2_t{3.0f, -4.5f}, 7.25f}, 3.0f, -4.5f, 7.25f));
 }
 
 void unittests_math_vector_float3_subscript_operator()

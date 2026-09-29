@@ -1,6 +1,7 @@
 #include "foundation/core/macros.h"
 #include "foundation/unittests.h"
 import foundation.core;
+import foundation.math;
 import unittests.core;
 import unittests.math;
 

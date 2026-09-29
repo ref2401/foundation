@@ -27,13 +27,8 @@ void unittests_math_vector_float4_type()
 {
     static_assert(PodType<float4_t>);
     static_assert(sizeof(float4_t) == 4 * sizeof(float_t));
-    // The ctor(float_t), ctor(bool2_t), ctor(bool4_t), ctor(float2_t) and
-    // ctor(float3_t) are explicit.
+    // The ctor(float_t) is explicit.
     static_assert(!is_convertible<float_t, float4_t>());
-    static_assert(!is_convertible<bool2_t, float4_t>());
-    static_assert(!is_convertible<bool4_t, float4_t>());
-    static_assert(!is_convertible<float2_t, float4_t>());
-    static_assert(!is_convertible<float3_t, float4_t>());
 }
 
 void unittests_math_vector_float4_constructors()
@@ -46,32 +41,6 @@ void unittests_math_vector_float4_constructors()
     FND_TEST_TRUE(
         test_components(float4_t{kFloatMinValue, kFloatMaxValue, 0.0f, -0.5f},
             kFloatMinValue, kFloatMaxValue, 0.0f, -0.5f));
-    // From a bool2_t: true is 1, false is 0; z and w default to 0.
-    FND_TEST_TRUE(test_components(
-        float4_t{bool2_t{true, false}}, 1.0f, 0.0f, 0.0f, 0.0f));
-    FND_TEST_TRUE(test_components(
-        float4_t{bool2_t{false, true}, -2.5f}, 0.0f, 1.0f, -2.5f, 0.0f));
-    FND_TEST_TRUE(test_components(
-        float4_t{bool2_t{true, true}, 0.5f, -3.0f}, 1.0f, 1.0f, 0.5f, -3.0f));
-    // From a bool4_t.
-    FND_TEST_TRUE(test_components(
-        float4_t{bool4_t{true, false, true, false}}, 1.0f, 0.0f, 1.0f, 0.0f));
-    FND_TEST_TRUE(test_components(
-        float4_t{bool4_t{false, true, false, true}}, 0.0f, 1.0f, 0.0f, 1.0f));
-    // From a float2_t; z and w default to 0.
-    FND_TEST_TRUE(test_components(
-        float4_t{float2_t{3.0f, -4.5f}}, 3.0f, -4.5f, 0.0f, 0.0f));
-    FND_TEST_TRUE(test_components(
-        float4_t{float2_t{3.0f, -4.5f}, 7.25f}, 3.0f, -4.5f, 7.25f, 0.0f));
-    FND_TEST_TRUE(
-        test_components(float4_t{float2_t{3.0f, -4.5f}, 7.25f, -2.0f}, 3.0f,
-            -4.5f, 7.25f, -2.0f));
-    // From a float3_t; w defaults to 0.
-    FND_TEST_TRUE(test_components(
-        float4_t{float3_t{3.0f, -4.5f, 7.25f}}, 3.0f, -4.5f, 7.25f, 0.0f));
-    FND_TEST_TRUE(test_components(
-        float4_t{float3_t{3.0f, -4.5f, 7.25f}, 1.0f}, 3.0f, -4.5f, 7.25f,
-        1.0f));
 }
 
 void unittests_math_vector_float4_subscript_operator()

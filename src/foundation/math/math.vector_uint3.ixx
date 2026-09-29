@@ -4,7 +4,6 @@ module;
 export module foundation.math:vector_uint3;
 import foundation.core;
 import :vector_bool;
-import :vector_uint2;
 
 namespace fnd {
 
@@ -15,20 +14,8 @@ export struct uint3_t final {
 
     constexpr uint3_t() = default;
 
-    constexpr explicit uint3_t(const bool2_t v2, const uint_t z = 0)
-        : x{v2.x}, y{v2.y}, z{z}
-    {
-    }
-
-    constexpr explicit uint3_t(const bool3_t v3) : x{v3.x}, y{v3.y}, z{v3.z} {}
-
     constexpr explicit uint3_t(const uint_t scalar)
         : x{scalar}, y{scalar}, z{scalar}
-    {
-    }
-
-    constexpr explicit uint3_t(const uint2_t v2, const uint_t z = 0)
-        : x{v2.x}, y{v2.y}, z{z}
     {
     }
 

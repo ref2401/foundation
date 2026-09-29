@@ -27,9 +27,8 @@ void unittests_math_vector_float2_type()
 {
     static_assert(PodType<float2_t>);
     static_assert(sizeof(float2_t) == 2 * sizeof(float_t));
-    // The ctor(float_t) and ctor(bool2_t) are explicit.
+    // The ctor(float_t) is explicit.
     static_assert(!is_convertible<float_t, float2_t>());
-    static_assert(!is_convertible<bool2_t, float2_t>());
 }
 
 void unittests_math_vector_float2_constructors()
@@ -40,9 +39,6 @@ void unittests_math_vector_float2_constructors()
     FND_TEST_TRUE(test_components(float2_t{3.0f, -4.5f}, 3.0f, -4.5f));
     FND_TEST_TRUE(test_components(float2_t{kFloatMinValue, kFloatMaxValue},
         kFloatMinValue, kFloatMaxValue));
-    // From a bool2_t: true is 1, false is 0.
-    FND_TEST_TRUE(test_components(float2_t{bool2_t{true, false}}, 1.0f, 0.0f));
-    FND_TEST_TRUE(test_components(float2_t{bool2_t{false, true}}, 0.0f, 1.0f));
 }
 
 void unittests_math_vector_float2_subscript_operator()

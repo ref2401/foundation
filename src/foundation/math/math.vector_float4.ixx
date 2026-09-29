@@ -5,8 +5,6 @@ export module foundation.math:vector_float4;
 import foundation.core;
 import :scalar;
 import :vector_bool;
-import :vector_float2;
-import :vector_float3;
 
 namespace fnd {
 
@@ -18,31 +16,8 @@ export struct float4_t final {
 
     constexpr float4_t() = default;
 
-    constexpr explicit float4_t(
-        const bool2_t v2, const float_t z = 0.0f, const float_t w = 0.0f)
-        : x{v2.x ? 1.0f : 0.0f}, y{v2.y ? 1.0f : 0.0f}, z{z}, w{w}
-    {
-    }
-
-    constexpr explicit float4_t(const bool4_t v4)
-        : x{v4.x ? 1.0f : 0.0f}, y{v4.y ? 1.0f : 0.0f}, z{v4.z ? 1.0f : 0.0f},
-          w{v4.w ? 1.0f : 0.0f}
-    {
-    }
-
     constexpr explicit float4_t(const float_t scalar)
         : x{scalar}, y{scalar}, z{scalar}, w{scalar}
-    {
-    }
-
-    constexpr explicit float4_t(
-        const float2_t v2, const float_t z = 0.0f, const float_t w = 0.0f)
-        : x{v2.x}, y{v2.y}, z{z}, w{w}
-    {
-    }
-
-    constexpr explicit float4_t(const float3_t v3, const float_t w = 0.0f)
-        : x{v3.x}, y{v3.y}, z{v3.z}, w{w}
     {
     }
 

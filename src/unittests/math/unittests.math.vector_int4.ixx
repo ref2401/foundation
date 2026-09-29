@@ -24,13 +24,8 @@ void unittests_math_vector_int4_type()
 {
     static_assert(PodType<int4_t>);
     static_assert(sizeof(int4_t) == 4 * sizeof(int_t));
-    // The ctor(int_t), ctor(bool2_t, z, w), ctor(bool4_t), ctor(int2_t, z, w)
-    // and ctor(int3_t, w) are explicit.
+    // The ctor(int_t) is explicit.
     static_assert(!is_convertible<int_t, int4_t>());
-    static_assert(!is_convertible<bool2_t, int4_t>());
-    static_assert(!is_convertible<bool4_t, int4_t>());
-    static_assert(!is_convertible<int2_t, int4_t>());
-    static_assert(!is_convertible<int3_t, int4_t>());
 }
 
 void unittests_math_vector_int4_constructors()
@@ -41,23 +36,6 @@ void unittests_math_vector_int4_constructors()
     FND_TEST_TRUE(test_components(int4_t{3, -4, 6, -8}, 3, -4, 6, -8));
     FND_TEST_TRUE(test_components(int4_t{kIntMinValue, kIntMaxValue, 0, 1},
         kIntMinValue, kIntMaxValue, 0, 1));
-    // From a bool2_t: true is 1, false is 0; z and w are 0 unless given.
-    FND_TEST_TRUE(test_components(int4_t{bool2_t{true, false}}, 1, 0, 0, 0));
-    FND_TEST_TRUE(test_components(int4_t{bool2_t{false, true}, 6}, 0, 1, 6, 0));
-    FND_TEST_TRUE(
-        test_components(int4_t{bool2_t{true, true}, 6, -8}, 1, 1, 6, -8));
-    // From a bool4_t: true is 1, false is 0.
-    FND_TEST_TRUE(
-        test_components(int4_t{bool4_t{true, false, true, false}}, 1, 0, 1, 0));
-    FND_TEST_TRUE(
-        test_components(int4_t{bool4_t{false, true, false, true}}, 0, 1, 0, 1));
-    // From an int2_t: z and w are 0 unless given.
-    FND_TEST_TRUE(test_components(int4_t{int2_t{3, -4}}, 3, -4, 0, 0));
-    FND_TEST_TRUE(test_components(int4_t{int2_t{3, -4}, 6}, 3, -4, 6, 0));
-    FND_TEST_TRUE(test_components(int4_t{int2_t{3, -4}, 6, -8}, 3, -4, 6, -8));
-    // From an int3_t: w is 0 unless given.
-    FND_TEST_TRUE(test_components(int4_t{int3_t{3, -4, 6}}, 3, -4, 6, 0));
-    FND_TEST_TRUE(test_components(int4_t{int3_t{3, -4, 6}, -8}, 3, -4, 6, -8));
 }
 
 void unittests_math_vector_int4_subscript_operator()

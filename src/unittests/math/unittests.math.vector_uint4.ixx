@@ -24,14 +24,9 @@ void unittests_math_vector_uint4_type()
 {
     static_assert(PodType<uint4_t>);
     static_assert(sizeof(uint4_t) == 4 * sizeof(uint_t));
-    // The ctor(uint_t), ctor(bool2_t, z, w), ctor(bool4_t), ctor(uint2_t, z, w)
-    // and ctor(uint3_t, w) are explicit.
+    // The ctor(uint_t) is explicit.
     static_assert(!is_convertible<uint_t, uint4_t>());
     static_assert(!is_convertible<int_t, uint4_t>());
-    static_assert(!is_convertible<bool2_t, uint4_t>());
-    static_assert(!is_convertible<bool4_t, uint4_t>());
-    static_assert(!is_convertible<uint2_t, uint4_t>());
-    static_assert(!is_convertible<uint3_t, uint4_t>());
 }
 
 void unittests_math_vector_uint4_constructors()
@@ -41,29 +36,6 @@ void unittests_math_vector_uint4_constructors()
     FND_TEST_TRUE(test_components(uint4_t{3u, 4u, 6u, 8u}, 3u, 4u, 6u, 8u));
     FND_TEST_TRUE(test_components(
         uint4_t{0u, kUIntMaxValue, 1u, 2u}, 0u, kUIntMaxValue, 1u, 2u));
-    // From a bool2_t: true is 1, false is 0; z and w are 0 unless given.
-    FND_TEST_TRUE(
-        test_components(uint4_t{bool2_t{true, false}}, 1u, 0u, 0u, 0u));
-    FND_TEST_TRUE(
-        test_components(uint4_t{bool2_t{false, true}, 6u}, 0u, 1u, 6u, 0u));
-    FND_TEST_TRUE(
-        test_components(uint4_t{bool2_t{true, true}, 6u, 8u}, 1u, 1u, 6u, 8u));
-    // From a bool4_t: true is 1, false is 0.
-    FND_TEST_TRUE(test_components(
-        uint4_t{bool4_t{true, false, true, false}}, 1u, 0u, 1u, 0u));
-    FND_TEST_TRUE(test_components(
-        uint4_t{bool4_t{false, true, false, true}}, 0u, 1u, 0u, 1u));
-    // From a uint2_t: z and w are 0 unless given.
-    FND_TEST_TRUE(test_components(uint4_t{uint2_t{3u, 4u}}, 3u, 4u, 0u, 0u));
-    FND_TEST_TRUE(
-        test_components(uint4_t{uint2_t{3u, 4u}, 6u}, 3u, 4u, 6u, 0u));
-    FND_TEST_TRUE(
-        test_components(uint4_t{uint2_t{3u, 4u}, 6u, 8u}, 3u, 4u, 6u, 8u));
-    // From a uint3_t: w is 0 unless given.
-    FND_TEST_TRUE(
-        test_components(uint4_t{uint3_t{3u, 4u, 6u}}, 3u, 4u, 6u, 0u));
-    FND_TEST_TRUE(
-        test_components(uint4_t{uint3_t{3u, 4u, 6u}, 8u}, 3u, 4u, 6u, 8u));
 }
 
 void unittests_math_vector_uint4_subscript_operator()

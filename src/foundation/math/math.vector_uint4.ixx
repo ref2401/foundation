@@ -4,8 +4,6 @@ module;
 export module foundation.math:vector_uint4;
 import foundation.core;
 import :vector_bool;
-import :vector_uint2;
-import :vector_uint3;
 
 namespace fnd {
 
@@ -17,30 +15,8 @@ export struct uint4_t final {
 
     constexpr uint4_t() = default;
 
-    constexpr explicit uint4_t(
-        const bool2_t v2, const uint_t z = 0, const uint_t w = 0)
-        : x{v2.x}, y{v2.y}, z{z}, w{w}
-    {
-    }
-
-    constexpr explicit uint4_t(const bool4_t v4)
-        : x{v4.x}, y{v4.y}, z{v4.z}, w{v4.w}
-    {
-    }
-
     constexpr explicit uint4_t(const uint_t scalar)
         : x{scalar}, y{scalar}, z{scalar}, w{scalar}
-    {
-    }
-
-    constexpr explicit uint4_t(
-        const uint2_t v2, const uint_t z = 0, const uint_t w = 0)
-        : x{v2.x}, y{v2.y}, z{z}, w{w}
-    {
-    }
-
-    constexpr explicit uint4_t(const uint3_t v3, const uint_t w = 0)
-        : x{v3.x}, y{v3.y}, z{v3.z}, w{w}
     {
     }
 

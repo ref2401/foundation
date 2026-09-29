@@ -15,7 +15,9 @@ export struct bool2_t final {
     bool_t y{false};
 
     constexpr bool2_t() = default;
+
     constexpr explicit bool2_t(const bool_t scalar) : x{scalar}, y{scalar} {}
+
     constexpr bool2_t(const bool_t x, const bool_t y) : x{x}, y{y} {}
 
     constexpr const bool_t& operator[](const uint_t idx) const
@@ -116,14 +118,12 @@ export struct bool3_t final {
     bool_t z{false};
 
     constexpr bool3_t() = default;
+
     constexpr explicit bool3_t(const bool_t scalar)
         : x{scalar}, y{scalar}, z{scalar}
     {
     }
-    constexpr explicit bool3_t(const bool2_t v2, const bool_t z = false)
-        : x{v2.x}, y{v2.y}, z{z}
-    {
-    }
+
     constexpr bool3_t(const bool_t x, const bool_t y, const bool_t z)
         : x{x}, y{y}, z{z}
     {
@@ -228,19 +228,12 @@ export struct bool4_t final {
     bool_t w{false};
 
     constexpr bool4_t() = default;
+
     constexpr explicit bool4_t(const bool_t scalar)
         : x{scalar}, y{scalar}, z{scalar}, w{scalar}
     {
     }
-    constexpr explicit bool4_t(
-        const bool2_t v2, const bool_t z = false, const bool_t w = false)
-        : x{v2.x}, y{v2.y}, z{z}, w{w}
-    {
-    }
-    constexpr explicit bool4_t(const bool3_t v3, const bool_t w = false)
-        : x{v3.x}, y{v3.y}, z{v3.z}, w{w}
-    {
-    }
+
     constexpr bool4_t(
         const bool_t x, const bool_t y, const bool_t z, const bool_t w)
         : x{x}, y{y}, z{z}, w{w}

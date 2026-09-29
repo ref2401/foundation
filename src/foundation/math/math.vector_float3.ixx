@@ -5,7 +5,6 @@ export module foundation.math:vector_float3;
 import foundation.core;
 import :scalar;
 import :vector_bool;
-import :vector_float2;
 
 namespace fnd {
 
@@ -16,23 +15,8 @@ export struct float3_t final {
 
     constexpr float3_t() = default;
 
-    constexpr explicit float3_t(const bool2_t v2, const float_t z = 0.0f)
-        : x{v2.x ? 1.0f : 0.0f}, y{v2.y ? 1.0f : 0.0f}, z{z}
-    {
-    }
-
-    constexpr explicit float3_t(const bool3_t v3)
-        : x{v3.x ? 1.0f : 0.0f}, y{v3.y ? 1.0f : 0.0f}, z{v3.z ? 1.0f : 0.0f}
-    {
-    }
-
     constexpr explicit float3_t(const float_t scalar)
         : x{scalar}, y{scalar}, z{scalar}
-    {
-    }
-
-    constexpr explicit float3_t(const float2_t v2, const float_t z = 0.0f)
-        : x{v2.x}, y{v2.y}, z{z}
     {
     }
 
