@@ -23,6 +23,7 @@ BreakConstructorInitializers: BeforeColon
 PackConstructorInitializers: NextLine
 
 AlignAfterOpenBracket: DontAlign
+BreakAfterOpenBracketFunction: true
 AlignOperands: DontAlign
 BreakBeforeBinaryOperators: All
 BreakAfterOpenBracketBracedList: true
