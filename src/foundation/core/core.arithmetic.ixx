@@ -1,4 +1,5 @@
 module;
+#include <float.h>
 #include <math.h>
 #include "foundation/core/macros.h"
 
@@ -16,6 +17,37 @@ import :arithmetic_types;
 // for numerical, geometric or graphics code.
 
 namespace fnd {
+
+// NOTE:
+// A float_t may be converted (static_cast, which truncates toward zero) to
+// int_t or uint_t only if it lies in the range below; can_trunc_to_int and
+// can_trunc_to_uint check it. Outside the range the conversion is UB.
+//
+// The conversion is defined when the truncated value fits in the destination
+// type ([conv.fpint]):
+// - int_t:  -2^31 <= x < 2^31. Both bounds are exact floats: -2^31 is
+//   kIntMinValue, and 2^31 is the first float above kIntMaxValue.
+//   kIntMaxValue itself (2^31 - 1) is not a float, and converting it to
+//   float_t rounds in an implementation-defined direction, so the bounds are
+//   written as literals rather than derived from the int_t limits.
+// - uint_t: 0 <= x < 2^32. Values in (-1, 0) would also truncate to 0 as
+//   defined behavior, but they are rejected on purpose: a negative float
+//   converted to an unsigned type is almost always a bug.
+//
+// NaN fails both comparisons, so it is outside every range; +-inf is outside
+// as well.
+//
+// The ranges rely on float_t being IEEE 754 binary32: radix 2, a 24-bit
+// significand and exponents up to 2^127. That makes 2^31 and 2^32 exact floats
+// and leaves no float between 2^31 - 128 and 2^31. C++ does not require
+// IEEE 754, so it is checked here.
+static_assert(FLT_RADIX == 2 && FLT_MANT_DIG == 24 && FLT_MAX_EXP == 128,
+    "float_t must be IEEE 754 binary32");
+
+constexpr float_t kFloatToIntTruncRangeStart = -0x1p31f;
+constexpr float_t kFloatToIntTruncRangeEnd = 0x1p31f; // exclusive
+constexpr float_t kFloatToUIntTruncRangeStart = 0.0f;
+constexpr float_t kFloatToUIntTruncRangeEnd = 0x1p32f; // exclusive
 
 export constexpr byte_t abs(const byte_t x)
 {
@@ -89,6 +121,18 @@ requires(sizeof(TDest) == sizeof(TSrc) && __is_trivially_copyable(TDest)
 constexpr TDest bit_cast(const TSrc& x)
 {
     return __builtin_bit_cast(TDest, x);
+}
+
+export FND_INLINE bool_t can_trunc_to_int(const float_t x)
+{
+    // Not constexpr: MSVC's constant evaluator treats NaN < x and x < NaN as
+    // true, so a compile-time call with NaN would return true.
+    return kFloatToIntTruncRangeStart <= x && x < kFloatToIntTruncRangeEnd;
+}
+
+export FND_INLINE bool_t can_trunc_to_uint(const float_t x)
+{
+    return kFloatToUIntTruncRangeStart <= x && x < kFloatToUIntTruncRangeEnd;
 }
 
 export FND_INLINE float_t ceil(const float_t x)

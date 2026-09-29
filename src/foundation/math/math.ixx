@@ -1,6 +1,7 @@
 export module foundation.math;
 export import :scalar;
 export import :vector_bool;
+export import :vector_conversion;
 export import :vector_float2;
 export import :vector_float3;
 export import :vector_float4;

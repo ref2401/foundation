@@ -253,6 +253,48 @@ void unittests_core_arithmetic_bit_cast_long_to_ulong()
     FND_TEST_TRUE(bit_cast<ulong_t>(kLongMinValue) == 0x8000000000000000ull);
 }
 
+void unittests_core_arithmetic_can_trunc_to_int()
+{
+    FND_TEST_TRUE(can_trunc_to_int(0.0f));
+    FND_TEST_TRUE(can_trunc_to_int(-0.0f));
+    FND_TEST_TRUE(can_trunc_to_int(2.75f));
+    FND_TEST_TRUE(can_trunc_to_int(-2.75f));
+    FND_TEST_TRUE(can_trunc_to_int(1e9f));
+    FND_TEST_TRUE(can_trunc_to_int(-1e9f));
+    // The range is -2^31 <= x < 2^31.
+    FND_TEST_TRUE(can_trunc_to_int(-0x1p31f));
+    FND_TEST_TRUE(can_trunc_to_int(0x1.fffffep30f)); // largest float < 2^31
+    FND_TEST_FALSE(can_trunc_to_int(0x1p31f));
+    FND_TEST_FALSE(can_trunc_to_int(-0x1.000002p31f)); // next float < -2^31
+    FND_TEST_FALSE(can_trunc_to_int(kFloatMaxValue));
+    FND_TEST_FALSE(can_trunc_to_int(kFloatMinValue));
+    FND_TEST_FALSE(can_trunc_to_int(kFloatInfinity));
+    FND_TEST_FALSE(can_trunc_to_int(-kFloatInfinity));
+    FND_TEST_FALSE(can_trunc_to_int(kFloatNaN));
+}
+
+void unittests_core_arithmetic_can_trunc_to_uint()
+{
+    FND_TEST_TRUE(can_trunc_to_uint(0.0f));
+    FND_TEST_TRUE(can_trunc_to_uint(-0.0f));
+    FND_TEST_TRUE(can_trunc_to_uint(kFloatMinSubnormal));
+    FND_TEST_TRUE(can_trunc_to_uint(2.75f));
+    FND_TEST_TRUE(can_trunc_to_uint(1e9f));
+    FND_TEST_TRUE(can_trunc_to_uint(0x1p31f));
+    // The range is 0 <= x < 2^32.
+    FND_TEST_TRUE(can_trunc_to_uint(0x1.fffffep31f)); // largest float < 2^32
+    FND_TEST_FALSE(can_trunc_to_uint(0x1p32f));
+    // (-1, 0) is rejected on purpose, even though it would truncate to 0.
+    FND_TEST_FALSE(can_trunc_to_uint(-kFloatMinSubnormal));
+    FND_TEST_FALSE(can_trunc_to_uint(-0.5f));
+    FND_TEST_FALSE(can_trunc_to_uint(-1.0f));
+    FND_TEST_FALSE(can_trunc_to_uint(kFloatMaxValue));
+    FND_TEST_FALSE(can_trunc_to_uint(kFloatMinValue));
+    FND_TEST_FALSE(can_trunc_to_uint(kFloatInfinity));
+    FND_TEST_FALSE(can_trunc_to_uint(-kFloatInfinity));
+    FND_TEST_FALSE(can_trunc_to_uint(kFloatNaN));
+}
+
 void unittests_core_arithmetic_ceil_float()
 {
     FND_TEST_TRUE(ceil(0.0f) == 0.0f);
@@ -982,6 +1024,8 @@ void unittests_core_arithmetic()
     unittests_core_arithmetic_bit_cast_ulong_to_long();
     unittests_core_arithmetic_bit_cast_double_to_ulong();
     unittests_core_arithmetic_bit_cast_long_to_ulong();
+    unittests_core_arithmetic_can_trunc_to_int();
+    unittests_core_arithmetic_can_trunc_to_uint();
     unittests_core_arithmetic_ceil_float();
     unittests_core_arithmetic_ceil_double();
     unittests_core_arithmetic_floor_float();

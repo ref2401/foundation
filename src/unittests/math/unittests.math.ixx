@@ -1,6 +1,7 @@
 export module unittests.math;
 import :scalar;
 import :vector_bool;
+import :vector_conversion;
 import :vector_float2;
 import :vector_float3;
 import :vector_float4;
@@ -17,6 +18,7 @@ export void run_unittests_math()
 {
     unittests_math_scalar();
     unittests_math_vector_bool();
+    unittests_math_vector_conversion();
     unittests_math_vector_float2();
     unittests_math_vector_float3();
     unittests_math_vector_float4();
