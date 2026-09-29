@@ -53,9 +53,9 @@ void unittests_math_vector_conversion_bool2()
     FND_TEST_TRUE(all(bool2(int4_t{3, 0, 7, 1}) == bool2_t{true, false}));
     FND_TEST_TRUE(all(bool2(3u) == bool2_t{true, true}));
     FND_TEST_TRUE(all(bool2(3u, 0u) == bool2_t{true, false}));
-    FND_TEST_TRUE(all(bool2(uint2_t{3u, 0u}) == bool2_t{true, false}));
-    FND_TEST_TRUE(all(bool2(uint3_t{3u, 0u, 7u}) == bool2_t{true, false}));
-    FND_TEST_TRUE(all(bool2(uint4_t{3u, 0u, 7u, 1u}) == bool2_t{true, false}));
+    FND_TEST_TRUE(all(bool2(uint2_t{3, 0}) == bool2_t{true, false}));
+    FND_TEST_TRUE(all(bool2(uint3_t{3, 0, 7}) == bool2_t{true, false}));
+    FND_TEST_TRUE(all(bool2(uint4_t{3, 0, 7, 1}) == bool2_t{true, false}));
 
 }
 
@@ -100,12 +100,12 @@ void unittests_math_vector_conversion_bool3()
     FND_TEST_TRUE(all(bool3(3u) == bool3_t{true, true, true}));
     FND_TEST_TRUE(all(bool3(3u, 0u, 7u) == bool3_t{true, false, true}));
     FND_TEST_TRUE(
-        all(bool3(uint2_t{3u, 0u}, 7u) == bool3_t{true, false, true}));
-    FND_TEST_TRUE(all(bool3(uint2_t{3u, 0u}) == bool3_t{true, false, false}));
+        all(bool3(uint2_t{3, 0}, 7u) == bool3_t{true, false, true}));
+    FND_TEST_TRUE(all(bool3(uint2_t{3, 0}) == bool3_t{true, false, false}));
     FND_TEST_TRUE(
-        all(bool3(uint3_t{3u, 0u, 7u}) == bool3_t{true, false, true}));
+        all(bool3(uint3_t{3, 0, 7}) == bool3_t{true, false, true}));
     FND_TEST_TRUE(
-        all(bool3(uint4_t{3u, 0u, 7u, 1u}) == bool3_t{true, false, true}));
+        all(bool3(uint4_t{3, 0, 7, 1}) == bool3_t{true, false, true}));
 
 }
 
@@ -166,15 +166,15 @@ void unittests_math_vector_conversion_bool4()
     FND_TEST_TRUE(all(bool4(3u) == bool4_t{true, true, true, true}));
     FND_TEST_TRUE(
         all(bool4(3u, 0u, 7u, 1u) == bool4_t{true, false, true, true}));
-    FND_TEST_TRUE(all(bool4(uint2_t{3u, 0u}, 7u, 1u)
+    FND_TEST_TRUE(all(bool4(uint2_t{3, 0}, 7u, 1u)
         == bool4_t{true, false, true, true}));
     FND_TEST_TRUE(
-        all(bool4(uint2_t{3u, 0u}) == bool4_t{true, false, false, false}));
-    FND_TEST_TRUE(all(bool4(uint3_t{3u, 0u, 7u}, 1u)
+        all(bool4(uint2_t{3, 0}) == bool4_t{true, false, false, false}));
+    FND_TEST_TRUE(all(bool4(uint3_t{3, 0, 7}, 1u)
         == bool4_t{true, false, true, true}));
     FND_TEST_TRUE(
-        all(bool4(uint3_t{3u, 0u, 7u}) == bool4_t{true, false, true, false}));
-    FND_TEST_TRUE(all(bool4(uint4_t{3u, 0u, 7u, 1u})
+        all(bool4(uint3_t{3, 0, 7}) == bool4_t{true, false, true, false}));
+    FND_TEST_TRUE(all(bool4(uint4_t{3, 0, 7, 1})
         == bool4_t{true, false, true, true}));
 
 }
@@ -227,7 +227,7 @@ void unittests_math_vector_conversion_can_trunc_to_uint()
         all(can_trunc_to_uint(float3_t{0.0f, 0x1.fffffep31f, -0.0f})));
     FND_TEST_TRUE(all(can_trunc_to_uint(float3_t{kFloatNaN, 1.0f, 1.0f})
         == bool3_t{false, true, true}));
-    FND_TEST_TRUE(all(can_trunc_to_uint(float3_t{1.0f, -1.0f, 1.0f})
+    FND_TEST_TRUE(all(can_trunc_to_uint(float3_t{1, -1, 1})
         == bool3_t{true, false, true}));
     FND_TEST_TRUE(all(can_trunc_to_uint(float3_t{1.0f, 1.0f, kFloatInfinity})
         == bool3_t{true, true, false}));
@@ -249,12 +249,12 @@ void unittests_math_vector_conversion_can_trunc_to_uint()
 void unittests_math_vector_conversion_float2()
 {
     // From an int2_t.
-    FND_TEST_TRUE(all(float2(int2_t{0, 1}) == float2_t{0.0f, 1.0f}));
-    FND_TEST_TRUE(all(float2(int2_t{-7, 123}) == float2_t{-7.0f, 123.0f}));
+    FND_TEST_TRUE(all(float2(int2_t{0, 1}) == float2_t{0, 1}));
+    FND_TEST_TRUE(all(float2(int2_t{-7, 123}) == float2_t{-7, 123}));
     FND_TEST_TRUE(all(float2(int2_t{kIntMinValue, kIntMaxValue})
         == float2_t{-0x1p31f, 0x1p31f}));
     FND_TEST_TRUE(all(float2(int2_t{16777216, 16777217})
-        == float2_t{16777216.0f, 16777216.0f}));
+        == float2_t{16777216, 16777216}));
     FND_TEST_TRUE(all(float2(int2_t{-16777217, 16777219})
         == float2_t{-16777216.0f, 16777220.0f}));
     // Up to 2^24 the round trip gives back the same value.
@@ -262,12 +262,12 @@ void unittests_math_vector_conversion_float2()
     FND_TEST_TRUE(all(int2(float2(iv)) == iv));
 
     // From a uint2_t.
-    FND_TEST_TRUE(all(float2(uint2_t{0u, 7u}) == float2_t{0.0f, 7.0f}));
+    FND_TEST_TRUE(all(float2(uint2_t{0, 7}) == float2_t{0, 7}));
     FND_TEST_TRUE(all(float2(uint2_t{kUIntMaxValue, 0x80000000u})
         == float2_t{0x1p32f, 0x1p31f}));
-    FND_TEST_TRUE(all(float2(uint2_t{16777217u, 16777219u})
+    FND_TEST_TRUE(all(float2(uint2_t{16777217, 16777219})
         == float2_t{16777216.0f, 16777220.0f}));
-    const uint2_t uv{16777216u, 12345u};
+    const uint2_t uv{16777216, 12345};
     FND_TEST_TRUE(all(uint2(float2(uv)) == uv));
 
     // From a float3_t or float4_t: keeps x and y.
@@ -278,29 +278,29 @@ void unittests_math_vector_conversion_float2()
 
     // Every overload: splat, components and vectors of every element
     // type.
-    FND_TEST_TRUE(all(float2(true) == float2_t{1.0f, 1.0f}));
-    FND_TEST_TRUE(all(float2(true, false) == float2_t{1.0f, 0.0f}));
-    FND_TEST_TRUE(all(float2(bool2_t{true, false}) == float2_t{1.0f, 0.0f}));
+    FND_TEST_TRUE(all(float2(true) == float2_t{1, 1}));
+    FND_TEST_TRUE(all(float2(true, false) == float2_t{1, 0}));
+    FND_TEST_TRUE(all(float2(bool2_t{true, false}) == float2_t{1, 0}));
     FND_TEST_TRUE(
-        all(float2(bool3_t{true, false, true}) == float2_t{1.0f, 0.0f}));
+        all(float2(bool3_t{true, false, true}) == float2_t{1, 0}));
     FND_TEST_TRUE(
-        all(float2(bool4_t{true, false, true, true}) == float2_t{1.0f, 0.0f}));
+        all(float2(bool4_t{true, false, true, true}) == float2_t{1, 0}));
     FND_TEST_TRUE(all(float2(3.75f) == float2_t{3.75f, 3.75f}));
     FND_TEST_TRUE(all(float2(3.75f, 0.0f) == float2_t{3.75f, 0.0f}));
     FND_TEST_TRUE(
         all(float2(float3_t{3.75f, 0.0f, 7.25f}) == float2_t{3.75f, 0.0f}));
     FND_TEST_TRUE(all(float2(float4_t{3.75f, 0.0f, 7.25f, 1.5f})
         == float2_t{3.75f, 0.0f}));
-    FND_TEST_TRUE(all(float2(3) == float2_t{3.0f, 3.0f}));
-    FND_TEST_TRUE(all(float2(3, 0) == float2_t{3.0f, 0.0f}));
-    FND_TEST_TRUE(all(float2(int2_t{3, 0}) == float2_t{3.0f, 0.0f}));
-    FND_TEST_TRUE(all(float2(int3_t{3, 0, 7}) == float2_t{3.0f, 0.0f}));
-    FND_TEST_TRUE(all(float2(int4_t{3, 0, 7, 1}) == float2_t{3.0f, 0.0f}));
-    FND_TEST_TRUE(all(float2(3u) == float2_t{3.0f, 3.0f}));
-    FND_TEST_TRUE(all(float2(3u, 0u) == float2_t{3.0f, 0.0f}));
-    FND_TEST_TRUE(all(float2(uint2_t{3u, 0u}) == float2_t{3.0f, 0.0f}));
-    FND_TEST_TRUE(all(float2(uint3_t{3u, 0u, 7u}) == float2_t{3.0f, 0.0f}));
-    FND_TEST_TRUE(all(float2(uint4_t{3u, 0u, 7u, 1u}) == float2_t{3.0f, 0.0f}));
+    FND_TEST_TRUE(all(float2(3) == float2_t{3, 3}));
+    FND_TEST_TRUE(all(float2(3, 0) == float2_t{3, 0}));
+    FND_TEST_TRUE(all(float2(int2_t{3, 0}) == float2_t{3, 0}));
+    FND_TEST_TRUE(all(float2(int3_t{3, 0, 7}) == float2_t{3, 0}));
+    FND_TEST_TRUE(all(float2(int4_t{3, 0, 7, 1}) == float2_t{3, 0}));
+    FND_TEST_TRUE(all(float2(3u) == float2_t{3, 3}));
+    FND_TEST_TRUE(all(float2(3u, 0u) == float2_t{3, 0}));
+    FND_TEST_TRUE(all(float2(uint2_t{3, 0}) == float2_t{3, 0}));
+    FND_TEST_TRUE(all(float2(uint3_t{3, 0, 7}) == float2_t{3, 0}));
+    FND_TEST_TRUE(all(float2(uint4_t{3, 0, 7, 1}) == float2_t{3, 0}));
 
 }
 
@@ -308,7 +308,7 @@ void unittests_math_vector_conversion_float3()
 {
     // From an int3_t.
     FND_TEST_TRUE(
-        all(float3(int3_t{-1, 0, 1}) == float3_t{-1.0f, 0.0f, 1.0f}));
+        all(float3(int3_t{-1, 0, 1}) == float3_t{-1, 0, 1}));
     FND_TEST_TRUE(all(float3(int3_t{kIntMinValue, kIntMaxValue, 16777217})
         == float3_t{-0x1p31f, 0x1p31f, 16777216.0f}));
     const int3_t iv{16777216, -12345, 678};
@@ -316,10 +316,10 @@ void unittests_math_vector_conversion_float3()
 
     // From a uint3_t.
     FND_TEST_TRUE(
-        all(float3(uint3_t{0u, 7u, 123u}) == float3_t{0.0f, 7.0f, 123.0f}));
+        all(float3(uint3_t{0, 7, 123}) == float3_t{0, 7, 123}));
     FND_TEST_TRUE(all(float3(uint3_t{kUIntMaxValue, 0x80000000u, 16777219u})
         == float3_t{0x1p32f, 0x1p31f, 16777220.0f}));
-    const uint3_t uv{16777216u, 12345u, 678u};
+    const uint3_t uv{16777216, 12345, 678};
     FND_TEST_TRUE(all(uint3(float3(uv)) == uv));
 
     // From a float2_t: z defaults to 0.
@@ -334,16 +334,16 @@ void unittests_math_vector_conversion_float3()
 
     // Every overload: splat, components and vectors of every element
     // type.
-    FND_TEST_TRUE(all(float3(true) == float3_t{1.0f, 1.0f, 1.0f}));
-    FND_TEST_TRUE(all(float3(true, false, true) == float3_t{1.0f, 0.0f, 1.0f}));
+    FND_TEST_TRUE(all(float3(true) == float3_t{1, 1, 1}));
+    FND_TEST_TRUE(all(float3(true, false, true) == float3_t{1, 0, 1}));
     FND_TEST_TRUE(
-        all(float3(bool2_t{true, false}, true) == float3_t{1.0f, 0.0f, 1.0f}));
+        all(float3(bool2_t{true, false}, true) == float3_t{1, 0, 1}));
     FND_TEST_TRUE(
-        all(float3(bool2_t{true, false}) == float3_t{1.0f, 0.0f, 0.0f}));
+        all(float3(bool2_t{true, false}) == float3_t{1, 0, 0}));
     FND_TEST_TRUE(
-        all(float3(bool3_t{true, false, true}) == float3_t{1.0f, 0.0f, 1.0f}));
+        all(float3(bool3_t{true, false, true}) == float3_t{1, 0, 1}));
     FND_TEST_TRUE(all(float3(bool4_t{true, false, true, true})
-        == float3_t{1.0f, 0.0f, 1.0f}));
+        == float3_t{1, 0, 1}));
     FND_TEST_TRUE(all(float3(3.75f) == float3_t{3.75f, 3.75f, 3.75f}));
     FND_TEST_TRUE(
         all(float3(3.75f, 0.0f, 7.25f) == float3_t{3.75f, 0.0f, 7.25f}));
@@ -353,22 +353,22 @@ void unittests_math_vector_conversion_float3()
         all(float3(float2_t{3.75f, 0.0f}) == float3_t{3.75f, 0.0f, 0.0f}));
     FND_TEST_TRUE(all(float3(float4_t{3.75f, 0.0f, 7.25f, 1.5f})
         == float3_t{3.75f, 0.0f, 7.25f}));
-    FND_TEST_TRUE(all(float3(3) == float3_t{3.0f, 3.0f, 3.0f}));
-    FND_TEST_TRUE(all(float3(3, 0, 7) == float3_t{3.0f, 0.0f, 7.0f}));
-    FND_TEST_TRUE(all(float3(int2_t{3, 0}, 7) == float3_t{3.0f, 0.0f, 7.0f}));
-    FND_TEST_TRUE(all(float3(int2_t{3, 0}) == float3_t{3.0f, 0.0f, 0.0f}));
-    FND_TEST_TRUE(all(float3(int3_t{3, 0, 7}) == float3_t{3.0f, 0.0f, 7.0f}));
+    FND_TEST_TRUE(all(float3(3) == float3_t{3, 3, 3}));
+    FND_TEST_TRUE(all(float3(3, 0, 7) == float3_t{3, 0, 7}));
+    FND_TEST_TRUE(all(float3(int2_t{3, 0}, 7) == float3_t{3, 0, 7}));
+    FND_TEST_TRUE(all(float3(int2_t{3, 0}) == float3_t{3, 0, 0}));
+    FND_TEST_TRUE(all(float3(int3_t{3, 0, 7}) == float3_t{3, 0, 7}));
     FND_TEST_TRUE(
-        all(float3(int4_t{3, 0, 7, 1}) == float3_t{3.0f, 0.0f, 7.0f}));
-    FND_TEST_TRUE(all(float3(3u) == float3_t{3.0f, 3.0f, 3.0f}));
-    FND_TEST_TRUE(all(float3(3u, 0u, 7u) == float3_t{3.0f, 0.0f, 7.0f}));
+        all(float3(int4_t{3, 0, 7, 1}) == float3_t{3, 0, 7}));
+    FND_TEST_TRUE(all(float3(3u) == float3_t{3, 3, 3}));
+    FND_TEST_TRUE(all(float3(3u, 0u, 7u) == float3_t{3, 0, 7}));
     FND_TEST_TRUE(
-        all(float3(uint2_t{3u, 0u}, 7u) == float3_t{3.0f, 0.0f, 7.0f}));
-    FND_TEST_TRUE(all(float3(uint2_t{3u, 0u}) == float3_t{3.0f, 0.0f, 0.0f}));
+        all(float3(uint2_t{3, 0}, 7u) == float3_t{3, 0, 7}));
+    FND_TEST_TRUE(all(float3(uint2_t{3, 0}) == float3_t{3, 0, 0}));
     FND_TEST_TRUE(
-        all(float3(uint3_t{3u, 0u, 7u}) == float3_t{3.0f, 0.0f, 7.0f}));
+        all(float3(uint3_t{3, 0, 7}) == float3_t{3, 0, 7}));
     FND_TEST_TRUE(
-        all(float3(uint4_t{3u, 0u, 7u, 1u}) == float3_t{3.0f, 0.0f, 7.0f}));
+        all(float3(uint4_t{3, 0, 7, 1}) == float3_t{3, 0, 7}));
 
 }
 
@@ -376,7 +376,7 @@ void unittests_math_vector_conversion_float4()
 {
     // From an int4_t.
     FND_TEST_TRUE(all(
-        float4(int4_t{-1, 0, 1, 123}) == float4_t{-1.0f, 0.0f, 1.0f, 123.0f}));
+        float4(int4_t{-1, 0, 1, 123}) == float4_t{-1, 0, 1, 123}));
     FND_TEST_TRUE(
         all(float4(int4_t{kIntMinValue, kIntMaxValue, 16777217, -16777219})
             == float4_t{-0x1p31f, 0x1p31f, 16777216.0f, -16777220.0f}));
@@ -384,12 +384,12 @@ void unittests_math_vector_conversion_float4()
     FND_TEST_TRUE(all(int4(float4(iv)) == iv));
 
     // From a uint4_t.
-    FND_TEST_TRUE(all(float4(uint4_t{0u, 7u, 123u, 16777216u})
-        == float4_t{0.0f, 7.0f, 123.0f, 16777216.0f}));
+    FND_TEST_TRUE(all(float4(uint4_t{0, 7, 123, 16777216})
+        == float4_t{0, 7, 123, 16777216}));
     FND_TEST_TRUE(
         all(float4(uint4_t{kUIntMaxValue, 0x80000000u, 16777217u, 16777219u})
             == float4_t{0x1p32f, 0x1p31f, 16777216.0f, 16777220.0f}));
-    const uint4_t uv{16777216u, 12345u, 678u, 0u};
+    const uint4_t uv{16777216, 12345, 678, 0};
     FND_TEST_TRUE(all(uint4(float4(uv)) == uv));
 
     // From a float2_t: z and w default to 0.
@@ -409,19 +409,19 @@ void unittests_math_vector_conversion_float4()
 
     // Every overload: splat, components and vectors of every element
     // type.
-    FND_TEST_TRUE(all(float4(true) == float4_t{1.0f, 1.0f, 1.0f, 1.0f}));
+    FND_TEST_TRUE(all(float4(true) == float4_t{1, 1, 1, 1}));
     FND_TEST_TRUE(all(float4(true, false, true, true)
-        == float4_t{1.0f, 0.0f, 1.0f, 1.0f}));
+        == float4_t{1, 0, 1, 1}));
     FND_TEST_TRUE(all(float4(bool2_t{true, false}, true, true)
-        == float4_t{1.0f, 0.0f, 1.0f, 1.0f}));
+        == float4_t{1, 0, 1, 1}));
     FND_TEST_TRUE(
-        all(float4(bool2_t{true, false}) == float4_t{1.0f, 0.0f, 0.0f, 0.0f}));
+        all(float4(bool2_t{true, false}) == float4_t{1, 0, 0, 0}));
     FND_TEST_TRUE(all(float4(bool3_t{true, false, true}, true)
-        == float4_t{1.0f, 0.0f, 1.0f, 1.0f}));
+        == float4_t{1, 0, 1, 1}));
     FND_TEST_TRUE(all(float4(bool3_t{true, false, true})
-        == float4_t{1.0f, 0.0f, 1.0f, 0.0f}));
+        == float4_t{1, 0, 1, 0}));
     FND_TEST_TRUE(all(float4(bool4_t{true, false, true, true})
-        == float4_t{1.0f, 0.0f, 1.0f, 1.0f}));
+        == float4_t{1, 0, 1, 1}));
     FND_TEST_TRUE(all(float4(3.75f) == float4_t{3.75f, 3.75f, 3.75f, 3.75f}));
     FND_TEST_TRUE(all(float4(3.75f, 0.0f, 7.25f, 1.5f)
         == float4_t{3.75f, 0.0f, 7.25f, 1.5f}));
@@ -433,31 +433,31 @@ void unittests_math_vector_conversion_float4()
         == float4_t{3.75f, 0.0f, 7.25f, 1.5f}));
     FND_TEST_TRUE(all(float4(float3_t{3.75f, 0.0f, 7.25f})
         == float4_t{3.75f, 0.0f, 7.25f, 0.0f}));
-    FND_TEST_TRUE(all(float4(3) == float4_t{3.0f, 3.0f, 3.0f, 3.0f}));
-    FND_TEST_TRUE(all(float4(3, 0, 7, 1) == float4_t{3.0f, 0.0f, 7.0f, 1.0f}));
+    FND_TEST_TRUE(all(float4(3) == float4_t{3, 3, 3, 3}));
+    FND_TEST_TRUE(all(float4(3, 0, 7, 1) == float4_t{3, 0, 7, 1}));
     FND_TEST_TRUE(
-        all(float4(int2_t{3, 0}, 7, 1) == float4_t{3.0f, 0.0f, 7.0f, 1.0f}));
+        all(float4(int2_t{3, 0}, 7, 1) == float4_t{3, 0, 7, 1}));
     FND_TEST_TRUE(
-        all(float4(int2_t{3, 0}) == float4_t{3.0f, 0.0f, 0.0f, 0.0f}));
+        all(float4(int2_t{3, 0}) == float4_t{3, 0, 0, 0}));
     FND_TEST_TRUE(
-        all(float4(int3_t{3, 0, 7}, 1) == float4_t{3.0f, 0.0f, 7.0f, 1.0f}));
+        all(float4(int3_t{3, 0, 7}, 1) == float4_t{3, 0, 7, 1}));
     FND_TEST_TRUE(
-        all(float4(int3_t{3, 0, 7}) == float4_t{3.0f, 0.0f, 7.0f, 0.0f}));
+        all(float4(int3_t{3, 0, 7}) == float4_t{3, 0, 7, 0}));
     FND_TEST_TRUE(
-        all(float4(int4_t{3, 0, 7, 1}) == float4_t{3.0f, 0.0f, 7.0f, 1.0f}));
-    FND_TEST_TRUE(all(float4(3u) == float4_t{3.0f, 3.0f, 3.0f, 3.0f}));
+        all(float4(int4_t{3, 0, 7, 1}) == float4_t{3, 0, 7, 1}));
+    FND_TEST_TRUE(all(float4(3u) == float4_t{3, 3, 3, 3}));
     FND_TEST_TRUE(
-        all(float4(3u, 0u, 7u, 1u) == float4_t{3.0f, 0.0f, 7.0f, 1.0f}));
-    FND_TEST_TRUE(all(float4(uint2_t{3u, 0u}, 7u, 1u)
-        == float4_t{3.0f, 0.0f, 7.0f, 1.0f}));
+        all(float4(3u, 0u, 7u, 1u) == float4_t{3, 0, 7, 1}));
+    FND_TEST_TRUE(all(float4(uint2_t{3, 0}, 7u, 1u)
+        == float4_t{3, 0, 7, 1}));
     FND_TEST_TRUE(
-        all(float4(uint2_t{3u, 0u}) == float4_t{3.0f, 0.0f, 0.0f, 0.0f}));
-    FND_TEST_TRUE(all(float4(uint3_t{3u, 0u, 7u}, 1u)
-        == float4_t{3.0f, 0.0f, 7.0f, 1.0f}));
+        all(float4(uint2_t{3, 0}) == float4_t{3, 0, 0, 0}));
+    FND_TEST_TRUE(all(float4(uint3_t{3, 0, 7}, 1u)
+        == float4_t{3, 0, 7, 1}));
     FND_TEST_TRUE(
-        all(float4(uint3_t{3u, 0u, 7u}) == float4_t{3.0f, 0.0f, 7.0f, 0.0f}));
-    FND_TEST_TRUE(all(float4(uint4_t{3u, 0u, 7u, 1u})
-        == float4_t{3.0f, 0.0f, 7.0f, 1.0f}));
+        all(float4(uint3_t{3, 0, 7}) == float4_t{3, 0, 7, 0}));
+    FND_TEST_TRUE(all(float4(uint4_t{3, 0, 7, 1})
+        == float4_t{3, 0, 7, 1}));
 
 }
 
@@ -474,7 +474,7 @@ void unittests_math_vector_conversion_int2()
         == int2_t{kIntMinValue, 2147483520}));
 
     // From a uint2_t.
-    FND_TEST_TRUE(all(int2(uint2_t{0u, 7u}) == int2_t{0, 7}));
+    FND_TEST_TRUE(all(int2(uint2_t{0, 7}) == int2_t{0, 7}));
     FND_TEST_TRUE(all(int2(uint2_t{static_cast<uint_t>(kIntMaxValue), 123u})
         == int2_t{kIntMaxValue, 123}));
     const int2_t iv{0, kIntMaxValue};
@@ -505,9 +505,9 @@ void unittests_math_vector_conversion_int2()
     FND_TEST_TRUE(all(int2(int4_t{3, 0, 7, 1}) == int2_t{3, 0}));
     FND_TEST_TRUE(all(int2(3u) == int2_t{3, 3}));
     FND_TEST_TRUE(all(int2(3u, 0u) == int2_t{3, 0}));
-    FND_TEST_TRUE(all(int2(uint2_t{3u, 0u}) == int2_t{3, 0}));
-    FND_TEST_TRUE(all(int2(uint3_t{3u, 0u, 7u}) == int2_t{3, 0}));
-    FND_TEST_TRUE(all(int2(uint4_t{3u, 0u, 7u, 1u}) == int2_t{3, 0}));
+    FND_TEST_TRUE(all(int2(uint2_t{3, 0}) == int2_t{3, 0}));
+    FND_TEST_TRUE(all(int2(uint3_t{3, 0, 7}) == int2_t{3, 0}));
+    FND_TEST_TRUE(all(int2(uint4_t{3, 0, 7, 1}) == int2_t{3, 0}));
 
 }
 
@@ -522,7 +522,7 @@ void unittests_math_vector_conversion_int3()
         == int3_t{kIntMinValue, 2147483520, -1}));
 
     // From a uint3_t.
-    FND_TEST_TRUE(all(int3(uint3_t{0u, 7u, 123u}) == int3_t{0, 7, 123}));
+    FND_TEST_TRUE(all(int3(uint3_t{0, 7, 123}) == int3_t{0, 7, 123}));
     FND_TEST_TRUE(
         all(int3(uint3_t{static_cast<uint_t>(kIntMaxValue), 1u, 0u})
             == int3_t{kIntMaxValue, 1, 0}));
@@ -562,10 +562,10 @@ void unittests_math_vector_conversion_int3()
     FND_TEST_TRUE(all(int3(int4_t{3, 0, 7, 1}) == int3_t{3, 0, 7}));
     FND_TEST_TRUE(all(int3(3u) == int3_t{3, 3, 3}));
     FND_TEST_TRUE(all(int3(3u, 0u, 7u) == int3_t{3, 0, 7}));
-    FND_TEST_TRUE(all(int3(uint2_t{3u, 0u}, 7u) == int3_t{3, 0, 7}));
-    FND_TEST_TRUE(all(int3(uint2_t{3u, 0u}) == int3_t{3, 0, 0}));
-    FND_TEST_TRUE(all(int3(uint3_t{3u, 0u, 7u}) == int3_t{3, 0, 7}));
-    FND_TEST_TRUE(all(int3(uint4_t{3u, 0u, 7u, 1u}) == int3_t{3, 0, 7}));
+    FND_TEST_TRUE(all(int3(uint2_t{3, 0}, 7u) == int3_t{3, 0, 7}));
+    FND_TEST_TRUE(all(int3(uint2_t{3, 0}) == int3_t{3, 0, 0}));
+    FND_TEST_TRUE(all(int3(uint3_t{3, 0, 7}) == int3_t{3, 0, 7}));
+    FND_TEST_TRUE(all(int3(uint4_t{3, 0, 7, 1}) == int3_t{3, 0, 7}));
 
 }
 
@@ -581,7 +581,7 @@ void unittests_math_vector_conversion_int4()
 
     // From a uint4_t.
     FND_TEST_TRUE(
-        all(int4(uint4_t{0u, 7u, 123u, 1u}) == int4_t{0, 7, 123, 1}));
+        all(int4(uint4_t{0, 7, 123, 1}) == int4_t{0, 7, 123, 1}));
     FND_TEST_TRUE(
         all(int4(uint4_t{static_cast<uint_t>(kIntMaxValue), 1u, 0u, 2u})
             == int4_t{kIntMaxValue, 1, 0, 2}));
@@ -633,59 +633,59 @@ void unittests_math_vector_conversion_int4()
     FND_TEST_TRUE(all(int4(int3_t{3, 0, 7}) == int4_t{3, 0, 7, 0}));
     FND_TEST_TRUE(all(int4(3u) == int4_t{3, 3, 3, 3}));
     FND_TEST_TRUE(all(int4(3u, 0u, 7u, 1u) == int4_t{3, 0, 7, 1}));
-    FND_TEST_TRUE(all(int4(uint2_t{3u, 0u}, 7u, 1u) == int4_t{3, 0, 7, 1}));
-    FND_TEST_TRUE(all(int4(uint2_t{3u, 0u}) == int4_t{3, 0, 0, 0}));
-    FND_TEST_TRUE(all(int4(uint3_t{3u, 0u, 7u}, 1u) == int4_t{3, 0, 7, 1}));
-    FND_TEST_TRUE(all(int4(uint3_t{3u, 0u, 7u}) == int4_t{3, 0, 7, 0}));
-    FND_TEST_TRUE(all(int4(uint4_t{3u, 0u, 7u, 1u}) == int4_t{3, 0, 7, 1}));
+    FND_TEST_TRUE(all(int4(uint2_t{3, 0}, 7u, 1u) == int4_t{3, 0, 7, 1}));
+    FND_TEST_TRUE(all(int4(uint2_t{3, 0}) == int4_t{3, 0, 0, 0}));
+    FND_TEST_TRUE(all(int4(uint3_t{3, 0, 7}, 1u) == int4_t{3, 0, 7, 1}));
+    FND_TEST_TRUE(all(int4(uint3_t{3, 0, 7}) == int4_t{3, 0, 7, 0}));
+    FND_TEST_TRUE(all(int4(uint4_t{3, 0, 7, 1}) == int4_t{3, 0, 7, 1}));
 
 }
 
 void unittests_math_vector_conversion_uint2()
 {
     // From a float2_t: truncates toward zero.
-    FND_TEST_TRUE(all(uint2(float2_t{2.75f, 0.5f}) == uint2_t{2u, 0u}));
-    FND_TEST_TRUE(all(uint2(float2_t{0.999f, -0.0f}) == uint2_t{0u, 0u}));
+    FND_TEST_TRUE(all(uint2(float2_t{2.75f, 0.5f}) == uint2_t{2, 0}));
+    FND_TEST_TRUE(all(uint2(float2_t{0.999f, -0.0f}) == uint2_t{0, 0}));
     // The upper edge of the valid range: the largest float below 2^32.
     FND_TEST_TRUE(all(uint2(float2_t{0x1.fffffep31f, 1e9f})
         == uint2_t{4294967040u, 1000000000u}));
 
     // From an int2_t.
-    FND_TEST_TRUE(all(uint2(int2_t{0, 7}) == uint2_t{0u, 7u}));
+    FND_TEST_TRUE(all(uint2(int2_t{0, 7}) == uint2_t{0, 7}));
     FND_TEST_TRUE(
-        all(uint2(int2_t{kIntMaxValue, 123}) == uint2_t{2147483647u, 123u}));
-    const uint2_t uv{0u, 2147483647u};
+        all(uint2(int2_t{kIntMaxValue, 123}) == uint2_t{2147483647, 123}));
+    const uint2_t uv{0, 2147483647};
     FND_TEST_TRUE(all(uint2(int2(uv)) == uv));
 
     // From a uint3_t or uint4_t: keeps x and y.
-    const uint3_t v3{1u, 2u, 3u};
-    const uint4_t v4{1u, 2u, 3u, 4u};
-    FND_TEST_TRUE(all(uint2(v3) == uint2_t{1u, 2u}));
-    FND_TEST_TRUE(all(uint2(v4) == uint2_t{1u, 2u}));
+    const uint3_t v3{1, 2, 3};
+    const uint4_t v4{1, 2, 3, 4};
+    FND_TEST_TRUE(all(uint2(v3) == uint2_t{1, 2}));
+    FND_TEST_TRUE(all(uint2(v4) == uint2_t{1, 2}));
 
     // Every overload: splat, components and vectors of every element
     // type.
-    FND_TEST_TRUE(all(uint2(true) == uint2_t{1u, 1u}));
-    FND_TEST_TRUE(all(uint2(true, false) == uint2_t{1u, 0u}));
-    FND_TEST_TRUE(all(uint2(bool2_t{true, false}) == uint2_t{1u, 0u}));
-    FND_TEST_TRUE(all(uint2(bool3_t{true, false, true}) == uint2_t{1u, 0u}));
+    FND_TEST_TRUE(all(uint2(true) == uint2_t{1, 1}));
+    FND_TEST_TRUE(all(uint2(true, false) == uint2_t{1, 0}));
+    FND_TEST_TRUE(all(uint2(bool2_t{true, false}) == uint2_t{1, 0}));
+    FND_TEST_TRUE(all(uint2(bool3_t{true, false, true}) == uint2_t{1, 0}));
     FND_TEST_TRUE(
-        all(uint2(bool4_t{true, false, true, true}) == uint2_t{1u, 0u}));
-    FND_TEST_TRUE(all(uint2(3.75f) == uint2_t{3u, 3u}));
-    FND_TEST_TRUE(all(uint2(3.75f, 0.0f) == uint2_t{3u, 0u}));
-    FND_TEST_TRUE(all(uint2(float2_t{3.75f, 0.0f}) == uint2_t{3u, 0u}));
-    FND_TEST_TRUE(all(uint2(float3_t{3.75f, 0.0f, 7.25f}) == uint2_t{3u, 0u}));
+        all(uint2(bool4_t{true, false, true, true}) == uint2_t{1, 0}));
+    FND_TEST_TRUE(all(uint2(3.75f) == uint2_t{3, 3}));
+    FND_TEST_TRUE(all(uint2(3.75f, 0.0f) == uint2_t{3, 0}));
+    FND_TEST_TRUE(all(uint2(float2_t{3.75f, 0.0f}) == uint2_t{3, 0}));
+    FND_TEST_TRUE(all(uint2(float3_t{3.75f, 0.0f, 7.25f}) == uint2_t{3, 0}));
     FND_TEST_TRUE(
-        all(uint2(float4_t{3.75f, 0.0f, 7.25f, 1.5f}) == uint2_t{3u, 0u}));
-    FND_TEST_TRUE(all(uint2(3) == uint2_t{3u, 3u}));
-    FND_TEST_TRUE(all(uint2(3, 0) == uint2_t{3u, 0u}));
-    FND_TEST_TRUE(all(uint2(int2_t{3, 0}) == uint2_t{3u, 0u}));
-    FND_TEST_TRUE(all(uint2(int3_t{3, 0, 7}) == uint2_t{3u, 0u}));
-    FND_TEST_TRUE(all(uint2(int4_t{3, 0, 7, 1}) == uint2_t{3u, 0u}));
-    FND_TEST_TRUE(all(uint2(3u) == uint2_t{3u, 3u}));
-    FND_TEST_TRUE(all(uint2(3u, 0u) == uint2_t{3u, 0u}));
-    FND_TEST_TRUE(all(uint2(uint3_t{3u, 0u, 7u}) == uint2_t{3u, 0u}));
-    FND_TEST_TRUE(all(uint2(uint4_t{3u, 0u, 7u, 1u}) == uint2_t{3u, 0u}));
+        all(uint2(float4_t{3.75f, 0.0f, 7.25f, 1.5f}) == uint2_t{3, 0}));
+    FND_TEST_TRUE(all(uint2(3) == uint2_t{3, 3}));
+    FND_TEST_TRUE(all(uint2(3, 0) == uint2_t{3, 0}));
+    FND_TEST_TRUE(all(uint2(int2_t{3, 0}) == uint2_t{3, 0}));
+    FND_TEST_TRUE(all(uint2(int3_t{3, 0, 7}) == uint2_t{3, 0}));
+    FND_TEST_TRUE(all(uint2(int4_t{3, 0, 7, 1}) == uint2_t{3, 0}));
+    FND_TEST_TRUE(all(uint2(3u) == uint2_t{3, 3}));
+    FND_TEST_TRUE(all(uint2(3u, 0u) == uint2_t{3, 0}));
+    FND_TEST_TRUE(all(uint2(uint3_t{3, 0, 7}) == uint2_t{3, 0}));
+    FND_TEST_TRUE(all(uint2(uint4_t{3, 0, 7, 1}) == uint2_t{3, 0}));
 
 }
 
@@ -693,58 +693,58 @@ void unittests_math_vector_conversion_uint3()
 {
     // From a float3_t: truncates toward zero.
     FND_TEST_TRUE(
-        all(uint3(float3_t{2.75f, 0.5f, 0.999f}) == uint3_t{2u, 0u, 0u}));
+        all(uint3(float3_t{2.75f, 0.5f, 0.999f}) == uint3_t{2, 0, 0}));
     FND_TEST_TRUE(all(uint3(float3_t{0x1.fffffep31f, 1e9f, -0.0f})
         == uint3_t{4294967040u, 1000000000u, 0u}));
 
     // From an int3_t.
-    FND_TEST_TRUE(all(uint3(int3_t{0, 7, 123}) == uint3_t{0u, 7u, 123u}));
+    FND_TEST_TRUE(all(uint3(int3_t{0, 7, 123}) == uint3_t{0, 7, 123}));
     FND_TEST_TRUE(all(uint3(int3_t{kIntMaxValue, 1, 0})
-        == uint3_t{2147483647u, 1u, 0u}));
-    const uint3_t uv{0u, 2147483647u, 678u};
+        == uint3_t{2147483647, 1, 0}));
+    const uint3_t uv{0, 2147483647, 678};
     FND_TEST_TRUE(all(uint3(int3(uv)) == uv));
 
     // From a uint2_t: z defaults to 0.
-    const uint2_t v2{1u, 2u};
-    FND_TEST_TRUE(all(uint3(v2) == uint3_t{1u, 2u, 0u}));
-    FND_TEST_TRUE(all(uint3(v2, 7u) == uint3_t{1u, 2u, 7u}));
+    const uint2_t v2{1, 2};
+    FND_TEST_TRUE(all(uint3(v2) == uint3_t{1, 2, 0}));
+    FND_TEST_TRUE(all(uint3(v2, 7u) == uint3_t{1, 2, 7}));
     FND_TEST_TRUE(all(uint2(uint3(v2)) == v2));
 
     // From a uint4_t: keeps x, y and z.
-    const uint4_t v4{1u, 2u, 3u, 4u};
-    FND_TEST_TRUE(all(uint3(v4) == uint3_t{1u, 2u, 3u}));
+    const uint4_t v4{1, 2, 3, 4};
+    FND_TEST_TRUE(all(uint3(v4) == uint3_t{1, 2, 3}));
 
     // Every overload: splat, components and vectors of every element
     // type.
-    FND_TEST_TRUE(all(uint3(true) == uint3_t{1u, 1u, 1u}));
-    FND_TEST_TRUE(all(uint3(true, false, true) == uint3_t{1u, 0u, 1u}));
+    FND_TEST_TRUE(all(uint3(true) == uint3_t{1, 1, 1}));
+    FND_TEST_TRUE(all(uint3(true, false, true) == uint3_t{1, 0, 1}));
     FND_TEST_TRUE(
-        all(uint3(bool2_t{true, false}, true) == uint3_t{1u, 0u, 1u}));
-    FND_TEST_TRUE(all(uint3(bool2_t{true, false}) == uint3_t{1u, 0u, 0u}));
+        all(uint3(bool2_t{true, false}, true) == uint3_t{1, 0, 1}));
+    FND_TEST_TRUE(all(uint3(bool2_t{true, false}) == uint3_t{1, 0, 0}));
     FND_TEST_TRUE(
-        all(uint3(bool3_t{true, false, true}) == uint3_t{1u, 0u, 1u}));
+        all(uint3(bool3_t{true, false, true}) == uint3_t{1, 0, 1}));
     FND_TEST_TRUE(
-        all(uint3(bool4_t{true, false, true, true}) == uint3_t{1u, 0u, 1u}));
-    FND_TEST_TRUE(all(uint3(3.75f) == uint3_t{3u, 3u, 3u}));
-    FND_TEST_TRUE(all(uint3(3.75f, 0.0f, 7.25f) == uint3_t{3u, 0u, 7u}));
+        all(uint3(bool4_t{true, false, true, true}) == uint3_t{1, 0, 1}));
+    FND_TEST_TRUE(all(uint3(3.75f) == uint3_t{3, 3, 3}));
+    FND_TEST_TRUE(all(uint3(3.75f, 0.0f, 7.25f) == uint3_t{3, 0, 7}));
     FND_TEST_TRUE(
-        all(uint3(float2_t{3.75f, 0.0f}, 7.25f) == uint3_t{3u, 0u, 7u}));
-    FND_TEST_TRUE(all(uint3(float2_t{3.75f, 0.0f}) == uint3_t{3u, 0u, 0u}));
+        all(uint3(float2_t{3.75f, 0.0f}, 7.25f) == uint3_t{3, 0, 7}));
+    FND_TEST_TRUE(all(uint3(float2_t{3.75f, 0.0f}) == uint3_t{3, 0, 0}));
     FND_TEST_TRUE(
-        all(uint3(float3_t{3.75f, 0.0f, 7.25f}) == uint3_t{3u, 0u, 7u}));
+        all(uint3(float3_t{3.75f, 0.0f, 7.25f}) == uint3_t{3, 0, 7}));
     FND_TEST_TRUE(
-        all(uint3(float4_t{3.75f, 0.0f, 7.25f, 1.5f}) == uint3_t{3u, 0u, 7u}));
-    FND_TEST_TRUE(all(uint3(3) == uint3_t{3u, 3u, 3u}));
-    FND_TEST_TRUE(all(uint3(3, 0, 7) == uint3_t{3u, 0u, 7u}));
-    FND_TEST_TRUE(all(uint3(int2_t{3, 0}, 7) == uint3_t{3u, 0u, 7u}));
-    FND_TEST_TRUE(all(uint3(int2_t{3, 0}) == uint3_t{3u, 0u, 0u}));
-    FND_TEST_TRUE(all(uint3(int3_t{3, 0, 7}) == uint3_t{3u, 0u, 7u}));
-    FND_TEST_TRUE(all(uint3(int4_t{3, 0, 7, 1}) == uint3_t{3u, 0u, 7u}));
-    FND_TEST_TRUE(all(uint3(3u) == uint3_t{3u, 3u, 3u}));
-    FND_TEST_TRUE(all(uint3(3u, 0u, 7u) == uint3_t{3u, 0u, 7u}));
-    FND_TEST_TRUE(all(uint3(uint2_t{3u, 0u}, 7u) == uint3_t{3u, 0u, 7u}));
-    FND_TEST_TRUE(all(uint3(uint2_t{3u, 0u}) == uint3_t{3u, 0u, 0u}));
-    FND_TEST_TRUE(all(uint3(uint4_t{3u, 0u, 7u, 1u}) == uint3_t{3u, 0u, 7u}));
+        all(uint3(float4_t{3.75f, 0.0f, 7.25f, 1.5f}) == uint3_t{3, 0, 7}));
+    FND_TEST_TRUE(all(uint3(3) == uint3_t{3, 3, 3}));
+    FND_TEST_TRUE(all(uint3(3, 0, 7) == uint3_t{3, 0, 7}));
+    FND_TEST_TRUE(all(uint3(int2_t{3, 0}, 7) == uint3_t{3, 0, 7}));
+    FND_TEST_TRUE(all(uint3(int2_t{3, 0}) == uint3_t{3, 0, 0}));
+    FND_TEST_TRUE(all(uint3(int3_t{3, 0, 7}) == uint3_t{3, 0, 7}));
+    FND_TEST_TRUE(all(uint3(int4_t{3, 0, 7, 1}) == uint3_t{3, 0, 7}));
+    FND_TEST_TRUE(all(uint3(3u) == uint3_t{3, 3, 3}));
+    FND_TEST_TRUE(all(uint3(3u, 0u, 7u) == uint3_t{3, 0, 7}));
+    FND_TEST_TRUE(all(uint3(uint2_t{3, 0}, 7u) == uint3_t{3, 0, 7}));
+    FND_TEST_TRUE(all(uint3(uint2_t{3, 0}) == uint3_t{3, 0, 0}));
+    FND_TEST_TRUE(all(uint3(uint4_t{3, 0, 7, 1}) == uint3_t{3, 0, 7}));
 
 }
 
@@ -752,73 +752,73 @@ void unittests_math_vector_conversion_uint4()
 {
     // From a float4_t: truncates toward zero.
     FND_TEST_TRUE(all(uint4(float4_t{2.75f, 0.5f, 0.999f, -0.0f})
-        == uint4_t{2u, 0u, 0u, 0u}));
+        == uint4_t{2, 0, 0, 0}));
     FND_TEST_TRUE(all(uint4(float4_t{0x1.fffffep31f, 1e9f, 1.5f, 0.999f})
         == uint4_t{4294967040u, 1000000000u, 1u, 0u}));
 
     // From an int4_t.
     FND_TEST_TRUE(
-        all(uint4(int4_t{0, 7, 123, 1}) == uint4_t{0u, 7u, 123u, 1u}));
+        all(uint4(int4_t{0, 7, 123, 1}) == uint4_t{0, 7, 123, 1}));
     FND_TEST_TRUE(all(uint4(int4_t{kIntMaxValue, 1, 0, 2})
-        == uint4_t{2147483647u, 1u, 0u, 2u}));
-    const uint4_t uv{0u, 2147483647u, 678u, 1u};
+        == uint4_t{2147483647, 1, 0, 2}));
+    const uint4_t uv{0, 2147483647, 678, 1};
     FND_TEST_TRUE(all(uint4(int4(uv)) == uv));
 
     // From a uint2_t: z and w default to 0.
-    const uint2_t v2{1u, 2u};
-    FND_TEST_TRUE(all(uint4(v2) == uint4_t{1u, 2u, 0u, 0u}));
-    FND_TEST_TRUE(all(uint4(v2, 7u) == uint4_t{1u, 2u, 7u, 0u}));
+    const uint2_t v2{1, 2};
+    FND_TEST_TRUE(all(uint4(v2) == uint4_t{1, 2, 0, 0}));
+    FND_TEST_TRUE(all(uint4(v2, 7u) == uint4_t{1, 2, 7, 0}));
     FND_TEST_TRUE(
-        all(uint4(v2, 7u, 8u) == uint4_t{1u, 2u, 7u, 8u}));
+        all(uint4(v2, 7u, 8u) == uint4_t{1, 2, 7, 8}));
     FND_TEST_TRUE(all(uint2(uint4(v2)) == v2));
 
     // From a uint3_t: w defaults to 0.
-    const uint3_t v3{1u, 2u, 3u};
-    FND_TEST_TRUE(all(uint4(v3) == uint4_t{1u, 2u, 3u, 0u}));
-    FND_TEST_TRUE(all(uint4(v3, 8u) == uint4_t{1u, 2u, 3u, 8u}));
+    const uint3_t v3{1, 2, 3};
+    FND_TEST_TRUE(all(uint4(v3) == uint4_t{1, 2, 3, 0}));
+    FND_TEST_TRUE(all(uint4(v3, 8u) == uint4_t{1, 2, 3, 8}));
     FND_TEST_TRUE(all(uint3(uint4(v3)) == v3));
 
     // Every overload: splat, components and vectors of every element
     // type.
-    FND_TEST_TRUE(all(uint4(true) == uint4_t{1u, 1u, 1u, 1u}));
+    FND_TEST_TRUE(all(uint4(true) == uint4_t{1, 1, 1, 1}));
     FND_TEST_TRUE(
-        all(uint4(true, false, true, true) == uint4_t{1u, 0u, 1u, 1u}));
+        all(uint4(true, false, true, true) == uint4_t{1, 0, 1, 1}));
     FND_TEST_TRUE(all(uint4(bool2_t{true, false}, true, true)
-        == uint4_t{1u, 0u, 1u, 1u}));
-    FND_TEST_TRUE(all(uint4(bool2_t{true, false}) == uint4_t{1u, 0u, 0u, 0u}));
+        == uint4_t{1, 0, 1, 1}));
+    FND_TEST_TRUE(all(uint4(bool2_t{true, false}) == uint4_t{1, 0, 0, 0}));
     FND_TEST_TRUE(all(uint4(bool3_t{true, false, true}, true)
-        == uint4_t{1u, 0u, 1u, 1u}));
+        == uint4_t{1, 0, 1, 1}));
     FND_TEST_TRUE(
-        all(uint4(bool3_t{true, false, true}) == uint4_t{1u, 0u, 1u, 0u}));
+        all(uint4(bool3_t{true, false, true}) == uint4_t{1, 0, 1, 0}));
     FND_TEST_TRUE(all(uint4(bool4_t{true, false, true, true})
-        == uint4_t{1u, 0u, 1u, 1u}));
-    FND_TEST_TRUE(all(uint4(3.75f) == uint4_t{3u, 3u, 3u, 3u}));
+        == uint4_t{1, 0, 1, 1}));
+    FND_TEST_TRUE(all(uint4(3.75f) == uint4_t{3, 3, 3, 3}));
     FND_TEST_TRUE(
-        all(uint4(3.75f, 0.0f, 7.25f, 1.5f) == uint4_t{3u, 0u, 7u, 1u}));
+        all(uint4(3.75f, 0.0f, 7.25f, 1.5f) == uint4_t{3, 0, 7, 1}));
     FND_TEST_TRUE(all(uint4(float2_t{3.75f, 0.0f}, 7.25f, 1.5f)
-        == uint4_t{3u, 0u, 7u, 1u}));
-    FND_TEST_TRUE(all(uint4(float2_t{3.75f, 0.0f}) == uint4_t{3u, 0u, 0u, 0u}));
+        == uint4_t{3, 0, 7, 1}));
+    FND_TEST_TRUE(all(uint4(float2_t{3.75f, 0.0f}) == uint4_t{3, 0, 0, 0}));
     FND_TEST_TRUE(all(uint4(float3_t{3.75f, 0.0f, 7.25f}, 1.5f)
-        == uint4_t{3u, 0u, 7u, 1u}));
+        == uint4_t{3, 0, 7, 1}));
     FND_TEST_TRUE(
-        all(uint4(float3_t{3.75f, 0.0f, 7.25f}) == uint4_t{3u, 0u, 7u, 0u}));
+        all(uint4(float3_t{3.75f, 0.0f, 7.25f}) == uint4_t{3, 0, 7, 0}));
     FND_TEST_TRUE(all(uint4(float4_t{3.75f, 0.0f, 7.25f, 1.5f})
-        == uint4_t{3u, 0u, 7u, 1u}));
-    FND_TEST_TRUE(all(uint4(3) == uint4_t{3u, 3u, 3u, 3u}));
-    FND_TEST_TRUE(all(uint4(3, 0, 7, 1) == uint4_t{3u, 0u, 7u, 1u}));
-    FND_TEST_TRUE(all(uint4(int2_t{3, 0}, 7, 1) == uint4_t{3u, 0u, 7u, 1u}));
-    FND_TEST_TRUE(all(uint4(int2_t{3, 0}) == uint4_t{3u, 0u, 0u, 0u}));
-    FND_TEST_TRUE(all(uint4(int3_t{3, 0, 7}, 1) == uint4_t{3u, 0u, 7u, 1u}));
-    FND_TEST_TRUE(all(uint4(int3_t{3, 0, 7}) == uint4_t{3u, 0u, 7u, 0u}));
-    FND_TEST_TRUE(all(uint4(int4_t{3, 0, 7, 1}) == uint4_t{3u, 0u, 7u, 1u}));
-    FND_TEST_TRUE(all(uint4(3u) == uint4_t{3u, 3u, 3u, 3u}));
-    FND_TEST_TRUE(all(uint4(3u, 0u, 7u, 1u) == uint4_t{3u, 0u, 7u, 1u}));
+        == uint4_t{3, 0, 7, 1}));
+    FND_TEST_TRUE(all(uint4(3) == uint4_t{3, 3, 3, 3}));
+    FND_TEST_TRUE(all(uint4(3, 0, 7, 1) == uint4_t{3, 0, 7, 1}));
+    FND_TEST_TRUE(all(uint4(int2_t{3, 0}, 7, 1) == uint4_t{3, 0, 7, 1}));
+    FND_TEST_TRUE(all(uint4(int2_t{3, 0}) == uint4_t{3, 0, 0, 0}));
+    FND_TEST_TRUE(all(uint4(int3_t{3, 0, 7}, 1) == uint4_t{3, 0, 7, 1}));
+    FND_TEST_TRUE(all(uint4(int3_t{3, 0, 7}) == uint4_t{3, 0, 7, 0}));
+    FND_TEST_TRUE(all(uint4(int4_t{3, 0, 7, 1}) == uint4_t{3, 0, 7, 1}));
+    FND_TEST_TRUE(all(uint4(3u) == uint4_t{3, 3, 3, 3}));
+    FND_TEST_TRUE(all(uint4(3u, 0u, 7u, 1u) == uint4_t{3, 0, 7, 1}));
     FND_TEST_TRUE(
-        all(uint4(uint2_t{3u, 0u}, 7u, 1u) == uint4_t{3u, 0u, 7u, 1u}));
-    FND_TEST_TRUE(all(uint4(uint2_t{3u, 0u}) == uint4_t{3u, 0u, 0u, 0u}));
+        all(uint4(uint2_t{3, 0}, 7u, 1u) == uint4_t{3, 0, 7, 1}));
+    FND_TEST_TRUE(all(uint4(uint2_t{3, 0}) == uint4_t{3, 0, 0, 0}));
     FND_TEST_TRUE(
-        all(uint4(uint3_t{3u, 0u, 7u}, 1u) == uint4_t{3u, 0u, 7u, 1u}));
-    FND_TEST_TRUE(all(uint4(uint3_t{3u, 0u, 7u}) == uint4_t{3u, 0u, 7u, 0u}));
+        all(uint4(uint3_t{3, 0, 7}, 1u) == uint4_t{3, 0, 7, 1}));
+    FND_TEST_TRUE(all(uint4(uint3_t{3, 0, 7}) == uint4_t{3, 0, 7, 0}));
 
 }
 

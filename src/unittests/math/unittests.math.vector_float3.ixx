@@ -39,7 +39,7 @@ void unittests_math_vector_float3_constants()
     FND_TEST_TRUE(test_components(float3_t::kUnitZ, 0.0f, 0.0f, 1.0f));
     FND_TEST_TRUE(all(float3_t::kZero == float3_t{}));
     FND_TEST_TRUE(all(float3_t::kUnitX + float3_t::kUnitY
-        + float3_t::kUnitZ == float3_t{1.0f}));
+        + float3_t::kUnitZ == float3_t{1}));
     // The constants are usable in constant expressions.
     static_assert(float3_t::kUnitZ.z == 1.0f);
 }
@@ -117,12 +117,12 @@ void unittests_math_vector_float3_compound_assignment_operators()
     float3_t v{7.5f, -3.0f, 1.0f};
 
     // Each operator returns a reference to its left operand.
-    FND_TEST_TRUE(&(v += float3_t{1.0f, 2.0f, 3.0f}) == &v);
+    FND_TEST_TRUE(&(v += float3_t{1, 2, 3}) == &v);
     FND_TEST_TRUE(test_components(v, 8.5f, -1.0f, 4.0f));
     FND_TEST_TRUE(test_components(v += 2.0f, 10.5f, 1.0f, 6.0f));
 
     FND_TEST_TRUE(test_components(
-        v -= float3_t{4.0f, 3.0f, 2.0f}, 6.5f, -2.0f, 4.0f));
+        v -= float3_t{4, 3, 2}, 6.5f, -2.0f, 4.0f));
     FND_TEST_TRUE(test_components(v -= 1.0f, 5.5f, -3.0f, 3.0f));
 
     FND_TEST_TRUE(test_components(
@@ -134,7 +134,7 @@ void unittests_math_vector_float3_compound_assignment_operators()
     FND_TEST_TRUE(test_components(v /= 0.25f, 11.0f, 3.0f, 12.0f));
 
     FND_TEST_TRUE(test_components(
-        v %= float3_t{4.0f, 2.0f, 5.0f}, 3.0f, 1.0f, 2.0f));
+        v %= float3_t{4, 2, 5}, 3.0f, 1.0f, 2.0f));
     FND_TEST_TRUE(test_components(v %= 2.0f, 1.0f, 1.0f, 0.0f));
 }
 
@@ -190,7 +190,7 @@ void unittests_math_vector_float3_equality_operators()
     FND_TEST_TRUE(all(
         (a == float3_t{7.5f, 5.0f, 1.0f}) == bool3_t{true, false, true}));
     FND_TEST_TRUE(all(
-        (a == float3_t{2.0f, 5.0f, 0.0f}) == bool3_t{false, false, false}));
+        (a == float3_t{2, 5, 0}) == bool3_t{false, false, false}));
     FND_TEST_TRUE(all((a == 7.5f) == bool3_t{true, false, false}));
     FND_TEST_TRUE(all((-3.0f == a) == bool3_t{false, true, false}));
 
@@ -199,7 +199,7 @@ void unittests_math_vector_float3_equality_operators()
     FND_TEST_TRUE(all(
         (a != float3_t{7.5f, 5.0f, 1.0f}) == bool3_t{false, true, false}));
     FND_TEST_TRUE(all(
-        (a != float3_t{2.0f, 5.0f, 0.0f}) == bool3_t{true, true, true}));
+        (a != float3_t{2, 5, 0}) == bool3_t{true, true, true}));
     FND_TEST_TRUE(all((a != 7.5f) == bool3_t{false, true, true}));
     FND_TEST_TRUE(all((-3.0f != a) == bool3_t{true, false, true}));
 
@@ -214,7 +214,7 @@ void unittests_math_vector_float3_equality_operators()
 void unittests_math_vector_float3_relational_operators()
 {
     const float3_t a{7.5f, -3.0f, 1.0f};
-    const float3_t b{2.0f, 5.0f, 1.0f};
+    const float3_t b{2, 5, 1};
     const float3_t c{7.5f, 5.0f, 0.0f};
 
     FND_TEST_TRUE(all((a < b) == bool3_t{false, true, false}));
@@ -249,7 +249,7 @@ void unittests_math_vector_float3_multiplication_operator()
 {
     const float3_t a{7.5f, -3.0f, 0.5f};
     FND_TEST_TRUE(test_components(
-        a * float3_t{2.0f, 5.0f, -4.0f}, 15.0f, -15.0f, -2.0f));
+        a * float3_t{2, 5, -4}, 15.0f, -15.0f, -2.0f));
     FND_TEST_TRUE(test_components(a * 2.0f, 15.0f, -6.0f, 1.0f));
     FND_TEST_TRUE(test_components(2.0f * a, 15.0f, -6.0f, 1.0f));
     // Overflow gives infinity.
@@ -289,10 +289,10 @@ void unittests_math_vector_float3_modulo_operator()
     // fmod: the result has the sign of the left operand.
     const float3_t a{7.5f, -3.0f, 5.0f};
     FND_TEST_TRUE(test_components(
-        a % float3_t{2.0f, 2.0f, 3.0f}, 1.5f, -1.0f, 2.0f));
+        a % float3_t{2, 2, 3}, 1.5f, -1.0f, 2.0f));
     FND_TEST_TRUE(test_components(a % 2.0f, 1.5f, -1.0f, 1.0f));
     FND_TEST_TRUE(test_components(
-        7.0f % float3_t{2.0f, 4.0f, -5.0f}, 1.0f, 3.0f, 2.0f));
+        7.0f % float3_t{2, 4, -5}, 1.0f, 3.0f, 2.0f));
     FND_TEST_TRUE(test_components(
         float3_t{-7.5f, 7.5f, -1.0f} % float3_t{2.0f, -2.0f, 0.75f}, -1.5f,
         1.5f, -0.25f));
@@ -310,7 +310,7 @@ void unittests_math_vector_float3_modulo_operator_matches_fmod()
         float3_t{kFloatNaN, -3.0f, 1.0f},
     };
     const float3_t b[] = {
-        float3_t{2.0f, 2.0f, -2.0f},
+        float3_t{2, 2, -2},
         float3_t{-4.0f, 0.75f, 0.5f},
         float3_t{kFloatMinSubnormal, -1e-3f, 1e30f},
         float3_t{kFloatInfinity, -kFloatInfinity, 1.0f},
@@ -341,10 +341,10 @@ void unittests_math_vector_float3_division_operator()
         a / float3_t{2.0f, 4.0f, -0.5f}, 3.75f, -0.75f, -2.0f));
     FND_TEST_TRUE(test_components(a / 2.0f, 3.75f, -1.5f, 0.5f));
     FND_TEST_TRUE(test_components(
-        3.0f / float3_t{2.0f, 4.0f, -8.0f}, 1.5f, 0.75f, -0.375f));
+        3.0f / float3_t{2, 4, -8}, 1.5f, 0.75f, -0.375f));
     FND_TEST_TRUE(test_components(
         float3_t{kFloatInfinity, 1.0f, -kFloatInfinity}
-            / float3_t{2.0f, 4.0f, 2.0f},
+            / float3_t{2, 4, 2},
         kFloatInfinity, 0.25f, -kFloatInfinity));
 }
 
@@ -379,9 +379,9 @@ void unittests_math_vector_float3_inverse_trigonometry()
         atan(float3_t{1.0f, -2.0f, 0.5f}), atan(1.0f), atan(-2.0f),
         atan(0.5f)));
     FND_TEST_TRUE(test_components(
-        atan2(float3_t{1.0f, -1.0f, 0.0f}, float3_t{-1.0f, 2.0f, -3.0f}),
+        atan2(float3_t{1, -1, 0}, float3_t{-1, 2, -3}),
         atan2(1.0f, -1.0f), atan2(-1.0f, 2.0f), atan2(0.0f, -3.0f)));
-    FND_TEST_TRUE(approx_equal(acos(float3_t{-1.0f, 1.0f, 0.0f}).x, kFloatPi));
+    FND_TEST_TRUE(approx_equal(acos(float3_t{-1, 1, 0}).x, kFloatPi));
 }
 
 void unittests_math_vector_float3_approx_equal()
@@ -428,47 +428,47 @@ void unittests_math_vector_float3_ceil()
 
 void unittests_math_vector_float3_clamp()
 {
-    const float3_t lower{-10.0f, 0.0f, 1.0f};
-    const float3_t upper{10.0f, 5.0f, 2.0f};
+    const float3_t lower{-10, 0, 1};
+    const float3_t upper{10, 5, 2};
     // Each component is clamped to its own bounds.
     FND_TEST_TRUE(test_components(
         clamp(float3_t{3.0f, 3.0f, 1.5f}, lower, upper), 3.0f, 3.0f, 1.5f));
     FND_TEST_TRUE(test_components(
-        clamp(float3_t{-20.0f, -1.0f, 0.0f}, lower, upper), -10.0f, 0.0f,
+        clamp(float3_t{-20, -1, 0}, lower, upper), -10.0f, 0.0f,
         1.0f));
     FND_TEST_TRUE(test_components(
-        clamp(float3_t{20.0f, 6.0f, 3.0f}, lower, upper), 10.0f, 5.0f, 2.0f));
+        clamp(float3_t{20, 6, 3}, lower, upper), 10.0f, 5.0f, 2.0f));
     FND_TEST_TRUE(test_components(
-        clamp(float3_t{-10.0f, 5.0f, 1.0f}, lower, upper), -10.0f, 5.0f,
+        clamp(float3_t{-10, 5, 1}, lower, upper), -10.0f, 5.0f,
         1.0f));
     FND_TEST_TRUE(test_components(
         clamp(float3_t{-kFloatInfinity, kFloatInfinity, -kFloatInfinity},
             lower, upper),
         -10.0f, 5.0f, 1.0f));
     FND_TEST_TRUE(test_components(
-        clamp(float3_t{9.0f}, float3_t{3.0f}, float3_t{3.0f}), 3.0f, 3.0f,
+        clamp(float3_t{9}, float3_t{3}, float3_t{3}), 3.0f, 3.0f,
         3.0f));
 
     // float_t bounds apply to every component.
     FND_TEST_TRUE(test_components(
         clamp(float3_t{0.5f, 9.5f, -1.0f}, 0.0f, 1.0f), 0.5f, 1.0f, 0.0f));
     FND_TEST_TRUE(test_components(
-        clamp(float3_t{-20.0f, 20.0f, 0.0f}, -10.0f, 10.0f), -10.0f, 10.0f,
+        clamp(float3_t{-20, 20, 0}, -10.0f, 10.0f), -10.0f, 10.0f,
         0.0f));
     FND_TEST_TRUE(test_components(
-        clamp(float3_t{9.0f, -9.0f, 3.0f}, 3.0f, 3.0f), 3.0f, 3.0f, 3.0f));
+        clamp(float3_t{9, -9, 3}, 3.0f, 3.0f), 3.0f, 3.0f, 3.0f));
 
     // float3_t lower bound, float_t upper bound.
-    FND_TEST_TRUE(test_components(clamp(float3_t{-20.0f}, lower, 5.0f), -10.0f,
+    FND_TEST_TRUE(test_components(clamp(float3_t{-20}, lower, 5.0f), -10.0f,
         0.0f, 1.0f));
     FND_TEST_TRUE(test_components(
-        clamp(float3_t{20.0f, 3.0f, 6.0f}, lower, 5.0f), 5.0f, 3.0f, 5.0f));
+        clamp(float3_t{20, 3, 6}, lower, 5.0f), 5.0f, 3.0f, 5.0f));
 
     // float_t lower bound, float3_t upper bound.
     FND_TEST_TRUE(test_components(
-        clamp(float3_t{-20.0f}, 0.0f, upper), 0.0f, 0.0f, 0.0f));
+        clamp(float3_t{-20}, 0.0f, upper), 0.0f, 0.0f, 0.0f));
     FND_TEST_TRUE(test_components(
-        clamp(float3_t{20.0f, 3.0f, 6.0f}, 0.0f, upper), 10.0f, 3.0f, 2.0f));
+        clamp(float3_t{20, 3, 6}, 0.0f, upper), 10.0f, 3.0f, 2.0f));
 }
 
 void unittests_math_vector_float3_cmax()
@@ -476,7 +476,7 @@ void unittests_math_vector_float3_cmax()
     FND_TEST_TRUE(cmax(float3_t{7.5f, -3.0f, 1.0f}) == 7.5f);
     FND_TEST_TRUE(cmax(float3_t{-3.0f, 7.5f, 1.0f}) == 7.5f);
     FND_TEST_TRUE(cmax(float3_t{-3.0f, 1.0f, 7.5f}) == 7.5f);
-    FND_TEST_TRUE(cmax(float3_t{4.0f}) == 4.0f);
+    FND_TEST_TRUE(cmax(float3_t{4}) == 4.0f);
     FND_TEST_TRUE(cmax(float3_t{-kFloatInfinity, kFloatInfinity, 0.0f})
         == kFloatInfinity);
     // A NaN component is ignored, as for the float_t max.
@@ -490,7 +490,7 @@ void unittests_math_vector_float3_cmin()
     FND_TEST_TRUE(cmin(float3_t{7.5f, -3.0f, 1.0f}) == -3.0f);
     FND_TEST_TRUE(cmin(float3_t{-3.0f, 7.5f, 1.0f}) == -3.0f);
     FND_TEST_TRUE(cmin(float3_t{1.0f, 7.5f, -3.0f}) == -3.0f);
-    FND_TEST_TRUE(cmin(float3_t{4.0f}) == 4.0f);
+    FND_TEST_TRUE(cmin(float3_t{4}) == 4.0f);
     FND_TEST_TRUE(cmin(float3_t{kFloatInfinity, -kFloatInfinity, 0.0f})
         == -kFloatInfinity);
     // A NaN component is ignored, as for the float_t min.
@@ -519,20 +519,20 @@ void unittests_math_vector_float3_trigonometry()
 
 void unittests_math_vector_float3_cross()
 {
-    const float3_t x{1.0f, 0.0f, 0.0f};
-    const float3_t y{0.0f, 1.0f, 0.0f};
-    const float3_t z{0.0f, 0.0f, 1.0f};
+    const float3_t x{1, 0, 0};
+    const float3_t y{0, 1, 0};
+    const float3_t z{0, 0, 1};
     // Right-handed basis.
     FND_TEST_TRUE(test_components(cross(x, y), 0.0f, 0.0f, 1.0f));
     FND_TEST_TRUE(test_components(cross(y, z), 1.0f, 0.0f, 0.0f));
     FND_TEST_TRUE(test_components(cross(z, x), 0.0f, 1.0f, 0.0f));
     FND_TEST_TRUE(test_components(cross(y, x), 0.0f, 0.0f, -1.0f));
 
-    const float3_t a{1.0f, 2.0f, 3.0f};
-    const float3_t b{4.0f, 5.0f, 6.0f};
+    const float3_t a{1, 2, 3};
+    const float3_t b{4, 5, 6};
     FND_TEST_TRUE(test_components(cross(a, b), -3.0f, 6.0f, -3.0f));
     FND_TEST_TRUE(test_components(
-        cross(float3_t{2.5f, -1.0f, 0.5f}, float3_t{-3.0f, 4.0f, 1.0f}), -3.0f,
+        cross(float3_t{2.5f, -1.0f, 0.5f}, float3_t{-3, 4, 1}), -3.0f,
         -4.0f, 7.0f));
     // cross(b, a) == -cross(a, b).
     FND_TEST_TRUE(all(cross(b, a) == -cross(a, b)));
@@ -558,7 +558,7 @@ void unittests_math_vector_float3_degrees_radians()
     FND_TEST_TRUE(test_components(
         degrees(float3_t{kFloatPi, -kFloatPi / 2, 0.0f}), 180.0f, -90.0f,
         0.0f));
-    FND_TEST_TRUE(test_components(radians(float3_t{180.0f, -90.0f, 0.0f}),
+    FND_TEST_TRUE(test_components(radians(float3_t{180, -90, 0}),
         kFloatPi, -kFloatPi / 2, 0.0f));
     FND_TEST_TRUE(test_components(degrees(float3_t{1.0f, -2.0f, 0.5f}),
         degrees(1.0f), degrees(-2.0f), degrees(0.5f)));
@@ -568,13 +568,13 @@ void unittests_math_vector_float3_degrees_radians()
 
 void unittests_math_vector_float3_distance_sqr()
 {
-    const float3_t a{1.0f, 2.0f, 3.0f};
-    const float3_t b{4.0f, 6.0f, 15.0f};
+    const float3_t a{1, 2, 3};
+    const float3_t b{4, 6, 15};
     FND_TEST_TRUE(distance_sqr(a, a) == 0.0f);
     FND_TEST_TRUE(distance_sqr(a, b) == 169.0f);
     FND_TEST_TRUE(distance_sqr(b, a) == 169.0f);
     FND_TEST_TRUE(
-        distance_sqr(float3_t{-1.0f, 0.0f, 0.0f}, float3_t{1.0f, 0.0f, 0.0f})
+        distance_sqr(float3_t{-1, 0, 0}, float3_t{1, 0, 0})
         == 4.0f);
     FND_TEST_TRUE(distance_sqr(a, float3_t{kFloatInfinity, 2.0f, 3.0f})
         == kFloatInfinity);
@@ -583,8 +583,8 @@ void unittests_math_vector_float3_distance_sqr()
 
 void unittests_math_vector_float3_distance()
 {
-    const float3_t a{1.0f, 2.0f, 3.0f};
-    const float3_t b{4.0f, 6.0f, 15.0f};
+    const float3_t a{1, 2, 3};
+    const float3_t b{4, 6, 15};
     FND_TEST_TRUE(distance(a, a) == 0.0f);
     FND_TEST_TRUE(distance(a, b) == 13.0f);
     FND_TEST_TRUE(distance(b, a) == 13.0f);
@@ -610,7 +610,7 @@ void unittests_math_vector_float3_distance_matches_length()
     // max_abs_diff is about 10 ulps of the largest squared distance the vector
     // takes part in.
     const test_value values[] = {
-        {float3_t{1.0f, 2.0f, 3.0f}, 1e-4f},
+        {float3_t{1, 2, 3}, 1e-4f},
         {float3_t{-2.0f, 7.5f, -1.0f}, 1e-4f},
         {float3_t{0.1f, -0.3f, 0.2f}, 1e-4f},
         {float3_t{-3e-5f, 4e6f, 1.0f}, 1e7f},
@@ -635,16 +635,16 @@ void unittests_math_vector_float3_distance_matches_length()
 void unittests_math_vector_float3_dot()
 {
     const float3_t a{2.5f, -1.0f, 0.5f};
-    const float3_t b{-3.0f, 4.0f, 2.0f};
+    const float3_t b{-3, 4, 2};
     FND_TEST_TRUE(dot(a, b) == -10.5f);
     FND_TEST_TRUE(dot(b, a) == -10.5f);
     FND_TEST_TRUE(
-        dot(float3_t{1.0f, 2.0f, 3.0f}, float3_t{4.0f, 5.0f, 6.0f}) == 32.0f);
+        dot(float3_t{1, 2, 3}, float3_t{4, 5, 6}) == 32.0f);
     // Perpendicular vectors.
     FND_TEST_TRUE(
-        dot(float3_t{2.0f, 0.0f, 0.0f}, float3_t{0.0f, -5.0f, 3.0f}) == 0.0f);
+        dot(float3_t{2, 0, 0}, float3_t{0, -5, 3}) == 0.0f);
     FND_TEST_TRUE(
-        dot(float3_t{1.0f, 1.0f, 0.0f}, float3_t{-1.0f, 1.0f, 5.0f}) == 0.0f);
+        dot(float3_t{1, 1, 0}, float3_t{-1, 1, 5}) == 0.0f);
     // dot(v, v) is the squared length.
     FND_TEST_TRUE(dot(a, a) == 7.5f);
     FND_TEST_TRUE(dot(a, a) == length_sqr(a));
@@ -653,16 +653,16 @@ void unittests_math_vector_float3_dot()
         dot(float3_t{1e20f, 0.0f, 0.0f}, float3_t{1e20f, 0.0f, 0.0f})
         == kFloatInfinity);
     FND_TEST_TRUE(
-        isnan(dot(float3_t{kFloatNaN, 1.0f, 1.0f}, float3_t{1.0f})));
+        isnan(dot(float3_t{kFloatNaN, 1.0f, 1.0f}, float3_t{1})));
     // inf * 0 is NaN.
     FND_TEST_TRUE(isnan(dot(
-        float3_t{kFloatInfinity, 0.0f, 0.0f}, float3_t{0.0f, 1.0f, 1.0f})));
+        float3_t{kFloatInfinity, 0.0f, 0.0f}, float3_t{0, 1, 1})));
 }
 
 void unittests_math_vector_float3_exp_log()
 {
     FND_TEST_TRUE(test_components(
-        exp(float3_t{0.0f, 1.0f, -1.0f}), exp(0.0f), exp(1.0f), exp(-1.0f)));
+        exp(float3_t{0, 1, -1}), exp(0.0f), exp(1.0f), exp(-1.0f)));
     FND_TEST_TRUE(test_components(exp2(float3_t{3.0f, -1.0f, 0.5f}),
         exp2(3.0f), exp2(-1.0f), exp2(0.5f)));
     FND_TEST_TRUE(test_components(
@@ -672,7 +672,7 @@ void unittests_math_vector_float3_exp_log()
     FND_TEST_TRUE(test_components(log10(float3_t{1000.0f, 0.01f, 10.0f}),
         log10(1000.0f), log10(0.01f), log10(10.0f)));
     FND_TEST_TRUE(test_components(
-        exp2(float3_t{3.0f, -1.0f, 0.0f}), 8.0f, 0.5f, 1.0f));
+        exp2(float3_t{3, -1, 0}), 8.0f, 0.5f, 1.0f));
     FND_TEST_TRUE(test_components(
         log2(float3_t{8.0f, 0.5f, 1.0f}), 3.0f, -1.0f, 0.0f));
 }
@@ -693,24 +693,24 @@ void unittests_math_vector_float3_fmod()
 {
     // The result has the sign of the left operand.
     FND_TEST_TRUE(test_components(
-        fmod(float3_t{7.5f, -7.5f, 7.5f}, float3_t{2.0f, 2.0f, -4.0f}), 1.5f,
+        fmod(float3_t{7.5f, -7.5f, 7.5f}, float3_t{2, 2, -4}), 1.5f,
         -1.5f, 3.5f));
     // float_t on either side is used with every component.
     FND_TEST_TRUE(test_components(
         fmod(float3_t{7.5f, -5.25f, 0.5f}, 2.0f), 1.5f, -1.25f, 0.5f));
     FND_TEST_TRUE(test_components(
-        fmod(7.5f, float3_t{2.0f, 4.0f, -5.0f}), 1.5f, 3.5f, 2.5f));
+        fmod(7.5f, float3_t{2, 4, -5}), 1.5f, 3.5f, 2.5f));
     // A finite x with an infinite y returns x.
     FND_TEST_TRUE(test_components(
         fmod(float3_t{1.5f, -1.5f, 0.0f}, kFloatInfinity), 1.5f, -1.5f, 0.0f));
     // Unlike operator%, fmod does not assert on a zero divisor: the result is
     // NaN.
     const float3_t zero_divisor
-        = fmod(float3_t{1.0f, 2.0f, 3.0f}, float3_t{0.0f, 1.0f, 2.0f});
+        = fmod(float3_t{1, 2, 3}, float3_t{0, 1, 2});
     FND_TEST_TRUE(isnan(zero_divisor.x));
     FND_TEST_TRUE(zero_divisor.y == 0.0f);
     FND_TEST_TRUE(zero_divisor.z == 1.0f);
-    FND_TEST_TRUE(isnan(fmod(kFloatInfinity, float3_t{2.0f}).y));
+    FND_TEST_TRUE(isnan(fmod(kFloatInfinity, float3_t{2}).y));
 }
 
 void unittests_math_vector_float3_fractional()
@@ -791,7 +791,7 @@ void unittests_math_vector_float3_isnan()
 void unittests_math_vector_float3_length_sqr()
 {
     FND_TEST_TRUE(length_sqr(float3_t{}) == 0.0f);
-    FND_TEST_TRUE(length_sqr(float3_t{3.0f, -4.0f, 12.0f}) == 169.0f);
+    FND_TEST_TRUE(length_sqr(float3_t{3, -4, 12}) == 169.0f);
     FND_TEST_TRUE(length_sqr(float3_t{-0.5f, 0.0f, 0.0f}) == 0.25f);
     // The true result 1e40 is out of range.
     FND_TEST_TRUE(length_sqr(float3_t{1e20f, 0.0f, 0.0f}) == kFloatInfinity);
@@ -803,9 +803,9 @@ void unittests_math_vector_float3_length_sqr()
 void unittests_math_vector_float3_length()
 {
     FND_TEST_TRUE(length(float3_t{}) == 0.0f);
-    FND_TEST_TRUE(length(float3_t{3.0f, -4.0f, 12.0f}) == 13.0f);
+    FND_TEST_TRUE(length(float3_t{3, -4, 12}) == 13.0f);
     FND_TEST_TRUE(length(float3_t{0.0f, -2.5f, 0.0f}) == 2.5f);
-    FND_TEST_TRUE(length(float3_t{1.0f}) == sqrt(3.0f));
+    FND_TEST_TRUE(length(float3_t{1}) == sqrt(3.0f));
     FND_TEST_TRUE(
         length(float3_t{kFloatInfinity, 1.0f, 1.0f}) == kFloatInfinity);
     FND_TEST_TRUE(
@@ -814,8 +814,8 @@ void unittests_math_vector_float3_length()
 
 void unittests_math_vector_float3_lerp()
 {
-    const float3_t a{0.0f, 10.0f, -4.0f};
-    const float3_t b{10.0f, 20.0f, 4.0f};
+    const float3_t a{0, 10, -4};
+    const float3_t b{10, 20, 4};
     FND_TEST_TRUE(test_components(lerp(a, b, 0.0f), 0.0f, 10.0f, -4.0f));
     FND_TEST_TRUE(test_components(lerp(a, b, 1.0f), 10.0f, 20.0f, 4.0f));
     FND_TEST_TRUE(test_components(lerp(a, b, 0.25f), 2.5f, 12.5f, -2.0f));
@@ -825,7 +825,7 @@ void unittests_math_vector_float3_lerp()
     FND_TEST_TRUE(test_components(
         lerp(a, b, float3_t{0.25f, 0.5f, 0.75f}), 2.5f, 15.0f, 2.0f));
     FND_TEST_TRUE(test_components(
-        lerp(a, b, float3_t{-1.0f, 1.0f, 0.0f}), -10.0f, 20.0f, -4.0f));
+        lerp(a, b, float3_t{-1, 1, 0}), -10.0f, 20.0f, -4.0f));
 }
 
 void unittests_math_vector_float3_max()
@@ -836,7 +836,7 @@ void unittests_math_vector_float3_max()
     FND_TEST_TRUE(test_components(
         max(float3_t{2.0f, 4.0f, 0.5f}, a), 7.5f, 4.0f, 0.5f));
     FND_TEST_TRUE(test_components(
-        max(float3_t{4.0f}, float3_t{4.0f}), 4.0f, 4.0f, 4.0f));
+        max(float3_t{4}, float3_t{4}), 4.0f, 4.0f, 4.0f));
     FND_TEST_TRUE(test_components(
         max(float3_t{kFloatInfinity, -kFloatInfinity, 1.0f},
             float3_t{1.0f, 1.0f, -kFloatInfinity}),
@@ -861,7 +861,7 @@ void unittests_math_vector_float3_min()
     FND_TEST_TRUE(test_components(
         min(float3_t{2.0f, 4.0f, 0.5f}, a), 2.0f, -3.0f, 0.5f));
     FND_TEST_TRUE(test_components(
-        min(float3_t{4.0f}, float3_t{4.0f}), 4.0f, 4.0f, 4.0f));
+        min(float3_t{4}, float3_t{4}), 4.0f, 4.0f, 4.0f));
     FND_TEST_TRUE(test_components(
         min(float3_t{kFloatInfinity, -kFloatInfinity, 1.0f},
             float3_t{1.0f, 1.0f, -kFloatInfinity}),
@@ -887,7 +887,7 @@ void unittests_math_vector_float3_modf()
         modf(float3_t{3.75f, -3.75f, 0.5f}, vi), 0.75f, -0.75f, 0.5f));
     FND_TEST_TRUE(test_components(vi, 3.0f, -3.0f, 0.0f));
     FND_TEST_TRUE(test_components(
-        modf(float3_t{-2.0f, 2.0f, 0.0f}, vi), 0.0f, 0.0f, 0.0f));
+        modf(float3_t{-2, 2, 0}, vi), 0.0f, 0.0f, 0.0f));
     FND_TEST_TRUE(test_components(vi, -2.0f, 2.0f, 0.0f));
     FND_TEST_TRUE(
         test_components(modf(float3_t{0.5f, -0.5f, kFloatMinSubnormal}, vi),
@@ -918,16 +918,16 @@ void unittests_math_vector_float3_modf()
 void unittests_math_vector_float3_normalize()
 {
     FND_TEST_TRUE(test_components(
-        normalize(float3_t{5.0f, 0.0f, 0.0f}), 1.0f, 0.0f, 0.0f));
+        normalize(float3_t{5, 0, 0}), 1.0f, 0.0f, 0.0f));
     FND_TEST_TRUE(test_components(
         normalize(float3_t{0.0f, -0.5f, 0.0f}), 0.0f, -1.0f, 0.0f));
     FND_TEST_TRUE(test_components(
-        normalize(float3_t{0.0f, 0.0f, 2.0f}), 0.0f, 0.0f, 1.0f));
-    FND_TEST_TRUE(all(approx_equal(normalize(float3_t{2.0f, -1.0f, 2.0f}),
+        normalize(float3_t{0, 0, 2}), 0.0f, 0.0f, 1.0f));
+    FND_TEST_TRUE(all(approx_equal(normalize(float3_t{2, -1, 2}),
         float3_t{0.66666667f, -0.33333333f, 0.66666667f})));
-    FND_TEST_TRUE(all(approx_equal(normalize(float3_t{3.0f, -4.0f, 12.0f}),
+    FND_TEST_TRUE(all(approx_equal(normalize(float3_t{3, -4, 12}),
         float3_t{0.23076923f, -0.30769231f, 0.92307692f})));
-    FND_TEST_TRUE(all(approx_equal(normalize(float3_t{-1.0f, 1.0f, 1.0f}),
+    FND_TEST_TRUE(all(approx_equal(normalize(float3_t{-1, 1, 1}),
         float3_t{-0.57735027f, 0.57735027f, 0.57735027f})));
     // The result has unit length and keeps the direction of v.
     const float3_t v{-2.5f, 7.0f, 1.0f};
@@ -936,9 +936,9 @@ void unittests_math_vector_float3_normalize()
     FND_TEST_TRUE(all(approx_equal(n * length(v), v)));
     // Large and small vectors whose squared length is still a normal float.
     FND_TEST_TRUE(all(approx_equal(
-        normalize(float3_t{1e19f, 0.0f, 0.0f}), float3_t{1.0f, 0.0f, 0.0f})));
+        normalize(float3_t{1e19f, 0.0f, 0.0f}), float3_t{1, 0, 0})));
     FND_TEST_TRUE(all(approx_equal(
-        normalize(float3_t{0.0f, 0.0f, 1e-18f}), float3_t{0.0f, 0.0f, 1.0f})));
+        normalize(float3_t{0.0f, 0.0f, 1e-18f}), float3_t{0, 0, 1})));
 }
 
 void unittests_math_vector_float3_normalize_safe()
@@ -947,21 +947,21 @@ void unittests_math_vector_float3_normalize_safe()
     FND_TEST_TRUE(
         test_components(normalize_safe(float3_t{}), 0.0f, 0.0f, 0.0f));
     FND_TEST_TRUE(test_components(normalize_safe(float3_t{-0.0f, 0.0f, -0.0f},
-                                      float3_t{1.0f, 0.0f, 0.0f}),
+                                      float3_t{1, 0, 0}),
         1.0f, 0.0f, 0.0f));
     // So does a vector whose squared length does not exceed kFloatMinNormal.
     FND_TEST_TRUE(test_components(normalize_safe(float3_t{1e-20f, 0.0f, 0.0f},
-                                      float3_t{0.0f, -1.0f, 0.0f}),
+                                      float3_t{0, -1, 0}),
         0.0f, -1.0f, 0.0f));
     FND_TEST_TRUE(test_components(normalize_safe(float3_t{kFloatMinSubnormal},
-                                      float3_t{0.0f, -1.0f, 0.0f}),
+                                      float3_t{0, -1, 0}),
         0.0f, -1.0f, 0.0f));
     // Any other vector is normalized and default_value is ignored.
-    const float3_t d{9.0f};
+    const float3_t d{9};
     FND_TEST_TRUE(test_components(
-        normalize_safe(float3_t{5.0f, 0.0f, 0.0f}, d), 1.0f, 0.0f, 0.0f));
+        normalize_safe(float3_t{5, 0, 0}, d), 1.0f, 0.0f, 0.0f));
     FND_TEST_TRUE(all(approx_equal(
-        normalize_safe(float3_t{2.0f, -1.0f, 2.0f}, d),
+        normalize_safe(float3_t{2, -1, 2}, d),
         float3_t{0.66666667f, -0.33333333f, 0.66666667f})));
     const float3_t v{-2.5f, 7.0f, 1.0f};
     FND_TEST_TRUE(all(normalize_safe(v, d) == normalize(v)));
@@ -975,7 +975,7 @@ void unittests_math_vector_float3_normalize_safe()
             float3_t{0.66666667f, -0.33333333f, 0.66666667f})));
     FND_TEST_TRUE(all(
         approx_equal(normalize_safe(float3_t{0.0f, 0.0f, -kFloatMaxValue}, d),
-            float3_t{0.0f, 0.0f, -1.0f})));
+            float3_t{0, 0, -1})));
     FND_TEST_TRUE(all(approx_equal(
         normalize_safe(
             float3_t{kFloatMaxValue, -kFloatMaxValue, kFloatMaxValue}, d),
@@ -988,9 +988,9 @@ void unittests_math_vector_float3_normalize_safe()
 
     // Scaling a vector up by a large factor does not change the result.
     const float3_t dirs[] = {
-        float3_t{3.0f, -4.0f, 12.0f},
+        float3_t{3, -4, 12},
         float3_t{-2.5f, 7.0f, 1.0f},
-        float3_t{1.0f, 1.0f, 1.0f},
+        float3_t{1, 1, 1},
         float3_t{0.1f, -0.3f, 0.2f},
     };
     for (const float3_t dir : dirs) {
@@ -1004,12 +1004,12 @@ void unittests_math_vector_float3_normalize_safe()
 void unittests_math_vector_float3_pow()
 {
     FND_TEST_TRUE(test_components(
-        pow(float3_t{2.0f, 9.0f, 4.0f}, float3_t{10.0f, 0.5f, -1.0f}),
+        pow(float3_t{2, 9, 4}, float3_t{10.0f, 0.5f, -1.0f}),
         pow(2.0f, 10.0f), pow(9.0f, 0.5f), pow(4.0f, -1.0f)));
     FND_TEST_TRUE(test_components(pow(float3_t{3.0f, -4.0f, 0.5f}, 2.0f),
         pow(3.0f, 2.0f), pow(-4.0f, 2.0f), pow(0.5f, 2.0f)));
     FND_TEST_TRUE(approx_equal(
-        pow(float3_t{2.0f, 9.0f, 4.0f}, float3_t{10.0f, 0.5f, -1.0f}).y,
+        pow(float3_t{2, 9, 4}, float3_t{10.0f, 0.5f, -1.0f}).y,
         3.0f));
 }
 
@@ -1019,11 +1019,11 @@ void unittests_math_vector_float3_rcp_sqrt_rsqrt()
         rcp(float3_t{2.0f, -4.0f, 0.5f}), 0.5f, -0.25f, 2.0f));
     FND_TEST_TRUE(test_components(
         sqrt(float3_t{4.0f, 2.25f, 0.25f}), 2.0f, 1.5f, 0.5f));
-    FND_TEST_TRUE(test_components(sqrt(float3_t{2.0f, 3.0f, 5.0f}),
+    FND_TEST_TRUE(test_components(sqrt(float3_t{2, 3, 5}),
         sqrt(2.0f), sqrt(3.0f), sqrt(5.0f)));
     FND_TEST_TRUE(test_components(
         rsqrt(float3_t{4.0f, 0.25f, 16.0f}), 0.5f, 2.0f, 0.25f));
-    FND_TEST_TRUE(test_components(rsqrt(float3_t{2.0f, 3.0f, 5.0f}),
+    FND_TEST_TRUE(test_components(rsqrt(float3_t{2, 3, 5}),
         rsqrt(2.0f), rsqrt(3.0f), rsqrt(5.0f)));
 }
 
@@ -1060,20 +1060,20 @@ void unittests_math_vector_float3_sign()
 void unittests_math_vector_float3_smoothstep()
 {
     // Each component has its own edges.
-    const float3_t edge0{0.0f, 2.0f, -1.0f};
-    const float3_t edge1{1.0f, 4.0f, 1.0f};
+    const float3_t edge0{0, 2, -1};
+    const float3_t edge1{1, 4, 1};
     FND_TEST_TRUE(test_components(
         smoothstep(float3_t{0.25f, 3.0f, 0.0f}, edge0, edge1), 0.15625f, 0.5f,
         0.5f));
     FND_TEST_TRUE(test_components(
-        smoothstep(float3_t{-1.0f, 5.0f, 2.0f}, edge0, edge1), 0.0f, 1.0f,
+        smoothstep(float3_t{-1, 5, 2}, edge0, edge1), 0.0f, 1.0f,
         1.0f));
     // float_t edges apply to every component.
     FND_TEST_TRUE(test_components(
         smoothstep(float3_t{0.25f, 0.75f, 0.5f}, 0.0f, 1.0f), 0.15625f,
         0.84375f, 0.5f));
     FND_TEST_TRUE(test_components(
-        smoothstep(float3_t{-1.0f, 2.0f, 0.0f}, 0.0f, 1.0f), 0.0f, 1.0f, 0.0f));
+        smoothstep(float3_t{-1, 2, 0}, 0.0f, 1.0f), 0.0f, 1.0f, 0.0f));
 }
 
 void unittests_math_vector_float3_trunc()

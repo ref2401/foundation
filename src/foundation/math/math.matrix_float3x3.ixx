@@ -75,13 +75,13 @@ export struct float3x3_t final {
 };
 
 constexpr float3x3_t float3x3_t::kZero{
-    float3_t{0.0f, 0.0f, 0.0f},
-    float3_t{0.0f, 0.0f, 0.0f},
-    float3_t{0.0f, 0.0f, 0.0f}};
+    float3_t{0, 0, 0},
+    float3_t{0, 0, 0},
+    float3_t{0, 0, 0}};
 constexpr float3x3_t float3x3_t::kIdentity{
-    float3_t{1.0f, 0.0f, 0.0f},
-    float3_t{0.0f, 1.0f, 0.0f},
-    float3_t{0.0f, 0.0f, 1.0f}};
+    float3_t{1, 0, 0},
+    float3_t{0, 1, 0},
+    float3_t{0, 0, 1}};
 
 export constexpr bool_t operator==(const float3x3_t& a, const float3x3_t& b)
 {

@@ -15,10 +15,10 @@ export struct float4_t final {
     static const float4_t kUnitZ;
     static const float4_t kUnitW;
 
-    float_t x{0.0f};
-    float_t y{0.0f};
-    float_t z{0.0f};
-    float_t w{0.0f};
+    float_t x{0};
+    float_t y{0};
+    float_t z{0};
+    float_t w{0};
 
     constexpr float4_t() = default;
 
@@ -174,11 +174,11 @@ export struct float4_t final {
     }
 };
 
-constexpr float4_t float4_t::kZero{0.0f, 0.0f, 0.0f, 0.0f};
-constexpr float4_t float4_t::kUnitX{1.0f, 0.0f, 0.0f, 0.0f};
-constexpr float4_t float4_t::kUnitY{0.0f, 1.0f, 0.0f, 0.0f};
-constexpr float4_t float4_t::kUnitZ{0.0f, 0.0f, 1.0f, 0.0f};
-constexpr float4_t float4_t::kUnitW{0.0f, 0.0f, 0.0f, 1.0f};
+constexpr float4_t float4_t::kZero{0, 0, 0, 0};
+constexpr float4_t float4_t::kUnitX{1, 0, 0, 0};
+constexpr float4_t float4_t::kUnitY{0, 1, 0, 0};
+constexpr float4_t float4_t::kUnitZ{0, 0, 1, 0};
+constexpr float4_t float4_t::kUnitW{0, 0, 0, 1};
 
 export constexpr bool4_t operator==(const float4_t a, const float4_t b)
 {

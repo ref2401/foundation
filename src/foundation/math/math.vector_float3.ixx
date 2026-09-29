@@ -14,9 +14,9 @@ export struct float3_t final {
     static const float3_t kUnitY;
     static const float3_t kUnitZ;
 
-    float_t x{0.0f};
-    float_t y{0.0f};
-    float_t z{0.0f};
+    float_t x{0};
+    float_t y{0};
+    float_t z{0};
 
     constexpr float3_t() = default;
 
@@ -153,10 +153,10 @@ export struct float3_t final {
     }
 };
 
-constexpr float3_t float3_t::kZero{0.0f, 0.0f, 0.0f};
-constexpr float3_t float3_t::kUnitX{1.0f, 0.0f, 0.0f};
-constexpr float3_t float3_t::kUnitY{0.0f, 1.0f, 0.0f};
-constexpr float3_t float3_t::kUnitZ{0.0f, 0.0f, 1.0f};
+constexpr float3_t float3_t::kZero{0, 0, 0};
+constexpr float3_t float3_t::kUnitX{1, 0, 0};
+constexpr float3_t float3_t::kUnitY{0, 1, 0};
+constexpr float3_t float3_t::kUnitZ{0, 0, 1};
 
 export constexpr bool3_t operator==(const float3_t a, const float3_t b)
 {

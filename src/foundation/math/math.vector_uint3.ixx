@@ -343,10 +343,10 @@ export struct uint3_t final {
     }
 };
 
-constexpr uint3_t uint3_t::kZero{0u, 0u, 0u};
-constexpr uint3_t uint3_t::kUnitX{1u, 0u, 0u};
-constexpr uint3_t uint3_t::kUnitY{0u, 1u, 0u};
-constexpr uint3_t uint3_t::kUnitZ{0u, 0u, 1u};
+constexpr uint3_t uint3_t::kZero{0, 0, 0};
+constexpr uint3_t uint3_t::kUnitX{1, 0, 0};
+constexpr uint3_t uint3_t::kUnitY{0, 1, 0};
+constexpr uint3_t uint3_t::kUnitZ{0, 0, 1};
 
 export constexpr bool3_t operator==(const uint3_t a, const uint3_t b)
 {

@@ -165,7 +165,7 @@ export FND_INLINE bool3_t bool3(
     return bool3_t{x != 0.0f, y != 0.0f, z != 0.0f};
 }
 
-export FND_INLINE bool3_t bool3(const float2_t v, const float_t z = 0.0f)
+export FND_INLINE bool3_t bool3(const float2_t v, const float_t z = 0)
 {
     FND_ASSERT(all(!isnan(v)) && !isnan(z));
 
@@ -221,7 +221,7 @@ export constexpr bool3_t bool3(const uint_t x, const uint_t y, const uint_t z)
     return bool3_t{x != 0u, y != 0u, z != 0u};
 }
 
-export constexpr bool3_t bool3(const uint2_t v, const uint_t z = 0u)
+export constexpr bool3_t bool3(const uint2_t v, const uint_t z = 0)
 {
     return bool3_t{v.x != 0u, v.y != 0u, z != 0u};
 }
@@ -279,14 +279,14 @@ export FND_INLINE bool4_t bool4(
 }
 
 export FND_INLINE bool4_t bool4(
-    const float2_t v, const float_t z = 0.0f, const float_t w = 0.0f)
+    const float2_t v, const float_t z = 0, const float_t w = 0)
 {
     FND_ASSERT(all(!isnan(v)) && !isnan(z) && !isnan(w));
 
     return bool4_t{v.x != 0.0f, v.y != 0.0f, z != 0.0f, w != 0.0f};
 }
 
-export FND_INLINE bool4_t bool4(const float3_t v, const float_t w = 0.0f)
+export FND_INLINE bool4_t bool4(const float3_t v, const float_t w = 0)
 {
     FND_ASSERT(all(!isnan(v)) && !isnan(w));
 
@@ -339,12 +339,12 @@ export constexpr bool4_t bool4(
 }
 
 export constexpr bool4_t bool4(
-    const uint2_t v, const uint_t z = 0u, const uint_t w = 0u)
+    const uint2_t v, const uint_t z = 0, const uint_t w = 0)
 {
     return bool4_t{v.x != 0u, v.y != 0u, z != 0u, w != 0u};
 }
 
-export constexpr bool4_t bool4(const uint3_t v, const uint_t w = 0u)
+export constexpr bool4_t bool4(const uint3_t v, const uint_t w = 0)
 {
     return bool4_t{v.x != 0u, v.y != 0u, v.z != 0u, w != 0u};
 }
@@ -534,7 +534,7 @@ export constexpr float3_t float3(
     return float3_t{x, y, z};
 }
 
-export constexpr float3_t float3(const float2_t v, const float_t z = 0.0f)
+export constexpr float3_t float3(const float2_t v, const float_t z = 0)
 {
     return float3_t{v.x, v.y, z};
 }
@@ -593,7 +593,7 @@ export constexpr float3_t float3(const uint_t x, const uint_t y, const uint_t z)
         static_cast<float_t>(z)};
 }
 
-export constexpr float3_t float3(const uint2_t v, const uint_t z = 0u)
+export constexpr float3_t float3(const uint2_t v, const uint_t z = 0)
 {
     return float3_t{
         static_cast<float_t>(v.x), static_cast<float_t>(v.y),
@@ -665,12 +665,12 @@ export constexpr float4_t float4(
 }
 
 export constexpr float4_t float4(
-    const float2_t v, const float_t z = 0.0f, const float_t w = 0.0f)
+    const float2_t v, const float_t z = 0, const float_t w = 0)
 {
     return float4_t{v.x, v.y, z, w};
 }
 
-export constexpr float4_t float4(const float3_t v, const float_t w = 0.0f)
+export constexpr float4_t float4(const float3_t v, const float_t w = 0)
 {
     return float4_t{v.x, v.y, v.z, w};
 }
@@ -728,14 +728,14 @@ export constexpr float4_t float4(
 }
 
 export constexpr float4_t float4(
-    const uint2_t v, const uint_t z = 0u, const uint_t w = 0u)
+    const uint2_t v, const uint_t z = 0, const uint_t w = 0)
 {
     return float4_t{
         static_cast<float_t>(v.x), static_cast<float_t>(v.y),
         static_cast<float_t>(z), static_cast<float_t>(w)};
 }
 
-export constexpr float4_t float4(const uint3_t v, const uint_t w = 0u)
+export constexpr float4_t float4(const uint3_t v, const uint_t w = 0)
 {
     return float4_t{
         static_cast<float_t>(v.x), static_cast<float_t>(v.y),
@@ -918,7 +918,7 @@ export FND_INLINE int3_t int3(const float_t x, const float_t y, const float_t z)
         static_cast<int_t>(x), static_cast<int_t>(y), static_cast<int_t>(z)};
 }
 
-export FND_INLINE int3_t int3(const float2_t v, const float_t z = 0.0f)
+export FND_INLINE int3_t int3(const float2_t v, const float_t z = 0)
 {
     FND_ASSERT(all(can_trunc_to_int(v)) && can_trunc_to_int(z));
 
@@ -985,7 +985,7 @@ export constexpr int3_t int3(const uint_t x, const uint_t y, const uint_t z)
         static_cast<int_t>(x), static_cast<int_t>(y), static_cast<int_t>(z)};
 }
 
-export constexpr int3_t int3(const uint2_t v, const uint_t z = 0u)
+export constexpr int3_t int3(const uint2_t v, const uint_t z = 0)
 {
     FND_ASSERT(all(v <= static_cast<uint_t>(kIntMaxValue))
         && z <= static_cast<uint_t>(kIntMaxValue));
@@ -1068,7 +1068,7 @@ export FND_INLINE int4_t int4(
 }
 
 export FND_INLINE int4_t int4(
-    const float2_t v, const float_t z = 0.0f, const float_t w = 0.0f)
+    const float2_t v, const float_t z = 0, const float_t w = 0)
 {
     FND_ASSERT(all(can_trunc_to_int(v)) && can_trunc_to_int(z)
         && can_trunc_to_int(w));
@@ -1078,7 +1078,7 @@ export FND_INLINE int4_t int4(
         static_cast<int_t>(w)};
 }
 
-export FND_INLINE int4_t int4(const float3_t v, const float_t w = 0.0f)
+export FND_INLINE int4_t int4(const float3_t v, const float_t w = 0)
 {
     FND_ASSERT(all(can_trunc_to_int(v)) && can_trunc_to_int(w));
 
@@ -1141,7 +1141,7 @@ export constexpr int4_t int4(
 }
 
 export constexpr int4_t int4(
-    const uint2_t v, const uint_t z = 0u, const uint_t w = 0u)
+    const uint2_t v, const uint_t z = 0, const uint_t w = 0)
 {
     FND_ASSERT(all(v <= static_cast<uint_t>(kIntMaxValue))
         && z <= static_cast<uint_t>(kIntMaxValue)
@@ -1152,7 +1152,7 @@ export constexpr int4_t int4(
         static_cast<int_t>(w)};
 }
 
-export constexpr int4_t int4(const uint3_t v, const uint_t w = 0u)
+export constexpr int4_t int4(const uint3_t v, const uint_t w = 0)
 {
     FND_ASSERT(all(v <= static_cast<uint_t>(kIntMaxValue))
         && w <= static_cast<uint_t>(kIntMaxValue));
@@ -1338,7 +1338,7 @@ export FND_INLINE uint3_t uint3(
         static_cast<uint_t>(x), static_cast<uint_t>(y), static_cast<uint_t>(z)};
 }
 
-export FND_INLINE uint3_t uint3(const float2_t v, const float_t z = 0.0f)
+export FND_INLINE uint3_t uint3(const float2_t v, const float_t z = 0)
 {
     FND_ASSERT(all(can_trunc_to_uint(v)) && can_trunc_to_uint(z));
 
@@ -1420,7 +1420,7 @@ export constexpr uint3_t uint3(const uint_t x, const uint_t y, const uint_t z)
     return uint3_t{x, y, z};
 }
 
-export constexpr uint3_t uint3(const uint2_t v, const uint_t z = 0u)
+export constexpr uint3_t uint3(const uint2_t v, const uint_t z = 0)
 {
     return uint3_t{v.x, v.y, z};
 }
@@ -1483,7 +1483,7 @@ export FND_INLINE uint4_t uint4(
 }
 
 export FND_INLINE uint4_t uint4(
-    const float2_t v, const float_t z = 0.0f, const float_t w = 0.0f)
+    const float2_t v, const float_t z = 0, const float_t w = 0)
 {
     FND_ASSERT(all(can_trunc_to_uint(v)) && can_trunc_to_uint(z)
         && can_trunc_to_uint(w));
@@ -1493,7 +1493,7 @@ export FND_INLINE uint4_t uint4(
         static_cast<uint_t>(z), static_cast<uint_t>(w)};
 }
 
-export FND_INLINE uint4_t uint4(const float3_t v, const float_t w = 0.0f)
+export FND_INLINE uint4_t uint4(const float3_t v, const float_t w = 0)
 {
     FND_ASSERT(all(can_trunc_to_uint(v)) && can_trunc_to_uint(w));
 
@@ -1570,12 +1570,12 @@ export constexpr uint4_t uint4(
 }
 
 export constexpr uint4_t uint4(
-    const uint2_t v, const uint_t z = 0u, const uint_t w = 0u)
+    const uint2_t v, const uint_t z = 0, const uint_t w = 0)
 {
     return uint4_t{v.x, v.y, z, w};
 }
 
-export constexpr uint4_t uint4(const uint3_t v, const uint_t w = 0u)
+export constexpr uint4_t uint4(const uint3_t v, const uint_t w = 0)
 {
     return uint4_t{v.x, v.y, v.z, w};
 }

@@ -301,9 +301,9 @@ export struct uint2_t final {
     }
 };
 
-constexpr uint2_t uint2_t::kZero{0u, 0u};
-constexpr uint2_t uint2_t::kUnitX{1u, 0u};
-constexpr uint2_t uint2_t::kUnitY{0u, 1u};
+constexpr uint2_t uint2_t::kZero{0, 0};
+constexpr uint2_t uint2_t::kUnitX{1, 0};
+constexpr uint2_t uint2_t::kUnitY{0, 1};
 
 export constexpr bool2_t operator==(const uint2_t a, const uint2_t b)
 {

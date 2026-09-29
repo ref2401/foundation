@@ -380,11 +380,11 @@ export struct uint4_t final {
     }
 };
 
-constexpr uint4_t uint4_t::kZero{0u, 0u, 0u, 0u};
-constexpr uint4_t uint4_t::kUnitX{1u, 0u, 0u, 0u};
-constexpr uint4_t uint4_t::kUnitY{0u, 1u, 0u, 0u};
-constexpr uint4_t uint4_t::kUnitZ{0u, 0u, 1u, 0u};
-constexpr uint4_t uint4_t::kUnitW{0u, 0u, 0u, 1u};
+constexpr uint4_t uint4_t::kZero{0, 0, 0, 0};
+constexpr uint4_t uint4_t::kUnitX{1, 0, 0, 0};
+constexpr uint4_t uint4_t::kUnitY{0, 1, 0, 0};
+constexpr uint4_t uint4_t::kUnitZ{0, 0, 1, 0};
+constexpr uint4_t uint4_t::kUnitW{0, 0, 0, 1};
 
 export constexpr bool4_t operator==(const uint4_t a, const uint4_t b)
 {

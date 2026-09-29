@@ -46,7 +46,7 @@ static_assert(FLT_RADIX == 2 && FLT_MANT_DIG == 24 && FLT_MAX_EXP == 128,
 
 constexpr float_t kFloatToIntTruncRangeStart = -0x1p31f;
 constexpr float_t kFloatToIntTruncRangeEnd = 0x1p31f; // exclusive
-constexpr float_t kFloatToUIntTruncRangeStart = 0.0f;
+constexpr float_t kFloatToUIntTruncRangeStart = 0;
 constexpr float_t kFloatToUIntTruncRangeEnd = 0x1p32f; // exclusive
 
 export constexpr byte_t abs(const byte_t x)

@@ -12,13 +12,13 @@ export void unittests_math_matrix_float3x3();
 
 // The columns are {1, 2, 3}, {4, 5, 6} and {7, 8, 9}.
 constexpr float3x3_t kMatrixA{
-    float3_t{1.0f, 2.0f, 3.0f}, float3_t{4.0f, 5.0f, 6.0f},
-    float3_t{7.0f, 8.0f, 9.0f}};
+    float3_t{1, 2, 3}, float3_t{4, 5, 6},
+    float3_t{7, 8, 9}};
 
 // The columns are {1, 0, 2}, {0, 1, 0} and {-1, 0, 1}.
 constexpr float3x3_t kMatrixB{
-    float3_t{1.0f, 0.0f, 2.0f}, float3_t{0.0f, 1.0f, 0.0f},
-    float3_t{-1.0f, 0.0f, 1.0f}};
+    float3_t{1, 0, 2}, float3_t{0, 1, 0},
+    float3_t{-1, 0, 1}};
 
 // All expected values below are exact in binary, so == is reliable.
 constexpr bool_t test_columns(
@@ -38,11 +38,11 @@ float_t& component(float3x3_t& m, const uint_t col, const uint_t row)
 void unittests_math_matrix_float3x3_constants()
 {
     FND_TEST_TRUE(test_columns(
-        float3x3_t::kZero, float3_t{0.0f, 0.0f, 0.0f},
-        float3_t{0.0f, 0.0f, 0.0f}, float3_t{0.0f, 0.0f, 0.0f}));
+        float3x3_t::kZero, float3_t{0, 0, 0},
+        float3_t{0, 0, 0}, float3_t{0, 0, 0}));
     FND_TEST_TRUE(test_columns(
-        float3x3_t::kIdentity, float3_t{1.0f, 0.0f, 0.0f},
-        float3_t{0.0f, 1.0f, 0.0f}, float3_t{0.0f, 0.0f, 1.0f}));
+        float3x3_t::kIdentity, float3_t{1, 0, 0},
+        float3_t{0, 1, 0}, float3_t{0, 0, 1}));
     // kZero is the default-constructed matrix; the identity is its own
     // transpose.
     FND_TEST_TRUE(float3x3_t::kZero == float3x3_t{});
@@ -56,12 +56,12 @@ void unittests_math_matrix_float3x3_constructors()
     // The default ctor gives the zero matrix.
     const float3x3_t zero;
     FND_TEST_TRUE(
-        test_columns(zero, float3_t{0.0f}, float3_t{0.0f}, float3_t{0.0f}));
+        test_columns(zero, float3_t{0}, float3_t{0}, float3_t{0}));
     FND_TEST_TRUE(test_columns(
-        float3x3_t{}, float3_t{0.0f}, float3_t{0.0f}, float3_t{0.0f}));
+        float3x3_t{}, float3_t{0}, float3_t{0}, float3_t{0}));
 
     // From three columns.
-    const float3_t c0{1.0f, 2.0f, 3.0f};
+    const float3_t c0{1, 2, 3};
     const float3_t c1{-4.0f, 5.5f, 0.0f};
     const float3_t c2{kFloatMaxValue, kFloatMinValue, -0.25f};
     FND_TEST_TRUE(test_columns(float3x3_t{c0, c1, c2}, c0, c1, c2));
@@ -69,23 +69,23 @@ void unittests_math_matrix_float3x3_constructors()
 
     // From nine floats in column-major order: each group of three is a
     // column.
-    const float3x3_t m{1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f, 8.0f, 9.0f};
+    const float3x3_t m{1, 2, 3, 4, 5, 6, 7, 8, 9};
     FND_TEST_TRUE(test_columns(
-        m, float3_t{1.0f, 2.0f, 3.0f}, float3_t{4.0f, 5.0f, 6.0f},
-        float3_t{7.0f, 8.0f, 9.0f}));
+        m, float3_t{1, 2, 3}, float3_t{4, 5, 6},
+        float3_t{7, 8, 9}));
     FND_TEST_TRUE(m == kMatrixA);
     // Each argument lands in its own component: the 8th is m12, which is row
     // 1 of column 2.
-    const float3x3_t e{0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f};
+    const float3x3_t e{0, 0, 0, 0, 0, 0, 0, 1, 0};
     FND_TEST_TRUE(test_columns(
-        e, float3_t{0.0f}, float3_t{0.0f}, float3_t{0.0f, 1.0f, 0.0f}));
+        e, float3_t{0}, float3_t{0}, float3_t{0, 1, 0}));
 }
 
 void unittests_math_matrix_float3x3_unary_minus_operator()
 {
     FND_TEST_TRUE(test_columns(
-        -kMatrixA, float3_t{-1.0f, -2.0f, -3.0f}, float3_t{-4.0f, -5.0f, -6.0f},
-        float3_t{-7.0f, -8.0f, -9.0f}));
+        -kMatrixA, float3_t{-1, -2, -3}, float3_t{-4, -5, -6},
+        float3_t{-7, -8, -9}));
     FND_TEST_TRUE(-(-kMatrixA) == kMatrixA);
     // -0 equals +0.
     FND_TEST_TRUE(-float3x3_t::kZero == float3x3_t::kZero);
@@ -98,8 +98,8 @@ void unittests_math_matrix_float3x3_scalar_compound_assignment_operators()
     // Each operator returns a reference to its left operand.
     FND_TEST_TRUE(&(m *= 2.0f) == &m);
     FND_TEST_TRUE(test_columns(
-        m, float3_t{2.0f, 4.0f, 6.0f}, float3_t{8.0f, 10.0f, 12.0f},
-        float3_t{14.0f, 16.0f, 18.0f}));
+        m, float3_t{2, 4, 6}, float3_t{8, 10, 12},
+        float3_t{14, 16, 18}));
     FND_TEST_TRUE(&(m /= 4.0f) == &m);
     FND_TEST_TRUE(test_columns(
         m, float3_t{0.5f, 1.0f, 1.5f}, float3_t{2.0f, 2.5f, 3.0f},
@@ -108,8 +108,8 @@ void unittests_math_matrix_float3x3_scalar_compound_assignment_operators()
         m *= -1.0f, float3_t{-0.5f, -1.0f, -1.5f},
         float3_t{-2.0f, -2.5f, -3.0f}, float3_t{-3.5f, -4.0f, -4.5f}));
     FND_TEST_TRUE(test_columns(
-        m /= 0.5f, float3_t{-1.0f, -2.0f, -3.0f}, float3_t{-4.0f, -5.0f, -6.0f},
-        float3_t{-7.0f, -8.0f, -9.0f}));
+        m /= 0.5f, float3_t{-1, -2, -3}, float3_t{-4, -5, -6},
+        float3_t{-7, -8, -9}));
 }
 
 void unittests_math_matrix_float3x3_matrix_compound_assignment_operators()
@@ -119,14 +119,14 @@ void unittests_math_matrix_float3x3_matrix_compound_assignment_operators()
     // The operator returns a reference to its left operand.
     FND_TEST_TRUE(&(m *= kMatrixB) == &m);
     FND_TEST_TRUE(test_columns(
-        m, float3_t{15.0f, 18.0f, 21.0f}, float3_t{4.0f, 5.0f, 6.0f},
-        float3_t{6.0f, 6.0f, 6.0f}));
+        m, float3_t{15, 18, 21}, float3_t{4, 5, 6},
+        float3_t{6, 6, 6}));
     // The product is computed before it is stored, so m *= m works.
     m = kMatrixA;
     m *= m;
     FND_TEST_TRUE(test_columns(
-        m, float3_t{30.0f, 36.0f, 42.0f}, float3_t{66.0f, 81.0f, 96.0f},
-        float3_t{102.0f, 126.0f, 150.0f}));
+        m, float3_t{30, 36, 42}, float3_t{66, 81, 96},
+        float3_t{102, 126, 150}));
 }
 
 void unittests_math_matrix_float3x3_scalar_compound_assignment_matches_operators()
@@ -182,8 +182,8 @@ void unittests_math_matrix_float3x3_equality_operators()
 void unittests_math_matrix_float3x3_scalar_multiplication_operator()
 {
     FND_TEST_TRUE(test_columns(
-        kMatrixA * 2.0f, float3_t{2.0f, 4.0f, 6.0f},
-        float3_t{8.0f, 10.0f, 12.0f}, float3_t{14.0f, 16.0f, 18.0f}));
+        kMatrixA * 2.0f, float3_t{2, 4, 6},
+        float3_t{8, 10, 12}, float3_t{14, 16, 18}));
     FND_TEST_TRUE(test_columns(
         0.5f * kMatrixA, float3_t{0.5f, 1.0f, 1.5f}, float3_t{2.0f, 2.5f, 3.0f},
         float3_t{3.5f, 4.0f, 4.5f}));
@@ -200,11 +200,11 @@ void unittests_math_matrix_float3x3_matrix_multiplication_operator()
 {
     // Matrix product: column j of a * b is a times column j of b.
     FND_TEST_TRUE(test_columns(
-        kMatrixA * kMatrixB, float3_t{15.0f, 18.0f, 21.0f},
-        float3_t{4.0f, 5.0f, 6.0f}, float3_t{6.0f, 6.0f, 6.0f}));
+        kMatrixA * kMatrixB, float3_t{15, 18, 21},
+        float3_t{4, 5, 6}, float3_t{6, 6, 6}));
     FND_TEST_TRUE(test_columns(
-        kMatrixB * kMatrixA, float3_t{-2.0f, 2.0f, 5.0f},
-        float3_t{-2.0f, 5.0f, 14.0f}, float3_t{-2.0f, 8.0f, 23.0f}));
+        kMatrixB * kMatrixA, float3_t{-2, 2, 5},
+        float3_t{-2, 5, 14}, float3_t{-2, 8, 23}));
     // The product does not commute.
     FND_TEST_TRUE(kMatrixA * kMatrixB != kMatrixB * kMatrixA);
     // The identity is neutral on both sides, the zero matrix absorbs.
@@ -214,8 +214,8 @@ void unittests_math_matrix_float3x3_matrix_multiplication_operator()
     FND_TEST_TRUE(float3x3_t::kZero * kMatrixA == float3x3_t::kZero);
     // Associative, scalars factor out, and transpose reverses the order.
     const float3x3_t c{
-        float3_t{2.0f, -1.0f, 0.0f}, float3_t{0.5f, 3.0f, 1.0f},
-        float3_t{-2.0f, 0.0f, 4.0f}};
+        float3_t{2, -1, 0}, float3_t{0.5f, 3.0f, 1.0f},
+        float3_t{-2, 0, 4}};
     FND_TEST_TRUE((kMatrixA * kMatrixB) * c == kMatrixA * (kMatrixB * c));
     FND_TEST_TRUE((kMatrixA * 2.0f) * kMatrixB == 2.0f * (kMatrixA * kMatrixB));
     FND_TEST_TRUE(
@@ -229,8 +229,8 @@ void unittests_math_matrix_float3x3_division_operator()
         kMatrixA / 2.0f, float3_t{0.5f, 1.0f, 1.5f}, float3_t{2.0f, 2.5f, 3.0f},
         float3_t{3.5f, 4.0f, 4.5f}));
     FND_TEST_TRUE(test_columns(
-        kMatrixA / 0.5f, float3_t{2.0f, 4.0f, 6.0f},
-        float3_t{8.0f, 10.0f, 12.0f}, float3_t{14.0f, 16.0f, 18.0f}));
+        kMatrixA / 0.5f, float3_t{2, 4, 6},
+        float3_t{8, 10, 12}, float3_t{14, 16, 18}));
     FND_TEST_TRUE(kMatrixA / 1.0f == kMatrixA);
     FND_TEST_TRUE(kMatrixA / -1.0f == -kMatrixA);
     FND_TEST_TRUE(kMatrixA / kFloatInfinity == float3x3_t::kZero);
@@ -266,15 +266,15 @@ void unittests_math_matrix_float3x3_transpose()
 {
     // The columns of the result are the rows of the argument.
     FND_TEST_TRUE(test_columns(
-        transpose(kMatrixA), float3_t{1.0f, 4.0f, 7.0f},
-        float3_t{2.0f, 5.0f, 8.0f}, float3_t{3.0f, 6.0f, 9.0f}));
+        transpose(kMatrixA), float3_t{1, 4, 7},
+        float3_t{2, 5, 8}, float3_t{3, 6, 9}));
     FND_TEST_TRUE(transpose(transpose(kMatrixA)) == kMatrixA);
     FND_TEST_TRUE(transpose(float3x3_t::kZero) == float3x3_t::kZero);
 
     // A symmetric matrix is its own transpose.
     const float3x3_t sym{
-        float3_t{1.0f, 2.0f, 3.0f}, float3_t{2.0f, 4.0f, 5.0f},
-        float3_t{3.0f, 5.0f, 6.0f}};
+        float3_t{1, 2, 3}, float3_t{2, 4, 5},
+        float3_t{3, 5, 6}};
     FND_TEST_TRUE(transpose(sym) == sym);
 
     // Transposing commutes with scaling.
