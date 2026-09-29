@@ -32,110 +32,40 @@ export struct float2_t final {
     {
         return const_cast<float_t&>(static_cast<const float2_t&>(*this)[idx]);
     }
-
-    constexpr float2_t& operator++()
-    {
-        ++x;
-        ++y;
-        return *this;
-    }
-
-    constexpr float2_t operator++(int) { return float2_t{x++, y++}; }
-
-    constexpr float2_t& operator--()
-    {
-        --x;
-        --y;
-        return *this;
-    }
-
-    constexpr float2_t operator--(int) { return float2_t{x--, y--}; }
-
-    constexpr float2_t operator-() const { return float2_t{-x, -y}; }
-
-    constexpr float2_t& operator+=(const float2_t b)
-    {
-        x += b.x;
-        y += b.y;
-        return *this;
-    }
-
-    constexpr float2_t& operator+=(const float_t scalar)
-    {
-        x += scalar;
-        y += scalar;
-        return *this;
-    }
-
-    constexpr float2_t& operator-=(const float2_t b)
-    {
-        x -= b.x;
-        y -= b.y;
-        return *this;
-    }
-
-    constexpr float2_t& operator-=(const float_t scalar)
-    {
-        x -= scalar;
-        y -= scalar;
-        return *this;
-    }
-
-    constexpr float2_t& operator*=(const float2_t b)
-    {
-        x *= b.x;
-        y *= b.y;
-        return *this;
-    }
-
-    constexpr float2_t& operator*=(const float_t scalar)
-    {
-        x *= scalar;
-        y *= scalar;
-        return *this;
-    }
-
-    constexpr float2_t& operator/=(const float2_t b)
-    {
-        FND_ASSERT(b.x != 0.0f && b.y != 0.0f);
-
-        x /= b.x;
-        y /= b.y;
-        return *this;
-    }
-
-    constexpr float2_t& operator/=(const float_t scalar)
-    {
-        FND_ASSERT(scalar != 0.0f);
-
-        x /= scalar;
-        y /= scalar;
-        return *this;
-    }
-
-    // The result has the sign of the left operand, as fmod does.
-    FND_INLINE float2_t& operator%=(const float2_t b)
-    {
-        FND_ASSERT(b.x != 0.0f && b.y != 0.0f);
-
-        x = fmod(x, b.x);
-        y = fmod(y, b.y);
-        return *this;
-    }
-
-    FND_INLINE float2_t& operator%=(const float_t scalar)
-    {
-        FND_ASSERT(scalar != 0.0f);
-
-        x = fmod(x, scalar);
-        y = fmod(y, scalar);
-        return *this;
-    }
 };
 
 constexpr float2_t float2_t::kZero{0, 0};
 constexpr float2_t float2_t::kUnitX{1, 0};
 constexpr float2_t float2_t::kUnitY{0, 1};
+
+export constexpr float2_t& operator++(float2_t& v)
+{
+    ++v.x;
+    ++v.y;
+    return v;
+}
+
+export constexpr float2_t operator++(float2_t& v, int)
+{
+    return float2_t{v.x++, v.y++};
+}
+
+export constexpr float2_t& operator--(float2_t& v)
+{
+    --v.x;
+    --v.y;
+    return v;
+}
+
+export constexpr float2_t operator--(float2_t& v, int)
+{
+    return float2_t{v.x--, v.y--};
+}
+
+export constexpr float2_t operator-(const float2_t v)
+{
+    return float2_t{-v.x, -v.y};
+}
 
 export constexpr bool2_t operator==(const float2_t a, const float2_t b)
 {
@@ -313,6 +243,74 @@ export constexpr float2_t operator/(const float_t scalar, const float2_t b)
     FND_ASSERT(b.x != 0.0f && b.y != 0.0f);
 
     return float2_t{scalar / b.x, scalar / b.y};
+}
+
+export constexpr float2_t& operator*=(float2_t& a, const float2_t b)
+{
+    a = a * b;
+    return a;
+}
+
+export constexpr float2_t& operator*=(float2_t& a, const float_t scalar)
+{
+    a = a * scalar;
+    return a;
+}
+
+export constexpr float2_t& operator+=(float2_t& a, const float2_t b)
+{
+    a = a + b;
+    return a;
+}
+
+export constexpr float2_t& operator+=(float2_t& a, const float_t scalar)
+{
+    a = a + scalar;
+    return a;
+}
+
+export constexpr float2_t& operator-=(float2_t& a, const float2_t b)
+{
+    a = a - b;
+    return a;
+}
+
+export constexpr float2_t& operator-=(float2_t& a, const float_t scalar)
+{
+    a = a - scalar;
+    return a;
+}
+
+export FND_INLINE float2_t& operator%=(float2_t& a, const float2_t b)
+{
+    FND_ASSERT(b.x != 0.0f && b.y != 0.0f);
+
+    a = a % b;
+    return a;
+}
+
+export FND_INLINE float2_t& operator%=(float2_t& a, const float_t scalar)
+{
+    FND_ASSERT(scalar != 0.0f);
+
+    a = a % scalar;
+    return a;
+}
+
+export constexpr float2_t& operator/=(float2_t& a, const float2_t b)
+{
+    FND_ASSERT(b.x != 0.0f && b.y != 0.0f);
+
+    a = a / b;
+    return a;
+}
+
+export constexpr float2_t& operator/=(float2_t& a, const float_t scalar)
+{
+    FND_ASSERT(scalar != 0.0f);
+
+    a = a / scalar;
+    return a;
 }
 
 export FND_INLINE float2_t abs(const float2_t v)

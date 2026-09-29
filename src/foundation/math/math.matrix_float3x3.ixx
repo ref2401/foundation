@@ -17,7 +17,6 @@ export struct float3x3_t final {
     float3_t col1;
     float3_t col2;
 
-    // All components are 0.
     constexpr float3x3_t() = default;
 
     constexpr float3x3_t(
@@ -35,53 +34,17 @@ export struct float3x3_t final {
         : col0{m00, m10, m20}, col1{m01, m11, m21}, col2{m02, m12, m22}
     {
     }
-
-    constexpr float3x3_t operator-() const
-    {
-        return float3x3_t{-col0, -col1, -col2};
-    }
-
-    constexpr float3x3_t& operator*=(const float_t scalar)
-    {
-        col0 *= scalar;
-        col1 *= scalar;
-        col2 *= scalar;
-        return *this;
-    }
-
-    // Matrix product: *this = *this * b.
-    constexpr float3x3_t& operator*=(const float3x3_t& b)
-    {
-        // Column j of the product is *this times column j of b. All three are
-        // computed before any is assigned, so m *= m works.
-        const float3_t c0 = col0 * b.col0.x + col1 * b.col0.y + col2 * b.col0.z;
-        const float3_t c1 = col0 * b.col1.x + col1 * b.col1.y + col2 * b.col1.z;
-        const float3_t c2 = col0 * b.col2.x + col1 * b.col2.y + col2 * b.col2.z;
-        col0 = c0;
-        col1 = c1;
-        col2 = c2;
-        return *this;
-    }
-
-    constexpr float3x3_t& operator/=(const float_t scalar)
-    {
-        FND_ASSERT(scalar != 0.0f);
-
-        col0 /= scalar;
-        col1 /= scalar;
-        col2 /= scalar;
-        return *this;
-    }
 };
 
 constexpr float3x3_t float3x3_t::kZero{
-    float3_t{0, 0, 0},
-    float3_t{0, 0, 0},
-    float3_t{0, 0, 0}};
+    float3_t{0, 0, 0}, float3_t{0, 0, 0}, float3_t{0, 0, 0}};
 constexpr float3x3_t float3x3_t::kIdentity{
-    float3_t{1, 0, 0},
-    float3_t{0, 1, 0},
-    float3_t{0, 0, 1}};
+    float3_t{1, 0, 0}, float3_t{0, 1, 0}, float3_t{0, 0, 1}};
+
+export constexpr float3x3_t operator-(const float3x3_t& v)
+{
+    return float3x3_t{-v.col0, -v.col1, -v.col2};
+}
 
 export constexpr bool_t operator==(const float3x3_t& a, const float3x3_t& b)
 {
@@ -120,6 +83,26 @@ export constexpr float3x3_t operator/(const float3x3_t& m, const float_t scalar)
     return float3x3_t{m.col0 / scalar, m.col1 / scalar, m.col2 / scalar};
 }
 
+export constexpr float3x3_t& operator*=(float3x3_t& a, const float_t scalar)
+{
+    a = a * scalar;
+    return a;
+}
+
+export constexpr float3x3_t& operator*=(float3x3_t& a, const float3x3_t& b)
+{
+    a = a * b;
+    return a;
+}
+
+export constexpr float3x3_t& operator/=(float3x3_t& a, const float_t scalar)
+{
+    FND_ASSERT(scalar != 0.0f);
+
+    a = a / scalar;
+    return a;
+}
+
 export FND_INLINE bool_t approx_equal(
     const float3x3_t& a, const float3x3_t& b,
     const float_t max_abs_diff = 1e-5f)
@@ -127,6 +110,72 @@ export FND_INLINE bool_t approx_equal(
     return all(approx_equal(a.col0, b.col0, max_abs_diff))
         && all(approx_equal(a.col1, b.col1, max_abs_diff))
         && all(approx_equal(a.col2, b.col2, max_abs_diff));
+}
+
+export constexpr float3_t column0(const float3x3_t& m)
+{
+    return m.col0;
+}
+
+export constexpr float3_t column1(const float3x3_t& m)
+{
+    return m.col1;
+}
+
+export constexpr float3_t column2(const float3x3_t& m)
+{
+    return m.col2;
+}
+
+export constexpr float3_t row0(const float3x3_t& m)
+{
+    return float3_t{m.col0.x, m.col1.x, m.col2.x};
+}
+
+export constexpr float3_t row1(const float3x3_t& m)
+{
+    return float3_t{m.col0.y, m.col1.y, m.col2.y};
+}
+
+export constexpr float3_t row2(const float3x3_t& m)
+{
+    return float3_t{m.col0.z, m.col1.z, m.col2.z};
+}
+
+export constexpr void set_column0(float3x3_t& m, const float3_t c)
+{
+    m.col0 = c;
+}
+
+export constexpr void set_column1(float3x3_t& m, const float3_t c)
+{
+    m.col1 = c;
+}
+
+export constexpr void set_column2(float3x3_t& m, const float3_t c)
+{
+    m.col2 = c;
+}
+
+export constexpr void set_row0(float3x3_t& m, const float3_t r)
+{
+    m.col0.x = r.x;
+    m.col1.x = r.y;
+    m.col2.x = r.z;
+}
+
+export constexpr void set_row1(float3x3_t& m, const float3_t r)
+{
+    m.col0.y = r.x;
+    m.col1.y = r.y;
+    m.col2.y = r.z;
+}
+
+export constexpr void set_row2(float3x3_t& m, const float3_t r)
+{
+    m.col0.z = r.x;
+    m.col1.z = r.y;
+    m.col2.z = r.z;
 }
 
 export constexpr float3x3_t transpose(const float3x3_t& m)

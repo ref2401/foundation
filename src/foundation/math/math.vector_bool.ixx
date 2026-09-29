@@ -30,9 +30,12 @@ export struct bool2_t final {
     {
         return const_cast<bool_t&>(static_cast<const bool2_t&>(*this)[idx]);
     }
-
-    constexpr bool2_t operator!() const { return bool2_t{!x, !y}; }
 };
+
+export constexpr bool2_t operator!(const bool2_t v)
+{
+    return bool2_t{!v.x, !v.y};
+}
 
 export constexpr bool2_t operator==(const bool2_t a, const bool2_t b)
 {
@@ -139,9 +142,12 @@ export struct bool3_t final {
     {
         return const_cast<bool_t&>(static_cast<const bool3_t&>(*this)[idx]);
     }
-
-    constexpr bool3_t operator!() const { return bool3_t{!x, !y, !z}; }
 };
+
+export constexpr bool3_t operator!(const bool3_t v)
+{
+    return bool3_t{!v.x, !v.y, !v.z};
+}
 
 export constexpr bool3_t operator==(const bool3_t a, const bool3_t b)
 {
@@ -250,9 +256,12 @@ export struct bool4_t final {
     {
         return const_cast<bool_t&>(static_cast<const bool4_t&>(*this)[idx]);
     }
-
-    constexpr bool4_t operator!() const { return bool4_t{!x, !y, !z, !w}; }
 };
+
+export constexpr bool4_t operator!(const bool4_t v)
+{
+    return bool4_t{!v.x, !v.y, !v.z, !v.w};
+}
 
 export constexpr bool4_t operator==(const bool4_t a, const bool4_t b)
 {

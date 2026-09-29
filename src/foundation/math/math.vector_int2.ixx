@@ -31,252 +31,60 @@ export struct int2_t final {
     {
         return const_cast<int_t&>(static_cast<const int2_t&>(*this)[idx]);
     }
-
-    constexpr int2_t& operator++()
-    {
-        FND_ASSERT(x != kIntMaxValue);
-        FND_ASSERT(y != kIntMaxValue);
-
-        ++x;
-        ++y;
-        return *this;
-    }
-
-    constexpr int2_t operator++(int)
-    {
-        FND_ASSERT(x != kIntMaxValue);
-        FND_ASSERT(y != kIntMaxValue);
-
-        return int2_t{x++, y++};
-    }
-
-    constexpr int2_t& operator--()
-    {
-        FND_ASSERT(x != kIntMinValue);
-        FND_ASSERT(y != kIntMinValue);
-
-        --x;
-        --y;
-        return *this;
-    }
-
-    constexpr int2_t operator--(int)
-    {
-        FND_ASSERT(x != kIntMinValue);
-        FND_ASSERT(y != kIntMinValue);
-
-        return int2_t{x--, y--};
-    }
-
-    constexpr int2_t operator-() const
-    {
-        FND_ASSERT(x != kIntMinValue);
-        FND_ASSERT(y != kIntMinValue);
-
-        return int2_t{-x, -y};
-    }
-
-    constexpr int2_t operator~() const { return int2_t{~x, ~y}; }
-
-    constexpr int2_t& operator+=(const int2_t b)
-    {
-        FND_ASSERT(
-            long_t{x} + b.x >= kIntMinValue && long_t{x} + b.x <= kIntMaxValue);
-        FND_ASSERT(
-            long_t{y} + b.y >= kIntMinValue && long_t{y} + b.y <= kIntMaxValue);
-
-        x += b.x;
-        y += b.y;
-        return *this;
-    }
-
-    constexpr int2_t& operator+=(const int_t scalar)
-    {
-        FND_ASSERT(long_t{x} + scalar >= kIntMinValue
-            && long_t{x} + scalar <= kIntMaxValue);
-        FND_ASSERT(long_t{y} + scalar >= kIntMinValue
-            && long_t{y} + scalar <= kIntMaxValue);
-
-        x += scalar;
-        y += scalar;
-        return *this;
-    }
-
-    constexpr int2_t& operator-=(const int2_t b)
-    {
-        FND_ASSERT(
-            long_t{x} - b.x >= kIntMinValue && long_t{x} - b.x <= kIntMaxValue);
-        FND_ASSERT(
-            long_t{y} - b.y >= kIntMinValue && long_t{y} - b.y <= kIntMaxValue);
-
-        x -= b.x;
-        y -= b.y;
-        return *this;
-    }
-
-    constexpr int2_t& operator-=(const int_t scalar)
-    {
-        FND_ASSERT(long_t{x} - scalar >= kIntMinValue
-            && long_t{x} - scalar <= kIntMaxValue);
-        FND_ASSERT(long_t{y} - scalar >= kIntMinValue
-            && long_t{y} - scalar <= kIntMaxValue);
-
-        x -= scalar;
-        y -= scalar;
-        return *this;
-    }
-
-    constexpr int2_t& operator*=(const int2_t b)
-    {
-        FND_ASSERT(
-            long_t{x} * b.x >= kIntMinValue && long_t{x} * b.x <= kIntMaxValue);
-        FND_ASSERT(
-            long_t{y} * b.y >= kIntMinValue && long_t{y} * b.y <= kIntMaxValue);
-
-        x *= b.x;
-        y *= b.y;
-        return *this;
-    }
-
-    constexpr int2_t& operator*=(const int_t scalar)
-    {
-        FND_ASSERT(long_t{x} * scalar >= kIntMinValue
-            && long_t{x} * scalar <= kIntMaxValue);
-        FND_ASSERT(long_t{y} * scalar >= kIntMinValue
-            && long_t{y} * scalar <= kIntMaxValue);
-
-        x *= scalar;
-        y *= scalar;
-        return *this;
-    }
-
-    constexpr int2_t& operator/=(const int2_t b)
-    {
-        FND_ASSERT(b.x != 0 && b.y != 0);
-        FND_ASSERT(!(x == kIntMinValue && b.x == -1));
-        FND_ASSERT(!(y == kIntMinValue && b.y == -1));
-
-        x /= b.x;
-        y /= b.y;
-        return *this;
-    }
-
-    constexpr int2_t& operator/=(const int_t scalar)
-    {
-        FND_ASSERT(scalar != 0);
-        FND_ASSERT(!(scalar == -1 && (x == kIntMinValue || y == kIntMinValue)));
-
-        x /= scalar;
-        y /= scalar;
-        return *this;
-    }
-
-    constexpr int2_t& operator%=(const int2_t b)
-    {
-        FND_ASSERT(b.x != 0 && b.y != 0);
-        FND_ASSERT(!(x == kIntMinValue && b.x == -1));
-        FND_ASSERT(!(y == kIntMinValue && b.y == -1));
-
-        x %= b.x;
-        y %= b.y;
-        return *this;
-    }
-
-    constexpr int2_t& operator%=(const int_t scalar)
-    {
-        FND_ASSERT(scalar != 0);
-        FND_ASSERT(!(scalar == -1 && x == kIntMinValue));
-        FND_ASSERT(!(scalar == -1 && y == kIntMinValue));
-
-        x %= scalar;
-        y %= scalar;
-        return *this;
-    }
-
-    constexpr int2_t& operator&=(const int2_t b)
-    {
-        x &= b.x;
-        y &= b.y;
-        return *this;
-    }
-
-    constexpr int2_t& operator&=(const int_t scalar)
-    {
-        x &= scalar;
-        y &= scalar;
-        return *this;
-    }
-
-    constexpr int2_t& operator|=(const int2_t b)
-    {
-        x |= b.x;
-        y |= b.y;
-        return *this;
-    }
-
-    constexpr int2_t& operator|=(const int_t scalar)
-    {
-        x |= scalar;
-        y |= scalar;
-        return *this;
-    }
-
-    constexpr int2_t& operator^=(const int2_t b)
-    {
-        x ^= b.x;
-        y ^= b.y;
-        return *this;
-    }
-
-    constexpr int2_t& operator^=(const int_t scalar)
-    {
-        x ^= scalar;
-        y ^= scalar;
-        return *this;
-    }
-
-    constexpr int2_t& operator<<=(const int2_t b)
-    {
-        FND_ASSERT(b.x >= 0 && b.x < 32);
-        FND_ASSERT(b.y >= 0 && b.y < 32);
-
-        x <<= b.x;
-        y <<= b.y;
-        return *this;
-    }
-
-    constexpr int2_t& operator<<=(const int_t scalar)
-    {
-        FND_ASSERT(scalar >= 0 && scalar < 32);
-
-        x <<= scalar;
-        y <<= scalar;
-        return *this;
-    }
-
-    constexpr int2_t& operator>>=(const int2_t b)
-    {
-        FND_ASSERT(b.x >= 0 && b.x < 32);
-        FND_ASSERT(b.y >= 0 && b.y < 32);
-
-        x >>= b.x;
-        y >>= b.y;
-        return *this;
-    }
-
-    constexpr int2_t& operator>>=(const int_t scalar)
-    {
-        FND_ASSERT(scalar >= 0 && scalar < 32);
-
-        x >>= scalar;
-        y >>= scalar;
-        return *this;
-    }
 };
 
 constexpr int2_t int2_t::kZero{0, 0};
 constexpr int2_t int2_t::kUnitX{1, 0};
 constexpr int2_t int2_t::kUnitY{0, 1};
+
+export constexpr int2_t& operator++(int2_t& v)
+{
+    FND_ASSERT(v.x != kIntMaxValue);
+    FND_ASSERT(v.y != kIntMaxValue);
+
+    ++v.x;
+    ++v.y;
+    return v;
+}
+
+export constexpr int2_t operator++(int2_t& v, int)
+{
+    FND_ASSERT(v.x != kIntMaxValue);
+    FND_ASSERT(v.y != kIntMaxValue);
+
+    return int2_t{v.x++, v.y++};
+}
+
+export constexpr int2_t& operator--(int2_t& v)
+{
+    FND_ASSERT(v.x != kIntMinValue);
+    FND_ASSERT(v.y != kIntMinValue);
+
+    --v.x;
+    --v.y;
+    return v;
+}
+
+export constexpr int2_t operator--(int2_t& v, int)
+{
+    FND_ASSERT(v.x != kIntMinValue);
+    FND_ASSERT(v.y != kIntMinValue);
+
+    return int2_t{v.x--, v.y--};
+}
+
+export constexpr int2_t operator-(const int2_t v)
+{
+    FND_ASSERT(v.x != kIntMinValue);
+    FND_ASSERT(v.y != kIntMinValue);
+
+    return int2_t{-v.x, -v.y};
+}
+
+export constexpr int2_t operator~(const int2_t v)
+{
+    return int2_t{~v.x, ~v.y};
+}
 
 export constexpr bool2_t operator==(const int2_t a, const int2_t b)
 {
@@ -595,6 +403,176 @@ export constexpr int2_t operator|(const int2_t a, const int_t scalar)
 export constexpr int2_t operator|(const int_t scalar, const int2_t b)
 {
     return int2_t{scalar | b.x, scalar | b.y};
+}
+
+export constexpr int2_t& operator&=(int2_t& a, const int2_t b)
+{
+    a = a & b;
+    return a;
+}
+
+export constexpr int2_t& operator&=(int2_t& a, const int_t scalar)
+{
+    a = a & scalar;
+    return a;
+}
+
+export constexpr int2_t& operator*=(int2_t& a, const int2_t b)
+{
+    FND_ASSERT(
+        long_t{a.x} * b.x >= kIntMinValue && long_t{a.x} * b.x <= kIntMaxValue);
+    FND_ASSERT(
+        long_t{a.y} * b.y >= kIntMinValue && long_t{a.y} * b.y <= kIntMaxValue);
+
+    a = a * b;
+    return a;
+}
+
+export constexpr int2_t& operator*=(int2_t& a, const int_t scalar)
+{
+    FND_ASSERT(long_t{a.x} * scalar >= kIntMinValue
+        && long_t{a.x} * scalar <= kIntMaxValue);
+    FND_ASSERT(long_t{a.y} * scalar >= kIntMinValue
+        && long_t{a.y} * scalar <= kIntMaxValue);
+
+    a = a * scalar;
+    return a;
+}
+
+export constexpr int2_t& operator+=(int2_t& a, const int2_t b)
+{
+    FND_ASSERT(
+        long_t{a.x} + b.x >= kIntMinValue && long_t{a.x} + b.x <= kIntMaxValue);
+    FND_ASSERT(
+        long_t{a.y} + b.y >= kIntMinValue && long_t{a.y} + b.y <= kIntMaxValue);
+
+    a = a + b;
+    return a;
+}
+
+export constexpr int2_t& operator+=(int2_t& a, const int_t scalar)
+{
+    FND_ASSERT(long_t{a.x} + scalar >= kIntMinValue
+        && long_t{a.x} + scalar <= kIntMaxValue);
+    FND_ASSERT(long_t{a.y} + scalar >= kIntMinValue
+        && long_t{a.y} + scalar <= kIntMaxValue);
+
+    a = a + scalar;
+    return a;
+}
+
+export constexpr int2_t& operator-=(int2_t& a, const int2_t b)
+{
+    FND_ASSERT(
+        long_t{a.x} - b.x >= kIntMinValue && long_t{a.x} - b.x <= kIntMaxValue);
+    FND_ASSERT(
+        long_t{a.y} - b.y >= kIntMinValue && long_t{a.y} - b.y <= kIntMaxValue);
+
+    a = a - b;
+    return a;
+}
+
+export constexpr int2_t& operator-=(int2_t& a, const int_t scalar)
+{
+    FND_ASSERT(long_t{a.x} - scalar >= kIntMinValue
+        && long_t{a.x} - scalar <= kIntMaxValue);
+    FND_ASSERT(long_t{a.y} - scalar >= kIntMinValue
+        && long_t{a.y} - scalar <= kIntMaxValue);
+
+    a = a - scalar;
+    return a;
+}
+
+export constexpr int2_t& operator%=(int2_t& a, const int2_t b)
+{
+    FND_ASSERT(all(b != 0));
+    FND_ASSERT(!any(a == kIntMinValue && b == -1));
+
+    a = a % b;
+    return a;
+}
+
+export constexpr int2_t& operator%=(int2_t& a, const int_t scalar)
+{
+    FND_ASSERT(scalar != 0);
+    FND_ASSERT(!(scalar == -1 && any(a == kIntMinValue)));
+
+    a = a % scalar;
+    return a;
+}
+
+export constexpr int2_t& operator/=(int2_t& a, const int2_t b)
+{
+    FND_ASSERT(all(b != 0));
+    FND_ASSERT(!any(a == kIntMinValue && b == -1));
+
+    a = a / b;
+    return a;
+}
+
+export constexpr int2_t& operator/=(int2_t& a, const int_t scalar)
+{
+    FND_ASSERT(scalar != 0);
+    FND_ASSERT(!(scalar == -1 && any(a == kIntMinValue)));
+
+    a = a / scalar;
+    return a;
+}
+
+export constexpr int2_t& operator<<=(int2_t& a, const int2_t b)
+{
+    FND_ASSERT(all(b >= 0 && b < 32));
+
+    a = a << b;
+    return a;
+}
+
+export constexpr int2_t& operator<<=(int2_t& a, const int_t scalar)
+{
+    FND_ASSERT(scalar >= 0 && scalar < 32);
+
+    a = a << scalar;
+    return a;
+}
+
+export constexpr int2_t& operator>>=(int2_t& a, const int2_t b)
+{
+    FND_ASSERT(all(b >= 0 && b < 32));
+
+    a = a >> b;
+    return a;
+}
+
+export constexpr int2_t& operator>>=(int2_t& a, const int_t scalar)
+{
+    FND_ASSERT(scalar >= 0 && scalar < 32);
+
+    a = a >> scalar;
+    return a;
+}
+
+export constexpr int2_t& operator^=(int2_t& a, const int2_t b)
+{
+    a = a ^ b;
+    return a;
+}
+
+export constexpr int2_t& operator^=(int2_t& a, const int_t scalar)
+{
+    a = a ^ scalar;
+    return a;
+}
+
+export constexpr int2_t& operator|=(int2_t& a, const int2_t b)
+{
+    a = a | b;
+    return a;
+}
+
+export constexpr int2_t& operator|=(int2_t& a, const int_t scalar)
+{
+    a = a | scalar;
+    return a;
 }
 
 export constexpr int2_t abs(const int2_t v)

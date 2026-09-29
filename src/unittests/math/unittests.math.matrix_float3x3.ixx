@@ -262,6 +262,79 @@ void unittests_math_matrix_float3x3_approx_equal()
     FND_TEST_FALSE(approx_equal(n, n));
 }
 
+void unittests_math_matrix_float3x3_column()
+{
+    FND_TEST_TRUE(all(column0(kMatrixA) == float3_t{1, 2, 3}));
+    FND_TEST_TRUE(all(column1(kMatrixA) == float3_t{4, 5, 6}));
+    FND_TEST_TRUE(all(column2(kMatrixA) == float3_t{7, 8, 9}));
+    FND_TEST_TRUE(all(column2(kMatrixB) == kMatrixB.col2));
+    // Usable in constant expressions.
+    static_assert(column2(kMatrixA).z == 9.0f);
+}
+
+void unittests_math_matrix_float3x3_row()
+{
+    FND_TEST_TRUE(all(row0(kMatrixA) == float3_t{1, 4, 7}));
+    FND_TEST_TRUE(all(row1(kMatrixA) == float3_t{2, 5, 8}));
+    FND_TEST_TRUE(all(row2(kMatrixA) == float3_t{3, 6, 9}));
+    // Row i of a matrix is column i of its transpose.
+    const float3x3_t t = transpose(kMatrixB);
+    FND_TEST_TRUE(all(row0(kMatrixB) == column0(t)));
+    FND_TEST_TRUE(all(row1(kMatrixB) == column1(t)));
+    FND_TEST_TRUE(all(row2(kMatrixB) == column2(t)));
+    static_assert(row2(kMatrixA).x == 3.0f);
+}
+
+void unittests_math_matrix_float3x3_set_column()
+{
+    // Each setter replaces its own column and leaves the others alone.
+    float3x3_t m = kMatrixA;
+    set_column0(m, float3_t{-1, -2, -3});
+    FND_TEST_TRUE(test_columns(
+        m, float3_t{-1, -2, -3}, float3_t{4, 5, 6}, float3_t{7, 8, 9}));
+    m = kMatrixA;
+    set_column1(m, float3_t{-4, -5, -6});
+    FND_TEST_TRUE(test_columns(
+        m, float3_t{1, 2, 3}, float3_t{-4, -5, -6}, float3_t{7, 8, 9}));
+    m = kMatrixA;
+    set_column2(m, float3_t{-7, -8, -9});
+    FND_TEST_TRUE(test_columns(
+        m, float3_t{1, 2, 3}, float3_t{4, 5, 6}, float3_t{-7, -8, -9}));
+
+    // Setting every column rebuilds the matrix.
+    m = float3x3_t::kZero;
+    set_column0(m, column0(kMatrixB));
+    set_column1(m, column1(kMatrixB));
+    set_column2(m, column2(kMatrixB));
+    FND_TEST_TRUE(m == kMatrixB);
+}
+
+void unittests_math_matrix_float3x3_set_row()
+{
+    // Each setter replaces its own row and leaves the others alone.
+    float3x3_t m = kMatrixA;
+    set_row0(m, float3_t{-1, -4, -7});
+    FND_TEST_TRUE(test_columns(
+        m, float3_t{-1, 2, 3}, float3_t{-4, 5, 6}, float3_t{-7, 8, 9}));
+    m = kMatrixA;
+    set_row1(m, float3_t{-2, -5, -8});
+    FND_TEST_TRUE(test_columns(
+        m, float3_t{1, -2, 3}, float3_t{4, -5, 6}, float3_t{7, -8, 9}));
+    m = kMatrixA;
+    set_row2(m, float3_t{-3, -6, -9});
+    FND_TEST_TRUE(test_columns(
+        m, float3_t{1, 2, -3}, float3_t{4, 5, -6}, float3_t{7, 8, -9}));
+
+    // Setting every row rebuilds the matrix; rows round-trip through row().
+    m = float3x3_t::kZero;
+    set_row0(m, row0(kMatrixB));
+    set_row1(m, row1(kMatrixB));
+    set_row2(m, row2(kMatrixB));
+    FND_TEST_TRUE(m == kMatrixB);
+    set_row1(m, float3_t{0.5f, -0.25f, 8});
+    FND_TEST_TRUE(all(row1(m) == float3_t{0.5f, -0.25f, 8}));
+}
+
 void unittests_math_matrix_float3x3_transpose()
 {
     // The columns of the result are the rows of the argument.
@@ -295,6 +368,10 @@ void unittests_math_matrix_float3x3()
     unittests_math_matrix_float3x3_matrix_multiplication_operator();
     unittests_math_matrix_float3x3_division_operator();
     unittests_math_matrix_float3x3_approx_equal();
+    unittests_math_matrix_float3x3_column();
+    unittests_math_matrix_float3x3_row();
+    unittests_math_matrix_float3x3_set_column();
+    unittests_math_matrix_float3x3_set_row();
     unittests_math_matrix_float3x3_transpose();
 }
 
