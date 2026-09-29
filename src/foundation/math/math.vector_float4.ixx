@@ -10,17 +10,16 @@ import :vector_float3;
 
 namespace fnd {
 
-// NOTE: w defaults to 1, so float4_t{} is {0, 0, 0, 1}.
 export struct float4_t final {
     float_t x{0.0f};
     float_t y{0.0f};
     float_t z{0.0f};
-    float_t w{1.0f};
+    float_t w{0.0f};
 
     constexpr float4_t() = default;
 
     constexpr explicit float4_t(
-        const bool2_t v2, const float_t z = 0.0f, const float_t w = 1.0f)
+        const bool2_t v2, const float_t z = 0.0f, const float_t w = 0.0f)
         : x{v2.x ? 1.0f : 0.0f}, y{v2.y ? 1.0f : 0.0f}, z{z}, w{w}
     {
     }
@@ -37,12 +36,12 @@ export struct float4_t final {
     }
 
     constexpr explicit float4_t(
-        const float2_t v2, const float_t z = 0.0f, const float_t w = 1.0f)
+        const float2_t v2, const float_t z = 0.0f, const float_t w = 0.0f)
         : x{v2.x}, y{v2.y}, z{z}, w{w}
     {
     }
 
-    constexpr explicit float4_t(const float3_t v3, const float_t w = 1.0f)
+    constexpr explicit float4_t(const float3_t v3, const float_t w = 0.0f)
         : x{v3.x}, y{v3.y}, z{v3.z}, w{w}
     {
     }
@@ -693,9 +692,8 @@ export FND_INLINE float4_t normalize(const float4_t v)
     return v * rsqrt(l2);
 }
 
-// NOTE: default_value is a zero vector, not float4_t{} (which has w = 1).
 export FND_INLINE float4_t normalize_safe(
-    const float4_t v, const float4_t default_value = float4_t{0.0f})
+    const float4_t v, const float4_t default_value = float4_t{})
 {
     FND_ASSERT(all(!isnan(v)));
 

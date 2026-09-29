@@ -38,8 +38,7 @@ void unittests_math_vector_float4_type()
 
 void unittests_math_vector_float4_constructors()
 {
-    // w defaults to 1.
-    FND_TEST_TRUE(test_components(float4_t{}, 0.0f, 0.0f, 0.0f, 1.0f));
+    FND_TEST_TRUE(test_components(float4_t{}, 0.0f, 0.0f, 0.0f, 0.0f));
     FND_TEST_TRUE(test_components(float4_t{2.5f}, 2.5f, 2.5f, 2.5f, 2.5f));
     FND_TEST_TRUE(test_components(float4_t{0.0f}, 0.0f, 0.0f, 0.0f, 0.0f));
     FND_TEST_TRUE(test_components(
@@ -47,11 +46,11 @@ void unittests_math_vector_float4_constructors()
     FND_TEST_TRUE(
         test_components(float4_t{kFloatMinValue, kFloatMaxValue, 0.0f, -0.5f},
             kFloatMinValue, kFloatMaxValue, 0.0f, -0.5f));
-    // From a bool2_t: true is 1, false is 0; z defaults to 0 and w to 1.
+    // From a bool2_t: true is 1, false is 0; z and w default to 0.
     FND_TEST_TRUE(test_components(
-        float4_t{bool2_t{true, false}}, 1.0f, 0.0f, 0.0f, 1.0f));
+        float4_t{bool2_t{true, false}}, 1.0f, 0.0f, 0.0f, 0.0f));
     FND_TEST_TRUE(test_components(
-        float4_t{bool2_t{false, true}, -2.5f}, 0.0f, 1.0f, -2.5f, 1.0f));
+        float4_t{bool2_t{false, true}, -2.5f}, 0.0f, 1.0f, -2.5f, 0.0f));
     FND_TEST_TRUE(test_components(
         float4_t{bool2_t{true, true}, 0.5f, -3.0f}, 1.0f, 1.0f, 0.5f, -3.0f));
     // From a bool4_t.
@@ -59,20 +58,20 @@ void unittests_math_vector_float4_constructors()
         float4_t{bool4_t{true, false, true, false}}, 1.0f, 0.0f, 1.0f, 0.0f));
     FND_TEST_TRUE(test_components(
         float4_t{bool4_t{false, true, false, true}}, 0.0f, 1.0f, 0.0f, 1.0f));
-    // From a float2_t; z defaults to 0 and w to 1.
+    // From a float2_t; z and w default to 0.
     FND_TEST_TRUE(test_components(
-        float4_t{float2_t{3.0f, -4.5f}}, 3.0f, -4.5f, 0.0f, 1.0f));
+        float4_t{float2_t{3.0f, -4.5f}}, 3.0f, -4.5f, 0.0f, 0.0f));
     FND_TEST_TRUE(test_components(
-        float4_t{float2_t{3.0f, -4.5f}, 7.25f}, 3.0f, -4.5f, 7.25f, 1.0f));
+        float4_t{float2_t{3.0f, -4.5f}, 7.25f}, 3.0f, -4.5f, 7.25f, 0.0f));
     FND_TEST_TRUE(
         test_components(float4_t{float2_t{3.0f, -4.5f}, 7.25f, -2.0f}, 3.0f,
             -4.5f, 7.25f, -2.0f));
-    // From a float3_t; w defaults to 1.
+    // From a float3_t; w defaults to 0.
     FND_TEST_TRUE(test_components(
-        float4_t{float3_t{3.0f, -4.5f, 7.25f}}, 3.0f, -4.5f, 7.25f, 1.0f));
+        float4_t{float3_t{3.0f, -4.5f, 7.25f}}, 3.0f, -4.5f, 7.25f, 0.0f));
     FND_TEST_TRUE(test_components(
-        float4_t{float3_t{3.0f, -4.5f, 7.25f}, 0.0f}, 3.0f, -4.5f, 7.25f,
-        0.0f));
+        float4_t{float3_t{3.0f, -4.5f, 7.25f}, 1.0f}, 3.0f, -4.5f, 7.25f,
+        1.0f));
 }
 
 void unittests_math_vector_float4_subscript_operator()
@@ -849,8 +848,6 @@ void unittests_math_vector_float4_isnan()
 void unittests_math_vector_float4_length_sqr()
 {
     FND_TEST_TRUE(length_sqr(float4_t{0.0f}) == 0.0f);
-    // float4_t{} is {0, 0, 0, 1}.
-    FND_TEST_TRUE(length_sqr(float4_t{}) == 1.0f);
     FND_TEST_TRUE(length_sqr(float4_t{1.0f, 2.0f, 2.0f, -4.0f}) == 25.0f);
     FND_TEST_TRUE(length_sqr(float4_t{3.0f, -4.0f, 12.0f, 0.0f}) == 169.0f);
     FND_TEST_TRUE(length_sqr(float4_t{-0.5f, 0.0f, 0.0f, 0.0f}) == 0.25f);
@@ -865,8 +862,6 @@ void unittests_math_vector_float4_length_sqr()
 void unittests_math_vector_float4_length()
 {
     FND_TEST_TRUE(length(float4_t{0.0f}) == 0.0f);
-    // float4_t{} is {0, 0, 0, 1}.
-    FND_TEST_TRUE(length(float4_t{}) == 1.0f);
     FND_TEST_TRUE(length(float4_t{1.0f, 2.0f, 2.0f, -4.0f}) == 5.0f);
     FND_TEST_TRUE(length(float4_t{3.0f, -4.0f, 12.0f, 0.0f}) == 13.0f);
     FND_TEST_TRUE(length(float4_t{0.0f, -2.5f, 0.0f, 0.0f}) == 2.5f);
@@ -1025,10 +1020,9 @@ void unittests_math_vector_float4_normalize()
 
 void unittests_math_vector_float4_normalize_safe()
 {
-    // A zero vector gives default_value, which is a zero vector by default
-    // (not float4_t{}, whose w is 1).
+    // A zero vector gives default_value.
     FND_TEST_TRUE(test_components(
-        normalize_safe(float4_t{0.0f}), 0.0f, 0.0f, 0.0f, 0.0f));
+        normalize_safe(float4_t{}), 0.0f, 0.0f, 0.0f, 0.0f));
     FND_TEST_TRUE(test_components(
         normalize_safe(float4_t{-0.0f, 0.0f, -0.0f, 0.0f},
             float4_t{1.0f, 0.0f, 0.0f, 0.0f}),
@@ -1047,9 +1041,6 @@ void unittests_math_vector_float4_normalize_safe()
     FND_TEST_TRUE(test_components(
         normalize_safe(float4_t{5.0f, 0.0f, 0.0f, 0.0f}, d), 1.0f, 0.0f, 0.0f,
         0.0f));
-    // float4_t{} is already a unit vector.
-    FND_TEST_TRUE(test_components(
-        normalize_safe(float4_t{}, d), 0.0f, 0.0f, 0.0f, 1.0f));
     FND_TEST_TRUE(all(
         approx_equal(normalize_safe(float4_t{1.0f, 2.0f, 2.0f, -4.0f}, d),
             float4_t{0.2f, 0.4f, 0.4f, -0.8f})));
