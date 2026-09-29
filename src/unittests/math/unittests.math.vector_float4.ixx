@@ -31,6 +31,20 @@ void unittests_math_vector_float4_type()
     static_assert(!is_convertible<float_t, float4_t>());
 }
 
+void unittests_math_vector_float4_constants()
+{
+    FND_TEST_TRUE(test_components(float4_t::kZero, 0.0f, 0.0f, 0.0f, 0.0f));
+    FND_TEST_TRUE(test_components(float4_t::kUnitX, 1.0f, 0.0f, 0.0f, 0.0f));
+    FND_TEST_TRUE(test_components(float4_t::kUnitY, 0.0f, 1.0f, 0.0f, 0.0f));
+    FND_TEST_TRUE(test_components(float4_t::kUnitZ, 0.0f, 0.0f, 1.0f, 0.0f));
+    FND_TEST_TRUE(test_components(float4_t::kUnitW, 0.0f, 0.0f, 0.0f, 1.0f));
+    FND_TEST_TRUE(all(float4_t::kZero == float4_t{}));
+    FND_TEST_TRUE(all(float4_t::kUnitX + float4_t::kUnitY
+        + float4_t::kUnitZ + float4_t::kUnitW == float4_t{1.0f}));
+    // The constants are usable in constant expressions.
+    static_assert(float4_t::kUnitW.w == 1.0f);
+}
+
 void unittests_math_vector_float4_constructors()
 {
     FND_TEST_TRUE(test_components(float4_t{}, 0.0f, 0.0f, 0.0f, 0.0f));
@@ -1150,6 +1164,7 @@ void unittests_math_vector_float4_trunc()
 void unittests_math_vector_float4()
 {
     unittests_math_vector_float4_type();
+    unittests_math_vector_float4_constants();
     unittests_math_vector_float4_constructors();
     unittests_math_vector_float4_subscript_operator();
     unittests_math_vector_float4_increment_operators();

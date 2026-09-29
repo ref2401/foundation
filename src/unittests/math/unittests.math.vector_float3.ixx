@@ -31,6 +31,19 @@ void unittests_math_vector_float3_type()
     static_assert(!is_convertible<float_t, float3_t>());
 }
 
+void unittests_math_vector_float3_constants()
+{
+    FND_TEST_TRUE(test_components(float3_t::kZero, 0.0f, 0.0f, 0.0f));
+    FND_TEST_TRUE(test_components(float3_t::kUnitX, 1.0f, 0.0f, 0.0f));
+    FND_TEST_TRUE(test_components(float3_t::kUnitY, 0.0f, 1.0f, 0.0f));
+    FND_TEST_TRUE(test_components(float3_t::kUnitZ, 0.0f, 0.0f, 1.0f));
+    FND_TEST_TRUE(all(float3_t::kZero == float3_t{}));
+    FND_TEST_TRUE(all(float3_t::kUnitX + float3_t::kUnitY
+        + float3_t::kUnitZ == float3_t{1.0f}));
+    // The constants are usable in constant expressions.
+    static_assert(float3_t::kUnitZ.z == 1.0f);
+}
+
 void unittests_math_vector_float3_constructors()
 {
     FND_TEST_TRUE(test_components(float3_t{}, 0.0f, 0.0f, 0.0f));
@@ -1079,6 +1092,7 @@ void unittests_math_vector_float3_trunc()
 void unittests_math_vector_float3()
 {
     unittests_math_vector_float3_type();
+    unittests_math_vector_float3_constants();
     unittests_math_vector_float3_constructors();
     unittests_math_vector_float3_subscript_operator();
     unittests_math_vector_float3_increment_operators();

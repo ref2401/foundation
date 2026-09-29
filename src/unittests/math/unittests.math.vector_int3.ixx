@@ -28,6 +28,19 @@ void unittests_math_vector_int3_type()
     static_assert(!is_convertible<int_t, int3_t>());
 }
 
+void unittests_math_vector_int3_constants()
+{
+    FND_TEST_TRUE(test_components(int3_t::kZero, 0, 0, 0));
+    FND_TEST_TRUE(test_components(int3_t::kUnitX, 1, 0, 0));
+    FND_TEST_TRUE(test_components(int3_t::kUnitY, 0, 1, 0));
+    FND_TEST_TRUE(test_components(int3_t::kUnitZ, 0, 0, 1));
+    FND_TEST_TRUE(all(int3_t::kZero == int3_t{}));
+    FND_TEST_TRUE(all(int3_t::kUnitX + int3_t::kUnitY
+        + int3_t::kUnitZ == int3_t{1}));
+    // The constants are usable in constant expressions.
+    static_assert(int3_t::kUnitZ.z == 1);
+}
+
 void unittests_math_vector_int3_constructors()
 {
     FND_TEST_TRUE(test_components(int3_t{}, 0, 0, 0));
@@ -514,6 +527,7 @@ void unittests_math_vector_int3_sign()
 void unittests_math_vector_int3()
 {
     unittests_math_vector_int3_type();
+    unittests_math_vector_int3_constants();
     unittests_math_vector_int3_constructors();
     unittests_math_vector_int3_subscript_operator();
     unittests_math_vector_int3_increment_operators();

@@ -29,6 +29,17 @@ void unittests_math_vector_uint2_type()
     static_assert(!is_convertible<int_t, uint2_t>());
 }
 
+void unittests_math_vector_uint2_constants()
+{
+    FND_TEST_TRUE(test_components(uint2_t::kZero, 0u, 0u));
+    FND_TEST_TRUE(test_components(uint2_t::kUnitX, 1u, 0u));
+    FND_TEST_TRUE(test_components(uint2_t::kUnitY, 0u, 1u));
+    FND_TEST_TRUE(all(uint2_t::kZero == uint2_t{}));
+    FND_TEST_TRUE(all(uint2_t::kUnitX + uint2_t::kUnitY == uint2_t{1u}));
+    // The constants are usable in constant expressions.
+    static_assert(uint2_t::kUnitY.y == 1u);
+}
+
 void unittests_math_vector_uint2_constructors()
 {
     FND_TEST_TRUE(test_components(uint2_t{}, 0u, 0u));
@@ -704,6 +715,7 @@ void unittests_math_vector_uint2_matches_int2()
 void unittests_math_vector_uint2()
 {
     unittests_math_vector_uint2_type();
+    unittests_math_vector_uint2_constants();
     unittests_math_vector_uint2_constructors();
     unittests_math_vector_uint2_subscript_operator();
     unittests_math_vector_uint2_increment_operators();

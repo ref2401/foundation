@@ -9,6 +9,10 @@ import :vector_bool;
 namespace fnd {
 
 export struct float2_t final {
+    static const float2_t kZero;
+    static const float2_t kUnitX;
+    static const float2_t kUnitY;
+
     float_t x{0.0f};
     float_t y{0.0f};
 
@@ -128,6 +132,10 @@ export struct float2_t final {
         return *this;
     }
 };
+
+constexpr float2_t float2_t::kZero{0.0f, 0.0f};
+constexpr float2_t float2_t::kUnitX{1.0f, 0.0f};
+constexpr float2_t float2_t::kUnitY{0.0f, 1.0f};
 
 export constexpr bool2_t operator==(const float2_t a, const float2_t b)
 {

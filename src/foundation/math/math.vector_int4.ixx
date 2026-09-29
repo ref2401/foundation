@@ -8,6 +8,12 @@ import :vector_bool;
 namespace fnd {
 
 export struct int4_t final {
+    static const int4_t kZero;
+    static const int4_t kUnitX;
+    static const int4_t kUnitY;
+    static const int4_t kUnitZ;
+    static const int4_t kUnitW;
+
     int_t x{0};
     int_t y{0};
     int_t z{0};
@@ -368,6 +374,12 @@ export struct int4_t final {
         return *this;
     }
 };
+
+constexpr int4_t int4_t::kZero{0, 0, 0, 0};
+constexpr int4_t int4_t::kUnitX{1, 0, 0, 0};
+constexpr int4_t int4_t::kUnitY{0, 1, 0, 0};
+constexpr int4_t int4_t::kUnitZ{0, 0, 1, 0};
+constexpr int4_t int4_t::kUnitW{0, 0, 0, 1};
 
 export constexpr bool4_t operator==(const int4_t a, const int4_t b)
 {

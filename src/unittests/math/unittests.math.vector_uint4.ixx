@@ -29,6 +29,20 @@ void unittests_math_vector_uint4_type()
     static_assert(!is_convertible<int_t, uint4_t>());
 }
 
+void unittests_math_vector_uint4_constants()
+{
+    FND_TEST_TRUE(test_components(uint4_t::kZero, 0u, 0u, 0u, 0u));
+    FND_TEST_TRUE(test_components(uint4_t::kUnitX, 1u, 0u, 0u, 0u));
+    FND_TEST_TRUE(test_components(uint4_t::kUnitY, 0u, 1u, 0u, 0u));
+    FND_TEST_TRUE(test_components(uint4_t::kUnitZ, 0u, 0u, 1u, 0u));
+    FND_TEST_TRUE(test_components(uint4_t::kUnitW, 0u, 0u, 0u, 1u));
+    FND_TEST_TRUE(all(uint4_t::kZero == uint4_t{}));
+    FND_TEST_TRUE(all(uint4_t::kUnitX + uint4_t::kUnitY
+        + uint4_t::kUnitZ + uint4_t::kUnitW == uint4_t{1u}));
+    // The constants are usable in constant expressions.
+    static_assert(uint4_t::kUnitW.w == 1u);
+}
+
 void unittests_math_vector_uint4_constructors()
 {
     FND_TEST_TRUE(test_components(uint4_t{}, 0u, 0u, 0u, 0u));
@@ -785,6 +799,7 @@ void unittests_math_vector_uint4_matches_int4()
 void unittests_math_vector_uint4()
 {
     unittests_math_vector_uint4_type();
+    unittests_math_vector_uint4_constants();
     unittests_math_vector_uint4_constructors();
     unittests_math_vector_uint4_subscript_operator();
     unittests_math_vector_uint4_increment_operators();
