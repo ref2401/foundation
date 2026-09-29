@@ -262,6 +262,54 @@ void unittests_math_matrix_float3x3_approx_equal()
     FND_TEST_FALSE(approx_equal(n, n));
 }
 
+void unittests_math_matrix_float3x3_cmax()
+{
+    FND_TEST_TRUE(cmax(kMatrixA) == 9.0f);
+    FND_TEST_TRUE(cmax(-kMatrixA) == -1.0f);
+    FND_TEST_TRUE(cmax(float3x3_t::kZero) == 0.0f);
+    FND_TEST_TRUE(cmax(float3x3_t::kIdentity) == 1.0f);
+
+    // The largest component is found in any of the nine positions.
+    for (uint_t col = 0; col < 3; ++col) {
+        for (uint_t row = 0; row < 3; ++row) {
+            float3x3_t m = kMatrixA;
+            component(m, col, row) = 100.0f;
+            FND_TEST_TRUE(cmax(m) == 100.0f);
+        }
+    }
+
+    // A NaN component is ignored, as for the float_t max; inf wins.
+    float3x3_t m = kMatrixA;
+    component(m, 2, 2) = kFloatNaN;
+    FND_TEST_TRUE(cmax(m) == 8.0f);
+    component(m, 0, 1) = kFloatInfinity;
+    FND_TEST_TRUE(cmax(m) == kFloatInfinity);
+}
+
+void unittests_math_matrix_float3x3_cmin()
+{
+    FND_TEST_TRUE(cmin(kMatrixA) == 1.0f);
+    FND_TEST_TRUE(cmin(-kMatrixA) == -9.0f);
+    FND_TEST_TRUE(cmin(float3x3_t::kZero) == 0.0f);
+    FND_TEST_TRUE(cmin(float3x3_t::kIdentity) == 0.0f);
+
+    // The smallest component is found in any of the nine positions.
+    for (uint_t col = 0; col < 3; ++col) {
+        for (uint_t row = 0; row < 3; ++row) {
+            float3x3_t m = kMatrixA;
+            component(m, col, row) = -100.0f;
+            FND_TEST_TRUE(cmin(m) == -100.0f);
+        }
+    }
+
+    // A NaN component is ignored, as for the float_t min; -inf wins.
+    float3x3_t m = kMatrixA;
+    component(m, 0, 0) = kFloatNaN;
+    FND_TEST_TRUE(cmin(m) == 2.0f);
+    component(m, 1, 2) = -kFloatInfinity;
+    FND_TEST_TRUE(cmin(m) == -kFloatInfinity);
+}
+
 void unittests_math_matrix_float3x3_column()
 {
     FND_TEST_TRUE(all(column0(kMatrixA) == float3_t{1, 2, 3}));
@@ -368,6 +416,8 @@ void unittests_math_matrix_float3x3()
     unittests_math_matrix_float3x3_matrix_multiplication_operator();
     unittests_math_matrix_float3x3_division_operator();
     unittests_math_matrix_float3x3_approx_equal();
+    unittests_math_matrix_float3x3_cmax();
+    unittests_math_matrix_float3x3_cmin();
     unittests_math_matrix_float3x3_column();
     unittests_math_matrix_float3x3_row();
     unittests_math_matrix_float3x3_set_column();
