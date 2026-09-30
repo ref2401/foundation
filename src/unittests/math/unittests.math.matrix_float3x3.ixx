@@ -6,6 +6,11 @@ export module unittests.math:matrix_float3x3;
 import foundation.core;
 import foundation.math;
 
+// Some tests overflow to infinity on purpose. In Release, /GL lets the
+// optimizer fold their constant inputs, and it reports C4756 at the
+// library line it inlined rather than here.
+#pragma warning(disable: 4756)
+
 namespace fnd::unittests {
 
 export void unittests_math_matrix_float3x3();
@@ -17,6 +22,11 @@ constexpr float3x3_t kMatrixA3x3{
 // The columns are {1, 0, 2}, {0, 1, 0} and {-1, 0, 1}.
 constexpr float3x3_t kMatrixB3x3{
     float3_t{1, 0, 2}, float3_t{0, 1, 0}, float3_t{-1, 0, 1}};
+
+// The columns are {2, -1, 0}, {0.5, 3, 1} and {-2, 0, 4}; its determinant is
+// 28.
+constexpr float3x3_t kMatrixC3x3{
+    float3_t{2, -1, 0}, float3_t{0.5f, 3, 1}, float3_t{-2, 0, 4}};
 
 // All expected values below are exact in binary, so == is reliable.
 constexpr bool_t test_columns(
@@ -207,9 +217,9 @@ void unittests_math_matrix_float3x3_matrix_multiplication_operator()
     FND_TEST_TRUE(kMatrixA3x3 * float3x3_t::kZero == float3x3_t::kZero);
     FND_TEST_TRUE(float3x3_t::kZero * kMatrixA3x3 == float3x3_t::kZero);
     // Associative, scalars factor out, and transpose reverses the order.
-    const float3x3_t mc{
-        float3_t{2, -1, 0}, float3_t{0.5f, 3.0f, 1.0f}, float3_t{-2, 0, 4}};
-    FND_TEST_TRUE((kMatrixA3x3 * kMatrixB3x3) * mc == kMatrixA3x3 * (kMatrixB3x3 * mc));
+    FND_TEST_TRUE(
+        (kMatrixA3x3 * kMatrixB3x3) * kMatrixC3x3
+        == kMatrixA3x3 * (kMatrixB3x3 * kMatrixC3x3));
     FND_TEST_TRUE((kMatrixA3x3 * 2.0f) * kMatrixB3x3 == 2.0f * (kMatrixA3x3 * kMatrixB3x3));
     FND_TEST_TRUE(
         transpose(kMatrixA3x3 * kMatrixB3x3)
@@ -334,11 +344,10 @@ void unittests_math_matrix_float3x3_determinant()
     FND_TEST_TRUE(determinant(kMatrixB3x3 * 2.0f) == 24.0f);
 
     // det(a * b) == det(a) * det(b).
-    const float3x3_t mc{
-        float3_t{2, -1, 0}, float3_t{0.5f, 3, 1}, float3_t{-2, 0, 4}};
-    FND_TEST_TRUE(determinant(mc) == 28.0f);
+    FND_TEST_TRUE(determinant(kMatrixC3x3) == 28.0f);
     FND_TEST_TRUE(approx_equal(
-        determinant(kMatrixB3x3 * mc), determinant(kMatrixB3x3) * determinant(mc)));
+        determinant(kMatrixB3x3 * kMatrixC3x3),
+        determinant(kMatrixB3x3) * determinant(kMatrixC3x3)));
     // Usable in constant expressions.
     static_assert(determinant(float3x3_t::kIdentity) == 1.0f);
 }
@@ -363,18 +372,18 @@ void unittests_math_matrix_float3x3_inverse()
     FND_TEST_TRUE(approx_equal(kMatrixB3x3 * m_inv_b, float3x3_t::kIdentity));
     FND_TEST_TRUE(approx_equal(m_inv_b * kMatrixB3x3, float3x3_t::kIdentity));
 
-    const float3x3_t mc{
-        float3_t{2, -1, 0}, float3_t{0.5f, 3, 1}, float3_t{-2, 0, 4}};
-    const float3x3_t m_inv_c = inverse(mc);
-    FND_TEST_TRUE(approx_equal(mc * m_inv_c, float3x3_t::kIdentity));
-    FND_TEST_TRUE(approx_equal(inverse(m_inv_c), mc));
-    FND_TEST_TRUE(approx_equal(inverse(transpose(mc)), transpose(inverse(mc))));
+    const float3x3_t m_inv_c = inverse(kMatrixC3x3);
+    FND_TEST_TRUE(approx_equal(kMatrixC3x3 * m_inv_c, float3x3_t::kIdentity));
+    FND_TEST_TRUE(approx_equal(inverse(m_inv_c), kMatrixC3x3));
+    FND_TEST_TRUE(approx_equal(
+        inverse(transpose(kMatrixC3x3)), transpose(inverse(kMatrixC3x3))));
 
-    const float_t det_c = determinant(mc);
+    const float_t det_c = determinant(kMatrixC3x3);
     const float_t det_inv_c = determinant(m_inv_c);
     FND_TEST_TRUE(approx_equal(1.0f / det_c, det_inv_c));
-    FND_TEST_TRUE(
-        approx_equal(inverse(kMatrixB3x3 * mc), inverse(mc) * inverse(kMatrixB3x3)));
+    FND_TEST_TRUE(approx_equal(
+        inverse(kMatrixB3x3 * kMatrixC3x3),
+        inverse(kMatrixC3x3) * inverse(kMatrixB3x3)));
 }
 
 void unittests_math_matrix_float3x3_make_float3x3_rotation()

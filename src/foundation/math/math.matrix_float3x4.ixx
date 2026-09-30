@@ -4,7 +4,6 @@ module;
 export module foundation.math:matrix_float3x4;
 import foundation.core;
 import :matrix_float3x3;
-import :scalar;
 import :vector_float3;
 import :vector_float4;
 
@@ -87,11 +86,34 @@ export constexpr float3x4_t operator*(const float_t scalar, const float3x4_t& m)
 // and the translation is a.linear * b.col3 + a.col3.
 export constexpr float3x4_t operator*(const float3x4_t& a, const float3x4_t& b)
 {
+    // NOTE:
+    // Performance (MSVC): float3_t columns are 12 bytes, so no form of this
+    // product gets 4-wide SSE; the best MSVC does is x and y two at a time
+    // plus a scalar z. The obvious a.col0 * b.col0.x + ... on float3_t
+    // temporaries does reach that shape in a non-inlined call (10 ns), but
+    // inlined into a loop it falls back to fully scalar code (8 ns). Writing
+    // the sums out per component keeps the vectorized shape inlined as well
+    // (~6 ns) at no cost to the non-inlined call.
+    //
+    // a and b stay const&: by value helps inlined (~6 ns), but a non-inlined
+    // call then costs 17 ns instead of 10 ns.
     return float3x4_t{
-        a.col0 * b.col0.x + a.col1 * b.col0.y + a.col2 * b.col0.z,
-        a.col0 * b.col1.x + a.col1 * b.col1.y + a.col2 * b.col1.z,
-        a.col0 * b.col2.x + a.col1 * b.col2.y + a.col2 * b.col2.z,
-        a.col0 * b.col3.x + a.col1 * b.col3.y + a.col2 * b.col3.z + a.col3};
+        float3_t{
+            a.col0.x * b.col0.x + a.col1.x * b.col0.y + a.col2.x * b.col0.z,
+            a.col0.y * b.col0.x + a.col1.y * b.col0.y + a.col2.y * b.col0.z,
+            a.col0.z * b.col0.x + a.col1.z * b.col0.y + a.col2.z * b.col0.z},
+        float3_t{
+            a.col0.x * b.col1.x + a.col1.x * b.col1.y + a.col2.x * b.col1.z,
+            a.col0.y * b.col1.x + a.col1.y * b.col1.y + a.col2.y * b.col1.z,
+            a.col0.z * b.col1.x + a.col1.z * b.col1.y + a.col2.z * b.col1.z},
+        float3_t{
+            a.col0.x * b.col2.x + a.col1.x * b.col2.y + a.col2.x * b.col2.z,
+            a.col0.y * b.col2.x + a.col1.y * b.col2.y + a.col2.y * b.col2.z,
+            a.col0.z * b.col2.x + a.col1.z * b.col2.y + a.col2.z * b.col2.z},
+        float3_t{
+            a.col0.x * b.col3.x + a.col1.x * b.col3.y + a.col2.x * b.col3.z + a.col3.x,
+            a.col0.y * b.col3.x + a.col1.y * b.col3.y + a.col2.y * b.col3.z + a.col3.y,
+            a.col0.z * b.col3.x + a.col1.z * b.col3.y + a.col2.z * b.col3.z + a.col3.z}};
 }
 
 export constexpr float3x4_t operator/(const float3x4_t& m, const float_t scalar)
@@ -183,25 +205,22 @@ export constexpr float3x4_t inverse(const float3x4_t& m)
     // inverse has that bottom row too:
     //   | L  t |^-1   | inverse(L)  -inverse(L) * t |
     //   | 0  1 |    = | 0            1              |
-    // so it is again a float3x4_t.
-    // The rows of the inverse linear part are the cross products of pairs of
-    // columns, divided by the determinant (dot(col0, cross(col1, col2))).
-    const float3_t r0 = cross(m.col1, m.col2);
-    const float3_t r1 = cross(m.col2, m.col0);
-    const float3_t r2 = cross(m.col0, m.col1);
-    const float_t det = dot(m.col0, r0);
-    FND_ASSERT(det != 0.0f); // the linear part is singular
-
+    // so it is again a float3x4_t. The float3x3_t inverse asserts that the
+    // linear part is not singular.
+    const float3x3_t m_inv_linear = inverse(float3x3_t{m.col0, m.col1, m.col2});
     return float3x4_t{
-        float3_t{r0.x, r1.x, r2.x} / det, float3_t{r0.y, r1.y, r2.y} / det,
-        float3_t{r0.z, r1.z, r2.z} / det,
-        -float3_t{dot(r0, m.col3), dot(r1, m.col3), dot(r2, m.col3)} / det};
+        m_inv_linear.col0, m_inv_linear.col1, m_inv_linear.col2,
+        -mul(m_inv_linear, m.col3)};
 }
 
+// Rotation about the normalized axis, with no translation; see
+// make_float3x3_rotation for the direction of a positive angle.
 export FND_INLINE float3x4_t make_float3x4_rotation(
-    const float3_t axis, const float_t angle_angle)
+    const float3_t axis, const float_t angle_radians)
 {
-    const float3x3_t rm = make_float3x3_rotation(axis, angle_angle);
+    FND_ASSERT(is_normalized(axis));
+
+    const float3x3_t rm = make_float3x3_rotation(axis, angle_radians);
     return float3x4_t{rm.col0, rm.col1, rm.col2, float3_t::kZero};
 }
 
@@ -232,16 +251,16 @@ export constexpr float3_t mul(const float3x4_t& m, const float4_t v)
     return m.col0 * v.x + m.col1 * v.y + m.col2 * v.z + m.col3 * v.w;
 }
 
-// Transforms the point p: the linear part and then the translation.
-export constexpr float3_t mul_point(const float3x4_t& m, const float3_t p)
-{
-    return m.col0 * p.x + m.col1 * p.y + m.col2 * p.z + m.col3;
-}
-
 // Transforms the direction v: the linear part only, no translation.
 export constexpr float3_t mul_direction(const float3x4_t& m, const float3_t v)
 {
     return m.col0 * v.x + m.col1 * v.y + m.col2 * v.z;
+}
+
+// Transforms the point p: the linear part and then the translation.
+export constexpr float3_t mul_point(const float3x4_t& m, const float3_t p)
+{
+    return m.col0 * p.x + m.col1 * p.y + m.col2 * p.z + m.col3;
 }
 
 export constexpr float4_t row0(const float3x4_t& m)

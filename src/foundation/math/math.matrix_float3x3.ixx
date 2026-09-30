@@ -5,7 +5,6 @@ export module foundation.math:matrix_float3x3;
 import foundation.core;
 import :scalar;
 import :vector_float3;
-import :vector_float4;
 
 namespace fnd {
 
@@ -70,10 +69,30 @@ export constexpr float3x3_t operator*(const float_t scalar, const float3x3_t& m)
 // Matrix product
 export constexpr float3x3_t operator*(const float3x3_t& a, const float3x3_t& b)
 {
+    // NOTE:
+    // Performance (MSVC): float3_t columns are 12 bytes, so no form of this
+    // product gets 4-wide SSE; the best MSVC does is x and y two at a time
+    // plus a scalar z. The obvious a.col0 * b.col0.x + ... on float3_t
+    // temporaries does reach that shape in a non-inlined call (8 ns), but
+    // inlined into a loop it falls back to fully scalar code (5.3 ns). Writing
+    // the sums out per component keeps the vectorized shape inlined as well
+    // (~3.7 ns) at no cost to the non-inlined call.
+    //
+    // a and b stay const&: by value helps inlined (~3.5 ns), but a non-inlined
+    // call then costs 14 ns instead of 8 ns.
     return float3x3_t{
-        a.col0 * b.col0.x + a.col1 * b.col0.y + a.col2 * b.col0.z,
-        a.col0 * b.col1.x + a.col1 * b.col1.y + a.col2 * b.col1.z,
-        a.col0 * b.col2.x + a.col1 * b.col2.y + a.col2 * b.col2.z};
+        float3_t{
+            a.col0.x * b.col0.x + a.col1.x * b.col0.y + a.col2.x * b.col0.z,
+            a.col0.y * b.col0.x + a.col1.y * b.col0.y + a.col2.y * b.col0.z,
+            a.col0.z * b.col0.x + a.col1.z * b.col0.y + a.col2.z * b.col0.z},
+        float3_t{
+            a.col0.x * b.col1.x + a.col1.x * b.col1.y + a.col2.x * b.col1.z,
+            a.col0.y * b.col1.x + a.col1.y * b.col1.y + a.col2.y * b.col1.z,
+            a.col0.z * b.col1.x + a.col1.z * b.col1.y + a.col2.z * b.col1.z},
+        float3_t{
+            a.col0.x * b.col2.x + a.col1.x * b.col2.y + a.col2.x * b.col2.z,
+            a.col0.y * b.col2.x + a.col1.y * b.col2.y + a.col2.y * b.col2.z,
+            a.col0.z * b.col2.x + a.col1.z * b.col2.y + a.col2.z * b.col2.z}};
 }
 
 export constexpr float3x3_t operator/(const float3x3_t& m, const float_t scalar)
@@ -150,8 +169,11 @@ export constexpr float3x3_t inverse(const float3x3_t& m)
     const float_t det = dot(m.col0, r0);
     FND_ASSERT(det != 0.0f); // m is singular
 
+    // One division instead of nine; the result may differ from dividing each
+    // component by det in the last bit.
+    const float_t inv_det = 1.0f / det;
     return float3x3_t{r0.x, r1.x, r2.x, r0.y, r1.y, r2.y, r0.z, r1.z, r2.z}
-    / det;
+    * inv_det;
 }
 
 // Rotation by angle_radians (in radians) about axis, which must be normalized

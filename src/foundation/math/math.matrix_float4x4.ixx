@@ -4,7 +4,6 @@ module;
 export module foundation.math:matrix_float4x4;
 import foundation.core;
 import :matrix_float3x3;
-import :scalar;
 import :vector_conversion;
 import :vector_float3;
 import :vector_float4;
@@ -214,12 +213,14 @@ export constexpr float_t determinant(const float4x4_t& m)
         + a23 * b01;
 }
 
-// Rotation by angle (in radians) about axis, which must be normalized, with
-// no translation. See make_float3x3_rotation.
+// Rotation about the normalized axis, with no translation; see
+// make_float3x3_rotation for the direction of a positive angle.
 export FND_INLINE float4x4_t make_float4x4_rotation(
-    const float3_t axis, const float_t angle)
+    const float3_t axis, const float_t angle_radians)
 {
-    const float3x3_t rm = make_float3x3_rotation(axis, angle);
+    FND_ASSERT(is_normalized(axis));
+
+    const float3x3_t rm = make_float3x3_rotation(axis, angle_radians);
     return float4x4_t{
         float4(rm.col0, 0), float4(rm.col1, 0), float4(rm.col2, 0),
         float4_t::kUnitW};

@@ -15,5 +15,19 @@
             "requireExactSource": true,
             "preLaunchTask": "${defaultBuildTask}",
         },
+        {
+            "name": "unittests_release",
+            "type": "cppvsdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/bin/release/unittests",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}/bin/release/",
+            "environment": [],
+            "console": "internalConsole",
+            "internalConsoleOptions": "openOnSessionStart",
+            "requireExactSource": true,
+            "preLaunchTask": "Build Unittests (Release)",
+        },
     ]
 }

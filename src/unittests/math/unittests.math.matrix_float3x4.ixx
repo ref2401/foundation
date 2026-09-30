@@ -256,6 +256,56 @@ void unittests_math_matrix_float3x4_approx_equal()
     FND_TEST_FALSE(approx_equal(m_nan, m_nan));
 }
 
+void unittests_math_matrix_float3x4_cmax()
+{
+    // All twelve components count, the translation included.
+    FND_TEST_TRUE(cmax(kMatrixA3x4) == 6.0f);
+    FND_TEST_TRUE(cmax(-kMatrixA3x4) == 1.0f);
+    FND_TEST_TRUE(cmax(float3x4_t::kZero) == 0.0f);
+    FND_TEST_TRUE(cmax(float3x4_t::kIdentity) == 1.0f);
+
+    // The largest component is found in any of the twelve positions.
+    for (uint_t col = 0; col < 4; ++col) {
+        for (uint_t row = 0; row < 3; ++row) {
+            float3x4_t m = kMatrixA3x4;
+            component(m, col, row) = 100.0f;
+            FND_TEST_TRUE(cmax(m) == 100.0f);
+        }
+    }
+
+    // A NaN component is ignored, as for the float_t max; inf wins.
+    float3x4_t m = kMatrixA3x4;
+    component(m, 3, 2) = kFloatNaN;
+    FND_TEST_TRUE(cmax(m) == 5.0f);
+    component(m, 0, 1) = kFloatInfinity;
+    FND_TEST_TRUE(cmax(m) == kFloatInfinity);
+}
+
+void unittests_math_matrix_float3x4_cmin()
+{
+    // All twelve components count, the translation included.
+    FND_TEST_TRUE(cmin(kMatrixA3x4) == -1.0f);
+    FND_TEST_TRUE(cmin(-kMatrixA3x4) == -6.0f);
+    FND_TEST_TRUE(cmin(float3x4_t::kZero) == 0.0f);
+    FND_TEST_TRUE(cmin(float3x4_t::kIdentity) == 0.0f);
+
+    // The smallest component is found in any of the twelve positions.
+    for (uint_t col = 0; col < 4; ++col) {
+        for (uint_t row = 0; row < 3; ++row) {
+            float3x4_t m = kMatrixA3x4;
+            component(m, col, row) = -100.0f;
+            FND_TEST_TRUE(cmin(m) == -100.0f);
+        }
+    }
+
+    // A NaN component is ignored, as for the float_t min; -inf wins.
+    float3x4_t m = kMatrixA3x4;
+    component(m, 2, 0) = kFloatNaN;
+    FND_TEST_TRUE(cmin(m) == 0.0f);
+    component(m, 3, 1) = -kFloatInfinity;
+    FND_TEST_TRUE(cmin(m) == -kFloatInfinity);
+}
+
 void unittests_math_matrix_float3x4_column()
 {
     FND_TEST_TRUE(all(column0(kMatrixA3x4) == float3_t{1, 0, 2}));
@@ -573,6 +623,8 @@ void unittests_math_matrix_float3x4()
     unittests_math_matrix_float3x4_scalar_compound_assignment_matches_operators();
     unittests_math_matrix_float3x4_matrix_compound_assignment_matches_operators();
     unittests_math_matrix_float3x4_approx_equal();
+    unittests_math_matrix_float3x4_cmax();
+    unittests_math_matrix_float3x4_cmin();
     unittests_math_matrix_float3x4_column();
     unittests_math_matrix_float3x4_determinant();
     unittests_math_matrix_float3x4_inverse();

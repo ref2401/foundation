@@ -6,6 +6,11 @@ export module unittests.math:vector_float2;
 import foundation.core;
 import foundation.math;
 
+// Some tests overflow to infinity on purpose. In Release, /GL lets the
+// optimizer fold their constant inputs, and it reports C4756 at the
+// library line it inlined rather than here.
+#pragma warning(disable: 4756)
+
 namespace fnd::unittests {
 
 export void unittests_math_vector_float2();
