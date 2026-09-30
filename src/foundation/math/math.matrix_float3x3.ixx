@@ -179,6 +179,12 @@ export FND_INLINE float3x3_t make_float3x3_rotation(
         float3_t{omc * xz + axis.y * s, omc * yz - axis.x * s, c + omc * zz}};
 }
 
+export constexpr float3x3_t make_float3x3_scale(const float3_t s)
+{
+    return float3x3_t{
+        float3_t{s.x, 0, 0}, float3_t{0, s.y, 0}, float3_t{0, 0, s.z}};
+}
+
 export constexpr float3_t mul(const float3x3_t& m, const float3_t v)
 {
     return m.col0 * v.x + m.col1 * v.y + m.col2 * v.z;

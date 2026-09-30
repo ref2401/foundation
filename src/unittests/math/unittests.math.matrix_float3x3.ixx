@@ -52,8 +52,8 @@ void unittests_math_matrix_float3x3_constants()
 void unittests_math_matrix_float3x3_constructors()
 {
     // The default ctor gives the zero matrix.
-    const float3x3_t zero;
-    FND_TEST_TRUE(test_columns(zero, float3_t{0}, float3_t{0}, float3_t{0}));
+    const float3x3_t m_zero;
+    FND_TEST_TRUE(test_columns(m_zero, float3_t{0}, float3_t{0}, float3_t{0}));
     FND_TEST_TRUE(
         test_columns(float3x3_t{}, float3_t{0}, float3_t{0}, float3_t{0}));
 
@@ -72,8 +72,9 @@ void unittests_math_matrix_float3x3_constructors()
     FND_TEST_TRUE(m == kMatrixA);
     // Each argument lands in its own component: the 8th is m12, which is row
     // 1 of column 2.
-    const float3x3_t e{0, 0, 0, 0, 0, 0, 0, 1, 0};
-    FND_TEST_TRUE(test_columns(e, float3_t{0}, float3_t{0}, float3_t{0, 1, 0}));
+    const float3x3_t m_e{0, 0, 0, 0, 0, 0, 0, 1, 0};
+    FND_TEST_TRUE(
+        test_columns(m_e, float3_t{0}, float3_t{0}, float3_t{0, 1, 0}));
 }
 
 void unittests_math_matrix_float3x3_unary_minus_operator()
@@ -166,10 +167,10 @@ void unittests_math_matrix_float3x3_equality_operators()
     float3x3_t z{};
     component(z, 1, 2) = -0.0f;
     FND_TEST_TRUE(z == float3x3_t::kZero);
-    float3x3_t n = kMatrixA;
-    component(n, 2, 0) = kFloatNaN;
-    FND_TEST_FALSE(n == n);
-    FND_TEST_TRUE(n != n);
+    float3x3_t m_nan = kMatrixA;
+    component(m_nan, 2, 0) = kFloatNaN;
+    FND_TEST_FALSE(m_nan == m_nan);
+    FND_TEST_TRUE(m_nan != m_nan);
 }
 
 void unittests_math_matrix_float3x3_scalar_multiplication_operator()
@@ -185,8 +186,8 @@ void unittests_math_matrix_float3x3_scalar_multiplication_operator()
     FND_TEST_TRUE(kMatrixA * 0.0f == float3x3_t::kZero);
     FND_TEST_TRUE(kMatrixA * 3.0f == 3.0f * kMatrixA);
     // Overflow gives infinity.
-    const float3x3_t big = kMatrixA * kFloatMaxValue;
-    FND_TEST_TRUE(all(isinf(big.col1)));
+    const float3x3_t m_big = kMatrixA * kFloatMaxValue;
+    FND_TEST_TRUE(all(isinf(m_big.col1)));
 }
 
 void unittests_math_matrix_float3x3_matrix_multiplication_operator()
@@ -206,9 +207,9 @@ void unittests_math_matrix_float3x3_matrix_multiplication_operator()
     FND_TEST_TRUE(kMatrixA * float3x3_t::kZero == float3x3_t::kZero);
     FND_TEST_TRUE(float3x3_t::kZero * kMatrixA == float3x3_t::kZero);
     // Associative, scalars factor out, and transpose reverses the order.
-    const float3x3_t c{
+    const float3x3_t mc{
         float3_t{2, -1, 0}, float3_t{0.5f, 3.0f, 1.0f}, float3_t{-2, 0, 4}};
-    FND_TEST_TRUE((kMatrixA * kMatrixB) * c == kMatrixA * (kMatrixB * c));
+    FND_TEST_TRUE((kMatrixA * kMatrixB) * mc == kMatrixA * (kMatrixB * mc));
     FND_TEST_TRUE((kMatrixA * 2.0f) * kMatrixB == 2.0f * (kMatrixA * kMatrixB));
     FND_TEST_TRUE(
         transpose(kMatrixA * kMatrixB)
@@ -246,12 +247,12 @@ void unittests_math_matrix_float3x3_approx_equal()
     }
 
     // inf equals inf and NaN equals nothing, as for the float_t approx_equal.
-    float3x3_t inf = kMatrixA;
-    component(inf, 0, 1) = kFloatInfinity;
-    FND_TEST_TRUE(approx_equal(inf, inf));
-    float3x3_t n = kMatrixA;
-    component(n, 1, 1) = kFloatNaN;
-    FND_TEST_FALSE(approx_equal(n, n));
+    float3x3_t m_inf = kMatrixA;
+    component(m_inf, 0, 1) = kFloatInfinity;
+    FND_TEST_TRUE(approx_equal(m_inf, m_inf));
+    float3x3_t m_nan = kMatrixA;
+    component(m_nan, 1, 1) = kFloatNaN;
+    FND_TEST_FALSE(approx_equal(m_nan, m_nan));
 }
 
 void unittests_math_matrix_float3x3_cmax()
@@ -327,16 +328,17 @@ void unittests_math_matrix_float3x3_determinant()
     FND_TEST_TRUE(
         determinant(float3x3_t{kMatrixB.col1, kMatrixB.col0, kMatrixB.col2})
         == -3.0f);
-    const float3x3_t scaled{kMatrixB.col0 * 2.0f, kMatrixB.col1, kMatrixB.col2};
-    FND_TEST_TRUE(determinant(scaled) == 6.0f);
+    const float3x3_t m_scaled{
+        kMatrixB.col0 * 2.0f, kMatrixB.col1, kMatrixB.col2};
+    FND_TEST_TRUE(determinant(m_scaled) == 6.0f);
     FND_TEST_TRUE(determinant(kMatrixB * 2.0f) == 24.0f);
 
     // det(a * b) == det(a) * det(b).
-    const float3x3_t c{
+    const float3x3_t mc{
         float3_t{2, -1, 0}, float3_t{0.5f, 3, 1}, float3_t{-2, 0, 4}};
-    FND_TEST_TRUE(determinant(c) == 28.0f);
+    FND_TEST_TRUE(determinant(mc) == 28.0f);
     FND_TEST_TRUE(approx_equal(
-        determinant(kMatrixB * c), determinant(kMatrixB) * determinant(c)));
+        determinant(kMatrixB * mc), determinant(kMatrixB) * determinant(mc)));
     // Usable in constant expressions.
     static_assert(determinant(float3x3_t::kIdentity) == 1.0f);
 }
@@ -351,28 +353,28 @@ void unittests_math_matrix_float3x3_inverse()
 
     // The rows of the inverse of kMatrixB are {1, 0, 1}, {0, 3, 0} and
     // {-2, 0, 1}, divided by its determinant, 3.
-    const float3x3_t inv_b = inverse(kMatrixB);
-    const float3x3_t expected_inv_b = float3x3_t{
+    const float3x3_t m_inv_b = inverse(kMatrixB);
+    const float3x3_t m_inv_b_expected = float3x3_t{
         float3_t{1.0f / 3, 0, -2.0f / 3}, float3_t{0, 1, 0},
         float3_t{1.0f / 3, 0, 1.0f / 3}};
-    FND_TEST_TRUE(approx_equal(inv_b, expected_inv_b));
+    FND_TEST_TRUE(approx_equal(m_inv_b, m_inv_b_expected));
 
     // m * inverse(m) and inverse(m) * m are the identity.
-    FND_TEST_TRUE(approx_equal(kMatrixB * inv_b, float3x3_t::kIdentity));
-    FND_TEST_TRUE(approx_equal(inv_b * kMatrixB, float3x3_t::kIdentity));
+    FND_TEST_TRUE(approx_equal(kMatrixB * m_inv_b, float3x3_t::kIdentity));
+    FND_TEST_TRUE(approx_equal(m_inv_b * kMatrixB, float3x3_t::kIdentity));
 
-    const float3x3_t c{
+    const float3x3_t mc{
         float3_t{2, -1, 0}, float3_t{0.5f, 3, 1}, float3_t{-2, 0, 4}};
-    const float3x3_t inv_c = inverse(c);
-    FND_TEST_TRUE(approx_equal(c * inv_c, float3x3_t::kIdentity));
-    FND_TEST_TRUE(approx_equal(inverse(inv_c), c));
-    FND_TEST_TRUE(approx_equal(inverse(transpose(c)), transpose(inverse(c))));
+    const float3x3_t m_inv_c = inverse(mc);
+    FND_TEST_TRUE(approx_equal(mc * m_inv_c, float3x3_t::kIdentity));
+    FND_TEST_TRUE(approx_equal(inverse(m_inv_c), mc));
+    FND_TEST_TRUE(approx_equal(inverse(transpose(mc)), transpose(inverse(mc))));
 
-    const float_t det_c = determinant(c);
-    const float_t det_inv_c = determinant(inv_c);
+    const float_t det_c = determinant(mc);
+    const float_t det_inv_c = determinant(m_inv_c);
     FND_TEST_TRUE(approx_equal(1.0f / det_c, det_inv_c));
     FND_TEST_TRUE(
-        approx_equal(inverse(kMatrixB * c), inverse(c) * inverse(kMatrixB)));
+        approx_equal(inverse(kMatrixB * mc), inverse(mc) * inverse(kMatrixB)));
 }
 
 void unittests_math_matrix_float3x3_make_float3x3_rotation()
@@ -384,51 +386,81 @@ void unittests_math_matrix_float3x3_make_float3x3_rotation()
 
     // Quarter turns about the axes are right-handed: counter-clockwise when
     // looking from the tip of the axis toward the origin.
-    const float3x3_t rx = make_float3x3_rotation(x, quarter);
-    FND_TEST_TRUE(all(approx_equal(mul(rx, y), z)));
-    FND_TEST_TRUE(all(approx_equal(mul(rx, z), -y)));
-    const float3x3_t ry = make_float3x3_rotation(y, quarter);
-    FND_TEST_TRUE(all(approx_equal(mul(ry, z), x)));
-    FND_TEST_TRUE(all(approx_equal(mul(ry, x), -z)));
-    const float3x3_t rz = make_float3x3_rotation(z, quarter);
-    FND_TEST_TRUE(all(approx_equal(mul(rz, x), y)));
-    FND_TEST_TRUE(all(approx_equal(mul(rz, y), -x)));
-    FND_TEST_TRUE(approx_equal(rz,
+    const float3x3_t rm_x = make_float3x3_rotation(x, quarter);
+    FND_TEST_TRUE(all(approx_equal(mul(rm_x, y), z)));
+    FND_TEST_TRUE(all(approx_equal(mul(rm_x, z), -y)));
+    const float3x3_t rm_y = make_float3x3_rotation(y, quarter);
+    FND_TEST_TRUE(all(approx_equal(mul(rm_y, z), x)));
+    FND_TEST_TRUE(all(approx_equal(mul(rm_y, x), -z)));
+    const float3x3_t rm_z = make_float3x3_rotation(z, quarter);
+    FND_TEST_TRUE(all(approx_equal(mul(rm_z, x), y)));
+    FND_TEST_TRUE(all(approx_equal(mul(rm_z, y), -x)));
+    FND_TEST_TRUE(approx_equal(
+        rm_z,
         float3x3_t{float3_t{0, 1, 0}, float3_t{-1, 0, 0}, float3_t{0, 0, 1}}));
 
     // A third of a turn about the diagonal cycles x -> y -> z -> x.
-    const float3x3_t rd = make_float3x3_rotation(
+    const float3x3_t rm_diag = make_float3x3_rotation(
         normalize(float3_t{1, 1, 1}), 2 * kFloatPi / 3);
-    FND_TEST_TRUE(all(approx_equal(mul(rd, x), y)));
-    FND_TEST_TRUE(all(approx_equal(mul(rd, y), z)));
-    FND_TEST_TRUE(all(approx_equal(mul(rd, z), x)));
+    FND_TEST_TRUE(all(approx_equal(mul(rm_diag, x), y)));
+    FND_TEST_TRUE(all(approx_equal(mul(rm_diag, y), z)));
+    FND_TEST_TRUE(all(approx_equal(mul(rm_diag, z), x)));
 
     // Angle 0 and a full turn give the identity.
     const float3_t axis = normalize(float3_t{2, -1, 2});
-    FND_TEST_TRUE(approx_equal(
-        make_float3x3_rotation(axis, 0), float3x3_t::kIdentity));
+    FND_TEST_TRUE(
+        approx_equal(make_float3x3_rotation(axis, 0), float3x3_t::kIdentity));
     FND_TEST_TRUE(approx_equal(
         make_float3x3_rotation(axis, 2 * kFloatPi), float3x3_t::kIdentity));
 
     // The axis is left unchanged, and a rotation is orthonormal with
     // determinant 1: its inverse is its transpose.
-    const float3x3_t r = make_float3x3_rotation(axis, 0.75f);
-    FND_TEST_TRUE(all(approx_equal(mul(r, axis), axis)));
-    FND_TEST_TRUE(approx_equal(r * transpose(r), float3x3_t::kIdentity));
-    FND_TEST_TRUE(approx_equal(determinant(r), 1.0f));
-    FND_TEST_TRUE(approx_equal(inverse(r), transpose(r)));
+    const float3x3_t rm = make_float3x3_rotation(axis, 0.75f);
+    FND_TEST_TRUE(all(approx_equal(mul(rm, axis), axis)));
+    FND_TEST_TRUE(approx_equal(rm * transpose(rm), float3x3_t::kIdentity));
+    FND_TEST_TRUE(approx_equal(determinant(rm), 1.0f));
+    FND_TEST_TRUE(approx_equal(inverse(rm), transpose(rm)));
     // Lengths are preserved.
     const float3_t v{3, -4, 12};
-    FND_TEST_TRUE(approx_equal(length(mul(r, v)), 13.0f));
+    FND_TEST_TRUE(approx_equal(length(mul(rm, v)), 13.0f));
 
     // Rotating back by -angle undoes it, and rotations about the same axis
     // add up: R(a) * R(b) == R(a + b).
-    FND_TEST_TRUE(approx_equal(make_float3x3_rotation(axis, -0.75f),
-        transpose(r)));
-    FND_TEST_TRUE(approx_equal(r * make_float3x3_rotation(axis, -0.75f),
-        float3x3_t::kIdentity));
-    FND_TEST_TRUE(approx_equal(r * make_float3x3_rotation(axis, 0.5f),
+    FND_TEST_TRUE(
+        approx_equal(make_float3x3_rotation(axis, -0.75f), transpose(rm)));
+    FND_TEST_TRUE(approx_equal(
+        rm * make_float3x3_rotation(axis, -0.75f), float3x3_t::kIdentity));
+    FND_TEST_TRUE(approx_equal(
+        rm * make_float3x3_rotation(axis, 0.5f),
         make_float3x3_rotation(axis, 1.25f)));
+}
+
+void unittests_math_matrix_float3x3_make_float3x3_scale()
+{
+    // A diagonal matrix.
+    FND_TEST_TRUE(test_columns(
+        make_float3x3_scale(float3_t{2, 3, 4}), float3_t{2, 0, 0},
+        float3_t{0, 3, 0}, float3_t{0, 0, 4}));
+    FND_TEST_TRUE(make_float3x3_scale(float3_t{1}) == float3x3_t::kIdentity);
+    FND_TEST_TRUE(make_float3x3_scale(float3_t::kZero) == float3x3_t::kZero);
+
+    constexpr float3_t kScale0{2, -0.5f, 4};
+    const float3x3_t sm0 = make_float3x3_scale(kScale0);
+    FND_TEST_TRUE(determinant(sm0) == cmul(kScale0));
+    FND_TEST_TRUE(inverse(sm0) == make_float3x3_scale(rcp(kScale0)));
+
+    FND_TEST_TRUE(all(mul(sm0, float3_t{1, 2, 3}) == float3_t{2, -1, 12}));
+    FND_TEST_TRUE(all(mul(sm0, float3_t::kUnitY) == float3_t{0, -0.5f, 0}));
+
+    // Scales combine by multiplying their factors, in either order.
+    constexpr float3_t kScale1{3, 4, -1};
+    const float3x3_t sm1 = make_float3x3_scale(kScale1);
+    FND_TEST_TRUE(sm0 * sm1 == make_float3x3_scale(kScale0 * kScale1));
+    FND_TEST_TRUE(sm0 * sm1 == sm1 * sm0);
+    // A scale is its own transpose.
+    FND_TEST_TRUE(transpose(sm0) == sm0);
+    // Usable in constant expressions.
+    static_assert(make_float3x3_scale(float3_t{2, 3, 4}).col2.z == 4.0f);
 }
 
 void unittests_math_matrix_float3x3_mul()
@@ -460,10 +492,10 @@ void unittests_math_matrix_float3x3_row()
     FND_TEST_TRUE(all(row1(kMatrixA) == float3_t{2, 5, 8}));
     FND_TEST_TRUE(all(row2(kMatrixA) == float3_t{3, 6, 9}));
     // Row i of a matrix is column i of its transpose.
-    const float3x3_t t = transpose(kMatrixB);
-    FND_TEST_TRUE(all(row0(kMatrixB) == column0(t)));
-    FND_TEST_TRUE(all(row1(kMatrixB) == column1(t)));
-    FND_TEST_TRUE(all(row2(kMatrixB) == column2(t)));
+    const float3x3_t mt = transpose(kMatrixB);
+    FND_TEST_TRUE(all(row0(kMatrixB) == column0(mt)));
+    FND_TEST_TRUE(all(row1(kMatrixB) == column1(mt)));
+    FND_TEST_TRUE(all(row2(kMatrixB) == column2(mt)));
     static_assert(row2(kMatrixA).x == 3.0f);
 }
 
@@ -527,9 +559,9 @@ void unittests_math_matrix_float3x3_transpose()
     FND_TEST_TRUE(transpose(float3x3_t::kZero) == float3x3_t::kZero);
 
     // A symmetric matrix is its own transpose.
-    const float3x3_t sym{
+    const float3x3_t m_sym{
         float3_t{1, 2, 3}, float3_t{2, 4, 5}, float3_t{3, 5, 6}};
-    FND_TEST_TRUE(transpose(sym) == sym);
+    FND_TEST_TRUE(transpose(m_sym) == m_sym);
 
     // Transposing commutes with scaling.
     FND_TEST_TRUE(transpose(kMatrixA * 2.0f) == transpose(kMatrixA) * 2.0f);
@@ -555,6 +587,7 @@ void unittests_math_matrix_float3x3()
     unittests_math_matrix_float3x3_determinant();
     unittests_math_matrix_float3x3_inverse();
     unittests_math_matrix_float3x3_make_float3x3_rotation();
+    unittests_math_matrix_float3x3_make_float3x3_scale();
     unittests_math_matrix_float3x3_mul();
     unittests_math_matrix_float3x3_row();
     unittests_math_matrix_float3x3_set_column();
