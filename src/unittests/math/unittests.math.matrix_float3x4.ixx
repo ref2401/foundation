@@ -397,6 +397,42 @@ void unittests_math_matrix_float3x4_make_float3x4_translation()
     static_assert(make_float3x4_translation(kTranslation0).col3.y == -2.0f);
 }
 
+void unittests_math_matrix_float3x4_make_float3x4_trs()
+{
+    // mrs is the linear part and t the translation.
+    constexpr float3_t kTranslation{1, -2, 0.5f};
+    constexpr float3_t kScale{2, 3, 4};
+    const float3x3_t mrs = make_float3x3_rotation(float3_t::kUnitZ, 0.75f)
+        * make_float3x3_scale(kScale);
+    const float3x4_t m = make_float3x4_trs(kTranslation, mrs);
+    FND_TEST_TRUE(test_columns(m, mrs.col0, mrs.col1, mrs.col2, kTranslation));
+
+    // mrs is applied first, then t: the same as the composition T * RS.
+    const float3x4_t m_rs{mrs.col0, mrs.col1, mrs.col2, float3_t::kZero};
+    FND_TEST_TRUE(m == make_float3x4_translation(kTranslation) * m_rs);
+    constexpr float3_t kPoint{3, -4, 12};
+    FND_TEST_TRUE(all(approx_equal(
+        mul_point(m, kPoint), mul(mrs, kPoint) + kTranslation)));
+    // Directions are not translated.
+    FND_TEST_TRUE(
+        all(approx_equal(mul_direction(m, kPoint), mul(mrs, kPoint))));
+
+    // With the identity it is a pure translation; with a zero translation it
+    // is the linear part alone.
+    FND_TEST_TRUE(make_float3x4_trs(kTranslation, float3x3_t::kIdentity)
+        == make_float3x4_translation(kTranslation));
+    const float3x3_t sm = make_float3x3_scale(kScale);
+    FND_TEST_TRUE(
+        make_float3x4_trs(float3_t::kZero, sm) == make_float3x4_scale(kScale));
+
+    // The inverse transform takes a transformed point back.
+    FND_TEST_TRUE(all(approx_equal(
+        mul_point(inverse(m), mul_point(m, kPoint)), kPoint)));
+    // Usable in constant expressions.
+    static_assert(
+        make_float3x4_trs(kTranslation, float3x3_t::kIdentity).col3.z == 0.5f);
+}
+
 void unittests_math_matrix_float3x4_mul()
 {
     // w == 1 transforms a point, w == 0 a direction.
@@ -543,6 +579,7 @@ void unittests_math_matrix_float3x4()
     unittests_math_matrix_float3x4_make_float3x4_rotation();
     unittests_math_matrix_float3x4_make_float3x4_scale();
     unittests_math_matrix_float3x4_make_float3x4_translation();
+    unittests_math_matrix_float3x4_make_float3x4_trs();
     unittests_math_matrix_float3x4_mul();
     unittests_math_matrix_float3x4_mul_direction();
     unittests_math_matrix_float3x4_mul_point();

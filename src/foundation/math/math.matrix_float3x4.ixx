@@ -201,6 +201,14 @@ export constexpr float3x4_t make_float3x4_translation(const float3_t t)
     return float3x4_t{float3_t::kUnitX, float3_t::kUnitY, float3_t::kUnitZ, t};
 }
 
+// Translation t combined with the linear part mrs (rotation and scale): mrs
+// is applied first, then t. The same as make_float3x4_translation(t) * mrs.
+export constexpr float3x4_t make_float3x4_trs(
+    const float3_t t, const float3x3_t& mrs)
+{
+    return float3x4_t{mrs.col0, mrs.col1, mrs.col2, t};
+}
+
 // m times the column vector v; v.w scales the translation (1 for a point, 0
 // for a direction).
 export constexpr float3_t mul(const float3x4_t& m, const float4_t v)
