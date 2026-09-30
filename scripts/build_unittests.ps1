@@ -72,6 +72,7 @@ $moduleNames = @(
     'foundation\math\math.vector_uint4.ixx'
     'foundation\math\math.vector_conversion.ixx'
     'foundation\math\math.matrix_float3x3.ixx'
+    'foundation\math\math.matrix_float3x4.ixx'
     'foundation\math\math.ixx'
     'unittests\core\unittests.core.arithmetic_types.ixx'
     'unittests\core\unittests.core.arithmetic.ixx'
@@ -90,6 +91,7 @@ $moduleNames = @(
     'unittests\math\unittests.math.vector_uint4.ixx'
     'unittests\math\unittests.math.vector_conversion.ixx'
     'unittests\math\unittests.math.matrix_float3x3.ixx'
+    'unittests\math\unittests.math.matrix_float3x4.ixx'
     'unittests\math\unittests.math.ixx'
 )
 

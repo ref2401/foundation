@@ -41,9 +41,9 @@ constexpr float3x3_t float3x3_t::kZero{
 constexpr float3x3_t float3x3_t::kIdentity{
     float3_t{1, 0, 0}, float3_t{0, 1, 0}, float3_t{0, 0, 1}};
 
-export constexpr float3x3_t operator-(const float3x3_t& v)
+export constexpr float3x3_t operator-(const float3x3_t& m)
 {
-    return float3x3_t{-v.col0, -v.col1, -v.col2};
+    return float3x3_t{-m.col0, -m.col1, -m.col2};
 }
 
 export constexpr bool_t operator==(const float3x3_t& a, const float3x3_t& b)
