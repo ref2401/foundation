@@ -67,7 +67,7 @@ export constexpr float3x3_t operator*(const float_t scalar, const float3x3_t& m)
     return float3x3_t{scalar * m.col0, scalar * m.col1, scalar * m.col2};
 }
 
-// Matrix product: column j of a * b is a times column j of b.
+// Matrix product
 export constexpr float3x3_t operator*(const float3x3_t& a, const float3x3_t& b)
 {
     return float3x3_t{
@@ -112,15 +112,11 @@ export FND_INLINE bool_t approx_equal(
         && all(approx_equal(a.col2, b.col2, max_abs_diff));
 }
 
-// The largest of the nine components. A NaN component is ignored, as for the
-// float_t max.
 export FND_INLINE float_t cmax(const float3x3_t& m)
 {
     return max(max(cmax(m.col0), cmax(m.col1)), cmax(m.col2));
 }
 
-// The smallest of the nine components. A NaN component is ignored, as for the
-// float_t min.
 export FND_INLINE float_t cmin(const float3x3_t& m)
 {
     return min(min(cmin(m.col0), cmin(m.col1)), cmin(m.col2));
@@ -139,6 +135,28 @@ export constexpr float3_t column1(const float3x3_t& m)
 export constexpr float3_t column2(const float3x3_t& m)
 {
     return m.col2;
+}
+
+export constexpr float_t determinant(const float3x3_t& m)
+{
+    return dot(m.col0, cross(m.col1, m.col2));
+}
+
+export constexpr float3x3_t inverse(const float3x3_t& m)
+{
+    const float3_t r0 = cross(m.col1, m.col2);
+    const float3_t r1 = cross(m.col2, m.col0);
+    const float3_t r2 = cross(m.col0, m.col1);
+    const float_t det = dot(m.col0, r0);
+    FND_ASSERT(det != 0.0f); // m is singular
+
+    return float3x3_t{r0.x, r1.x, r2.x, r0.y, r1.y, r2.y, r0.z, r1.z, r2.z}
+    / det;
+}
+
+export constexpr float3_t mul(const float3x3_t& m, const float3_t v)
+{
+    return m.col0 * v.x + m.col1 * v.y + m.col2 * v.z;
 }
 
 export constexpr float3_t row0(const float3x3_t& m)
