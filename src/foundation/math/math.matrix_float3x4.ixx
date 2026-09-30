@@ -132,6 +132,22 @@ export FND_INLINE bool_t approx_equal(
         && all(approx_equal(a.col3, b.col3, max_abs_diff));
 }
 
+// The largest of the twelve components. A NaN component is ignored, as for
+// the float_t max.
+export FND_INLINE float_t cmax(const float3x4_t& m)
+{
+    return max(
+        max(cmax(m.col0), cmax(m.col1)), max(cmax(m.col2), cmax(m.col3)));
+}
+
+// The smallest of the twelve components. A NaN component is ignored, as for
+// the float_t min.
+export FND_INLINE float_t cmin(const float3x4_t& m)
+{
+    return min(
+        min(cmin(m.col0), cmin(m.col1)), min(cmin(m.col2), cmin(m.col3)));
+}
+
 export constexpr float3_t column0(const float3x4_t& m)
 {
     return m.col0;
