@@ -504,9 +504,6 @@ export constexpr float_t length_sqr(const float2_t v)
     return v.x * v.x + v.y * v.y;
 }
 
-// True when the length of v is 1, within max_abs_diff on the squared length
-// (1e-4 on the squared length is about 5e-5 on the length). A NaN or infinite
-// component makes it false.
 export FND_INLINE bool_t is_normalized(
     const float2_t v, const float_t max_abs_diff = 1e-4f)
 {

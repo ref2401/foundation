@@ -390,8 +390,7 @@ export FND_INLINE float3_t clamp(
     FND_ASSERT(all(lower <= upper));
 
     return float3_t{
-        clamp(v.x, lower.x, upper.x),
-        clamp(v.y, lower.y, upper.y),
+        clamp(v.x, lower.x, upper.x), clamp(v.y, lower.y, upper.y),
         clamp(v.z, lower.z, upper.z)};
 }
 
@@ -401,8 +400,7 @@ export FND_INLINE float3_t clamp(
     FND_ASSERT(all(lower <= upper));
 
     return float3_t{
-        clamp(v.x, lower.x, upper),
-        clamp(v.y, lower.y, upper),
+        clamp(v.x, lower.x, upper), clamp(v.y, lower.y, upper),
         clamp(v.z, lower.z, upper)};
 }
 
@@ -412,8 +410,7 @@ export FND_INLINE float3_t clamp(
     FND_ASSERT(all(lower <= upper));
 
     return float3_t{
-        clamp(v.x, lower, upper.x),
-        clamp(v.y, lower, upper.y),
+        clamp(v.x, lower, upper.x), clamp(v.y, lower, upper.y),
         clamp(v.z, lower, upper.z)};
 }
 
@@ -423,8 +420,7 @@ export FND_INLINE float3_t clamp(
     FND_ASSERT(lower <= upper);
 
     return float3_t{
-        clamp(v.x, lower, upper),
-        clamp(v.y, lower, upper),
+        clamp(v.x, lower, upper), clamp(v.y, lower, upper),
         clamp(v.z, lower, upper)};
 }
 
@@ -452,9 +448,7 @@ export FND_INLINE float3_t cos(const float3_t v)
 export constexpr float3_t cross(const float3_t a, const float3_t b)
 {
     return float3_t{
-        a.y * b.z - a.z * b.y,
-        a.z * b.x - a.x * b.z,
-        a.x * b.y - a.y * b.x};
+        a.y * b.z - a.z * b.y, a.z * b.x - a.x * b.z, a.x * b.y - a.y * b.x};
 }
 
 export constexpr float_t csum(const float3_t v)
@@ -539,9 +533,6 @@ export constexpr float_t length_sqr(const float3_t v)
     return v.x * v.x + v.y * v.y + v.z * v.z;
 }
 
-// True when the length of v is 1, within max_abs_diff on the squared length
-// (1e-4 on the squared length is about 5e-5 on the length). A NaN or infinite
-// component makes it false.
 export FND_INLINE bool_t is_normalized(
     const float3_t v, const float_t max_abs_diff = 1e-4f)
 {
@@ -664,8 +655,7 @@ export FND_INLINE float3_t normalize_safe(
 export FND_INLINE float3_t pow(const float3_t base, const float3_t exponent)
 {
     return float3_t{
-        pow(base.x, exponent.x),
-        pow(base.y, exponent.y),
+        pow(base.x, exponent.x), pow(base.y, exponent.y),
         pow(base.z, exponent.z)};
 }
 
@@ -709,8 +699,7 @@ export FND_INLINE float3_t smoothstep(
     const float3_t x, const float3_t edge0, const float3_t edge1)
 {
     return float3_t{
-        smoothstep(x.x, edge0.x, edge1.x),
-        smoothstep(x.y, edge0.y, edge1.y),
+        smoothstep(x.x, edge0.x, edge1.x), smoothstep(x.y, edge0.y, edge1.y),
         smoothstep(x.z, edge0.z, edge1.z)};
 }
 
@@ -718,8 +707,7 @@ export FND_INLINE float3_t smoothstep(
     const float3_t x, const float_t edge0, const float_t edge1)
 {
     return float3_t{
-        smoothstep(x.x, edge0, edge1),
-        smoothstep(x.y, edge0, edge1),
+        smoothstep(x.x, edge0, edge1), smoothstep(x.y, edge0, edge1),
         smoothstep(x.z, edge0, edge1)};
 }
 

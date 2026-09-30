@@ -375,6 +375,62 @@ void unittests_math_matrix_float3x3_inverse()
         approx_equal(inverse(kMatrixB * c), inverse(c) * inverse(kMatrixB)));
 }
 
+void unittests_math_matrix_float3x3_make_float3x3_rotation()
+{
+    const float_t quarter = kFloatPi / 2;
+    const float3_t x = float3_t::kUnitX;
+    const float3_t y = float3_t::kUnitY;
+    const float3_t z = float3_t::kUnitZ;
+
+    // Quarter turns about the axes are right-handed: counter-clockwise when
+    // looking from the tip of the axis toward the origin.
+    const float3x3_t rx = make_float3x3_rotation(x, quarter);
+    FND_TEST_TRUE(all(approx_equal(mul(rx, y), z)));
+    FND_TEST_TRUE(all(approx_equal(mul(rx, z), -y)));
+    const float3x3_t ry = make_float3x3_rotation(y, quarter);
+    FND_TEST_TRUE(all(approx_equal(mul(ry, z), x)));
+    FND_TEST_TRUE(all(approx_equal(mul(ry, x), -z)));
+    const float3x3_t rz = make_float3x3_rotation(z, quarter);
+    FND_TEST_TRUE(all(approx_equal(mul(rz, x), y)));
+    FND_TEST_TRUE(all(approx_equal(mul(rz, y), -x)));
+    FND_TEST_TRUE(approx_equal(rz,
+        float3x3_t{float3_t{0, 1, 0}, float3_t{-1, 0, 0}, float3_t{0, 0, 1}}));
+
+    // A third of a turn about the diagonal cycles x -> y -> z -> x.
+    const float3x3_t rd = make_float3x3_rotation(
+        normalize(float3_t{1, 1, 1}), 2 * kFloatPi / 3);
+    FND_TEST_TRUE(all(approx_equal(mul(rd, x), y)));
+    FND_TEST_TRUE(all(approx_equal(mul(rd, y), z)));
+    FND_TEST_TRUE(all(approx_equal(mul(rd, z), x)));
+
+    // Angle 0 and a full turn give the identity.
+    const float3_t axis = normalize(float3_t{2, -1, 2});
+    FND_TEST_TRUE(approx_equal(
+        make_float3x3_rotation(axis, 0), float3x3_t::kIdentity));
+    FND_TEST_TRUE(approx_equal(
+        make_float3x3_rotation(axis, 2 * kFloatPi), float3x3_t::kIdentity));
+
+    // The axis is left unchanged, and a rotation is orthonormal with
+    // determinant 1: its inverse is its transpose.
+    const float3x3_t r = make_float3x3_rotation(axis, 0.75f);
+    FND_TEST_TRUE(all(approx_equal(mul(r, axis), axis)));
+    FND_TEST_TRUE(approx_equal(r * transpose(r), float3x3_t::kIdentity));
+    FND_TEST_TRUE(approx_equal(determinant(r), 1.0f));
+    FND_TEST_TRUE(approx_equal(inverse(r), transpose(r)));
+    // Lengths are preserved.
+    const float3_t v{3, -4, 12};
+    FND_TEST_TRUE(approx_equal(length(mul(r, v)), 13.0f));
+
+    // Rotating back by -angle undoes it, and rotations about the same axis
+    // add up: R(a) * R(b) == R(a + b).
+    FND_TEST_TRUE(approx_equal(make_float3x3_rotation(axis, -0.75f),
+        transpose(r)));
+    FND_TEST_TRUE(approx_equal(r * make_float3x3_rotation(axis, -0.75f),
+        float3x3_t::kIdentity));
+    FND_TEST_TRUE(approx_equal(r * make_float3x3_rotation(axis, 0.5f),
+        make_float3x3_rotation(axis, 1.25f)));
+}
+
 void unittests_math_matrix_float3x3_mul()
 {
     const float3_t v{1, 2, 3};
@@ -498,6 +554,7 @@ void unittests_math_matrix_float3x3()
     unittests_math_matrix_float3x3_column();
     unittests_math_matrix_float3x3_determinant();
     unittests_math_matrix_float3x3_inverse();
+    unittests_math_matrix_float3x3_make_float3x3_rotation();
     unittests_math_matrix_float3x3_mul();
     unittests_math_matrix_float3x3_row();
     unittests_math_matrix_float3x3_set_column();

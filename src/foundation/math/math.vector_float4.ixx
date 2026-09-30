@@ -233,9 +233,7 @@ export FND_INLINE float4_t operator%(const float4_t a, const float_t scalar)
     FND_ASSERT(scalar != 0.0f);
 
     return float4_t{
-        fmod(a.x, scalar),
-        fmod(a.y, scalar),
-        fmod(a.z, scalar),
+        fmod(a.x, scalar), fmod(a.y, scalar), fmod(a.z, scalar),
         fmod(a.w, scalar)};
 }
 
@@ -244,9 +242,7 @@ export FND_INLINE float4_t operator%(const float_t scalar, const float4_t b)
     FND_ASSERT(b.x != 0.0f && b.y != 0.0f && b.z != 0.0f && b.w != 0.0f);
 
     return float4_t{
-        fmod(scalar, b.x),
-        fmod(scalar, b.y),
-        fmod(scalar, b.z),
+        fmod(scalar, b.x), fmod(scalar, b.y), fmod(scalar, b.z),
         fmod(scalar, b.w)};
 }
 
@@ -409,10 +405,8 @@ export FND_INLINE float4_t clamp(
     FND_ASSERT(all(lower <= upper));
 
     return float4_t{
-        clamp(v.x, lower.x, upper.x),
-        clamp(v.y, lower.y, upper.y),
-        clamp(v.z, lower.z, upper.z),
-        clamp(v.w, lower.w, upper.w)};
+        clamp(v.x, lower.x, upper.x), clamp(v.y, lower.y, upper.y),
+        clamp(v.z, lower.z, upper.z), clamp(v.w, lower.w, upper.w)};
 }
 
 export FND_INLINE float4_t clamp(
@@ -421,10 +415,8 @@ export FND_INLINE float4_t clamp(
     FND_ASSERT(all(lower <= upper));
 
     return float4_t{
-        clamp(v.x, lower.x, upper),
-        clamp(v.y, lower.y, upper),
-        clamp(v.z, lower.z, upper),
-        clamp(v.w, lower.w, upper)};
+        clamp(v.x, lower.x, upper), clamp(v.y, lower.y, upper),
+        clamp(v.z, lower.z, upper), clamp(v.w, lower.w, upper)};
 }
 
 export FND_INLINE float4_t clamp(
@@ -433,10 +425,8 @@ export FND_INLINE float4_t clamp(
     FND_ASSERT(all(lower <= upper));
 
     return float4_t{
-        clamp(v.x, lower, upper.x),
-        clamp(v.y, lower, upper.y),
-        clamp(v.z, lower, upper.z),
-        clamp(v.w, lower, upper.w)};
+        clamp(v.x, lower, upper.x), clamp(v.y, lower, upper.y),
+        clamp(v.z, lower, upper.z), clamp(v.w, lower, upper.w)};
 }
 
 export FND_INLINE float4_t clamp(
@@ -445,10 +435,8 @@ export FND_INLINE float4_t clamp(
     FND_ASSERT(lower <= upper);
 
     return float4_t{
-        clamp(v.x, lower, upper),
-        clamp(v.y, lower, upper),
-        clamp(v.z, lower, upper),
-        clamp(v.w, lower, upper)};
+        clamp(v.x, lower, upper), clamp(v.y, lower, upper),
+        clamp(v.z, lower, upper), clamp(v.w, lower, upper)};
 }
 
 export FND_INLINE float_t cmax(const float4_t v)
@@ -522,18 +510,14 @@ export FND_INLINE float4_t fmod(const float4_t a, const float4_t b)
 export FND_INLINE float4_t fmod(const float4_t a, const float_t scalar)
 {
     return float4_t{
-        fmod(a.x, scalar),
-        fmod(a.y, scalar),
-        fmod(a.z, scalar),
+        fmod(a.x, scalar), fmod(a.y, scalar), fmod(a.z, scalar),
         fmod(a.w, scalar)};
 }
 
 export FND_INLINE float4_t fmod(const float_t scalar, const float4_t b)
 {
     return float4_t{
-        fmod(scalar, b.x),
-        fmod(scalar, b.y),
-        fmod(scalar, b.z),
+        fmod(scalar, b.x), fmod(scalar, b.y), fmod(scalar, b.z),
         fmod(scalar, b.w)};
 }
 
@@ -563,9 +547,6 @@ export constexpr float_t length_sqr(const float4_t v)
     return v.x * v.x + v.y * v.y + v.z * v.z + v.w * v.w;
 }
 
-// True when the length of v is 1, within max_abs_diff on the squared length
-// (1e-4 on the squared length is about 5e-5 on the length). A NaN or infinite
-// component makes it false.
 export FND_INLINE bool_t is_normalized(
     const float4_t v, const float_t max_abs_diff = 1e-4f)
 {
@@ -589,9 +570,7 @@ export FND_INLINE float4_t lerp(
     const float4_t a, const float4_t b, const float4_t t)
 {
     return float4_t{
-        lerp(a.x, b.x, t.x),
-        lerp(a.y, b.y, t.y),
-        lerp(a.z, b.z, t.z),
+        lerp(a.x, b.x, t.x), lerp(a.y, b.y, t.y), lerp(a.z, b.z, t.z),
         lerp(a.w, b.w, t.w)};
 }
 
@@ -698,18 +677,14 @@ export FND_INLINE float4_t normalize_safe(
 export FND_INLINE float4_t pow(const float4_t base, const float4_t exponent)
 {
     return float4_t{
-        pow(base.x, exponent.x),
-        pow(base.y, exponent.y),
-        pow(base.z, exponent.z),
-        pow(base.w, exponent.w)};
+        pow(base.x, exponent.x), pow(base.y, exponent.y),
+        pow(base.z, exponent.z), pow(base.w, exponent.w)};
 }
 
 export FND_INLINE float4_t pow(const float4_t base, const float_t exponent)
 {
     return float4_t{
-        pow(base.x, exponent),
-        pow(base.y, exponent),
-        pow(base.z, exponent),
+        pow(base.x, exponent), pow(base.y, exponent), pow(base.z, exponent),
         pow(base.w, exponent)};
 }
 
@@ -747,20 +722,16 @@ export FND_INLINE float4_t smoothstep(
     const float4_t x, const float4_t edge0, const float4_t edge1)
 {
     return float4_t{
-        smoothstep(x.x, edge0.x, edge1.x),
-        smoothstep(x.y, edge0.y, edge1.y),
-        smoothstep(x.z, edge0.z, edge1.z),
-        smoothstep(x.w, edge0.w, edge1.w)};
+        smoothstep(x.x, edge0.x, edge1.x), smoothstep(x.y, edge0.y, edge1.y),
+        smoothstep(x.z, edge0.z, edge1.z), smoothstep(x.w, edge0.w, edge1.w)};
 }
 
 export FND_INLINE float4_t smoothstep(
     const float4_t x, const float_t edge0, const float_t edge1)
 {
     return float4_t{
-        smoothstep(x.x, edge0, edge1),
-        smoothstep(x.y, edge0, edge1),
-        smoothstep(x.z, edge0, edge1),
-        smoothstep(x.w, edge0, edge1)};
+        smoothstep(x.x, edge0, edge1), smoothstep(x.y, edge0, edge1),
+        smoothstep(x.z, edge0, edge1), smoothstep(x.w, edge0, edge1)};
 }
 
 export FND_INLINE float4_t sqrt(const float4_t v)
