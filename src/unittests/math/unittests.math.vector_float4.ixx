@@ -842,6 +842,34 @@ void unittests_math_vector_float4_length_sqr()
     FND_TEST_TRUE(isnan(length_sqr(float4_t{kFloatNaN, 1.0f, 1.0f, 1.0f})));
 }
 
+void unittests_math_vector_float4_is_normalized()
+{
+    FND_TEST_TRUE(is_normalized(float4_t::kUnitX));
+    FND_TEST_TRUE(is_normalized(float4_t::kUnitY));
+    FND_TEST_TRUE(is_normalized(float4_t::kUnitZ));
+    FND_TEST_TRUE(is_normalized(float4_t::kUnitW));
+    FND_TEST_TRUE(is_normalized(float4_t{0.5f, -0.5f, 0.5f, -0.5f}));
+    FND_TEST_TRUE(is_normalized(float4_t{0.6f, 0, 0, -0.8f}));
+    FND_TEST_TRUE(is_normalized(normalize(float4_t{1, 2, 2, -4})));
+
+    FND_TEST_FALSE(is_normalized(float4_t::kZero));
+    FND_TEST_FALSE(is_normalized(float4_t{1, 1, 1, 1}));
+    FND_TEST_FALSE(is_normalized(float4_t{0, 0, 0, 0.5f}));
+    FND_TEST_FALSE(is_normalized(float4_t{1, 2, 2, -4}));
+
+    // The default max_abs_diff is 1e-4 on the squared length: a length of
+    // 1.0001 (squared 1.0002) is out, a length of 1.00004 (squared 1.00008)
+    // is in.
+    FND_TEST_FALSE(is_normalized(float4_t{0, 0, 0, 1.0001f}));
+    FND_TEST_TRUE(is_normalized(float4_t{-1.00004f, 0, 0, 0}));
+    FND_TEST_TRUE(is_normalized(float4_t{0, 0, 0, 1.0001f}, 1e-3f));
+    FND_TEST_FALSE(is_normalized(float4_t{-1.00004f, 0, 0, 0}, 1e-5f));
+
+    // A NaN or infinite component is never normalized.
+    FND_TEST_FALSE(is_normalized(float4_t{0, 0, 0, kFloatNaN}));
+    FND_TEST_FALSE(is_normalized(float4_t{-kFloatInfinity, 0, 0, 0}));
+}
+
 void unittests_math_vector_float4_length()
 {
     FND_TEST_TRUE(length(float4_t{0}) == 0.0f);
@@ -1203,6 +1231,7 @@ void unittests_math_vector_float4()
     unittests_math_vector_float4_isinf();
     unittests_math_vector_float4_isnan();
     unittests_math_vector_float4_length_sqr();
+    unittests_math_vector_float4_is_normalized();
     unittests_math_vector_float4_length();
     unittests_math_vector_float4_lerp();
     unittests_math_vector_float4_max();
