@@ -214,13 +214,13 @@ export constexpr float3x4_t inverse(const float3x4_t& m)
 }
 
 // Rotation about the normalized axis, with no translation; see
-// make_float3x3_rotation for the direction of a positive angle.
-export FND_INLINE float3x4_t make_float3x4_rotation(
+// make_float3x3_axis_angle for the direction of a positive angle.
+export FND_INLINE float3x4_t make_float3x4_axis_angle(
     const float3_t axis, const float_t angle_radians)
 {
     FND_ASSERT(is_normalized(axis));
 
-    const float3x3_t rm = make_float3x3_rotation(axis, angle_radians);
+    const float3x3_t rm = make_float3x3_axis_angle(axis, angle_radians);
     return float3x4_t{rm.col0, rm.col1, rm.col2, float3_t::kZero};
 }
 

@@ -337,7 +337,7 @@ void unittests_math_matrix_float4x4_determinant()
     // An affine matrix has the determinant of its linear part.
     constexpr float3_t kScale{2, 3, 4};
     constexpr float3_t kTranslation{1, -2, 0.5f};
-    const float3x3_t mrs = make_float3x3_rotation(float3_t::kUnitZ, 0.75f)
+    const float3x3_t mrs = make_float3x3_axis_angle(float3_t::kUnitZ, 0.75f)
         * make_float3x3_scale(kScale);
     FND_TEST_TRUE(approx_equal(
         determinant(make_float4x4_trs(kTranslation, mrs)), determinant(mrs)));
@@ -383,7 +383,7 @@ void unittests_math_matrix_float4x4_inverse()
 
     // An affine matrix has the inverse of the same float3x4_t transform, with
     // the bottom row 0, 0, 0, 1.
-    const float3x3_t mrs = make_float3x3_rotation(float3_t::kUnitZ, 0.75f)
+    const float3x3_t mrs = make_float3x3_axis_angle(float3_t::kUnitZ, 0.75f)
         * make_float3x3_scale(kScale);
     const float3x4_t m_inv_affine
         = inverse(make_float3x4_trs(kTranslation, mrs));
@@ -402,20 +402,20 @@ void unittests_math_matrix_float4x4_inverse()
             float4_t{0, 0, 0, -0.25f}, float4_t{0, 0, -1, 0.75f}}));
 }
 
-void unittests_math_matrix_float4x4_make_float4x4_rotation()
+void unittests_math_matrix_float4x4_make_float4x4_axis_angle()
 {
     // The float3x3_t rotation in the upper-left 3x3; no translation, bottom
     // row 0, 0, 0, 1.
     constexpr float3_t kAxis{0.6f, 0, -0.8f};
     constexpr float_t kAngle = 0.75f;
-    const float3x3_t rm3 = make_float3x3_rotation(kAxis, kAngle);
-    const float4x4_t rm = make_float4x4_rotation(kAxis, kAngle);
+    const float3x3_t rm3 = make_float3x3_axis_angle(kAxis, kAngle);
+    const float4x4_t rm = make_float4x4_axis_angle(kAxis, kAngle);
     FND_TEST_TRUE(test_columns(rm, float4(rm3.col0, 0), float4(rm3.col1, 0),
         float4(rm3.col2, 0), float4_t::kUnitW));
 
     // A quarter turn about z maps x to y.
     const float4x4_t rm_z
-        = make_float4x4_rotation(float3_t::kUnitZ, kFloatPi / 2);
+        = make_float4x4_axis_angle(float3_t::kUnitZ, kFloatPi / 2);
     FND_TEST_TRUE(all(approx_equal(
         mul(rm_z, float4_t::kUnitX), float4_t::kUnitY)));
 
@@ -423,8 +423,8 @@ void unittests_math_matrix_float4x4_make_float4x4_rotation()
     // rotating by -angle undoes it.
     FND_TEST_TRUE(approx_equal(determinant(rm), 1.0f));
     FND_TEST_TRUE(approx_equal(transpose(rm) * rm, float4x4_t::kIdentity));
-    FND_TEST_TRUE(approx_equal(rm * make_float4x4_rotation(kAxis, -kAngle),
-        float4x4_t::kIdentity));
+    FND_TEST_TRUE(approx_equal(
+        rm * make_float4x4_axis_angle(kAxis, -kAngle), float4x4_t::kIdentity));
 }
 
 void unittests_math_matrix_float4x4_make_float4x4_scale()
@@ -482,7 +482,7 @@ void unittests_math_matrix_float4x4_make_float4x4_trs()
     // mrs in the upper-left 3x3, {t, 1} as the last column.
     constexpr float3_t kTranslation{1, -2, 0.5f};
     constexpr float3_t kScale{2, 3, 4};
-    const float3x3_t mrs = make_float3x3_rotation(float3_t::kUnitZ, 0.75f)
+    const float3x3_t mrs = make_float3x3_axis_angle(float3_t::kUnitZ, 0.75f)
         * make_float3x3_scale(kScale);
     const float4x4_t m = make_float4x4_trs(kTranslation, mrs);
     FND_TEST_TRUE(test_columns(m, float4(mrs.col0, 0), float4(mrs.col1, 0),
@@ -641,7 +641,7 @@ void unittests_math_matrix_float4x4()
     unittests_math_matrix_float4x4_column();
     unittests_math_matrix_float4x4_determinant();
     unittests_math_matrix_float4x4_inverse();
-    unittests_math_matrix_float4x4_make_float4x4_rotation();
+    unittests_math_matrix_float4x4_make_float4x4_axis_angle();
     unittests_math_matrix_float4x4_make_float4x4_scale();
     unittests_math_matrix_float4x4_make_float4x4_translation();
     unittests_math_matrix_float4x4_make_float4x4_trs();

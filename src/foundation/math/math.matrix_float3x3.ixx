@@ -178,7 +178,7 @@ export constexpr float3x3_t inverse(const float3x3_t& m)
 // (Rodrigues' rotation formula).
 // Right-handed: a positive angle_radians rotates
 // counter-clockwise when looking from the tip of axis toward the origin.
-export FND_INLINE float3x3_t make_float3x3_rotation(
+export FND_INLINE float3x3_t make_float3x3_axis_angle(
     const float3_t axis, const float_t angle_radians)
 {
     FND_ASSERT(is_normalized(axis));

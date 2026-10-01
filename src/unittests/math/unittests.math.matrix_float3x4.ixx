@@ -376,19 +376,19 @@ void unittests_math_matrix_float3x4_inverse()
         inverse(kMatrixB3x4) * inverse(kMatrixA3x4)));
 }
 
-void unittests_math_matrix_float3x4_make_float3x4_rotation()
+void unittests_math_matrix_float3x4_make_float3x4_axis_angle()
 {
     // The linear part is the float3x3_t rotation; there is no translation.
     constexpr float3_t kAxis{0.6f, 0, -0.8f};
     constexpr float_t kAngle = 0.75f;
-    const float3x3_t rm3 = make_float3x3_rotation(kAxis, kAngle);
-    const float3x4_t rm = make_float3x4_rotation(kAxis, kAngle);
+    const float3x3_t rm3 = make_float3x3_axis_angle(kAxis, kAngle);
+    const float3x4_t rm = make_float3x4_axis_angle(kAxis, kAngle);
     FND_TEST_TRUE(
         test_columns(rm, rm3.col0, rm3.col1, rm3.col2, float3_t::kZero));
 
     // A quarter turn about z maps x to y, for points and directions alike.
     const float3x4_t rm_z
-        = make_float3x4_rotation(float3_t::kUnitZ, kFloatPi / 2);
+        = make_float3x4_axis_angle(float3_t::kUnitZ, kFloatPi / 2);
     FND_TEST_TRUE(all(approx_equal(
         mul_point(rm_z, float3_t::kUnitX), float3_t::kUnitY)));
     FND_TEST_TRUE(all(approx_equal(
@@ -398,7 +398,7 @@ void unittests_math_matrix_float3x4_make_float3x4_rotation()
     FND_TEST_TRUE(all(mul_point(rm, float3_t::kZero) == float3_t::kZero));
     FND_TEST_TRUE(approx_equal(determinant(rm), 1.0f));
     FND_TEST_TRUE(
-        approx_equal(inverse(rm), make_float3x4_rotation(kAxis, -kAngle)));
+        approx_equal(inverse(rm), make_float3x4_axis_angle(kAxis, -kAngle)));
 }
 
 void unittests_math_matrix_float3x4_make_float3x4_scale()
@@ -452,7 +452,7 @@ void unittests_math_matrix_float3x4_make_float3x4_trs()
     // mrs is the linear part and t the translation.
     constexpr float3_t kTranslation{1, -2, 0.5f};
     constexpr float3_t kScale{2, 3, 4};
-    const float3x3_t mrs = make_float3x3_rotation(float3_t::kUnitZ, 0.75f)
+    const float3x3_t mrs = make_float3x3_axis_angle(float3_t::kUnitZ, 0.75f)
         * make_float3x3_scale(kScale);
     const float3x4_t m = make_float3x4_trs(kTranslation, mrs);
     FND_TEST_TRUE(test_columns(m, mrs.col0, mrs.col1, mrs.col2, kTranslation));
@@ -628,7 +628,7 @@ void unittests_math_matrix_float3x4()
     unittests_math_matrix_float3x4_column();
     unittests_math_matrix_float3x4_determinant();
     unittests_math_matrix_float3x4_inverse();
-    unittests_math_matrix_float3x4_make_float3x4_rotation();
+    unittests_math_matrix_float3x4_make_float3x4_axis_angle();
     unittests_math_matrix_float3x4_make_float3x4_scale();
     unittests_math_matrix_float3x4_make_float3x4_translation();
     unittests_math_matrix_float3x4_make_float3x4_trs();

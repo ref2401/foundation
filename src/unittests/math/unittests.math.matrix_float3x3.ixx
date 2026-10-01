@@ -386,7 +386,7 @@ void unittests_math_matrix_float3x3_inverse()
         inverse(kMatrixC3x3) * inverse(kMatrixB3x3)));
 }
 
-void unittests_math_matrix_float3x3_make_float3x3_rotation()
+void unittests_math_matrix_float3x3_make_float3x3_axis_angle()
 {
     const float_t quarter = kFloatPi / 2;
     const float3_t x = float3_t::kUnitX;
@@ -395,13 +395,13 @@ void unittests_math_matrix_float3x3_make_float3x3_rotation()
 
     // Quarter turns about the axes are right-handed: counter-clockwise when
     // looking from the tip of the axis toward the origin.
-    const float3x3_t rm_x = make_float3x3_rotation(x, quarter);
+    const float3x3_t rm_x = make_float3x3_axis_angle(x, quarter);
     FND_TEST_TRUE(all(approx_equal(mul(rm_x, y), z)));
     FND_TEST_TRUE(all(approx_equal(mul(rm_x, z), -y)));
-    const float3x3_t rm_y = make_float3x3_rotation(y, quarter);
+    const float3x3_t rm_y = make_float3x3_axis_angle(y, quarter);
     FND_TEST_TRUE(all(approx_equal(mul(rm_y, z), x)));
     FND_TEST_TRUE(all(approx_equal(mul(rm_y, x), -z)));
-    const float3x3_t rm_z = make_float3x3_rotation(z, quarter);
+    const float3x3_t rm_z = make_float3x3_axis_angle(z, quarter);
     FND_TEST_TRUE(all(approx_equal(mul(rm_z, x), y)));
     FND_TEST_TRUE(all(approx_equal(mul(rm_z, y), -x)));
     FND_TEST_TRUE(approx_equal(
@@ -409,7 +409,7 @@ void unittests_math_matrix_float3x3_make_float3x3_rotation()
         float3x3_t{float3_t{0, 1, 0}, float3_t{-1, 0, 0}, float3_t{0, 0, 1}}));
 
     // A third of a turn about the diagonal cycles x -> y -> z -> x.
-    const float3x3_t rm_diag = make_float3x3_rotation(
+    const float3x3_t rm_diag = make_float3x3_axis_angle(
         normalize(float3_t{1, 1, 1}), 2 * kFloatPi / 3);
     FND_TEST_TRUE(all(approx_equal(mul(rm_diag, x), y)));
     FND_TEST_TRUE(all(approx_equal(mul(rm_diag, y), z)));
@@ -418,13 +418,13 @@ void unittests_math_matrix_float3x3_make_float3x3_rotation()
     // Angle 0 and a full turn give the identity.
     const float3_t axis = normalize(float3_t{2, -1, 2});
     FND_TEST_TRUE(
-        approx_equal(make_float3x3_rotation(axis, 0), float3x3_t::kIdentity));
+        approx_equal(make_float3x3_axis_angle(axis, 0), float3x3_t::kIdentity));
     FND_TEST_TRUE(approx_equal(
-        make_float3x3_rotation(axis, 2 * kFloatPi), float3x3_t::kIdentity));
+        make_float3x3_axis_angle(axis, 2 * kFloatPi), float3x3_t::kIdentity));
 
     // The axis is left unchanged, and a rotation is orthonormal with
     // determinant 1: its inverse is its transpose.
-    const float3x3_t rm = make_float3x3_rotation(axis, 0.75f);
+    const float3x3_t rm = make_float3x3_axis_angle(axis, 0.75f);
     FND_TEST_TRUE(all(approx_equal(mul(rm, axis), axis)));
     FND_TEST_TRUE(approx_equal(rm * transpose(rm), float3x3_t::kIdentity));
     FND_TEST_TRUE(approx_equal(determinant(rm), 1.0f));
@@ -436,12 +436,12 @@ void unittests_math_matrix_float3x3_make_float3x3_rotation()
     // Rotating back by -angle undoes it, and rotations about the same axis
     // add up: R(a) * R(b) == R(a + b).
     FND_TEST_TRUE(
-        approx_equal(make_float3x3_rotation(axis, -0.75f), transpose(rm)));
+        approx_equal(make_float3x3_axis_angle(axis, -0.75f), transpose(rm)));
     FND_TEST_TRUE(approx_equal(
-        rm * make_float3x3_rotation(axis, -0.75f), float3x3_t::kIdentity));
+        rm * make_float3x3_axis_angle(axis, -0.75f), float3x3_t::kIdentity));
     FND_TEST_TRUE(approx_equal(
-        rm * make_float3x3_rotation(axis, 0.5f),
-        make_float3x3_rotation(axis, 1.25f)));
+        rm * make_float3x3_axis_angle(axis, 0.5f),
+        make_float3x3_axis_angle(axis, 1.25f)));
 }
 
 void unittests_math_matrix_float3x3_make_float3x3_scale()
@@ -595,7 +595,7 @@ void unittests_math_matrix_float3x3()
     unittests_math_matrix_float3x3_column();
     unittests_math_matrix_float3x3_determinant();
     unittests_math_matrix_float3x3_inverse();
-    unittests_math_matrix_float3x3_make_float3x3_rotation();
+    unittests_math_matrix_float3x3_make_float3x3_axis_angle();
     unittests_math_matrix_float3x3_make_float3x3_scale();
     unittests_math_matrix_float3x3_mul();
     unittests_math_matrix_float3x3_row();
