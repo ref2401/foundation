@@ -3,6 +3,7 @@ import :matrix_conversion;
 import :matrix_float3x3;
 import :matrix_float3x4;
 import :matrix_float4x4;
+import :quat;
 import :scalar;
 import :vector_bool;
 import :vector_conversion;
@@ -24,6 +25,7 @@ export void run_unittests_math()
     unittests_math_matrix_float3x3();
     unittests_math_matrix_float3x4();
     unittests_math_matrix_float4x4();
+    unittests_math_quat();
     unittests_math_scalar();
     unittests_math_vector_bool();
     unittests_math_vector_conversion();
