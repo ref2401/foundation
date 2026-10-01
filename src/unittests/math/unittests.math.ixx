@@ -1,4 +1,5 @@
 export module unittests.math;
+import :matrix_conversion;
 import :matrix_float3x3;
 import :matrix_float3x4;
 import :matrix_float4x4;
@@ -19,6 +20,7 @@ namespace fnd::unittests {
 
 export void run_unittests_math()
 {
+    unittests_math_matrix_conversion();
     unittests_math_matrix_float3x3();
     unittests_math_matrix_float3x4();
     unittests_math_matrix_float4x4();
