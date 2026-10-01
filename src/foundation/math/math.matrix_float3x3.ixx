@@ -169,11 +169,9 @@ export constexpr float3x3_t inverse(const float3x3_t& m)
     const float_t det = dot(m.col0, r0);
     FND_ASSERT(det != 0.0f); // m is singular
 
-    // One division instead of nine; the result may differ from dividing each
-    // component by det in the last bit.
     const float_t inv_det = 1.0f / det;
-    return float3x3_t{r0.x, r1.x, r2.x, r0.y, r1.y, r2.y, r0.z, r1.z, r2.z}
-    * inv_det;
+    return inv_det
+        * float3x3_t{r0.x, r1.x, r2.x, r0.y, r1.y, r2.y, r0.z, r1.z, r2.z};
 }
 
 // Rotation by angle_radians (in radians) about axis, which must be normalized

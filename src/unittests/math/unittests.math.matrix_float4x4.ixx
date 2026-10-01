@@ -347,6 +347,61 @@ void unittests_math_matrix_float4x4_determinant()
     static_assert(determinant(float4x4_t::kIdentity) == 1.0f);
 }
 
+void unittests_math_matrix_float4x4_inverse()
+{
+    FND_TEST_TRUE(inverse(float4x4_t::kIdentity) == float4x4_t::kIdentity);
+
+    // A translation is undone by the opposite translation, a scale by the
+    // reciprocal scale (exact for powers of two).
+    constexpr float3_t kTranslation{1, -2, 0.5f};
+    FND_TEST_TRUE(inverse(make_float4x4_translation(kTranslation))
+        == make_float4x4_translation(-kTranslation));
+    constexpr float3_t kScale{2, -0.5f, 4};
+    FND_TEST_TRUE(inverse(make_float4x4_scale(kScale))
+        == make_float4x4_scale(rcp(kScale)));
+
+    // m * inverse(m) and inverse(m) * m are the identity, and inverting twice
+    // gives m back.
+    const float4x4_t m_inv_a = inverse(kMatrixA4x4);
+    FND_TEST_TRUE(approx_equal(kMatrixA4x4 * m_inv_a, float4x4_t::kIdentity));
+    FND_TEST_TRUE(approx_equal(m_inv_a * kMatrixA4x4, float4x4_t::kIdentity));
+    FND_TEST_TRUE(approx_equal(inverse(m_inv_a), kMatrixA4x4));
+    const float4x4_t m_inv_b = inverse(kMatrixB4x4);
+    FND_TEST_TRUE(approx_equal(kMatrixB4x4 * m_inv_b, float4x4_t::kIdentity));
+    FND_TEST_TRUE(approx_equal(m_inv_b * kMatrixB4x4, float4x4_t::kIdentity));
+    FND_TEST_TRUE(approx_equal(inverse(m_inv_b), kMatrixB4x4));
+
+    // Inverting commutes with transposing, the determinant of the inverse is
+    // the reciprocal of the determinant, and the inverse of a product is the
+    // product of the inverses, reversed.
+    FND_TEST_TRUE(approx_equal(
+        inverse(transpose(kMatrixB4x4)), transpose(inverse(kMatrixB4x4))));
+    FND_TEST_TRUE(approx_equal(
+        determinant(m_inv_b), 1.0f / determinant(kMatrixB4x4)));
+    FND_TEST_TRUE(approx_equal(
+        inverse(kMatrixA4x4 * kMatrixB4x4), m_inv_b * m_inv_a));
+
+    // An affine matrix has the inverse of the same float3x4_t transform, with
+    // the bottom row 0, 0, 0, 1.
+    const float3x3_t mrs = make_float3x3_rotation(float3_t::kUnitZ, 0.75f)
+        * make_float3x3_scale(kScale);
+    const float3x4_t m_inv_affine
+        = inverse(make_float3x4_trs(kTranslation, mrs));
+    FND_TEST_TRUE(approx_equal(inverse(make_float4x4_trs(kTranslation, mrs)),
+        float4x4_t{float4(m_inv_affine.col0, 0), float4(m_inv_affine.col1, 0),
+            float4(m_inv_affine.col2, 0), float4(m_inv_affine.col3, 1)}));
+
+    // A perspective projection (focal length 2, near 1, far 2, depth to
+    // [-1, 1]); its bottom row is 0, 0, -1, 0. The rows of its inverse are
+    // {0.5, 0, 0, 0}, {0, 0.5, 0, 0}, {0, 0, 0, -1} and {0, 0, -0.25, 0.75}.
+    constexpr float4x4_t kProjection{
+        float4_t{2, 0, 0, 0}, float4_t{0, 2, 0, 0}, float4_t{0, 0, -3, -1},
+        float4_t{0, 0, -4, 0}};
+    FND_TEST_TRUE(approx_equal(inverse(kProjection),
+        float4x4_t{float4_t{0.5f, 0, 0, 0}, float4_t{0, 0.5f, 0, 0},
+            float4_t{0, 0, 0, -0.25f}, float4_t{0, 0, -1, 0.75f}}));
+}
+
 void unittests_math_matrix_float4x4_make_float4x4_rotation()
 {
     // The float3x3_t rotation in the upper-left 3x3; no translation, bottom
@@ -585,6 +640,7 @@ void unittests_math_matrix_float4x4()
     unittests_math_matrix_float4x4_cmin();
     unittests_math_matrix_float4x4_column();
     unittests_math_matrix_float4x4_determinant();
+    unittests_math_matrix_float4x4_inverse();
     unittests_math_matrix_float4x4_make_float4x4_rotation();
     unittests_math_matrix_float4x4_make_float4x4_scale();
     unittests_math_matrix_float4x4_make_float4x4_translation();

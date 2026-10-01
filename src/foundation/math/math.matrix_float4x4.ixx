@@ -213,6 +213,57 @@ export constexpr float_t determinant(const float4x4_t& m)
         + a23 * b01;
 }
 
+// The adjugate (the transposed cofactors) divided by the determinant. Column C
+// of the inverse holds the cofactors of row C of m. A cofactor of a row 0-1
+// component expands along the other of rows 0-1 with the minors of rows 2-3,
+// and a cofactor of a row 2-3 component along the other of rows 2-3 with the
+// minors of rows 0-1; the same 2x2 minors give the determinant.
+export constexpr float4x4_t inverse(const float4x4_t& m)
+{
+    // Minors of rows 0-1: aIJ uses columns I and J.
+    const float_t a01 = m.col0.x * m.col1.y - m.col1.x * m.col0.y;
+    const float_t a02 = m.col0.x * m.col2.y - m.col2.x * m.col0.y;
+    const float_t a03 = m.col0.x * m.col3.y - m.col3.x * m.col0.y;
+    const float_t a12 = m.col1.x * m.col2.y - m.col2.x * m.col1.y;
+    const float_t a13 = m.col1.x * m.col3.y - m.col3.x * m.col1.y;
+    const float_t a23 = m.col2.x * m.col3.y - m.col3.x * m.col2.y;
+    // Minors of rows 2-3: bIJ uses columns I and J.
+    const float_t b01 = m.col0.z * m.col1.w - m.col1.z * m.col0.w;
+    const float_t b02 = m.col0.z * m.col2.w - m.col2.z * m.col0.w;
+    const float_t b03 = m.col0.z * m.col3.w - m.col3.z * m.col0.w;
+    const float_t b12 = m.col1.z * m.col2.w - m.col2.z * m.col1.w;
+    const float_t b13 = m.col1.z * m.col3.w - m.col3.z * m.col1.w;
+    const float_t b23 = m.col2.z * m.col3.w - m.col3.z * m.col2.w;
+
+    const float_t det = a01 * b23 - a02 * b13 + a03 * b12 + a12 * b03
+        - a13 * b02 + a23 * b01;
+    FND_ASSERT(det != 0.0f); // m is singular
+
+    const float_t inv_det = 1.0f / det;
+    return inv_det
+        * float4x4_t{
+            float4_t{
+                m.col1.y * b23 - m.col2.y * b13 + m.col3.y * b12,
+                -m.col0.y * b23 + m.col2.y * b03 - m.col3.y * b02,
+                m.col0.y * b13 - m.col1.y * b03 + m.col3.y * b01,
+                -m.col0.y * b12 + m.col1.y * b02 - m.col2.y * b01},
+            float4_t{
+                -m.col1.x * b23 + m.col2.x * b13 - m.col3.x * b12,
+                m.col0.x * b23 - m.col2.x * b03 + m.col3.x * b02,
+                -m.col0.x * b13 + m.col1.x * b03 - m.col3.x * b01,
+                m.col0.x * b12 - m.col1.x * b02 + m.col2.x * b01},
+            float4_t{
+                m.col1.w * a23 - m.col2.w * a13 + m.col3.w * a12,
+                -m.col0.w * a23 + m.col2.w * a03 - m.col3.w * a02,
+                m.col0.w * a13 - m.col1.w * a03 + m.col3.w * a01,
+                -m.col0.w * a12 + m.col1.w * a02 - m.col2.w * a01},
+            float4_t{
+                -m.col1.z * a23 + m.col2.z * a13 - m.col3.z * a12,
+                m.col0.z * a23 - m.col2.z * a03 + m.col3.z * a02,
+                -m.col0.z * a13 + m.col1.z * a03 - m.col3.z * a01,
+                m.col0.z * a12 - m.col1.z * a02 + m.col2.z * a01}};
+}
+
 // Rotation about the normalized axis, with no translation; see
 // make_float3x3_rotation for the direction of a positive angle.
 export FND_INLINE float4x4_t make_float4x4_rotation(
