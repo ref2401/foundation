@@ -240,28 +240,31 @@ export constexpr float4x4_t inverse(const float4x4_t& m)
     FND_ASSERT(det != 0.0f); // m is singular
 
     const float_t inv_det = 1.0f / det;
-    return inv_det
-        * float4x4_t{
-            float4_t{
-                m.col1.y * b23 - m.col2.y * b13 + m.col3.y * b12,
-                -m.col0.y * b23 + m.col2.y * b03 - m.col3.y * b02,
-                m.col0.y * b13 - m.col1.y * b03 + m.col3.y * b01,
-                -m.col0.y * b12 + m.col1.y * b02 - m.col2.y * b01},
-            float4_t{
-                -m.col1.x * b23 + m.col2.x * b13 - m.col3.x * b12,
-                m.col0.x * b23 - m.col2.x * b03 + m.col3.x * b02,
-                -m.col0.x * b13 + m.col1.x * b03 - m.col3.x * b01,
-                m.col0.x * b12 - m.col1.x * b02 + m.col2.x * b01},
-            float4_t{
-                m.col1.w * a23 - m.col2.w * a13 + m.col3.w * a12,
-                -m.col0.w * a23 + m.col2.w * a03 - m.col3.w * a02,
-                m.col0.w * a13 - m.col1.w * a03 + m.col3.w * a01,
-                -m.col0.w * a12 + m.col1.w * a02 - m.col2.w * a01},
-            float4_t{
-                -m.col1.z * a23 + m.col2.z * a13 - m.col3.z * a12,
-                m.col0.z * a23 - m.col2.z * a03 + m.col3.z * a02,
-                -m.col0.z * a13 + m.col1.z * a03 - m.col3.z * a01,
-                m.col0.z * a12 - m.col1.z * a02 + m.col2.z * a01}};
+
+    // rowR holds the cofactors of row R of m.
+    const float4_t row0{
+        m.col1.y * b23 - m.col2.y * b13 + m.col3.y * b12,
+        -m.col0.y * b23 + m.col2.y * b03 - m.col3.y * b02,
+        m.col0.y * b13 - m.col1.y * b03 + m.col3.y * b01,
+        -m.col0.y * b12 + m.col1.y * b02 - m.col2.y * b01};
+    const float4_t row1{
+        -m.col1.x * b23 + m.col2.x * b13 - m.col3.x * b12,
+        m.col0.x * b23 - m.col2.x * b03 + m.col3.x * b02,
+        -m.col0.x * b13 + m.col1.x * b03 - m.col3.x * b01,
+        m.col0.x * b12 - m.col1.x * b02 + m.col2.x * b01};
+    const float4_t row2{
+        m.col1.w * a23 - m.col2.w * a13 + m.col3.w * a12,
+        -m.col0.w * a23 + m.col2.w * a03 - m.col3.w * a02,
+        m.col0.w * a13 - m.col1.w * a03 + m.col3.w * a01,
+        -m.col0.w * a12 + m.col1.w * a02 - m.col2.w * a01};
+    const float4_t row3{
+        -m.col1.z * a23 + m.col2.z * a13 - m.col3.z * a12,
+        m.col0.z * a23 - m.col2.z * a03 + m.col3.z * a02,
+        -m.col0.z * a13 + m.col1.z * a03 - m.col3.z * a01,
+        m.col0.z * a12 - m.col1.z * a02 + m.col2.z * a01};
+
+    return float4x4_t{
+        row0 * inv_det, row1 * inv_det, row2 * inv_det, row3 * inv_det};
 }
 
 // Rotation about the normalized axis, with no translation; see

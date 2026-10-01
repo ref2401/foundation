@@ -116,6 +116,24 @@ export constexpr float_t dot(const quat_t a, const quat_t b)
     return a.x * b.x + a.y * b.y + a.z * b.z + a.w * b.w;
 }
 
+// True if every component is finite: neither NaN nor infinity.
+export FND_INLINE bool_t isfinite(const quat_t q)
+{
+    return isfinite(q.x) && isfinite(q.y) && isfinite(q.z) && isfinite(q.w);
+}
+
+// True if any component is infinity, of either sign.
+export FND_INLINE bool_t isinf(const quat_t q)
+{
+    return isinf(q.x) || isinf(q.y) || isinf(q.z) || isinf(q.w);
+}
+
+// True if any component is NaN.
+export FND_INLINE bool_t isnan(const quat_t q)
+{
+    return isnan(q.x) || isnan(q.y) || isnan(q.z) || isnan(q.w);
+}
+
 export constexpr float_t length_sqr(const quat_t q)
 {
     return q.x * q.x + q.y * q.y + q.z * q.z + q.w * q.w;
@@ -193,7 +211,7 @@ export FND_INLINE quat_t nlerp(const quat_t a, const quat_t b, const float_t t)
 export FND_INLINE quat_t normalize_safe(
     const quat_t q, const quat_t default_value = quat_t::kIdentity)
 {
-    FND_ASSERT(!isnan(q.x) && !isnan(q.y) && !isnan(q.z) && !isnan(q.w));
+    FND_ASSERT(!isnan(q));
 
     quat_t res_quat = default_value;
     const float_t l2 = length_sqr(q);
@@ -222,9 +240,7 @@ export FND_INLINE quat_t normalize_safe(
     }
 
     // post condition
-    FND_ASSERT(
-        !isnan(res_quat.x) && !isnan(res_quat.y) && !isnan(res_quat.z)
-        && !isnan(res_quat.w));
+    FND_ASSERT(!isnan(res_quat));
     return res_quat;
 }
 

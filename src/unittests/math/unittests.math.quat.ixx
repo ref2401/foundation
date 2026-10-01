@@ -6,6 +6,11 @@ export module unittests.math:quat;
 import foundation.core;
 import foundation.math;
 
+// Some tests overflow to infinity on purpose. In Release, /GL lets the
+// optimizer fold their constant inputs, and it reports C4756 at the
+// library line it inlined rather than here.
+#pragma warning(disable: 4756)
+
 namespace fnd::unittests {
 
 export void unittests_math_quat();
@@ -230,6 +235,72 @@ void unittests_math_quat_dot()
     static_assert(dot(kQuatI, kQuatJ) == 0.0f);
 }
 
+// kQuatA with component idx (0, 1, 2, 3 for x, y, z, w) set to value.
+quat_t quat_with_component(const uint_t idx, const float_t value)
+{
+    quat_t q = kQuatA;
+    float_t* const components[] = {&q.x, &q.y, &q.z, &q.w};
+    *components[idx] = value;
+    return q;
+}
+
+void unittests_math_quat_isfinite()
+{
+    FND_TEST_TRUE(isfinite(quat_t::kZero));
+    FND_TEST_TRUE(isfinite(quat_t::kIdentity));
+    FND_TEST_TRUE(isfinite(kQuatA));
+    FND_TEST_TRUE(isfinite(
+        quat_t(kFloatMaxValue, kFloatMinValue, kFloatMinSubnormal, -0.0f)));
+
+    // A single NaN or infinity in any component makes q not finite.
+    for (uint_t idx = 0; idx < 4; ++idx) {
+        FND_TEST_FALSE(isfinite(quat_with_component(idx, kFloatNaN)));
+        FND_TEST_FALSE(isfinite(quat_with_component(idx, kFloatInfinity)));
+        FND_TEST_FALSE(isfinite(quat_with_component(idx, -kFloatInfinity)));
+    }
+
+    // NaN and infinity together: isnan and isinf are both true.
+    const quat_t q{kFloatNaN, 1, -kFloatInfinity, 0};
+    FND_TEST_FALSE(isfinite(q));
+    FND_TEST_TRUE(isinf(q));
+    FND_TEST_TRUE(isnan(q));
+}
+
+void unittests_math_quat_isinf()
+{
+    FND_TEST_FALSE(isinf(quat_t::kZero));
+    FND_TEST_FALSE(isinf(kQuatA));
+    FND_TEST_FALSE(
+        isinf(quat_t(kFloatMaxValue, kFloatMinValue, kFloatMaxValue, 1)));
+
+    // Infinity of either sign in any component; NaN is not infinity.
+    for (uint_t idx = 0; idx < 4; ++idx) {
+        FND_TEST_TRUE(isinf(quat_with_component(idx, kFloatInfinity)));
+        FND_TEST_TRUE(isinf(quat_with_component(idx, -kFloatInfinity)));
+        FND_TEST_FALSE(isinf(quat_with_component(idx, kFloatNaN)));
+    }
+
+    // A product that overflows.
+    FND_TEST_TRUE(isinf(quat_t(kFloatMaxValue, 0, 0, 1) * 2.0f));
+}
+
+void unittests_math_quat_isnan()
+{
+    FND_TEST_FALSE(isnan(quat_t::kZero));
+    FND_TEST_FALSE(isnan(kQuatA));
+
+    // NaN in any component; infinity is not NaN.
+    for (uint_t idx = 0; idx < 4; ++idx) {
+        FND_TEST_TRUE(isnan(quat_with_component(idx, kFloatNaN)));
+        FND_TEST_FALSE(isnan(quat_with_component(idx, kFloatInfinity)));
+        FND_TEST_FALSE(isnan(quat_with_component(idx, -kFloatInfinity)));
+    }
+
+    // inf - inf is NaN.
+    const quat_t q_inf{kFloatInfinity, 0, 0, 1};
+    FND_TEST_TRUE(isnan(q_inf + -q_inf));
+}
+
 void unittests_math_quat_length_sqr()
 {
     FND_TEST_TRUE(length_sqr(kQuatA) == 30.0f);
@@ -446,6 +517,9 @@ void unittests_math_quat()
     unittests_math_quat_approx_equal();
     unittests_math_quat_conjugate();
     unittests_math_quat_dot();
+    unittests_math_quat_isfinite();
+    unittests_math_quat_isinf();
+    unittests_math_quat_isnan();
     unittests_math_quat_length_sqr();
     unittests_math_quat_inverse();
     unittests_math_quat_is_normalized();
