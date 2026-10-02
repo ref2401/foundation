@@ -376,113 +376,6 @@ void unittests_math_matrix_float3x4_inverse()
         inverse(kMatrixB3x4) * inverse(kMatrixA3x4)));
 }
 
-void unittests_math_matrix_float3x4_make_float3x4_axis_angle()
-{
-    // The linear part is the float3x3_t rotation; there is no translation.
-    constexpr float3_t kAxis{0.6f, 0, -0.8f};
-    constexpr float_t kAngle = 0.75f;
-    const float3x3_t rm3 = make_float3x3_axis_angle(kAxis, kAngle);
-    const float3x4_t rm = make_float3x4_axis_angle(kAxis, kAngle);
-    FND_TEST_TRUE(
-        test_columns(rm, rm3.col0, rm3.col1, rm3.col2, float3_t::kZero));
-
-    // A quarter turn about z maps x to y, for points and directions alike.
-    const float3x4_t rm_z
-        = make_float3x4_axis_angle(float3_t::kUnitZ, kFloatPi / 2);
-    FND_TEST_TRUE(all(approx_equal(
-        mul_point(rm_z, float3_t::kUnitX), float3_t::kUnitY)));
-    FND_TEST_TRUE(all(approx_equal(
-        mul_direction(rm_z, float3_t::kUnitX), float3_t::kUnitY)));
-    // The origin stays in place; the determinant is 1; the inverse rotates
-    // back by -angle.
-    FND_TEST_TRUE(all(mul_point(rm, float3_t::kZero) == float3_t::kZero));
-    FND_TEST_TRUE(approx_equal(determinant(rm), 1.0f));
-    FND_TEST_TRUE(
-        approx_equal(inverse(rm), make_float3x4_axis_angle(kAxis, -kAngle)));
-}
-
-void unittests_math_matrix_float3x4_make_float3x4_scale()
-{
-    // A diagonal linear part and no translation.
-    constexpr float3_t kScale0{2, -0.5f, 4};
-    const float3x4_t sm0 = make_float3x4_scale(kScale0);
-    FND_TEST_TRUE(test_columns(sm0, float3_t{kScale0.x, 0, 0},
-        float3_t{0, kScale0.y, 0}, float3_t{0, 0, kScale0.z}, float3_t{0}));
-    FND_TEST_TRUE(make_float3x4_scale(float3_t{1}) == float3x4_t::kIdentity);
-
-    // Points and directions are scaled per component.
-    constexpr float3_t kPoint{1, 2, 3};
-    FND_TEST_TRUE(all(mul_point(sm0, kPoint) == kScale0 * kPoint));
-    FND_TEST_TRUE(all(mul_direction(sm0, kPoint) == kScale0 * kPoint));
-
-    // Scales combine by multiplying their factors, in either order.
-    constexpr float3_t kScale1{3, 4, -1};
-    const float3x4_t sm1 = make_float3x4_scale(kScale1);
-    FND_TEST_TRUE(sm0 * sm1 == make_float3x4_scale(kScale0 * kScale1));
-    FND_TEST_TRUE(sm0 * sm1 == sm1 * sm0);
-    // Usable in constant expressions.
-    static_assert(make_float3x4_scale(float3_t{2, 3, 4}).col2.z == 4.0f);
-}
-
-void unittests_math_matrix_float3x4_make_float3x4_translation()
-{
-    // The identity linear part and the translation in col3.
-    constexpr float3_t kTranslation0{1, -2, 0.5f};
-    const float3x4_t tm0 = make_float3x4_translation(kTranslation0);
-    FND_TEST_TRUE(test_columns(tm0, float3_t::kUnitX, float3_t::kUnitY,
-        float3_t::kUnitZ, kTranslation0));
-
-    // Points are moved, directions are not.
-    constexpr float3_t kPoint{3, -4, 12};
-    FND_TEST_TRUE(all(mul_point(tm0, kPoint) == kPoint + kTranslation0));
-    FND_TEST_TRUE(all(mul_direction(tm0, kPoint) == kPoint));
-
-    // Translations combine by adding, in either order.
-    constexpr float3_t kTranslation1{-3, 4, 8};
-    const float3x4_t tm1 = make_float3x4_translation(kTranslation1);
-    FND_TEST_TRUE(
-        tm0 * tm1 == make_float3x4_translation(kTranslation0 + kTranslation1));
-    FND_TEST_TRUE(tm0 * tm1 == tm1 * tm0);
-    // Usable in constant expressions.
-    static_assert(make_float3x4_translation(kTranslation0).col3.y == -2.0f);
-}
-
-void unittests_math_matrix_float3x4_make_float3x4_trs()
-{
-    // mrs is the linear part and t the translation.
-    constexpr float3_t kTranslation{1, -2, 0.5f};
-    constexpr float3_t kScale{2, 3, 4};
-    const float3x3_t mrs = make_float3x3_axis_angle(float3_t::kUnitZ, 0.75f)
-        * make_float3x3_scale(kScale);
-    const float3x4_t m = make_float3x4_trs(kTranslation, mrs);
-    FND_TEST_TRUE(test_columns(m, mrs.col0, mrs.col1, mrs.col2, kTranslation));
-
-    // mrs is applied first, then t: the same as the composition T * RS.
-    const float3x4_t m_rs{mrs.col0, mrs.col1, mrs.col2, float3_t::kZero};
-    FND_TEST_TRUE(m == make_float3x4_translation(kTranslation) * m_rs);
-    constexpr float3_t kPoint{3, -4, 12};
-    FND_TEST_TRUE(all(approx_equal(
-        mul_point(m, kPoint), mul(mrs, kPoint) + kTranslation)));
-    // Directions are not translated.
-    FND_TEST_TRUE(
-        all(approx_equal(mul_direction(m, kPoint), mul(mrs, kPoint))));
-
-    // With the identity it is a pure translation; with a zero translation it
-    // is the linear part alone.
-    FND_TEST_TRUE(make_float3x4_trs(kTranslation, float3x3_t::kIdentity)
-        == make_float3x4_translation(kTranslation));
-    const float3x3_t sm = make_float3x3_scale(kScale);
-    FND_TEST_TRUE(
-        make_float3x4_trs(float3_t::kZero, sm) == make_float3x4_scale(kScale));
-
-    // The inverse transform takes a transformed point back.
-    FND_TEST_TRUE(all(approx_equal(
-        mul_point(inverse(m), mul_point(m, kPoint)), kPoint)));
-    // Usable in constant expressions.
-    static_assert(
-        make_float3x4_trs(kTranslation, float3x3_t::kIdentity).col3.z == 0.5f);
-}
-
 void unittests_math_matrix_float3x4_mul()
 {
     // w == 1 transforms a point, w == 0 a direction.
@@ -628,10 +521,6 @@ void unittests_math_matrix_float3x4()
     unittests_math_matrix_float3x4_column();
     unittests_math_matrix_float3x4_determinant();
     unittests_math_matrix_float3x4_inverse();
-    unittests_math_matrix_float3x4_make_float3x4_axis_angle();
-    unittests_math_matrix_float3x4_make_float3x4_scale();
-    unittests_math_matrix_float3x4_make_float3x4_translation();
-    unittests_math_matrix_float3x4_make_float3x4_trs();
     unittests_math_matrix_float3x4_mul();
     unittests_math_matrix_float3x4_mul_direction();
     unittests_math_matrix_float3x4_mul_point();

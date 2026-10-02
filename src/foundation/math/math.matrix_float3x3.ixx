@@ -174,37 +174,6 @@ export constexpr float3x3_t inverse(const float3x3_t& m)
         * float3x3_t{r0.x, r1.x, r2.x, r0.y, r1.y, r2.y, r0.z, r1.z, r2.z};
 }
 
-// Rotation by angle_radians (in radians) about axis, which must be normalized
-// (Rodrigues' rotation formula).
-// Right-handed: a positive angle_radians rotates
-// counter-clockwise when looking from the tip of axis toward the origin.
-export FND_INLINE float3x3_t make_float3x3_axis_angle(
-    const float3_t axis, const float_t angle_radians)
-{
-    FND_ASSERT(is_normalized(axis));
-
-    const float_t c = cos(angle_radians);
-    const float_t s = sin(angle_radians);
-    const float_t omc = 1.0f - c;
-    const float_t xx = axis.x * axis.x;
-    const float_t xy = axis.x * axis.y;
-    const float_t xz = axis.x * axis.z;
-    const float_t yy = axis.y * axis.y;
-    const float_t yz = axis.y * axis.z;
-    const float_t zz = axis.z * axis.z;
-
-    return float3x3_t{
-        float3_t{c + omc * xx, omc * xy + axis.z * s, omc * xz - axis.y * s},
-        float3_t{omc * xy - axis.z * s, c + omc * yy, omc * yz + axis.x * s},
-        float3_t{omc * xz + axis.y * s, omc * yz - axis.x * s, c + omc * zz}};
-}
-
-export constexpr float3x3_t make_float3x3_scale(const float3_t s)
-{
-    return float3x3_t{
-        float3_t{s.x, 0, 0}, float3_t{0, s.y, 0}, float3_t{0, 0, s.z}};
-}
-
 export constexpr float3_t mul(const float3x3_t& m, const float3_t v)
 {
     return m.col0 * v.x + m.col1 * v.y + m.col2 * v.z;

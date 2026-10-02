@@ -3,9 +3,6 @@ module;
 
 export module foundation.math:matrix_float4x4;
 import foundation.core;
-import :matrix_float3x3;
-import :vector_conversion;
-import :vector_float3;
 import :vector_float4;
 
 namespace fnd {
@@ -265,44 +262,6 @@ export constexpr float4x4_t inverse(const float4x4_t& m)
 
     return float4x4_t{
         row0 * inv_det, row1 * inv_det, row2 * inv_det, row3 * inv_det};
-}
-
-// Rotation about the normalized axis, with no translation; see
-// make_float3x3_axis_angle for the direction of a positive angle.
-export FND_INLINE float4x4_t make_float4x4_axis_angle(
-    const float3_t axis, const float_t angle_radians)
-{
-    FND_ASSERT(is_normalized(axis));
-
-    const float3x3_t rm = make_float3x3_axis_angle(axis, angle_radians);
-    return float4x4_t{
-        float4(rm.col0, 0), float4(rm.col1, 0), float4(rm.col2, 0),
-        float4_t::kUnitW};
-}
-
-// Scale by s.x, s.y and s.z along the x, y and z axes, with no translation.
-export constexpr float4x4_t make_float4x4_scale(const float3_t s)
-{
-    return float4x4_t{
-        float4_t{s.x, 0, 0, 0}, float4_t{0, s.y, 0, 0}, float4_t{0, 0, s.z, 0},
-        float4_t::kUnitW};
-}
-
-// Translation by t, with the identity as the linear part.
-export constexpr float4x4_t make_float4x4_translation(const float3_t t)
-{
-    return float4x4_t{
-        float4_t::kUnitX, float4_t::kUnitY, float4_t::kUnitZ, float4(t, 1)};
-}
-
-// Translation t combined with the linear part mrs (rotation and scale): mrs
-// is applied first, then t. The same as make_float4x4_translation(t) * mrs.
-export constexpr float4x4_t make_float4x4_trs(
-    const float3_t t, const float3x3_t& mrs)
-{
-    return float4x4_t{
-        float4(mrs.col0, 0), float4(mrs.col1, 0), float4(mrs.col2, 0),
-        float4(t, 1)};
 }
 
 // m times the column vector v.

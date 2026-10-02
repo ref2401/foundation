@@ -386,92 +386,6 @@ void unittests_math_matrix_float3x3_inverse()
         inverse(kMatrixC3x3) * inverse(kMatrixB3x3)));
 }
 
-void unittests_math_matrix_float3x3_make_float3x3_axis_angle()
-{
-    const float_t quarter = kFloatPi / 2;
-    const float3_t x = float3_t::kUnitX;
-    const float3_t y = float3_t::kUnitY;
-    const float3_t z = float3_t::kUnitZ;
-
-    // Quarter turns about the axes are right-handed: counter-clockwise when
-    // looking from the tip of the axis toward the origin.
-    const float3x3_t rm_x = make_float3x3_axis_angle(x, quarter);
-    FND_TEST_TRUE(all(approx_equal(mul(rm_x, y), z)));
-    FND_TEST_TRUE(all(approx_equal(mul(rm_x, z), -y)));
-    const float3x3_t rm_y = make_float3x3_axis_angle(y, quarter);
-    FND_TEST_TRUE(all(approx_equal(mul(rm_y, z), x)));
-    FND_TEST_TRUE(all(approx_equal(mul(rm_y, x), -z)));
-    const float3x3_t rm_z = make_float3x3_axis_angle(z, quarter);
-    FND_TEST_TRUE(all(approx_equal(mul(rm_z, x), y)));
-    FND_TEST_TRUE(all(approx_equal(mul(rm_z, y), -x)));
-    FND_TEST_TRUE(approx_equal(
-        rm_z,
-        float3x3_t{float3_t{0, 1, 0}, float3_t{-1, 0, 0}, float3_t{0, 0, 1}}));
-
-    // A third of a turn about the diagonal cycles x -> y -> z -> x.
-    const float3x3_t rm_diag = make_float3x3_axis_angle(
-        normalize(float3_t{1, 1, 1}), 2 * kFloatPi / 3);
-    FND_TEST_TRUE(all(approx_equal(mul(rm_diag, x), y)));
-    FND_TEST_TRUE(all(approx_equal(mul(rm_diag, y), z)));
-    FND_TEST_TRUE(all(approx_equal(mul(rm_diag, z), x)));
-
-    // Angle 0 and a full turn give the identity.
-    const float3_t axis = normalize(float3_t{2, -1, 2});
-    FND_TEST_TRUE(
-        approx_equal(make_float3x3_axis_angle(axis, 0), float3x3_t::kIdentity));
-    FND_TEST_TRUE(approx_equal(
-        make_float3x3_axis_angle(axis, 2 * kFloatPi), float3x3_t::kIdentity));
-
-    // The axis is left unchanged, and a rotation is orthonormal with
-    // determinant 1: its inverse is its transpose.
-    const float3x3_t rm = make_float3x3_axis_angle(axis, 0.75f);
-    FND_TEST_TRUE(all(approx_equal(mul(rm, axis), axis)));
-    FND_TEST_TRUE(approx_equal(rm * transpose(rm), float3x3_t::kIdentity));
-    FND_TEST_TRUE(approx_equal(determinant(rm), 1.0f));
-    FND_TEST_TRUE(approx_equal(inverse(rm), transpose(rm)));
-    // Lengths are preserved.
-    const float3_t v{3, -4, 12};
-    FND_TEST_TRUE(approx_equal(length(mul(rm, v)), 13.0f));
-
-    // Rotating back by -angle undoes it, and rotations about the same axis
-    // add up: R(a) * R(b) == R(a + b).
-    FND_TEST_TRUE(
-        approx_equal(make_float3x3_axis_angle(axis, -0.75f), transpose(rm)));
-    FND_TEST_TRUE(approx_equal(
-        rm * make_float3x3_axis_angle(axis, -0.75f), float3x3_t::kIdentity));
-    FND_TEST_TRUE(approx_equal(
-        rm * make_float3x3_axis_angle(axis, 0.5f),
-        make_float3x3_axis_angle(axis, 1.25f)));
-}
-
-void unittests_math_matrix_float3x3_make_float3x3_scale()
-{
-    // A diagonal matrix.
-    FND_TEST_TRUE(test_columns(
-        make_float3x3_scale(float3_t{2, 3, 4}), float3_t{2, 0, 0},
-        float3_t{0, 3, 0}, float3_t{0, 0, 4}));
-    FND_TEST_TRUE(make_float3x3_scale(float3_t{1}) == float3x3_t::kIdentity);
-    FND_TEST_TRUE(make_float3x3_scale(float3_t::kZero) == float3x3_t::kZero);
-
-    constexpr float3_t kScale0{2, -0.5f, 4};
-    const float3x3_t sm0 = make_float3x3_scale(kScale0);
-    FND_TEST_TRUE(determinant(sm0) == cmul(kScale0));
-    FND_TEST_TRUE(inverse(sm0) == make_float3x3_scale(rcp(kScale0)));
-
-    FND_TEST_TRUE(all(mul(sm0, float3_t{1, 2, 3}) == float3_t{2, -1, 12}));
-    FND_TEST_TRUE(all(mul(sm0, float3_t::kUnitY) == float3_t{0, -0.5f, 0}));
-
-    // Scales combine by multiplying their factors, in either order.
-    constexpr float3_t kScale1{3, 4, -1};
-    const float3x3_t sm1 = make_float3x3_scale(kScale1);
-    FND_TEST_TRUE(sm0 * sm1 == make_float3x3_scale(kScale0 * kScale1));
-    FND_TEST_TRUE(sm0 * sm1 == sm1 * sm0);
-    // A scale is its own transpose.
-    FND_TEST_TRUE(transpose(sm0) == sm0);
-    // Usable in constant expressions.
-    static_assert(make_float3x3_scale(float3_t{2, 3, 4}).col2.z == 4.0f);
-}
-
 void unittests_math_matrix_float3x3_mul()
 {
     const float3_t v{1, 2, 3};
@@ -595,8 +509,6 @@ void unittests_math_matrix_float3x3()
     unittests_math_matrix_float3x3_column();
     unittests_math_matrix_float3x3_determinant();
     unittests_math_matrix_float3x3_inverse();
-    unittests_math_matrix_float3x3_make_float3x3_axis_angle();
-    unittests_math_matrix_float3x3_make_float3x3_scale();
     unittests_math_matrix_float3x3_mul();
     unittests_math_matrix_float3x3_row();
     unittests_math_matrix_float3x3_set_column();

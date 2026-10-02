@@ -402,112 +402,6 @@ void unittests_math_matrix_float4x4_inverse()
             float4_t{0, 0, 0, -0.25f}, float4_t{0, 0, -1, 0.75f}}));
 }
 
-void unittests_math_matrix_float4x4_make_float4x4_axis_angle()
-{
-    // The float3x3_t rotation in the upper-left 3x3; no translation, bottom
-    // row 0, 0, 0, 1.
-    constexpr float3_t kAxis{0.6f, 0, -0.8f};
-    constexpr float_t kAngle = 0.75f;
-    const float3x3_t rm3 = make_float3x3_axis_angle(kAxis, kAngle);
-    const float4x4_t rm = make_float4x4_axis_angle(kAxis, kAngle);
-    FND_TEST_TRUE(test_columns(rm, float4(rm3.col0, 0), float4(rm3.col1, 0),
-        float4(rm3.col2, 0), float4_t::kUnitW));
-
-    // A quarter turn about z maps x to y.
-    const float4x4_t rm_z
-        = make_float4x4_axis_angle(float3_t::kUnitZ, kFloatPi / 2);
-    FND_TEST_TRUE(all(approx_equal(
-        mul(rm_z, float4_t::kUnitX), float4_t::kUnitY)));
-
-    // Orthonormal with determinant 1: its transpose is its inverse, and
-    // rotating by -angle undoes it.
-    FND_TEST_TRUE(approx_equal(determinant(rm), 1.0f));
-    FND_TEST_TRUE(approx_equal(transpose(rm) * rm, float4x4_t::kIdentity));
-    FND_TEST_TRUE(approx_equal(
-        rm * make_float4x4_axis_angle(kAxis, -kAngle), float4x4_t::kIdentity));
-}
-
-void unittests_math_matrix_float4x4_make_float4x4_scale()
-{
-    // A diagonal matrix with 1 in the bottom-right corner.
-    constexpr float3_t kScale0{2, -0.5f, 4};
-    const float4x4_t sm0 = make_float4x4_scale(kScale0);
-    FND_TEST_TRUE(test_columns(sm0, float4_t{kScale0.x, 0, 0, 0},
-        float4_t{0, kScale0.y, 0, 0}, float4_t{0, 0, kScale0.z, 0},
-        float4_t::kUnitW));
-    FND_TEST_TRUE(make_float4x4_scale(float3_t{1}) == float4x4_t::kIdentity);
-
-    // Points are scaled per component and keep w == 1.
-    constexpr float3_t kPoint{1, 2, 3};
-    FND_TEST_TRUE(all(
-        mul(sm0, float4(kPoint, 1)) == float4(kScale0 * kPoint, 1)));
-
-    // The determinant is the product of the factors; scales combine by
-    // multiplying their factors, in either order.
-    FND_TEST_TRUE(determinant(sm0) == cmul(kScale0));
-    constexpr float3_t kScale1{3, 4, -1};
-    const float4x4_t sm1 = make_float4x4_scale(kScale1);
-    FND_TEST_TRUE(sm0 * sm1 == make_float4x4_scale(kScale0 * kScale1));
-    FND_TEST_TRUE(sm0 * sm1 == sm1 * sm0);
-    // Usable in constant expressions.
-    static_assert(make_float4x4_scale(float3_t{2, 3, 4}).col2.z == 4.0f);
-}
-
-void unittests_math_matrix_float4x4_make_float4x4_translation()
-{
-    // The identity with {t, 1} as the last column.
-    constexpr float3_t kTranslation0{1, -2, 0.5f};
-    const float4x4_t tm0 = make_float4x4_translation(kTranslation0);
-    FND_TEST_TRUE(test_columns(tm0, float4_t::kUnitX, float4_t::kUnitY,
-        float4_t::kUnitZ, float4(kTranslation0, 1)));
-
-    // Points (w == 1) are moved, directions (w == 0) are not.
-    constexpr float3_t kPoint{3, -4, 12};
-    FND_TEST_TRUE(all(mul(tm0, float4(kPoint, 1))
-        == float4(kPoint + kTranslation0, 1)));
-    FND_TEST_TRUE(all(mul(tm0, float4(kPoint, 0)) == float4(kPoint, 0)));
-
-    // Translations combine by adding, in either order.
-    constexpr float3_t kTranslation1{-3, 4, 8};
-    const float4x4_t tm1 = make_float4x4_translation(kTranslation1);
-    FND_TEST_TRUE(
-        tm0 * tm1 == make_float4x4_translation(kTranslation0 + kTranslation1));
-    FND_TEST_TRUE(tm0 * tm1 == tm1 * tm0);
-    // Usable in constant expressions.
-    static_assert(make_float4x4_translation(kTranslation0).col3.w == 1.0f);
-}
-
-void unittests_math_matrix_float4x4_make_float4x4_trs()
-{
-    // mrs in the upper-left 3x3, {t, 1} as the last column.
-    constexpr float3_t kTranslation{1, -2, 0.5f};
-    constexpr float3_t kScale{2, 3, 4};
-    const float3x3_t mrs = make_float3x3_axis_angle(float3_t::kUnitZ, 0.75f)
-        * make_float3x3_scale(kScale);
-    const float4x4_t m = make_float4x4_trs(kTranslation, mrs);
-    FND_TEST_TRUE(test_columns(m, float4(mrs.col0, 0), float4(mrs.col1, 0),
-        float4(mrs.col2, 0), float4(kTranslation, 1)));
-
-    // mrs is applied first, then t: the same as T * RS.
-    FND_TEST_TRUE(m
-        == make_float4x4_translation(kTranslation)
-            * make_float4x4_trs(float3_t::kZero, mrs));
-    constexpr float3_t kPoint{3, -4, 12};
-    FND_TEST_TRUE(all(approx_equal(mul(m, float4(kPoint, 1)),
-        float4(mul(mrs, kPoint) + kTranslation, 1))));
-
-    // With the identity it is a pure translation; with a zero translation
-    // and a scale it is that scale.
-    FND_TEST_TRUE(make_float4x4_trs(kTranslation, float3x3_t::kIdentity)
-        == make_float4x4_translation(kTranslation));
-    FND_TEST_TRUE(
-        make_float4x4_trs(float3_t::kZero, make_float3x3_scale(kScale))
-        == make_float4x4_scale(kScale));
-    // Usable in constant expressions.
-    static_assert(
-        make_float4x4_trs(kTranslation, float3x3_t::kIdentity).col3.z == 0.5f);
-}
-
 void unittests_math_matrix_float4x4_mul()
 {
     constexpr float4_t kV{3, -4, 12, 1};
@@ -641,10 +535,6 @@ void unittests_math_matrix_float4x4()
     unittests_math_matrix_float4x4_column();
     unittests_math_matrix_float4x4_determinant();
     unittests_math_matrix_float4x4_inverse();
-    unittests_math_matrix_float4x4_make_float4x4_axis_angle();
-    unittests_math_matrix_float4x4_make_float4x4_scale();
-    unittests_math_matrix_float4x4_make_float4x4_translation();
-    unittests_math_matrix_float4x4_make_float4x4_trs();
     unittests_math_matrix_float4x4_mul();
     unittests_math_matrix_float4x4_row();
     unittests_math_matrix_float4x4_set_column();

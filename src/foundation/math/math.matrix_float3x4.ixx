@@ -213,37 +213,6 @@ export constexpr float3x4_t inverse(const float3x4_t& m)
         -mul(m_inv_linear, m.col3)};
 }
 
-// Rotation about the normalized axis, with no translation; see
-// make_float3x3_axis_angle for the direction of a positive angle.
-export FND_INLINE float3x4_t make_float3x4_axis_angle(
-    const float3_t axis, const float_t angle_radians)
-{
-    FND_ASSERT(is_normalized(axis));
-
-    const float3x3_t rm = make_float3x3_axis_angle(axis, angle_radians);
-    return float3x4_t{rm.col0, rm.col1, rm.col2, float3_t::kZero};
-}
-
-export constexpr float3x4_t make_float3x4_scale(const float3_t s)
-{
-    return float3x4_t{
-        float3_t{s.x, 0, 0}, float3_t{0, s.y, 0}, float3_t{0, 0, s.z},
-        float3_t::kZero};
-}
-
-export constexpr float3x4_t make_float3x4_translation(const float3_t t)
-{
-    return float3x4_t{float3_t::kUnitX, float3_t::kUnitY, float3_t::kUnitZ, t};
-}
-
-// Translation t combined with the linear part mrs (rotation and scale): mrs
-// is applied first, then t. The same as make_float3x4_translation(t) * mrs.
-export constexpr float3x4_t make_float3x4_trs(
-    const float3_t t, const float3x3_t& mrs)
-{
-    return float3x4_t{mrs.col0, mrs.col1, mrs.col2, t};
-}
-
 // m times the column vector v; v.w scales the translation (1 for a point, 0
 // for a direction).
 export constexpr float3_t mul(const float3x4_t& m, const float4_t v)
