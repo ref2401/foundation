@@ -198,6 +198,27 @@ void unittests_math_matrix_construction_make_float3x4_trs()
     // The inverse transform takes a transformed point back.
     FND_TEST_TRUE(all(approx_equal(
         mul_point(inverse(m), mul_point(m, kPoint)), kPoint)));
+
+    // From a translation, a quaternion rotation and a scale: the same as mrs
+    // = make_float3x3(r) * make_float3x3_scale(s).
+    const quat_t r = make_quat_axis_angle(float3_t{0.6f, 0, -0.8f}, 2);
+    const float3x4_t m_trs = make_float3x4_trs(kTranslation, r, kScale);
+    FND_TEST_TRUE(m_trs
+        == make_float3x4_trs(
+            kTranslation, make_float3x3(r) * make_float3x3_scale(kScale)));
+    // s is applied first, then r, then t.
+    FND_TEST_TRUE(all(approx_equal(mul_point(m_trs, kPoint),
+        mul(r, kScale * kPoint) + kTranslation, 1e-4f)));
+    // Each part alone.
+    FND_TEST_TRUE(
+        make_float3x4_trs(kTranslation, quat_t::kIdentity, float3_t{1})
+        == make_float3x4_translation(kTranslation));
+    FND_TEST_TRUE(
+        make_float3x4_trs(float3_t::kZero, quat_t::kIdentity, kScale)
+        == make_float3x4_scale(kScale));
+    FND_TEST_TRUE(make_float3x4_trs(float3_t::kZero, r, float3_t{1})
+        == make_float3x4(r));
+
     // Usable in constant expressions.
     static_assert(
         make_float3x4_trs(kTranslation, float3x3_t::kIdentity).col3.z == 0.5f);
@@ -304,6 +325,27 @@ void unittests_math_matrix_construction_make_float4x4_trs()
     FND_TEST_TRUE(
         make_float4x4_trs(float3_t::kZero, make_float3x3_scale(kScale))
         == make_float4x4_scale(kScale));
+
+    // From a translation, a quaternion rotation and a scale: the same as mrs
+    // = make_float3x3(r) * make_float3x3_scale(s).
+    const quat_t r = make_quat_axis_angle(float3_t{0.6f, 0, -0.8f}, 2);
+    const float4x4_t m_trs = make_float4x4_trs(kTranslation, r, kScale);
+    FND_TEST_TRUE(m_trs
+        == make_float4x4_trs(
+            kTranslation, make_float3x3(r) * make_float3x3_scale(kScale)));
+    // s is applied first, then r, then t; w stays 1.
+    FND_TEST_TRUE(all(approx_equal(mul(m_trs, float4(kPoint, 1)),
+        float4(mul(r, kScale * kPoint) + kTranslation, 1), 1e-4f)));
+    // Each part alone.
+    FND_TEST_TRUE(
+        make_float4x4_trs(kTranslation, quat_t::kIdentity, float3_t{1})
+        == make_float4x4_translation(kTranslation));
+    FND_TEST_TRUE(
+        make_float4x4_trs(float3_t::kZero, quat_t::kIdentity, kScale)
+        == make_float4x4_scale(kScale));
+    FND_TEST_TRUE(make_float4x4_trs(float3_t::kZero, r, float3_t{1})
+        == make_float4x4(r));
+
     // Usable in constant expressions.
     static_assert(
         make_float4x4_trs(kTranslation, float3x3_t::kIdentity).col3.z == 0.5f);

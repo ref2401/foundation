@@ -110,10 +110,13 @@ export FND_INLINE quat_t make_quat(const float3x3_t& m)
     const float3_t c0 = normalize(m.col0);
     const float3_t c1 = normalize(m.col1);
     const float3_t c2 = normalize(m.col2);
+    // Columns are orthogonal
     FND_ASSERT(approx_equal(dot(c0, c1), 0.0f, 1e-4f));
     FND_ASSERT(approx_equal(dot(c0, c2), 0.0f, 1e-4f));
     FND_ASSERT(approx_equal(dot(c1, c2), 0.0f, 1e-4f));
-    FND_ASSERT(dot(c0, cross(c1, c2)) > 0); // a reflection
+    // Columns form a right-handed basis, so the matrix is a rotation and not
+    // a rotation combined with a mirror.
+    FND_ASSERT(dot(c0, cross(c1, c2)) > 0);
 
     // NOTE: Shepperd's method
     const float_t m00 = c0.x;

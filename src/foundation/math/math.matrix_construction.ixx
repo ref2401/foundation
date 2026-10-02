@@ -6,6 +6,8 @@ import foundation.core;
 import :matrix_float3x3;
 import :matrix_float3x4;
 import :matrix_float4x4;
+import :quat;
+import :quat_conversion;
 import :scalar;
 import :vector_conversion;
 import :vector_float3;
@@ -75,20 +77,26 @@ export constexpr float3x4_t make_float3x4_translation(const float3_t t)
     return float3x4_t{float3_t::kUnitX, float3_t::kUnitY, float3_t::kUnitZ, t};
 }
 
-// Translation t combined with the linear part mrs (rotation and scale): mrs
-// is applied first, then t. The same as make_float3x4_translation(t) * mrs.
 export constexpr float3x4_t make_float3x4_trs(
     const float3_t t, const float3x3_t& mrs)
 {
     return float3x4_t{mrs.col0, mrs.col1, mrs.col2, t};
 }
 
+export FND_INLINE float3x4_t make_float3x4_trs(
+    const float3_t t, const quat_t r, const float3_t s)
+{
+    FND_ASSERT(is_normalized(r));
+
+    // the scale is diagonal, so the columns of the rotation are scaled instead.
+    const float3x3_t rm = make_float3x3(r);
+    return float3x4_t{rm.col0 * s.x, rm.col1 * s.y, rm.col2 * s.z, t};
+}
+
 // ---------------------------------------------------------------------------
 // make_float4x4_*()
 // ---------------------------------------------------------------------------
 
-// Rotation about the normalized axis, with no translation; see
-// make_float3x3_axis_angle for the direction of a positive angle.
 export FND_INLINE float4x4_t make_float4x4_axis_angle(
     const float3_t axis, const float_t angle_radians)
 {
@@ -100,7 +108,6 @@ export FND_INLINE float4x4_t make_float4x4_axis_angle(
         float4_t::kUnitW};
 }
 
-// Scale by s.x, s.y and s.z along the x, y and z axes, with no translation.
 export constexpr float4x4_t make_float4x4_scale(const float3_t s)
 {
     return float4x4_t{
@@ -108,21 +115,30 @@ export constexpr float4x4_t make_float4x4_scale(const float3_t s)
         float4_t::kUnitW};
 }
 
-// Translation by t, with the identity as the linear part.
 export constexpr float4x4_t make_float4x4_translation(const float3_t t)
 {
     return float4x4_t{
         float4_t::kUnitX, float4_t::kUnitY, float4_t::kUnitZ, float4(t, 1)};
 }
 
-// Translation t combined with the linear part mrs (rotation and scale): mrs
-// is applied first, then t. The same as make_float4x4_translation(t) * mrs.
 export constexpr float4x4_t make_float4x4_trs(
     const float3_t t, const float3x3_t& mrs)
 {
     return float4x4_t{
         float4(mrs.col0, 0), float4(mrs.col1, 0), float4(mrs.col2, 0),
         float4(t, 1)};
+}
+
+export FND_INLINE float4x4_t make_float4x4_trs(
+    const float3_t t, const quat_t r, const float3_t s)
+{
+    FND_ASSERT(is_normalized(r));
+
+    // the scale is diagonal, so the columns of the rotation are scaled instead.
+    const float3x3_t rm = make_float3x3(r);
+    return float4x4_t{
+        float4(rm.col0 * s.x, 0), float4(rm.col1 * s.y, 0),
+        float4(rm.col2 * s.z, 0), float4(t, 1)};
 }
 
 } // namespace fnd
