@@ -459,6 +459,11 @@ void unittests_math_vector_conversion_float4()
     FND_TEST_TRUE(all(float4(uint4_t{3, 0, 7, 1})
         == float4_t{3, 0, 7, 1}));
 
+    // From a quat_t: the components x, y, z and w.
+    constexpr quat_t kQuat{1, -2, 3, 4};
+    FND_TEST_TRUE(all(float4(kQuat) == float4_t{1, -2, 3, 4}));
+    FND_TEST_TRUE(all(float4(quat_t::kIdentity) == float4_t::kUnitW));
+    static_assert(float4(kQuat).w == 4.0f);
 }
 
 void unittests_math_vector_conversion_int2()
@@ -639,6 +644,20 @@ void unittests_math_vector_conversion_int4()
     FND_TEST_TRUE(all(int4(uint3_t{3, 0, 7}) == int4_t{3, 0, 7, 0}));
     FND_TEST_TRUE(all(int4(uint4_t{3, 0, 7, 1}) == int4_t{3, 0, 7, 1}));
 
+}
+
+void unittests_math_vector_conversion_quat()
+{
+    // The components x, y, z and w, without normalizing; float4 gives them
+    // back.
+    constexpr float4_t kVector{1, -2, 3, 4};
+    FND_TEST_TRUE(quat(kVector) == quat_t(1, -2, 3, 4));
+    FND_TEST_TRUE(all(float4(quat(kVector)) == kVector));
+    FND_TEST_TRUE(quat(float4_t::kUnitW) == quat_t::kIdentity);
+    FND_TEST_TRUE(quat(float4(quat_t::kIdentity)) == quat_t::kIdentity);
+
+    // Usable in constant expressions.
+    static_assert(quat(kVector).w == 4.0f);
 }
 
 void unittests_math_vector_conversion_uint2()
@@ -835,6 +854,7 @@ void unittests_math_vector_conversion()
     unittests_math_vector_conversion_int2();
     unittests_math_vector_conversion_int3();
     unittests_math_vector_conversion_int4();
+    unittests_math_vector_conversion_quat();
     unittests_math_vector_conversion_uint2();
     unittests_math_vector_conversion_uint3();
     unittests_math_vector_conversion_uint4();

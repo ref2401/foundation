@@ -3,15 +3,15 @@ module;
 
 export module foundation.math:matrix_construction;
 import foundation.core;
+import :matrix_conversion;
 import :matrix_float3x3;
 import :matrix_float3x4;
 import :matrix_float4x4;
-import :quat;
-import :quat_conversion;
 import :scalar;
 import :vector_conversion;
 import :vector_float3;
 import :vector_float4;
+import :vector_quat;
 
 namespace fnd {
 

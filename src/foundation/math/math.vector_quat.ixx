@@ -1,7 +1,7 @@
 module;
 #include "foundation/core/macros.h"
 
-export module foundation.math:quat;
+export module foundation.math:vector_quat;
 import foundation.core;
 import :scalar;
 import :vector_float3;

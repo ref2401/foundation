@@ -10,6 +10,7 @@ import :vector_float4;
 import :vector_int2;
 import :vector_int3;
 import :vector_int4;
+import :vector_quat;
 import :vector_uint2;
 import :vector_uint3;
 import :vector_uint4;
@@ -712,6 +713,11 @@ export constexpr float4_t float4(const int4_t v)
         static_cast<float_t>(v.z), static_cast<float_t>(v.w)};
 }
 
+export constexpr float4_t float4(const quat_t q)
+{
+    return float4_t{q.x, q.y, q.z, q.w};
+}
+
 export constexpr float4_t float4(const uint_t scalar)
 {
     return float4_t{
@@ -1169,6 +1175,16 @@ export constexpr int4_t int4(const uint4_t v)
     return int4_t{
         static_cast<int_t>(v.x), static_cast<int_t>(v.y),
         static_cast<int_t>(v.z), static_cast<int_t>(v.w)};
+}
+
+// ---------------------------------------------------------------------------
+// quat()
+// ---------------------------------------------------------------------------
+
+// The components x, y, z and w; v is not normalized.
+export constexpr quat_t quat(const float4_t v)
+{
+    return quat_t{v.x, v.y, v.z, v.w};
 }
 
 // ---------------------------------------------------------------------------

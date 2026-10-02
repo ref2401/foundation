@@ -2,7 +2,7 @@ module;
 #include "foundation/unittests.h"
 
 
-export module unittests.math:quat;
+export module unittests.math:vector_quat;
 import foundation.core;
 import foundation.math;
 
@@ -13,7 +13,7 @@ import foundation.math;
 
 namespace fnd::unittests {
 
-export void unittests_math_quat();
+export void unittests_math_vector_quat();
 
 // Not unit quaternions: small values whose products are exact in binary, so
 // == is reliable for the algebra. length_sqr(kQuatA) is 30.
@@ -26,7 +26,7 @@ constexpr quat_t kQuatI{1, 0, 0, 0};
 constexpr quat_t kQuatJ{0, 1, 0, 0};
 constexpr quat_t kQuatK{0, 0, 1, 0};
 
-void unittests_math_quat_constants()
+void unittests_math_vector_quat_constants()
 {
     FND_TEST_TRUE(quat_t::kZero == quat_t(0, 0, 0, 0));
     FND_TEST_TRUE(quat_t::kIdentity == quat_t(0, 0, 0, 1));
@@ -35,7 +35,7 @@ void unittests_math_quat_constants()
     static_assert(quat_t::kIdentity.w == 1.0f);
 }
 
-void unittests_math_quat_constructors()
+void unittests_math_vector_quat_constructors()
 {
     // The default ctor gives the zero quaternion.
     const quat_t q_zero;
@@ -47,14 +47,14 @@ void unittests_math_quat_constructors()
     FND_TEST_TRUE(q.x == 1 && q.y == -2 && q.z == 3 && q.w == -4);
 }
 
-void unittests_math_quat_unary_minus_operator()
+void unittests_math_vector_quat_unary_minus_operator()
 {
     FND_TEST_TRUE(-kQuatA == quat_t(-1, -2, -3, -4));
     FND_TEST_TRUE(-(-kQuatA) == kQuatA);
     static_assert((-quat_t::kIdentity).w == -1.0f);
 }
 
-void unittests_math_quat_equality_operators()
+void unittests_math_vector_quat_equality_operators()
 {
     FND_TEST_TRUE(kQuatA == kQuatA);
     FND_TEST_FALSE(kQuatA != kQuatA);
@@ -74,7 +74,7 @@ void unittests_math_quat_equality_operators()
     FND_TEST_TRUE(q_nan != q_nan);
 }
 
-void unittests_math_quat_multiplication_operator()
+void unittests_math_vector_quat_multiplication_operator()
 {
     // The Hamilton product: i * j = k, j * k = i, k * i = j, the reversed
     // orders negate, and i * i = j * j = k * k = -1.
@@ -112,7 +112,7 @@ void unittests_math_quat_multiplication_operator()
     static_assert((kQuatI * kQuatJ).z == 1.0f);
 }
 
-void unittests_math_quat_scalar_multiplication_operator()
+void unittests_math_vector_quat_scalar_multiplication_operator()
 {
     // Each component is scaled, in either order.
     constexpr float_t kScale = 2;
@@ -140,7 +140,7 @@ void unittests_math_quat_scalar_multiplication_operator()
     static_assert((2.0f * kQuatA).w == 8.0f);
 }
 
-void unittests_math_quat_addition_operator()
+void unittests_math_vector_quat_addition_operator()
 {
     FND_TEST_TRUE(kQuatA + kQuatB == quat_t(-1, 2.5f, 4, 7));
 
@@ -165,7 +165,7 @@ void unittests_math_quat_addition_operator()
     static_assert((kQuatI + kQuatJ).y == 1.0f);
 }
 
-void unittests_math_quat_compound_assignment_operators()
+void unittests_math_vector_quat_compound_assignment_operators()
 {
     // Each compound operator gives the same as its binary operator.
     quat_t q = kQuatA;
@@ -187,7 +187,7 @@ void unittests_math_quat_compound_assignment_operators()
     FND_TEST_TRUE(q == kQuatA + kQuatB);
 }
 
-void unittests_math_quat_approx_equal()
+void unittests_math_vector_quat_approx_equal()
 {
     FND_TEST_TRUE(approx_equal(kQuatA, kQuatA));
     FND_TEST_FALSE(approx_equal(kQuatA, kQuatB));
@@ -206,7 +206,7 @@ void unittests_math_quat_approx_equal()
     FND_TEST_FALSE(approx_equal(q_nan, q_nan));
 }
 
-void unittests_math_quat_conjugate()
+void unittests_math_vector_quat_conjugate()
 {
     FND_TEST_TRUE(conjugate(kQuatA) == quat_t(-1, -2, -3, 4));
     FND_TEST_TRUE(conjugate(conjugate(kQuatA)) == kQuatA);
@@ -225,7 +225,7 @@ void unittests_math_quat_conjugate()
     static_assert(conjugate(kQuatA).x == -1.0f);
 }
 
-void unittests_math_quat_dot()
+void unittests_math_vector_quat_dot()
 {
     FND_TEST_TRUE(dot(kQuatA, kQuatB) == 14.0f);
     FND_TEST_TRUE(dot(kQuatA, kQuatB) == dot(kQuatB, kQuatA));
@@ -244,7 +244,7 @@ quat_t quat_with_component(const uint_t idx, const float_t value)
     return q;
 }
 
-void unittests_math_quat_isfinite()
+void unittests_math_vector_quat_isfinite()
 {
     FND_TEST_TRUE(isfinite(quat_t::kZero));
     FND_TEST_TRUE(isfinite(quat_t::kIdentity));
@@ -266,7 +266,7 @@ void unittests_math_quat_isfinite()
     FND_TEST_TRUE(isnan(q));
 }
 
-void unittests_math_quat_isinf()
+void unittests_math_vector_quat_isinf()
 {
     FND_TEST_FALSE(isinf(quat_t::kZero));
     FND_TEST_FALSE(isinf(kQuatA));
@@ -284,7 +284,7 @@ void unittests_math_quat_isinf()
     FND_TEST_TRUE(isinf(quat_t(kFloatMaxValue, 0, 0, 1) * 2.0f));
 }
 
-void unittests_math_quat_isnan()
+void unittests_math_vector_quat_isnan()
 {
     FND_TEST_FALSE(isnan(quat_t::kZero));
     FND_TEST_FALSE(isnan(kQuatA));
@@ -301,7 +301,7 @@ void unittests_math_quat_isnan()
     FND_TEST_TRUE(isnan(q_inf + -q_inf));
 }
 
-void unittests_math_quat_length_sqr()
+void unittests_math_vector_quat_length_sqr()
 {
     FND_TEST_TRUE(length_sqr(kQuatA) == 30.0f);
     FND_TEST_TRUE(length_sqr(-kQuatA) == 30.0f);
@@ -310,7 +310,7 @@ void unittests_math_quat_length_sqr()
     static_assert(length_sqr(kQuatA) == 30.0f);
 }
 
-void unittests_math_quat_inverse()
+void unittests_math_vector_quat_inverse()
 {
     FND_TEST_TRUE(inverse(quat_t::kIdentity) == quat_t::kIdentity);
     // A power-of-two length_sqr keeps it exact: {1, 1, 1, 1} / 4.
@@ -330,7 +330,7 @@ void unittests_math_quat_inverse()
     FND_TEST_TRUE(approx_equal(inverse(q), conjugate(q)));
 }
 
-void unittests_math_quat_is_normalized()
+void unittests_math_vector_quat_is_normalized()
 {
     FND_TEST_TRUE(is_normalized(quat_t::kIdentity));
     FND_TEST_TRUE(is_normalized(-quat_t::kIdentity));
@@ -345,7 +345,7 @@ void unittests_math_quat_is_normalized()
     FND_TEST_TRUE(is_normalized(quat_t(0, 0, 0, 1.001f), 0.01f));
 }
 
-void unittests_math_quat_length()
+void unittests_math_vector_quat_length()
 {
     FND_TEST_TRUE(length(quat_t(1, 1, 1, 1)) == 2.0f);
     FND_TEST_TRUE(length(quat_t::kZero) == 0.0f);
@@ -353,7 +353,7 @@ void unittests_math_quat_length()
     FND_TEST_TRUE(approx_equal(length(kQuatA), sqrt(30.0f)));
 }
 
-void unittests_math_quat_make_quat_axis_angle()
+void unittests_math_vector_quat_make_quat_axis_angle()
 {
     // A zero angle is the identity; a full turn is -identity, the same
     // rotation.
@@ -377,7 +377,7 @@ void unittests_math_quat_make_quat_axis_angle()
         approx_equal(make_quat_axis_angle(kAxis, -kAngle), conjugate(q)));
 }
 
-void unittests_math_quat_mul()
+void unittests_math_vector_quat_mul()
 {
     constexpr float3_t kVector{3, -4, 12};
     FND_TEST_TRUE(all(mul(quat_t::kIdentity, kVector) == kVector));
@@ -420,7 +420,7 @@ void unittests_math_quat_mul()
         all(approx_equal(mul(inverse(q), mul(q, kVector)), kVector, 1e-4f)));
 }
 
-void unittests_math_quat_nlerp()
+void unittests_math_vector_quat_nlerp()
 {
     constexpr float_t kAngle = 1.2f;
     const quat_t q0 = make_quat_axis_angle(float3_t::kUnitZ, kAngle);
@@ -448,7 +448,7 @@ void unittests_math_quat_nlerp()
     }
 }
 
-void unittests_math_quat_normalize()
+void unittests_math_vector_quat_normalize()
 {
     const quat_t q = normalize(kQuatA);
     FND_TEST_TRUE(is_normalized(q));
@@ -459,7 +459,7 @@ void unittests_math_quat_normalize()
     FND_TEST_TRUE(approx_equal(normalize(-kQuatA), -q));
 }
 
-void unittests_math_quat_normalize_safe()
+void unittests_math_vector_quat_normalize_safe()
 {
     // As normalize when q can be normalized.
     FND_TEST_TRUE(normalize_safe(kQuatA) == normalize(kQuatA));
@@ -473,7 +473,7 @@ void unittests_math_quat_normalize_safe()
         quat_t(0.5f, 0.5f, 0.5f, 0.5f)));
 }
 
-void unittests_math_quat_slerp()
+void unittests_math_vector_quat_slerp()
 {
     // Constant angular speed: t of the way is t of the angle, extrapolated
     // t included.
@@ -504,32 +504,32 @@ void unittests_math_quat_slerp()
     FND_TEST_TRUE(approx_equal(slerp(q0, -q0, 0.3f), q0));
 }
 
-void unittests_math_quat()
+void unittests_math_vector_quat()
 {
-    unittests_math_quat_constants();
-    unittests_math_quat_constructors();
-    unittests_math_quat_unary_minus_operator();
-    unittests_math_quat_equality_operators();
-    unittests_math_quat_multiplication_operator();
-    unittests_math_quat_scalar_multiplication_operator();
-    unittests_math_quat_addition_operator();
-    unittests_math_quat_compound_assignment_operators();
-    unittests_math_quat_approx_equal();
-    unittests_math_quat_conjugate();
-    unittests_math_quat_dot();
-    unittests_math_quat_isfinite();
-    unittests_math_quat_isinf();
-    unittests_math_quat_isnan();
-    unittests_math_quat_length_sqr();
-    unittests_math_quat_inverse();
-    unittests_math_quat_is_normalized();
-    unittests_math_quat_length();
-    unittests_math_quat_make_quat_axis_angle();
-    unittests_math_quat_mul();
-    unittests_math_quat_nlerp();
-    unittests_math_quat_normalize();
-    unittests_math_quat_normalize_safe();
-    unittests_math_quat_slerp();
+    unittests_math_vector_quat_constants();
+    unittests_math_vector_quat_constructors();
+    unittests_math_vector_quat_unary_minus_operator();
+    unittests_math_vector_quat_equality_operators();
+    unittests_math_vector_quat_multiplication_operator();
+    unittests_math_vector_quat_scalar_multiplication_operator();
+    unittests_math_vector_quat_addition_operator();
+    unittests_math_vector_quat_compound_assignment_operators();
+    unittests_math_vector_quat_approx_equal();
+    unittests_math_vector_quat_conjugate();
+    unittests_math_vector_quat_dot();
+    unittests_math_vector_quat_isfinite();
+    unittests_math_vector_quat_isinf();
+    unittests_math_vector_quat_isnan();
+    unittests_math_vector_quat_length_sqr();
+    unittests_math_vector_quat_inverse();
+    unittests_math_vector_quat_is_normalized();
+    unittests_math_vector_quat_length();
+    unittests_math_vector_quat_make_quat_axis_angle();
+    unittests_math_vector_quat_mul();
+    unittests_math_vector_quat_nlerp();
+    unittests_math_vector_quat_normalize();
+    unittests_math_vector_quat_normalize_safe();
+    unittests_math_vector_quat_slerp();
 }
 
 } // namespace fnd::unittests
