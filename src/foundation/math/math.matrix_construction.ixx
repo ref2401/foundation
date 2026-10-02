@@ -141,4 +141,32 @@ export FND_INLINE float4x4_t make_float4x4_trs(
         float4(rm.col2 * s.z, 0), float4(t, 1)};
 }
 
+// The view matrix of a camera at position_ws looking at target_ws (gluLookAt):
+// world space to a right-handed view space in which the camera is at the
+// origin and looks along -z, +x is right and +y is up.
+// up_ws gives the vertical direction:
+//  It need not be normalized or perpendicular to target_ws - position_ws, only
+//  not parallel to it.
+export FND_INLINE float4x4_t make_float4x4_view_rh(
+    const float3_t position_ws, const float3_t target_ws, const float3_t up_ws)
+{
+    // position_ws == target_ws
+    FND_ASSERT(length_sqr(target_ws - position_ws) > kFloatMinNormal);
+
+    const float3_t f_ws = normalize(target_ws - position_ws);
+    // up_ws is not parallel to f_ws
+    FND_ASSERT(length_sqr(cross(f_ws, up_ws)) > kFloatMinNormal);
+
+    // The camera's basis in world space: right r_ws and up u_ws, forward f_ws.
+    // The view matrix is the inverse of the camera's rotation
+    // [r_ws | u_ws | -f_ws] and translation position_ws: the transposed
+    // rotation, and -position_ws rotated by it.
+    const float3_t r_ws = normalize(cross(f_ws, up_ws));
+    const float3_t u_ws = cross(r_ws, f_ws);
+
+    return float4x4_t{r_ws.x, u_ws.x, -f_ws.x, 0, r_ws.y, u_ws.y, -f_ws.y, 0,
+        r_ws.z, u_ws.z, -f_ws.z, 0, -dot(r_ws, position_ws),
+        -dot(u_ws, position_ws), dot(f_ws, position_ws), 1};
+}
+
 } // namespace fnd

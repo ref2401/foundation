@@ -351,6 +351,68 @@ void unittests_math_matrix_construction_make_float4x4_trs()
         make_float4x4_trs(kTranslation, float3x3_t::kIdentity).col3.z == 0.5f);
 }
 
+void unittests_math_matrix_construction_make_float4x4_view_rh()
+{
+    // At the origin, looking along -z with +y up: view space is world space.
+    FND_TEST_TRUE(make_float4x4_view_rh(
+        float3_t::kZero, -float3_t::kUnitZ, float3_t::kUnitY)
+        == float4x4_t::kIdentity);
+
+    // On +z looking at the origin: only a translation. World +x stays on the
+    // right (x > 0), and points in front of the camera have z < 0.
+    constexpr float3_t kPosition0Ws{0, 0, 10};
+    const float4x4_t vm0 = make_float4x4_view_rh(
+        kPosition0Ws, float3_t::kZero, float3_t::kUnitY);
+    FND_TEST_TRUE(vm0 == make_float4x4_translation(-kPosition0Ws));
+    FND_TEST_TRUE(
+        all(mul(vm0, float4_t{1, 0, 0, 1}) == float4_t{1, 0, -10, 1}));
+
+    // A general camera: the view direction is (0.6, 0.8, 0), 5 long; the up
+    // hint is neither normalized nor perpendicular to it. The camera's right
+    // is (0.8, -0.6, 0) and its up is +z.
+    constexpr float3_t kPositionWs{1, -2, 3};
+    constexpr float3_t kTargetWs{4, 2, 3};
+    constexpr float3_t kUpWs{0, 0, 2};
+    constexpr float3_t kForwardWs{0.6f, 0.8f, 0};
+    constexpr float3_t kRightWs{0.8f, -0.6f, 0};
+    const float4x4_t vm = make_float4x4_view_rh(kPositionWs, kTargetWs, kUpWs);
+
+    // The position goes to the origin, the target onto -z, and a step right or
+    // up from the position onto +x or +y.
+    FND_TEST_TRUE(
+        all(approx_equal(mul(vm, float4(kPositionWs, 1)), float4_t::kUnitW)));
+    FND_TEST_TRUE(all(
+        approx_equal(mul(vm, float4(kTargetWs, 1)), float4_t{0, 0, -5, 1})));
+    FND_TEST_TRUE(all(approx_equal(
+        mul(vm, float4(kPositionWs + kRightWs, 1)), float4_t{1, 0, 0, 1})));
+    FND_TEST_TRUE(
+        all(approx_equal(mul(vm, float4(kPositionWs + float3_t::kUnitZ, 1)),
+            float4_t{0, 1, 0, 1})));
+    // Directions are rotated, not translated: forward becomes -z.
+    FND_TEST_TRUE(all(approx_equal(
+        mul(vm, float4(kForwardWs, 0)), float4_t{0, 0, -1, 0})));
+
+    // A rigid transform, the inverse of the camera's own: rotation
+    // [right | up | -forward] and translation position.
+    const float4x4_t m_camera = make_float4x4_trs(
+        kPositionWs, float3x3_t{kRightWs, float3_t::kUnitZ, -kForwardWs});
+    FND_TEST_TRUE(approx_equal(determinant(vm), 1.0f));
+    FND_TEST_TRUE(approx_equal(vm * m_camera, float4x4_t::kIdentity));
+    FND_TEST_TRUE(approx_equal(inverse(vm), m_camera));
+
+    // Only the plane of the view direction and up matters: a longer up, an up
+    // tilted toward the target, or a farther target give the same matrix.
+    FND_TEST_TRUE(approx_equal(
+        make_float4x4_view_rh(kPositionWs, kTargetWs, kUpWs * 5), vm));
+    FND_TEST_TRUE(approx_equal(make_float4x4_view_rh(kPositionWs, kTargetWs,
+                                   kUpWs + kTargetWs - kPositionWs),
+        vm));
+    FND_TEST_TRUE(approx_equal(make_float4x4_view_rh(kPositionWs,
+                                   kPositionWs + (kTargetWs - kPositionWs) * 3,
+                                   kUpWs),
+        vm));
+}
+
 void unittests_math_matrix_construction()
 {
     unittests_math_matrix_construction_make_float3x3_axis_angle();
@@ -363,6 +425,7 @@ void unittests_math_matrix_construction()
     unittests_math_matrix_construction_make_float4x4_scale();
     unittests_math_matrix_construction_make_float4x4_translation();
     unittests_math_matrix_construction_make_float4x4_trs();
+    unittests_math_matrix_construction_make_float4x4_view_rh();
 }
 
 } // namespace fnd::unittests
