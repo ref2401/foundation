@@ -5,6 +5,7 @@ export import :matrix_float3x3;
 export import :matrix_float3x4;
 export import :matrix_float4x4;
 export import :quat;
+export import :quat_conversion;
 export import :scalar;
 export import :vector_bool;
 export import :vector_conversion;

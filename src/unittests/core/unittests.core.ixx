@@ -7,6 +7,7 @@ export module unittests.core;
 import :arithmetic_types;
 import :arithmetic;
 import :span;
+import :type_traits;
 
 
 namespace fnd::unittests {
@@ -46,6 +47,7 @@ void run_unittests_core()
     unittests_core_arithmetic();
     unittests_source_location_t();
     unittests_span_t();
+    unittests_core_type_traits();
 }
 
 } // namespace fnd::unittests

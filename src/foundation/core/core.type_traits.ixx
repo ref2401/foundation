@@ -1,7 +1,14 @@
+module;
+#include <type_traits>
+
 export module foundation.core:type_traits;
 import :arithmetic_types;
 
 namespace fnd {
+
+// MSVC has no __is_same intrinsic: the partial specialization for T, T picks
+// the true value.
+
 
 export template<typename T>
 concept PodType = __is_standard_layout(T) && __is_trivially_copyable(T);
@@ -14,6 +21,14 @@ export template<typename TSrc, typename TDest> constexpr bool_t is_convertible()
 export constexpr bool_t is_constant_evaluated()
 {
     return __builtin_is_constant_evaluated();
+}
+
+// True if T and U are the same type; const, volatile and references count.
+template<typename T, typename U> constexpr bool_t kIsSame = false;
+template<typename T> constexpr bool_t kIsSame<T, T> = true;
+export template<typename T, typename U> constexpr bool_t is_same()
+{
+    return kIsSame<T, U>;
 }
 
 } // namespace fnd
