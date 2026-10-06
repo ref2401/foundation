@@ -108,6 +108,36 @@ export FND_INLINE float4x4_t make_float4x4_axis_angle(
         float4_t::kUnitW};
 }
 
+// Orthographic projection from the right-handed view space (see
+// make_float4x4_view_rh) to the Direct3D 12 clip space: left-handed, OX right
+// and OY up in [-1, 1], depth OZ in [0, 1].
+// The view volume is the width_vs x height_vs box centered on the -OZ axis,
+// from near_dist_vs (ndc depth 0) to far_dist_vs (ndc depth 1) in front of the
+// camera.
+// near_dist_vs and far_dist_vs are distances along the viewing direction -OZ,
+// not z coordinates: the near and far planes are z_vs = -near_dist_vs and
+// z_vs = -far_dist_vs. A negative near_dist_vs puts the near plane behind the
+// camera, at z_vs > 0.
+// w stays 1, so clip space and NDC coincide.
+// The OZ row mirrors the depth axis: that turns the right-handed view space
+// into the left-handed clip space.
+export constexpr float4x4_t make_float4x4_ortho_rh_to_dx12(
+    const float_t width_vs, const float_t height_vs, const float_t near_dist_vs,
+    const float_t far_dist_vs)
+{
+    FND_ASSERT(width_vs > 0);
+    FND_ASSERT(height_vs > 0);
+    // Negative or zero near_dist_vs is valid for orthographic projection:
+    // geometry behind the camera plane still projects.
+    FND_ASSERT(near_dist_vs < far_dist_vs);
+
+    // z_vs = -near_dist_vs goes to depth 0 and z_vs = -far_dist_vs to depth 1.
+    const float_t rcp_depth_vs = 1 / (near_dist_vs - far_dist_vs);
+    return float4x4_t{
+        2 / width_vs, 0, 0, 0, 0, 2 / height_vs, 0, 0, 0, 0, rcp_depth_vs, 0, 0,
+        0, near_dist_vs * rcp_depth_vs, 1};
+}
+
 export constexpr float4x4_t make_float4x4_scale(const float3_t s)
 {
     return float4x4_t{
@@ -164,9 +194,10 @@ export FND_INLINE float4x4_t make_float4x4_view_rh(
     const float3_t r_ws = normalize(cross(f_ws, up_ws));
     const float3_t u_ws = cross(r_ws, f_ws);
 
-    return float4x4_t{r_ws.x, u_ws.x, -f_ws.x, 0, r_ws.y, u_ws.y, -f_ws.y, 0,
-        r_ws.z, u_ws.z, -f_ws.z, 0, -dot(r_ws, position_ws),
-        -dot(u_ws, position_ws), dot(f_ws, position_ws), 1};
+    return float4x4_t{
+        r_ws.x, u_ws.x, -f_ws.x, 0, r_ws.y, u_ws.y, -f_ws.y, 0, r_ws.z, u_ws.z,
+        -f_ws.z, 0, -dot(r_ws, position_ws), -dot(u_ws, position_ws),
+        dot(f_ws, position_ws), 1};
 }
 
 } // namespace fnd

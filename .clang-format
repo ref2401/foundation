@@ -25,7 +25,7 @@ PackConstructorInitializers: NextLine
 AlignAfterOpenBracket: DontAlign
 BreakAfterOpenBracketFunction: true
 AlignOperands: DontAlign
-BreakBeforeBinaryOperators: All
+BreakBeforeBinaryOperators: NonAssignment
 BreakAfterOpenBracketBracedList: true
 
 IndentPPDirectives: BeforeHash
