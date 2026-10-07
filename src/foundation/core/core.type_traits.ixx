@@ -6,10 +6,6 @@ import :arithmetic_types;
 
 namespace fnd {
 
-// MSVC has no __is_same intrinsic: the partial specialization for T, T picks
-// the true value.
-
-
 export template<typename T>
 concept PodType = __is_standard_layout(T) && __is_trivially_copyable(T);
 

@@ -3,7 +3,6 @@ module;
 
 export module foundation.math:matrix_float3x3;
 import foundation.core;
-import :scalar;
 import :vector_float3;
 
 namespace fnd {
