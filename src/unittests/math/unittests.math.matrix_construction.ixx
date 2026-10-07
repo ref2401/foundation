@@ -10,6 +10,12 @@ namespace fnd::unittests {
 
 export void unittests_math_matrix_construction();
 
+// The perspective divide: the clip space point p_cs in NDC.
+float3_t perspective_divide(const float4_t p_cs)
+{
+    return float3(p_cs) / p_cs.w;
+}
+
 void unittests_math_matrix_construction_make_float3x3_axis_angle()
 {
     const float_t quarter = kFloatPi / 2;
@@ -330,6 +336,94 @@ void unittests_math_matrix_construction_make_float4x4_ortho_rh_to_dx12()
     static_assert(make_float4x4_ortho_rh_to_dx12(8, 4, 1, 5).col1.y == 0.5f);
 }
 
+void unittests_math_matrix_construction_make_float4x4_perspective_rh_to_dx12()
+{
+    // A 90 degree vertical field of view (tan(fov / 2) = 1), twice as wide as
+    // high, from 1 to 5 in front of the camera.
+    constexpr float_t kVertFov = 0.5f * kFloatPi;
+    constexpr float_t kAspect = 2;
+    constexpr float_t kNear = 1;
+    constexpr float_t kFar = 5;
+    constexpr float4x4_t kExpectedM{
+        float4_t{0.5f, 0, 0, 0}, float4_t{0, 1, 0, 0},
+        float4_t{0, 0, -1.25f, -1}, float4_t{0, 0, -1.25f, 0}};
+    const float4x4_t pm =
+        make_float4x4_perspective_rh_to_dx12(kVertFov, kAspect, kNear, kFar);
+    FND_TEST_TRUE(approx_equal(pm, kExpectedM));
+
+    // w is the distance in front of the camera: w = -z_vs.
+    constexpr float4_t kPointVs{3, -4, -12, 1};
+    FND_TEST_TRUE(mul(pm, kPointVs).w == abs(kPointVs.z));
+
+    // The corners of the frustum go to the corners of the clip volume after
+    // the divide:
+    // x and y to -1 or 1,
+    // the near plane to depth 0 and the far plane to depth 1.
+    // At the distance d the frustum reaches d * tan(fov / 2) up and down, and
+    // kAspect times that left and right.
+    const float_t tan_half_fov = tan(0.5f * kVertFov);
+    constexpr float_t kSigns[] = {-1, 1};
+    for (const float_t sx : kSigns) {
+        for (const float_t sy : kSigns) {
+            const float4_t p0_vs{
+                sx * kAspect * kNear * tan_half_fov, sy * kNear * tan_half_fov,
+                -kNear, 1};
+            const float4_t p1_vs{
+                sx * kAspect * kFar * tan_half_fov, sy * kFar * tan_half_fov,
+                -kFar, 1};
+            FND_TEST_TRUE(all(approx_equal(
+                perspective_divide(mul(pm, p0_vs)), float3_t{sx, sy, 0})));
+            FND_TEST_TRUE(all(approx_equal(
+                perspective_divide(mul(pm, p1_vs)), float3_t{sx, sy, 1})));
+        }
+    }
+
+    // The axis of the frustum stays in the middle of the screen at any
+    // distance d, and the depth grows with d:
+    // depth = far / (far - near) * (1 - near / d).
+    constexpr float_t kDists[] = {1, 1.5f, 2, 3, 4, 5};
+    float_t prev_depth = -1;
+    for (const float_t d : kDists) {
+        const float4_t p_cs = mul(pm, float4_t{0, 0, -d, 1});
+        FND_TEST_TRUE(p_cs.x == 0 && p_cs.y == 0);
+        const float_t depth = p_cs.z / p_cs.w;
+        FND_TEST_TRUE(
+            approx_equal(depth, kFar / (kFar - kNear) * (1 - kNear / d)));
+        FND_TEST_TRUE(depth > prev_depth);
+        prev_depth = depth;
+    }
+
+    // Outside the frustum, outside the clip volume:
+    // closer than near_dist_vs has depth < 0,
+    // farther than far_dist_vs has depth > 1,
+    // beyond the right plane has x > 1,
+    // behind the camera has w < 0.
+    constexpr float4_t kTooCloseVs{0, 0, -0.5f, 1};
+    constexpr float4_t kTooFarVs{0, 0, -6, 1};
+    constexpr float4_t kTooRightVs{5, 0, -2, 1};
+    constexpr float4_t kBehindVs{0, 0, 1, 1};
+    FND_TEST_TRUE(perspective_divide(mul(pm, kTooCloseVs)).z < 0);
+    FND_TEST_TRUE(perspective_divide(mul(pm, kTooFarVs)).z > 1);
+    FND_TEST_TRUE(perspective_divide(mul(pm, kTooRightVs)).x > 1);
+    FND_TEST_TRUE(mul(pm, kBehindVs).w < 0);
+
+    // wh_aspect only widens the frustum: with 1 it is as wide as high.
+    const float4x4_t pm_square =
+        make_float4x4_perspective_rh_to_dx12(kVertFov, 1, kNear, kFar);
+    FND_TEST_TRUE(pm_square.col0.x == pm_square.col1.y);
+    FND_TEST_TRUE(pm.col0.x == pm.col1.y / kAspect);
+
+    // After the view matrix: a camera on +OZ looking at the origin sees the
+    // origin in the middle of the screen, 11 in front of it.
+    const float4x4_t vm = make_float4x4_view_rh(
+        float3_t{0, 0, 11}, float3_t::kZero, float3_t::kUnitY);
+    const float4x4_t pm_far =
+        make_float4x4_perspective_rh_to_dx12(kVertFov, kAspect, 1, 21);
+    constexpr float4_t kOriginCs{0, 0, 10.5f, 11};
+    FND_TEST_TRUE(
+        all(approx_equal(mul(pm_far * vm, float4_t::kUnitW), kOriginCs)));
+}
+
 void unittests_math_matrix_construction_make_float4x4_scale()
 {
     // A diagonal matrix with 1 in the bottom-right corner.
@@ -519,6 +613,7 @@ void unittests_math_matrix_construction()
     unittests_math_matrix_construction_make_float3x4_trs();
     unittests_math_matrix_construction_make_float4x4_axis_angle();
     unittests_math_matrix_construction_make_float4x4_ortho_rh_to_dx12();
+    unittests_math_matrix_construction_make_float4x4_perspective_rh_to_dx12();
     unittests_math_matrix_construction_make_float4x4_scale();
     unittests_math_matrix_construction_make_float4x4_translation();
     unittests_math_matrix_construction_make_float4x4_trs();

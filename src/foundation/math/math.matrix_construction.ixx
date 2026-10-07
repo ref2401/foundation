@@ -138,6 +138,41 @@ export constexpr float4x4_t make_float4x4_ortho_rh_to_dx12(
         0, near_dist_vs * rcp_depth_vs, 1};
 }
 
+// Perspective projection from the right-handed view space (see
+// make_float4x4_view_rh) to the Direct3D 12 clip space: left-handed, OX right
+// and OY up in [-1, 1] after the divide by w, depth OZ in [0, 1].
+// The view volume is the frustum around the -OZ axis with the vertical field
+// of view vert_fov_radians and the width / height ratio wh_aspect, from
+// near_dist_vs (ndc depth 0) to far_dist_vs (ndc depth 1) in front of the
+// camera.
+// near_dist_vs and far_dist_vs are distances along the viewing direction -OZ,
+// not z coordinates: the near and far planes are z_vs = -near_dist_vs and
+// z_vs = -far_dist_vs.
+// w = -z_vs is the distance in front of the camera; dividing by it shrinks x
+// and y with the distance. The -1 in the OW row mirrors the depth axis: that
+// turns the right-handed view space into the left-handed clip space.
+export FND_INLINE float4x4_t make_float4x4_perspective_rh_to_dx12(
+    const float_t vert_fov_radians, const float_t wh_aspect,
+    const float_t near_dist_vs, const float_t far_dist_vs)
+{
+    FND_ASSERT(vert_fov_radians > 0);
+    FND_ASSERT(vert_fov_radians < kFloatPi);
+    FND_ASSERT(wh_aspect > 0);
+    // The divide by the distance needs the near plane in front of the camera.
+    FND_ASSERT(near_dist_vs > 0);
+    FND_ASSERT(near_dist_vs < far_dist_vs);
+
+    // A point on the top plane of the frustum, y_vs = d * tan(fov / 2), goes
+    // to y_ndc = 1; the right plane is wh_aspect times wider.
+    const float_t scale_y = 1 / tan(0.5f * vert_fov_radians);
+    const float_t scale_x = scale_y / wh_aspect;
+    // z_vs = -near_dist_vs goes to depth 0 and z_vs = -far_dist_vs to depth 1.
+    const float_t depth_scale = far_dist_vs / (near_dist_vs - far_dist_vs);
+    return float4x4_t{
+        scale_x, 0, 0, 0, 0, scale_y, 0, 0, 0, 0, depth_scale, -1, 0, 0,
+        near_dist_vs * depth_scale, 0};
+}
+
 export constexpr float4x4_t make_float4x4_scale(const float3_t s)
 {
     return float4x4_t{
