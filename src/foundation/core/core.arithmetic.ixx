@@ -165,6 +165,47 @@ export FND_INLINE double_t fmod(const double_t x, const double_t y)
     return ::fmod(x, y);
 }
 
+// True if x is 2^k for an integer k >= 0: exactly one bit is set. Zero and
+// negative numbers are not powers of two.
+export constexpr bool_t is_pow2(const int_t x)
+{
+    // x > 0 first: x - 1 cannot overflow then.
+    return x > 0 && (x & (x - 1)) == 0;
+}
+
+export constexpr bool_t is_pow2(const long_t x)
+{
+    return x > 0 && (x & (x - 1)) == 0;
+}
+
+export constexpr bool_t is_pow2(const uint_t x)
+{
+    return x != 0 && (x & (x - 1)) == 0;
+}
+
+export constexpr bool_t is_pow2(const ulong_t x)
+{
+    return x != 0 && (x & (x - 1)) == 0;
+}
+
+// True if x is 2^k for an integer k, negative k included (0.5, 0.25, ...,
+// the subnormals). Zero, negative numbers, infinity and NaN are not powers of
+// two.
+export FND_INLINE bool_t is_pow2(const float_t x)
+{
+    // frexp splits x into m * 2^e with |m| in [0.5, 1), subnormals included;
+    // m is exactly 0.5 for a power of two. NaN and infinity come back as they
+    // are.
+    int_t exponent;
+    return ::frexpf(x, &exponent) == 0.5f;
+}
+
+export FND_INLINE bool_t is_pow2(const double_t x)
+{
+    int_t exponent;
+    return ::frexp(x, &exponent) == 0.5;
+}
+
 export FND_INLINE bool_t isfinite(const float_t x)
 {
     return ::isfinite(x);

@@ -401,6 +401,159 @@ void unittests_core_arithmetic_fmod_double()
     FND_TEST_TRUE(isnan(fmod(1.0, kDoubleNaN)));
 }
 
+void unittests_core_arithmetic_is_pow2_int()
+{
+    // Every single bit that keeps the value positive: 2^0 to 2^30.
+    for (int_t k = 0; k < 31; ++k) {
+        FND_TEST_TRUE(is_pow2(int_t{1} << k));
+    }
+    // Next to a power of two.
+    for (int_t k = 2; k < 31; ++k) {
+        FND_TEST_FALSE(is_pow2((int_t{1} << k) - 1));
+        FND_TEST_FALSE(is_pow2((int_t{1} << k) + 1));
+    }
+    FND_TEST_FALSE(is_pow2(0));
+    FND_TEST_FALSE(is_pow2(6));
+    FND_TEST_FALSE(is_pow2(kIntMaxValue));
+    // Negative numbers, also -2^31 with its single bit set.
+    FND_TEST_FALSE(is_pow2(-1));
+    FND_TEST_FALSE(is_pow2(-2));
+    FND_TEST_FALSE(is_pow2(-1024));
+    FND_TEST_FALSE(is_pow2(kIntMinValue));
+
+    // Usable in constant expressions.
+    static_assert(is_pow2(64));
+}
+
+void unittests_core_arithmetic_is_pow2_long()
+{
+    // Every single bit that keeps the value positive: 2^0 to 2^62.
+    for (long_t k = 0; k < 63; ++k) {
+        FND_TEST_TRUE(is_pow2(long_t{1} << k));
+    }
+    for (long_t k = 2; k < 63; ++k) {
+        FND_TEST_FALSE(is_pow2((long_t{1} << k) - 1));
+        FND_TEST_FALSE(is_pow2((long_t{1} << k) + 1));
+    }
+    FND_TEST_FALSE(is_pow2(long_t{0}));
+    FND_TEST_FALSE(is_pow2(long_t{6}));
+    FND_TEST_FALSE(is_pow2(kLongMaxValue));
+    // Negative numbers, also -2^63 with its single bit set.
+    FND_TEST_FALSE(is_pow2(long_t{-1}));
+    FND_TEST_FALSE(is_pow2(long_t{-1024}));
+    FND_TEST_FALSE(is_pow2(kLongMinValue));
+
+    static_assert(is_pow2(long_t{1} << 40));
+}
+
+void unittests_core_arithmetic_is_pow2_uint()
+{
+    // Every single bit: 2^0 to 2^31.
+    for (uint_t k = 0; k < 32; ++k) {
+        FND_TEST_TRUE(is_pow2(uint_t{1} << k));
+    }
+    for (uint_t k = 2; k < 32; ++k) {
+        FND_TEST_FALSE(is_pow2((uint_t{1} << k) - 1));
+        FND_TEST_FALSE(is_pow2((uint_t{1} << k) + 1));
+    }
+    FND_TEST_FALSE(is_pow2(0u));
+    FND_TEST_FALSE(is_pow2(6u));
+    FND_TEST_FALSE(is_pow2(kUIntMaxValue));
+
+    static_assert(is_pow2(64u));
+}
+
+void unittests_core_arithmetic_is_pow2_ulong()
+{
+    // Every single bit: 2^0 to 2^63.
+    for (ulong_t k = 0; k < 64; ++k) {
+        FND_TEST_TRUE(is_pow2(ulong_t{1} << k));
+    }
+    for (ulong_t k = 2; k < 64; ++k) {
+        FND_TEST_FALSE(is_pow2((ulong_t{1} << k) - 1));
+        FND_TEST_FALSE(is_pow2((ulong_t{1} << k) + 1));
+    }
+    FND_TEST_FALSE(is_pow2(ulong_t{0}));
+    FND_TEST_FALSE(is_pow2(ulong_t{6}));
+    FND_TEST_FALSE(is_pow2(kULongMaxValue));
+
+    static_assert(is_pow2(ulong_t{1} << 63));
+}
+
+void unittests_core_arithmetic_is_pow2_float()
+{
+    // Every power of two, by exact doubling and halving: 1 up to 2^127, and
+    // down through the normals into the subnormals, to 2^-149.
+    float_t up = 1;
+    for (int_t k = 0; k <= 127; ++k, up *= 2) {
+        FND_TEST_TRUE(is_pow2(up));
+    }
+    float_t down = 1;
+    for (int_t k = 0; k <= 149; ++k, down *= 0.5f) {
+        FND_TEST_TRUE(is_pow2(down));
+    }
+    FND_TEST_TRUE(is_pow2(kFloatMinNormal));
+    FND_TEST_TRUE(is_pow2(kFloatMinSubnormal));
+    FND_TEST_TRUE(is_pow2(kFloatEpsilon));
+
+    // 1.5 times a power of two is exact for the normals and is not one.
+    float_t x = kFloatMinNormal;
+    for (int_t k = -126; k < 127; ++k, x *= 2) {
+        FND_TEST_FALSE(is_pow2(1.5f * x));
+    }
+    FND_TEST_FALSE(is_pow2(3.0f));
+    FND_TEST_FALSE(is_pow2(0.75f));
+    FND_TEST_FALSE(is_pow2(1.0f + kFloatEpsilon));
+    FND_TEST_FALSE(is_pow2(kFloatMaxValue));
+    FND_TEST_FALSE(is_pow2(3 * kFloatMinSubnormal));
+
+    // Zero, negative numbers, infinity and NaN.
+    FND_TEST_FALSE(is_pow2(0.0f));
+    FND_TEST_FALSE(is_pow2(-0.0f));
+    FND_TEST_FALSE(is_pow2(-1.0f));
+    FND_TEST_FALSE(is_pow2(-0.5f));
+    FND_TEST_FALSE(is_pow2(kFloatInfinity));
+    FND_TEST_FALSE(is_pow2(-kFloatInfinity));
+    FND_TEST_FALSE(is_pow2(kFloatNaN));
+}
+
+void unittests_core_arithmetic_is_pow2_double()
+{
+    // Every power of two, by exact doubling and halving: 1 up to 2^1023, and
+    // down through the normals into the subnormals, to 2^-1074.
+    double_t up = 1;
+    for (int_t k = 0; k <= 1023; ++k, up *= 2) {
+        FND_TEST_TRUE(is_pow2(up));
+    }
+    double_t down = 1;
+    for (int_t k = 0; k <= 1074; ++k, down *= 0.5) {
+        FND_TEST_TRUE(is_pow2(down));
+    }
+    FND_TEST_TRUE(is_pow2(kDoubleMinNormal));
+    FND_TEST_TRUE(is_pow2(kDoubleMinSubnormal));
+    FND_TEST_TRUE(is_pow2(kDoubleEpsilon));
+
+    // 1.5 times a power of two is exact for the normals and is not one.
+    double_t x = kDoubleMinNormal;
+    for (int_t k = -1022; k < 1023; ++k, x *= 2) {
+        FND_TEST_FALSE(is_pow2(1.5 * x));
+    }
+    FND_TEST_FALSE(is_pow2(3.0));
+    FND_TEST_FALSE(is_pow2(0.75));
+    FND_TEST_FALSE(is_pow2(1.0 + kDoubleEpsilon));
+    FND_TEST_FALSE(is_pow2(kDoubleMaxValue));
+    FND_TEST_FALSE(is_pow2(3 * kDoubleMinSubnormal));
+
+    // Zero, negative numbers, infinity and NaN.
+    FND_TEST_FALSE(is_pow2(0.0));
+    FND_TEST_FALSE(is_pow2(-0.0));
+    FND_TEST_FALSE(is_pow2(-1.0));
+    FND_TEST_FALSE(is_pow2(-0.5));
+    FND_TEST_FALSE(is_pow2(kDoubleInfinity));
+    FND_TEST_FALSE(is_pow2(-kDoubleInfinity));
+    FND_TEST_FALSE(is_pow2(kDoubleNaN));
+}
+
 void unittests_core_arithmetic_isfinite_float()
 {
     FND_TEST_TRUE(isfinite(0.0f));
@@ -1032,6 +1185,12 @@ void unittests_core_arithmetic()
     unittests_core_arithmetic_floor_double();
     unittests_core_arithmetic_fmod_float();
     unittests_core_arithmetic_fmod_double();
+    unittests_core_arithmetic_is_pow2_int();
+    unittests_core_arithmetic_is_pow2_long();
+    unittests_core_arithmetic_is_pow2_uint();
+    unittests_core_arithmetic_is_pow2_ulong();
+    unittests_core_arithmetic_is_pow2_float();
+    unittests_core_arithmetic_is_pow2_double();
     unittests_core_arithmetic_isfinite_float();
     unittests_core_arithmetic_isfinite_double();
     unittests_core_arithmetic_isinf_float();
