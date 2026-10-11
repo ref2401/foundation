@@ -2,6 +2,10 @@
 
 #include <stdint.h>
 
+// ---------------------------------------------------------------------------
+// FND_ASSERT & FND_ASSERT_MSG
+// ---------------------------------------------------------------------------
+
 #if defined(FND_DEBUG)
     #define FND_ASSERT_IMPL(condition, failed_condition, message)      \
         do {                                                           \
@@ -23,7 +27,23 @@
     #define FND_ASSERT_MSG(condition, message) __noop(condition, message)
 #endif // defined(FND_DEBUG)
 
+// ---------------------------------------------------------------------------
+// FND_INLINE
+// ---------------------------------------------------------------------------
+
 #define FND_INLINE
+
+// ---------------------------------------------------------------------------
+// FND_CAST_FUNCTION
+// ---------------------------------------------------------------------------
+
+// For a function whose body is a single cast of its parameter, such as move and
+// forward: MSVC replaces each call with the cast itself, in Debug builds too.
+#if __has_cpp_attribute(msvc::intrinsic)
+    #define FND_CAST_FUNCTION [[msvc::intrinsic]]
+#else
+    #define FND_CAST_FUNCTION
+#endif
 
 
 namespace fnd {
