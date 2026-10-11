@@ -1,5 +1,4 @@
 module;
-#include <type_traits>
 
 export module foundation.core:type_traits;
 import :arithmetic_types;
@@ -20,6 +19,23 @@ template<typename T> struct UnrefImpl<T&> { using type = T; };
 template<typename T> struct UnrefImpl<T&&> { using type = T; };
 export template<typename T> using Unref = typename UnrefImpl<T>::type;
 
+
+// ---------------------------------------------------------------------------
+// is_const
+// ---------------------------------------------------------------------------
+
+// True if T itself is const-qualified (const or const volatile). Only the top
+// level counts:
+// - is_const<const int_t&>() is false: a reference is never const itself, the
+//   int_t it refers to is. is_const<Unref<T>>() asks about that type.
+// - is_const<const int_t*>() is false: it is a non-const pointer to a const
+//   int_t. is_const<int_t* const>() is true: the pointer itself is const.
+template<typename T> constexpr bool_t kIsConst = false;
+template<typename T> constexpr bool_t kIsConst<const T> = true;
+export template<typename T> constexpr bool_t is_const()
+{
+    return kIsConst<T>;
+}
 
 export template<typename TSrc, typename TDest> constexpr bool_t is_convertible()
 {

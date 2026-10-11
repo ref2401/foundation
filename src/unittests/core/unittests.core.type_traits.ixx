@@ -47,6 +47,42 @@ void unittests_core_type_traits_unref()
     static_assert(is_same<Unref<Unref<int_t&>>, int_t>());
 }
 
+void unittests_core_type_traits_is_const()
+{
+    struct is_const_test_t { int_t i; };
+
+    // const and const volatile types are const.
+    static_assert(is_const<const int_t>());
+    static_assert(is_const<const volatile int_t>());
+    static_assert(is_const<const is_const_test_t>());
+    static_assert(is_const<const void>());
+
+    // Types without const, including volatile alone.
+    static_assert(!is_const<int_t>());
+    static_assert(!is_const<volatile int_t>());
+    static_assert(!is_const<is_const_test_t>());
+    static_assert(!is_const<void>());
+
+    // A reference is never const itself, even to a const type; the type it
+    // refers to is.
+    static_assert(!is_const<int_t&>());
+    static_assert(!is_const<const int_t&>());
+    static_assert(!is_const<const int_t&&>());
+    static_assert(is_const<Unref<const int_t&>>());
+
+    // A pointer to const is not const; a const pointer is.
+    static_assert(!is_const<const int_t*>());
+    static_assert(is_const<int_t* const>());
+    static_assert(is_const<const int_t* const>());
+
+    // An array of const elements is a const type.
+    static_assert(is_const<const int_t[3]>());
+    static_assert(!is_const<int_t[3]>());
+
+    // A function type is never const.
+    static_assert(!is_const<void(int_t)>());
+}
+
 void unittests_core_type_traits_is_same()
 {
     struct is_same_test_t { int_t i; };
@@ -83,6 +119,7 @@ void unittests_core_type_traits_is_same()
 void unittests_core_type_traits()
 {
     unittests_core_type_traits_unref();
+    unittests_core_type_traits_is_const();
     unittests_core_type_traits_is_same();
 }
 
