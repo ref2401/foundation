@@ -91,6 +91,8 @@ and a `unittests` executable that tests them.
 
 ## Code
 
+- Parameters passed by value are `const`, pointers included:
+  `abs(const int_t x)`, `const char_t* const filename`.
 - Every function asserts its own preconditions with `FND_ASSERT` at its top,
   even when it only forwards to a callee that asserts the same thing.
 - Prefer brace initialization: `int_t a{1}`, `int_t* p{&a}`,

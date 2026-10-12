@@ -12,7 +12,7 @@ export void unittests_core_utility();
 // Cannot be copied: exchange and swap compile for it only if they never copy.
 class MoveOnly final {
   public:
-    constexpr explicit MoveOnly(int_t value) : value_{value} {}
+    constexpr explicit MoveOnly(const int_t value) : value_{value} {}
     MoveOnly(const MoveOnly&) = delete;
     MoveOnly(MoveOnly&&) = default;
     MoveOnly& operator=(const MoveOnly&) = delete;
