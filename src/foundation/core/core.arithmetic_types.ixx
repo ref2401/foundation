@@ -19,6 +19,10 @@ export using double_t = double;
 export using ubyte_t = ::uint8_t;
 export using uint_t = ::uint32_t;
 export using ulong_t = ::uint64_t;
+// pointer-sized
+export using uptr_t = ::uintptr_t;
+static_assert(sizeof(void*) <= sizeof(uptr_t)); // any pointer fits
+static_assert(sizeof(uptr_t{} - uptr_t{}) == sizeof(long_t)); // x64
 // characters
 export using char_t = char;
 
