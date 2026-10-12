@@ -93,8 +93,13 @@ and a `unittests` executable that tests them.
 
 - Parameters passed by value are `const`, pointers included:
   `abs(const int_t x)`, `const char_t* const filename`.
-- Every function asserts its own preconditions with `FND_ASSERT` at its top,
-  even when it only forwards to a callee that asserts the same thing.
+- Every function, and every overload of it, asserts its own conditions with
+  `FND_ASSERT`, even when it only forwards to a callee that asserts the same
+  thing:
+  - preconditions at its top;
+  - postconditions right before it returns.
+  An assert that calls a non-`constexpr` function (`is_normalized`, `isnan`)
+  makes the function `FND_INLINE` instead of `constexpr`.
 - Prefer brace initialization: `int_t a{1}`, `int_t* p{&a}`,
   `const float3_t v{normalize(a)}`. Use `=` with `auto`, and in generic code
   initializing a `T` from a single `T` (`T old_value = move(object);`).
