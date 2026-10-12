@@ -1,8 +1,5 @@
 # foundation
 
-A C++20 library built from MSVC modules: `foundation.core`, `foundation.math`,
-and a `unittests` executable that tests them.
-
 ## Building and formatting
 
 - The project's compiler is MSVC 19.51 (toolset 14.51) from Visual Studio 2026
@@ -11,7 +8,7 @@ and a `unittests` executable that tests them.
   installed; don't build with it.
 - `cl.exe` is not on the PATH. Load the VS 2026 developer environment first,
   then run the build script (`-Configuration Debug|Release`, optional `-Clean`):
-
+v
   ```
   cmd /c '"C:\Program Files\Microsoft Visual Studio\18\Community\VC\Auxiliary\Build\vcvars64.bat" >nul 2>&1 && powershell -NoProfile -ExecutionPolicy Bypass -File scripts\build_unittests.ps1 -Configuration Debug'
   ```
@@ -123,6 +120,13 @@ and a `unittests` executable that tests them.
   their NaN cases are tested at runtime.
 - `[[msvc::intrinsic]]` (`FND_CAST_FUNCTION`) only on functions whose body is a
   single cast, such as `move` and `forward`.
+- A helper that belongs to one function lives inside it: a lambda
+  (`const auto name = [](...) { ... };`), a local struct, a local constant.
+  Collapsing the function then hides its helpers, and nothing else can use
+  them. A helper shared by several functions goes at namespace scope. Where the
+  local form can't work (a template, a member template, a partial
+  specialization, an overload set, recursion), the helper stays next to its
+  function, as in Source order.
 
 ## Source order
 

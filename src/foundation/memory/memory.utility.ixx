@@ -25,7 +25,8 @@ export FND_INLINE void* align_up(void* const ptr, const ulong_t alignment)
     FND_ASSERT(is_pow2(alignment));
 
     const uptr_t address{reinterpret_cast<uptr_t>(ptr)};
-    FND_ASSERT(address + (alignment - 1) >= address); // overflow
+    const uptr_t mask{alignment - 1};
+    FND_ASSERT(address + mask >= address); // overflow
 
     // ptr is non-const, so casting the result back is safe. The static_cast
     // selects the const overload; without it this would call itself.

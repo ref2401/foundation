@@ -9,15 +9,19 @@ namespace fnd::unittests {
 
 export void unittests_memory_utility();
 
+// Alignment of the test buffers: the largest alignment that the tests on real
+// memory can check.
+constexpr ulong_t kMaxBufferAlignment{256};
 // Every power-of-two alignment up to that of the test buffers.
-constexpr ulong_t kAlignments[]{1, 2, 4, 8, 16, 32, 64, 128, 256};
+constexpr ulong_t kAlignments[]{
+    1, 2, 4, 8, 16, 32, 64, 128, kMaxBufferAlignment};
 
 void unittests_memory_utility_align_up()
 {
-    alignas(256) ubyte_t buffer[512]{};
+    alignas(kMaxBufferAlignment) ubyte_t buffer[2 * kMaxBufferAlignment]{};
 
     // An aligned pointer stays where it is.
-    FND_TEST_TRUE(align_up(buffer, 256) == buffer);
+    FND_TEST_TRUE(align_up(buffer, kMaxBufferAlignment) == buffer);
     FND_TEST_TRUE(align_up(buffer + 16, 16) == buffer + 16);
 
     // Otherwise it moves forward to the next multiple of alignment.
@@ -25,7 +29,9 @@ void unittests_memory_utility_align_up()
     FND_TEST_TRUE(align_up(buffer + 15, 16) == buffer + 16);
     FND_TEST_TRUE(align_up(buffer + 17, 16) == buffer + 32);
     FND_TEST_TRUE(align_up(buffer + 33, 64) == buffer + 64);
-    FND_TEST_TRUE(align_up(buffer + 1, 256) == buffer + 256);
+    FND_TEST_TRUE(
+        align_up(buffer + 1, kMaxBufferAlignment)
+        == buffer + kMaxBufferAlignment);
 
     // Every offset and alignment: the result is aligned, not before the
     // pointer, less than alignment after it, and the closest such address.
@@ -60,6 +66,31 @@ void unittests_memory_utility_align_up()
     static_assert(is_same<decltype(align_up(buffer, 16)), void*>());
     FND_TEST_TRUE(align_up(const_ptr, 16) == buffer + 16);
     FND_TEST_TRUE(align_up(const_ptr + 13, 16) == const_ptr + 13);
+
+    // Addresses built from integers reach what the buffer can't: page and
+    // larger alignments, and the upper half of a 64-bit address. The pointer
+    // is never dereferenced.
+    const auto align_up_test_address = [](const uptr_t address,
+                                           const ulong_t alignment) {
+        return reinterpret_cast<uptr_t>(
+            align_up(reinterpret_cast<void*>(address), alignment));
+    };
+    FND_TEST_TRUE(align_up_test_address(0x1000, 4096) == 0x1000);
+    FND_TEST_TRUE(align_up_test_address(0x1001, 4096) == 0x2000);
+    FND_TEST_TRUE(
+        align_up_test_address(0x100000001, ulong_t{1} << 32)
+        == uptr_t{2} << 32);
+    FND_TEST_TRUE(
+        align_up_test_address(1, ulong_t{1} << 63) == uptr_t{1} << 63);
+    // A mask computed in 32 bits would clear the upper half.
+    FND_TEST_TRUE(
+        align_up_test_address(0x123456789ABCDEF1, 16) == 0x123456789ABCDF00);
+
+    // The largest address that does not overflow with alignment 16. With
+    // alignment 1 nothing overflows, not even the last address.
+    constexpr uptr_t kMaxAddress{~uptr_t{0} - 15};
+    FND_TEST_TRUE(align_up_test_address(kMaxAddress, 16) == kMaxAddress);
+    FND_TEST_TRUE(align_up_test_address(~uptr_t{0}, 1) == ~uptr_t{0});
 }
 
 void unittests_memory_utility_gibibytes()
@@ -82,12 +113,7 @@ void unittests_memory_utility_gibibytes()
 
 void unittests_memory_utility_is_aligned()
 {
-    alignas(256) ubyte_t buffer[128]{};
-
-    // The start of the buffer is aligned to every alignment up to 256.
-    for (const ulong_t alignment : kAlignments) {
-        FND_TEST_TRUE(is_aligned(buffer, alignment));
-    }
+    alignas(kMaxBufferAlignment) ubyte_t buffer[128]{};
 
     // buffer + offset is aligned exactly when offset is a multiple of
     // alignment.
@@ -111,6 +137,20 @@ void unittests_memory_utility_is_aligned()
     const ubyte_t* const const_ptr{buffer + 16};
     FND_TEST_TRUE(is_aligned(const_ptr, 16));
     FND_TEST_FALSE(is_aligned(const_ptr, 32));
+
+    // Addresses built from integers reach alignments the buffer can't; the
+    // upper bits of an address don't affect the result. The pointer is never
+    // dereferenced.
+    const auto is_aligned_test_address = [](const uptr_t address,
+                                             const ulong_t alignment) {
+        return is_aligned(reinterpret_cast<const void*>(address), alignment);
+    };
+    FND_TEST_TRUE(is_aligned_test_address(0x1000, 4096));
+    FND_TEST_FALSE(is_aligned_test_address(0x1000, 8192));
+    FND_TEST_TRUE(is_aligned_test_address(0x123456789ABCDE00, 512));
+    FND_TEST_FALSE(is_aligned_test_address(0x123456789ABCDE00, 1024));
+    FND_TEST_TRUE(is_aligned_test_address(uptr_t{1} << 63, ulong_t{1} << 63));
+    FND_TEST_FALSE(is_aligned_test_address(uptr_t{1} << 62, ulong_t{1} << 63));
 }
 
 void unittests_memory_utility_kibibytes()
