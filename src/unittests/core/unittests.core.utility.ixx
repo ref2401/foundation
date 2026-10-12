@@ -62,10 +62,77 @@ void unittests_core_utility_move()
     static_assert([] { return move(5); }() == 5);
 }
 
+void unittests_core_utility_exchange()
+{
+    struct exchange_test_t {
+        int_t x;
+        int_t y;
+    };
+
+    // Cannot be copied: exchange compiles for it only if it never copies.
+    class MoveOnly {
+      public:
+        constexpr explicit MoveOnly(int_t value) : value_{value} {}
+        MoveOnly(const MoveOnly&) = delete;
+        MoveOnly(MoveOnly&&) = default;
+        MoveOnly& operator=(const MoveOnly&) = delete;
+        MoveOnly& operator=(MoveOnly&&) = default;
+
+        constexpr int_t value() const { return value_; }
+
+      private:
+        int_t value_;
+    };
+
+    int_t a{1};
+    const int_t ca{2};
+    int_t* p{&a};
+    exchange_test_t s{1, 2};
+    MoveOnly m{1};
+
+    // The result is the type of object, whatever new_value is: an rvalue, an
+    // lvalue, nullptr or a braced list (U falls back to T).
+    static_assert(is_same<decltype(exchange(a, 2)), int_t>());
+    static_assert(is_same<decltype(exchange(a, ca)), int_t>());
+    static_assert(is_same<decltype(exchange(p, nullptr)), int_t*>());
+    static_assert(is_same<decltype(exchange(s, {3, 4})), exchange_test_t>());
+    static_assert(is_same<decltype(exchange(m, MoveOnly{2})), MoveOnly>());
+
+    // object gets new_value, the previous value is returned.
+    static_assert([] {
+        int_t b{1};
+        const int_t old_value{exchange(b, 2)};
+        return old_value == 1 && b == 2;
+    }());
+    static_assert([] {
+        int_t b{1};
+        const int_t c{2};
+        const int_t old_value{exchange(b, c)};
+        return old_value == 1 && b == 2 && c == 2;
+    }());
+    static_assert([] {
+        int_t b{1};
+        int_t* q{&b};
+        int_t* const old_value{exchange(q, nullptr)};
+        return old_value == &b && q == nullptr;
+    }());
+    static_assert([] {
+        exchange_test_t t{1, 2};
+        const exchange_test_t old_value{exchange(t, {3, 4})};
+        return old_value.x == 1 && old_value.y == 2 && t.x == 3 && t.y == 4;
+    }());
+    static_assert([] {
+        MoveOnly n{1};
+        const MoveOnly old_value{exchange(n, MoveOnly{2})};
+        return old_value.value() == 1 && n.value() == 2;
+    }());
+}
+
 void unittests_core_utility()
 {
     unittests_core_utility_forward();
     unittests_core_utility_move();
+    unittests_core_utility_exchange();
 }
 
 } // namespace fnd::unittests

@@ -35,4 +35,13 @@ export template<typename T>
     return static_cast<Unref<T>&&>(value);
 }
 
+// Assigns new_value to object and returns object's previous value.
+export template<typename T, typename U = T>
+[[nodiscard]] constexpr T exchange(T& object, U&& new_value)
+{
+    T old_value = move(object);
+    object = forward<U>(new_value);
+    return old_value;
+}
+
 } // namespace fnd
