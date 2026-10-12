@@ -33,19 +33,6 @@
 
 #define FND_INLINE
 
-// ---------------------------------------------------------------------------
-// FND_CAST_FUNCTION
-// ---------------------------------------------------------------------------
-
-// For a function whose body is a single cast of its parameter, such as move and
-// forward: MSVC replaces each call with the cast itself, in Debug builds too.
-#if __has_cpp_attribute(msvc::intrinsic)
-    #define FND_CAST_FUNCTION [[msvc::intrinsic]]
-#else
-    #define FND_CAST_FUNCTION
-#endif
-
-
 namespace fnd {
 
 void print_assert_message(

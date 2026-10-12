@@ -1,5 +1,14 @@
 module;
-#include "foundation/core/macros.h"
+
+// For a function whose body is a single cast of its parameter, such as move and
+// forward: MSVC replaces each call with the cast itself, in Debug builds too.
+// A macro cannot be exported from a module: this one is only for the cast
+// functions of this file.
+#if __has_cpp_attribute(msvc::intrinsic)
+    #define FND_CAST_FUNCTION [[msvc::intrinsic]]
+#else
+    #define FND_CAST_FUNCTION
+#endif
 
 export module foundation.core:utility;
 import :type_traits;
