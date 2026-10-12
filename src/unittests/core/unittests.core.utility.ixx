@@ -9,6 +9,21 @@ namespace fnd::unittests {
 
 export void unittests_core_utility();
 
+// Cannot be copied: exchange and swap compile for it only if they never copy.
+class MoveOnly {
+  public:
+    constexpr explicit MoveOnly(int_t value) : value_{value} {}
+    MoveOnly(const MoveOnly&) = delete;
+    MoveOnly(MoveOnly&&) = default;
+    MoveOnly& operator=(const MoveOnly&) = delete;
+    MoveOnly& operator=(MoveOnly&&) = default;
+
+    constexpr int_t value() const { return value_; }
+
+  private:
+    int_t value_;
+};
+
 void unittests_core_utility_forward()
 {
     int_t a{1};
@@ -23,12 +38,17 @@ void unittests_core_utility_forward()
     static_assert(is_same<decltype(forward<const int_t>(ca)), const int_t&&>());
 
     // It is only a cast: the result refers to the object itself.
+    int_t& lr{forward<int_t&>(a)};
+    int_t&& rr{forward<int_t>(a)};
+    FND_TEST_TRUE(&lr == &a);
+    FND_TEST_TRUE(&rr == &a);
+    FND_TEST_TRUE(a == 1);
+
+    // Usable in constant expressions.
     static_assert([] {
         int_t b{4};
-        int_t& lr{forward<int_t&>(b)};
-        int_t&& rr{forward<int_t>(b)};
-        return &lr == &b && &rr == &b && b == 4;
-    }());
+        return forward<int_t&>(b);
+    }() == 4);
 }
 
 void unittests_core_utility_move()
@@ -52,11 +72,9 @@ void unittests_core_utility_move()
 
     // It is only a cast: the result refers to the object itself, which is not
     // changed.
-    static_assert([] {
-        int_t b{1};
-        int_t&& r{move(b)};
-        return &r == &b && b == 1;
-    }());
+    int_t&& r{move(a)};
+    FND_TEST_TRUE(&r == &a);
+    FND_TEST_TRUE(a == 1);
 
     // Usable in constant expressions.
     static_assert([] { return move(5); }() == 5);
@@ -67,21 +85,6 @@ void unittests_core_utility_exchange()
     struct exchange_test_t {
         int_t x;
         int_t y;
-    };
-
-    // Cannot be copied: exchange compiles for it only if it never copies.
-    class MoveOnly {
-      public:
-        constexpr explicit MoveOnly(int_t value) : value_{value} {}
-        MoveOnly(const MoveOnly&) = delete;
-        MoveOnly(MoveOnly&&) = default;
-        MoveOnly& operator=(const MoveOnly&) = delete;
-        MoveOnly& operator=(MoveOnly&&) = default;
-
-        constexpr int_t value() const { return value_; }
-
-      private:
-        int_t value_;
     };
 
     int_t a{1};
@@ -99,32 +102,73 @@ void unittests_core_utility_exchange()
     static_assert(is_same<decltype(exchange(m, MoveOnly{2})), MoveOnly>());
 
     // object gets new_value, the previous value is returned.
+    FND_TEST_TRUE(exchange(a, 3) == 1);
+    FND_TEST_TRUE(a == 3);
+    FND_TEST_TRUE(exchange(a, ca) == 3);
+    FND_TEST_TRUE(a == 2);
+
+    FND_TEST_TRUE(exchange(p, nullptr) == &a);
+    FND_TEST_TRUE(p == nullptr);
+
+    const exchange_test_t old_s{exchange(s, {3, 4})};
+    FND_TEST_TRUE(old_s.x == 1 && old_s.y == 2);
+    FND_TEST_TRUE(s.x == 3 && s.y == 4);
+
+    const MoveOnly old_m{exchange(m, MoveOnly{2})};
+    FND_TEST_TRUE(old_m.value() == 1);
+    FND_TEST_TRUE(m.value() == 2);
+
+    // Usable in constant expressions.
     static_assert([] {
         int_t b{1};
         const int_t old_value{exchange(b, 2)};
         return old_value == 1 && b == 2;
     }());
+}
+
+void unittests_core_utility_swap()
+{
+    struct swap_test_t {
+        int_t x;
+        int_t y;
+    };
+
+    int_t a{1};
+    int_t b{2};
+    swap(a, b);
+    FND_TEST_TRUE(a == 2);
+    FND_TEST_TRUE(b == 1);
+
+    int_t* p{&a};
+    int_t* q{&b};
+    swap(p, q);
+    FND_TEST_TRUE(p == &b);
+    FND_TEST_TRUE(q == &a);
+
+    swap_test_t s{1, 2};
+    swap_test_t t{3, 4};
+    swap(s, t);
+    FND_TEST_TRUE(s.x == 3 && s.y == 4);
+    FND_TEST_TRUE(t.x == 1 && t.y == 2);
+
+    MoveOnly m{1};
+    MoveOnly n{2};
+    swap(m, n);
+    FND_TEST_TRUE(m.value() == 2);
+    FND_TEST_TRUE(n.value() == 1);
+
+    // Swapping an object with itself leaves it unchanged.
+    swap(a, a);
+    FND_TEST_TRUE(a == 2);
+    swap(m, m);
+    FND_TEST_TRUE(m.value() == 2);
+
+    // Usable in constant expressions.
     static_assert([] {
-        int_t b{1};
-        const int_t c{2};
-        const int_t old_value{exchange(b, c)};
-        return old_value == 1 && b == 2 && c == 2;
-    }());
-    static_assert([] {
-        int_t b{1};
-        int_t* q{&b};
-        int_t* const old_value{exchange(q, nullptr)};
-        return old_value == &b && q == nullptr;
-    }());
-    static_assert([] {
-        exchange_test_t t{1, 2};
-        const exchange_test_t old_value{exchange(t, {3, 4})};
-        return old_value.x == 1 && old_value.y == 2 && t.x == 3 && t.y == 4;
-    }());
-    static_assert([] {
-        MoveOnly n{1};
-        const MoveOnly old_value{exchange(n, MoveOnly{2})};
-        return old_value.value() == 1 && n.value() == 2;
+        int_t c{1};
+        int_t d{2};
+        swap(c, d);
+        return c == 2 && d == 1;
     }());
 }
 
@@ -133,6 +177,7 @@ void unittests_core_utility()
     unittests_core_utility_forward();
     unittests_core_utility_move();
     unittests_core_utility_exchange();
+    unittests_core_utility_swap();
 }
 
 } // namespace fnd::unittests

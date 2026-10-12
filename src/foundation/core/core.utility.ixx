@@ -44,4 +44,13 @@ export template<typename T, typename U = T>
     return old_value;
 }
 
+// Swaps the values of a and b. swap(a, a) assigns a to itself through move
+// assignment, which must leave the object unchanged.
+export template<typename T> constexpr void swap(T& a, T& b)
+{
+    T temp = move(a);
+    a = move(b);
+    b = move(temp);
+}
+
 } // namespace fnd
