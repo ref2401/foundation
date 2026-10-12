@@ -8,29 +8,29 @@ import :vector_bool;
 namespace fnd {
 
 export struct uint2_t final {
-    static const uint2_t kZero;
-    static const uint2_t kUnitX;
-    static const uint2_t kUnitY;
+  static const uint2_t kZero;
+  static const uint2_t kUnitX;
+  static const uint2_t kUnitY;
 
-    uint_t x{0};
-    uint_t y{0};
+  uint_t x{0};
+  uint_t y{0};
 
-    constexpr uint2_t() = default;
+  constexpr uint2_t() = default;
 
-    constexpr explicit uint2_t(const uint_t scalar) : x{scalar}, y{scalar} {}
+  constexpr explicit uint2_t(const uint_t scalar) : x{scalar}, y{scalar} {}
 
-    constexpr uint2_t(const uint_t x, const uint_t y) : x{x}, y{y} {}
+  constexpr uint2_t(const uint_t x, const uint_t y) : x{x}, y{y} {}
 
-    constexpr const uint_t& operator[](const uint_t idx) const
-    {
-        FND_ASSERT(idx < 2);
-        return idx == 0 ? x : y;
-    }
+  constexpr const uint_t& operator[](const uint_t idx) const
+  {
+    FND_ASSERT(idx < 2);
+    return idx == 0 ? x : y;
+  }
 
-    constexpr uint_t& operator[](const uint_t idx)
-    {
-        return const_cast<uint_t&>(static_cast<const uint2_t&>(*this)[idx]);
-    }
+  constexpr uint_t& operator[](const uint_t idx)
+  {
+    return const_cast<uint_t&>(static_cast<const uint2_t&>(*this)[idx]);
+  }
 };
 
 constexpr uint2_t uint2_t::kZero{0, 0};
@@ -39,829 +39,829 @@ constexpr uint2_t uint2_t::kUnitY{0, 1};
 
 export constexpr uint2_t& operator++(uint2_t& v)
 {
-    ++v.x;
-    ++v.y;
-    return v;
+  ++v.x;
+  ++v.y;
+  return v;
 }
 
 export constexpr uint2_t operator++(uint2_t& v, int)
 {
-    return uint2_t{v.x++, v.y++};
+  return uint2_t{v.x++, v.y++};
 }
 
 export constexpr uint2_t& operator--(uint2_t& v)
 {
-    --v.x;
-    --v.y;
-    return v;
+  --v.x;
+  --v.y;
+  return v;
 }
 
 export constexpr uint2_t operator--(uint2_t& v, int)
 {
-    return uint2_t{v.x--, v.y--};
+  return uint2_t{v.x--, v.y--};
 }
 
 export constexpr uint2_t operator~(const uint2_t v)
 {
-    return uint2_t{~v.x, ~v.y};
+  return uint2_t{~v.x, ~v.y};
 }
 
 export constexpr bool2_t operator==(const uint2_t a, const uint2_t b)
 {
-    return bool2_t{a.x == b.x, a.y == b.y};
+  return bool2_t{a.x == b.x, a.y == b.y};
 }
 
 export constexpr bool2_t operator==(const uint2_t a, const uint_t scalar)
 {
-    return bool2_t{a.x == scalar, a.y == scalar};
+  return bool2_t{a.x == scalar, a.y == scalar};
 }
 
 export constexpr bool2_t operator==(const uint_t scalar, const uint2_t b)
 {
-    return bool2_t{scalar == b.x, scalar == b.y};
+  return bool2_t{scalar == b.x, scalar == b.y};
 }
 
 export constexpr bool2_t operator==(const uint2_t a, const int_t scalar)
 {
-    FND_ASSERT(scalar >= 0);
+  FND_ASSERT(scalar >= 0);
 
-    const uint_t uval = static_cast<uint_t>(scalar);
-    return bool2_t{a.x == uval, a.y == uval};
+  const uint_t uval = static_cast<uint_t>(scalar);
+  return bool2_t{a.x == uval, a.y == uval};
 }
 
 export constexpr bool2_t operator==(const int_t scalar, const uint2_t b)
 {
-    FND_ASSERT(scalar >= 0);
+  FND_ASSERT(scalar >= 0);
 
-    const uint_t uval = static_cast<uint_t>(scalar);
-    return bool2_t{uval == b.x, uval == b.y};
+  const uint_t uval = static_cast<uint_t>(scalar);
+  return bool2_t{uval == b.x, uval == b.y};
 }
 
 export constexpr bool2_t operator!=(const uint2_t a, const uint2_t b)
 {
-    return !(a == b);
+  return !(a == b);
 }
 
 export constexpr bool2_t operator!=(const uint2_t a, const uint_t scalar)
 {
-    return !(a == scalar);
+  return !(a == scalar);
 }
 
 export constexpr bool2_t operator!=(const uint_t scalar, const uint2_t b)
 {
-    return !(scalar == b);
+  return !(scalar == b);
 }
 
 export constexpr bool2_t operator!=(const uint2_t a, const int_t scalar)
 {
-    return !(a == scalar);
+  return !(a == scalar);
 }
 
 export constexpr bool2_t operator!=(const int_t scalar, const uint2_t b)
 {
-    return !(scalar == b);
+  return !(scalar == b);
 }
 
 export constexpr bool2_t operator<(const uint2_t a, const uint2_t b)
 {
-    return bool2_t{a.x < b.x, a.y < b.y};
+  return bool2_t{a.x < b.x, a.y < b.y};
 }
 
 export constexpr bool2_t operator<(const uint2_t a, const uint_t scalar)
 {
-    return bool2_t{a.x < scalar, a.y < scalar};
+  return bool2_t{a.x < scalar, a.y < scalar};
 }
 
 export constexpr bool2_t operator<(const uint_t scalar, const uint2_t b)
 {
-    return bool2_t{scalar < b.x, scalar < b.y};
+  return bool2_t{scalar < b.x, scalar < b.y};
 }
 
 export constexpr bool2_t operator<(const uint2_t a, const int_t scalar)
 {
-    FND_ASSERT(scalar >= 0);
+  FND_ASSERT(scalar >= 0);
 
-    const uint_t uval = static_cast<uint_t>(scalar);
-    return bool2_t{a.x < uval, a.y < uval};
+  const uint_t uval = static_cast<uint_t>(scalar);
+  return bool2_t{a.x < uval, a.y < uval};
 }
 
 export constexpr bool2_t operator<(const int_t scalar, const uint2_t b)
 {
-    FND_ASSERT(scalar >= 0);
+  FND_ASSERT(scalar >= 0);
 
-    const uint_t uval = static_cast<uint_t>(scalar);
-    return bool2_t{uval < b.x, uval < b.y};
+  const uint_t uval = static_cast<uint_t>(scalar);
+  return bool2_t{uval < b.x, uval < b.y};
 }
 
 export constexpr bool2_t operator<=(const uint2_t a, const uint2_t b)
 {
-    return bool2_t{a.x <= b.x, a.y <= b.y};
+  return bool2_t{a.x <= b.x, a.y <= b.y};
 }
 
 export constexpr bool2_t operator<=(const uint2_t a, const uint_t scalar)
 {
-    return bool2_t{a.x <= scalar, a.y <= scalar};
+  return bool2_t{a.x <= scalar, a.y <= scalar};
 }
 
 export constexpr bool2_t operator<=(const uint_t scalar, const uint2_t b)
 {
-    return bool2_t{scalar <= b.x, scalar <= b.y};
+  return bool2_t{scalar <= b.x, scalar <= b.y};
 }
 
 export constexpr bool2_t operator<=(const uint2_t a, const int_t scalar)
 {
-    FND_ASSERT(scalar >= 0);
+  FND_ASSERT(scalar >= 0);
 
-    const uint_t uval = static_cast<uint_t>(scalar);
-    return bool2_t{a.x <= uval, a.y <= uval};
+  const uint_t uval = static_cast<uint_t>(scalar);
+  return bool2_t{a.x <= uval, a.y <= uval};
 }
 
 export constexpr bool2_t operator<=(const int_t scalar, const uint2_t b)
 {
-    FND_ASSERT(scalar >= 0);
+  FND_ASSERT(scalar >= 0);
 
-    const uint_t uval = static_cast<uint_t>(scalar);
-    return bool2_t{uval <= b.x, uval <= b.y};
+  const uint_t uval = static_cast<uint_t>(scalar);
+  return bool2_t{uval <= b.x, uval <= b.y};
 }
 
 export constexpr bool2_t operator>(const uint2_t a, const uint2_t b)
 {
-    return bool2_t{a.x > b.x, a.y > b.y};
+  return bool2_t{a.x > b.x, a.y > b.y};
 }
 
 export constexpr bool2_t operator>(const uint2_t a, const uint_t scalar)
 {
-    return bool2_t{a.x > scalar, a.y > scalar};
+  return bool2_t{a.x > scalar, a.y > scalar};
 }
 
 export constexpr bool2_t operator>(const uint_t scalar, const uint2_t b)
 {
-    return bool2_t{scalar > b.x, scalar > b.y};
+  return bool2_t{scalar > b.x, scalar > b.y};
 }
 
 export constexpr bool2_t operator>(const uint2_t a, const int_t scalar)
 {
-    FND_ASSERT(scalar >= 0);
+  FND_ASSERT(scalar >= 0);
 
-    const uint_t uval = static_cast<uint_t>(scalar);
-    return bool2_t{a.x > uval, a.y > uval};
+  const uint_t uval = static_cast<uint_t>(scalar);
+  return bool2_t{a.x > uval, a.y > uval};
 }
 
 export constexpr bool2_t operator>(const int_t scalar, const uint2_t b)
 {
-    FND_ASSERT(scalar >= 0);
+  FND_ASSERT(scalar >= 0);
 
-    const uint_t uval = static_cast<uint_t>(scalar);
-    return bool2_t{uval > b.x, uval > b.y};
+  const uint_t uval = static_cast<uint_t>(scalar);
+  return bool2_t{uval > b.x, uval > b.y};
 }
 
 export constexpr bool2_t operator>=(const uint2_t a, const uint2_t b)
 {
-    return bool2_t{a.x >= b.x, a.y >= b.y};
+  return bool2_t{a.x >= b.x, a.y >= b.y};
 }
 
 export constexpr bool2_t operator>=(const uint2_t a, const uint_t scalar)
 {
-    return bool2_t{a.x >= scalar, a.y >= scalar};
+  return bool2_t{a.x >= scalar, a.y >= scalar};
 }
 
 export constexpr bool2_t operator>=(const uint_t scalar, const uint2_t b)
 {
-    return bool2_t{scalar >= b.x, scalar >= b.y};
+  return bool2_t{scalar >= b.x, scalar >= b.y};
 }
 
 export constexpr bool2_t operator>=(const uint2_t a, const int_t scalar)
 {
-    FND_ASSERT(scalar >= 0);
+  FND_ASSERT(scalar >= 0);
 
-    const uint_t uval = static_cast<uint_t>(scalar);
-    return bool2_t{a.x >= uval, a.y >= uval};
+  const uint_t uval = static_cast<uint_t>(scalar);
+  return bool2_t{a.x >= uval, a.y >= uval};
 }
 
 export constexpr bool2_t operator>=(const int_t scalar, const uint2_t b)
 {
-    FND_ASSERT(scalar >= 0);
+  FND_ASSERT(scalar >= 0);
 
-    const uint_t uval = static_cast<uint_t>(scalar);
-    return bool2_t{uval >= b.x, uval >= b.y};
+  const uint_t uval = static_cast<uint_t>(scalar);
+  return bool2_t{uval >= b.x, uval >= b.y};
 }
 
 export constexpr uint2_t operator&(const uint2_t a, const uint2_t b)
 {
-    return uint2_t{a.x & b.x, a.y & b.y};
+  return uint2_t{a.x & b.x, a.y & b.y};
 }
 
 export constexpr uint2_t operator&(const uint2_t a, const uint_t scalar)
 {
-    return uint2_t{a.x & scalar, a.y & scalar};
+  return uint2_t{a.x & scalar, a.y & scalar};
 }
 
 export constexpr uint2_t operator&(const uint_t scalar, const uint2_t b)
 {
-    return uint2_t{scalar & b.x, scalar & b.y};
+  return uint2_t{scalar & b.x, scalar & b.y};
 }
 
 export constexpr uint2_t operator&(const uint2_t a, const int_t scalar)
 {
-    FND_ASSERT(scalar >= 0);
+  FND_ASSERT(scalar >= 0);
 
-    return uint2_t{a.x & scalar, a.y & scalar};
+  return uint2_t{a.x & scalar, a.y & scalar};
 }
 
 export constexpr uint2_t operator&(const int_t scalar, const uint2_t b)
 {
-    FND_ASSERT(scalar >= 0);
+  FND_ASSERT(scalar >= 0);
 
-    return uint2_t{scalar & b.x, scalar & b.y};
+  return uint2_t{scalar & b.x, scalar & b.y};
 }
 
 export constexpr uint2_t operator*(const uint2_t a, const uint2_t b)
 {
-    return uint2_t{a.x * b.x, a.y * b.y};
+  return uint2_t{a.x * b.x, a.y * b.y};
 }
 
 export constexpr uint2_t operator*(const uint2_t a, const uint_t scalar)
 {
-    return uint2_t{a.x * scalar, a.y * scalar};
+  return uint2_t{a.x * scalar, a.y * scalar};
 }
 
 export constexpr uint2_t operator*(const uint_t scalar, const uint2_t b)
 {
-    return uint2_t{scalar * b.x, scalar * b.y};
+  return uint2_t{scalar * b.x, scalar * b.y};
 }
 
 export constexpr uint2_t operator*(const uint2_t a, const int_t scalar)
 {
-    FND_ASSERT(scalar >= 0);
+  FND_ASSERT(scalar >= 0);
 
-    return uint2_t{a.x * scalar, a.y * scalar};
+  return uint2_t{a.x * scalar, a.y * scalar};
 }
 
 export constexpr uint2_t operator*(const int_t scalar, const uint2_t b)
 {
-    FND_ASSERT(scalar >= 0);
+  FND_ASSERT(scalar >= 0);
 
-    return uint2_t{scalar * b.x, scalar * b.y};
+  return uint2_t{scalar * b.x, scalar * b.y};
 }
 
 export constexpr uint2_t operator+(const uint2_t a, const uint2_t b)
 {
-    return uint2_t{a.x + b.x, a.y + b.y};
+  return uint2_t{a.x + b.x, a.y + b.y};
 }
 
 export constexpr uint2_t operator+(const uint2_t a, const uint_t scalar)
 {
-    return uint2_t{a.x + scalar, a.y + scalar};
+  return uint2_t{a.x + scalar, a.y + scalar};
 }
 
 export constexpr uint2_t operator+(const uint_t scalar, const uint2_t b)
 {
-    return uint2_t{scalar + b.x, scalar + b.y};
+  return uint2_t{scalar + b.x, scalar + b.y};
 }
 
 export constexpr uint2_t operator+(const uint2_t a, const int_t scalar)
 {
-    FND_ASSERT(scalar >= 0);
+  FND_ASSERT(scalar >= 0);
 
-    return uint2_t{a.x + scalar, a.y + scalar};
+  return uint2_t{a.x + scalar, a.y + scalar};
 }
 
 export constexpr uint2_t operator+(const int_t scalar, const uint2_t b)
 {
-    FND_ASSERT(scalar >= 0);
+  FND_ASSERT(scalar >= 0);
 
-    return uint2_t{scalar + b.x, scalar + b.y};
+  return uint2_t{scalar + b.x, scalar + b.y};
 }
 
 export constexpr uint2_t operator-(const uint2_t a, const uint2_t b)
 {
-    return uint2_t{a.x - b.x, a.y - b.y};
+  return uint2_t{a.x - b.x, a.y - b.y};
 }
 
 export constexpr uint2_t operator-(const uint2_t a, const uint_t scalar)
 {
-    return uint2_t{a.x - scalar, a.y - scalar};
+  return uint2_t{a.x - scalar, a.y - scalar};
 }
 
 export constexpr uint2_t operator-(const uint_t scalar, const uint2_t b)
 {
-    return uint2_t{scalar - b.x, scalar - b.y};
+  return uint2_t{scalar - b.x, scalar - b.y};
 }
 
 export constexpr uint2_t operator-(const uint2_t a, const int_t scalar)
 {
-    FND_ASSERT(scalar >= 0);
+  FND_ASSERT(scalar >= 0);
 
-    return uint2_t{a.x - scalar, a.y - scalar};
+  return uint2_t{a.x - scalar, a.y - scalar};
 }
 
 export constexpr uint2_t operator-(const int_t scalar, const uint2_t b)
 {
-    FND_ASSERT(scalar >= 0);
+  FND_ASSERT(scalar >= 0);
 
-    return uint2_t{scalar - b.x, scalar - b.y};
+  return uint2_t{scalar - b.x, scalar - b.y};
 }
 
 export constexpr uint2_t operator%(const uint2_t a, const uint2_t b)
 {
-    FND_ASSERT(all(b != 0u));
+  FND_ASSERT(all(b != 0u));
 
-    return uint2_t{a.x % b.x, a.y % b.y};
+  return uint2_t{a.x % b.x, a.y % b.y};
 }
 
 export constexpr uint2_t operator%(const uint2_t a, const uint_t scalar)
 {
-    FND_ASSERT(scalar != 0);
+  FND_ASSERT(scalar != 0);
 
-    return uint2_t{a.x % scalar, a.y % scalar};
+  return uint2_t{a.x % scalar, a.y % scalar};
 }
 
 export constexpr uint2_t operator%(const uint_t scalar, const uint2_t b)
 {
-    FND_ASSERT(all(b != 0u));
+  FND_ASSERT(all(b != 0u));
 
-    return uint2_t{scalar % b.x, scalar % b.y};
+  return uint2_t{scalar % b.x, scalar % b.y};
 }
 
 export constexpr uint2_t operator%(const uint2_t a, const int_t scalar)
 {
-    FND_ASSERT(scalar > 0);
+  FND_ASSERT(scalar > 0);
 
-    return uint2_t{a.x % scalar, a.y % scalar};
+  return uint2_t{a.x % scalar, a.y % scalar};
 }
 
 export constexpr uint2_t operator%(const int_t scalar, const uint2_t b)
 {
-    FND_ASSERT(scalar >= 0);
-    FND_ASSERT(all(b != 0u));
+  FND_ASSERT(scalar >= 0);
+  FND_ASSERT(all(b != 0u));
 
-    return uint2_t{scalar % b.x, scalar % b.y};
+  return uint2_t{scalar % b.x, scalar % b.y};
 }
 
 export constexpr uint2_t operator/(const uint2_t a, const uint2_t b)
 {
-    FND_ASSERT(all(b != 0u));
+  FND_ASSERT(all(b != 0u));
 
-    return uint2_t{a.x / b.x, a.y / b.y};
+  return uint2_t{a.x / b.x, a.y / b.y};
 }
 
 export constexpr uint2_t operator/(const uint2_t a, const uint_t scalar)
 {
-    FND_ASSERT(scalar != 0);
+  FND_ASSERT(scalar != 0);
 
-    return uint2_t{a.x / scalar, a.y / scalar};
+  return uint2_t{a.x / scalar, a.y / scalar};
 }
 
 export constexpr uint2_t operator/(const uint_t scalar, const uint2_t b)
 {
-    FND_ASSERT(all(b != 0u));
+  FND_ASSERT(all(b != 0u));
 
-    return uint2_t{scalar / b.x, scalar / b.y};
+  return uint2_t{scalar / b.x, scalar / b.y};
 }
 
 export constexpr uint2_t operator/(const uint2_t a, const int_t scalar)
 {
-    FND_ASSERT(scalar > 0);
+  FND_ASSERT(scalar > 0);
 
-    return uint2_t{a.x / scalar, a.y / scalar};
+  return uint2_t{a.x / scalar, a.y / scalar};
 }
 
 export constexpr uint2_t operator/(const int_t scalar, const uint2_t b)
 {
-    FND_ASSERT(scalar >= 0);
-    FND_ASSERT(all(b != 0u));
+  FND_ASSERT(scalar >= 0);
+  FND_ASSERT(all(b != 0u));
 
-    return uint2_t{scalar / b.x, scalar / b.y};
+  return uint2_t{scalar / b.x, scalar / b.y};
 }
 
 export constexpr uint2_t operator<<(const uint2_t a, const uint2_t b)
 {
-    FND_ASSERT(all(b < 32u));
+  FND_ASSERT(all(b < 32u));
 
-    return uint2_t{a.x << b.x, a.y << b.y};
+  return uint2_t{a.x << b.x, a.y << b.y};
 }
 
 export constexpr uint2_t operator<<(const uint2_t a, const uint_t scalar)
 {
-    FND_ASSERT(scalar < 32);
+  FND_ASSERT(scalar < 32);
 
-    return uint2_t{a.x << scalar, a.y << scalar};
+  return uint2_t{a.x << scalar, a.y << scalar};
 }
 
 export constexpr uint2_t operator<<(const uint_t scalar, const uint2_t b)
 {
-    FND_ASSERT(all(b < 32u));
+  FND_ASSERT(all(b < 32u));
 
-    return uint2_t{scalar << b.x, scalar << b.y};
+  return uint2_t{scalar << b.x, scalar << b.y};
 }
 
 export constexpr uint2_t operator<<(const uint2_t a, const int_t scalar)
 {
-    FND_ASSERT(scalar >= 0 && scalar < 32);
+  FND_ASSERT(scalar >= 0 && scalar < 32);
 
-    return uint2_t{a.x << scalar, a.y << scalar};
+  return uint2_t{a.x << scalar, a.y << scalar};
 }
 
 export constexpr uint2_t operator<<(const int_t scalar, const uint2_t b)
 {
-    FND_ASSERT(scalar >= 0);
-    FND_ASSERT(all(b < 32u));
+  FND_ASSERT(scalar >= 0);
+  FND_ASSERT(all(b < 32u));
 
-    const uint_t uval = static_cast<uint_t>(scalar);
-    return uint2_t{uval << b.x, uval << b.y};
+  const uint_t uval = static_cast<uint_t>(scalar);
+  return uint2_t{uval << b.x, uval << b.y};
 }
 
 export constexpr uint2_t operator>>(const uint2_t a, const uint2_t b)
 {
-    FND_ASSERT(all(b < 32u));
+  FND_ASSERT(all(b < 32u));
 
-    return uint2_t{a.x >> b.x, a.y >> b.y};
+  return uint2_t{a.x >> b.x, a.y >> b.y};
 }
 
 export constexpr uint2_t operator>>(const uint2_t a, const uint_t scalar)
 {
-    FND_ASSERT(scalar < 32);
+  FND_ASSERT(scalar < 32);
 
-    return uint2_t{a.x >> scalar, a.y >> scalar};
+  return uint2_t{a.x >> scalar, a.y >> scalar};
 }
 
 export constexpr uint2_t operator>>(const uint_t scalar, const uint2_t b)
 {
-    FND_ASSERT(all(b < 32u));
+  FND_ASSERT(all(b < 32u));
 
-    return uint2_t{scalar >> b.x, scalar >> b.y};
+  return uint2_t{scalar >> b.x, scalar >> b.y};
 }
 
 export constexpr uint2_t operator>>(const uint2_t a, const int_t scalar)
 {
-    FND_ASSERT(scalar >= 0 && scalar < 32);
+  FND_ASSERT(scalar >= 0 && scalar < 32);
 
-    return uint2_t{a.x >> scalar, a.y >> scalar};
+  return uint2_t{a.x >> scalar, a.y >> scalar};
 }
 
 export constexpr uint2_t operator>>(const int_t scalar, const uint2_t b)
 {
-    FND_ASSERT(scalar >= 0);
-    FND_ASSERT(all(b < 32u));
+  FND_ASSERT(scalar >= 0);
+  FND_ASSERT(all(b < 32u));
 
-    const uint_t uval = static_cast<uint_t>(scalar);
-    return uint2_t{uval >> b.x, uval >> b.y};
+  const uint_t uval = static_cast<uint_t>(scalar);
+  return uint2_t{uval >> b.x, uval >> b.y};
 }
 
 export constexpr uint2_t operator^(const uint2_t a, const uint2_t b)
 {
-    return uint2_t{a.x ^ b.x, a.y ^ b.y};
+  return uint2_t{a.x ^ b.x, a.y ^ b.y};
 }
 
 export constexpr uint2_t operator^(const uint2_t a, const uint_t scalar)
 {
-    return uint2_t{a.x ^ scalar, a.y ^ scalar};
+  return uint2_t{a.x ^ scalar, a.y ^ scalar};
 }
 
 export constexpr uint2_t operator^(const uint_t scalar, const uint2_t b)
 {
-    return uint2_t{scalar ^ b.x, scalar ^ b.y};
+  return uint2_t{scalar ^ b.x, scalar ^ b.y};
 }
 
 export constexpr uint2_t operator^(const uint2_t a, const int_t scalar)
 {
-    FND_ASSERT(scalar >= 0);
+  FND_ASSERT(scalar >= 0);
 
-    return uint2_t{a.x ^ scalar, a.y ^ scalar};
+  return uint2_t{a.x ^ scalar, a.y ^ scalar};
 }
 
 export constexpr uint2_t operator^(const int_t scalar, const uint2_t b)
 {
-    FND_ASSERT(scalar >= 0);
+  FND_ASSERT(scalar >= 0);
 
-    return uint2_t{scalar ^ b.x, scalar ^ b.y};
+  return uint2_t{scalar ^ b.x, scalar ^ b.y};
 }
 
 export constexpr uint2_t operator|(const uint2_t a, const uint2_t b)
 {
-    return uint2_t{a.x | b.x, a.y | b.y};
+  return uint2_t{a.x | b.x, a.y | b.y};
 }
 
 export constexpr uint2_t operator|(const uint2_t a, const uint_t scalar)
 {
-    return uint2_t{a.x | scalar, a.y | scalar};
+  return uint2_t{a.x | scalar, a.y | scalar};
 }
 
 export constexpr uint2_t operator|(const uint_t scalar, const uint2_t b)
 {
-    return uint2_t{scalar | b.x, scalar | b.y};
+  return uint2_t{scalar | b.x, scalar | b.y};
 }
 
 export constexpr uint2_t operator|(const uint2_t a, const int_t scalar)
 {
-    FND_ASSERT(scalar >= 0);
+  FND_ASSERT(scalar >= 0);
 
-    return uint2_t{a.x | scalar, a.y | scalar};
+  return uint2_t{a.x | scalar, a.y | scalar};
 }
 
 export constexpr uint2_t operator|(const int_t scalar, const uint2_t b)
 {
-    FND_ASSERT(scalar >= 0);
+  FND_ASSERT(scalar >= 0);
 
-    return uint2_t{scalar | b.x, scalar | b.y};
+  return uint2_t{scalar | b.x, scalar | b.y};
 }
 
 export constexpr uint2_t& operator&=(uint2_t& a, const uint2_t b)
 {
-    a = a & b;
-    return a;
+  a = a & b;
+  return a;
 }
 
 export constexpr uint2_t& operator&=(uint2_t& a, const uint_t scalar)
 {
-    a = a & scalar;
-    return a;
+  a = a & scalar;
+  return a;
 }
 
 export constexpr uint2_t& operator&=(uint2_t& a, const int_t scalar)
 {
-    FND_ASSERT(scalar >= 0);
+  FND_ASSERT(scalar >= 0);
 
-    a = a & scalar;
-    return a;
+  a = a & scalar;
+  return a;
 }
 
 export constexpr uint2_t& operator*=(uint2_t& a, const uint2_t b)
 {
-    a = a * b;
-    return a;
+  a = a * b;
+  return a;
 }
 
 export constexpr uint2_t& operator*=(uint2_t& a, const uint_t scalar)
 {
-    a = a * scalar;
-    return a;
+  a = a * scalar;
+  return a;
 }
 
 export constexpr uint2_t& operator*=(uint2_t& a, const int_t scalar)
 {
-    FND_ASSERT(scalar >= 0);
+  FND_ASSERT(scalar >= 0);
 
-    a = a * scalar;
-    return a;
+  a = a * scalar;
+  return a;
 }
 
 export constexpr uint2_t& operator+=(uint2_t& a, const uint2_t b)
 {
-    a = a + b;
-    return a;
+  a = a + b;
+  return a;
 }
 
 export constexpr uint2_t& operator+=(uint2_t& a, const uint_t scalar)
 {
-    a = a + scalar;
-    return a;
+  a = a + scalar;
+  return a;
 }
 
 export constexpr uint2_t& operator+=(uint2_t& a, const int_t scalar)
 {
-    FND_ASSERT(scalar >= 0);
+  FND_ASSERT(scalar >= 0);
 
-    a = a + scalar;
-    return a;
+  a = a + scalar;
+  return a;
 }
 
 export constexpr uint2_t& operator-=(uint2_t& a, const uint2_t b)
 {
-    a = a - b;
-    return a;
+  a = a - b;
+  return a;
 }
 
 export constexpr uint2_t& operator-=(uint2_t& a, const uint_t scalar)
 {
-    a = a - scalar;
-    return a;
+  a = a - scalar;
+  return a;
 }
 
 export constexpr uint2_t& operator-=(uint2_t& a, const int_t scalar)
 {
-    FND_ASSERT(scalar >= 0);
+  FND_ASSERT(scalar >= 0);
 
-    a = a - scalar;
-    return a;
+  a = a - scalar;
+  return a;
 }
 
 export constexpr uint2_t& operator%=(uint2_t& a, const uint2_t b)
 {
-    FND_ASSERT(all(b != 0u));
+  FND_ASSERT(all(b != 0u));
 
-    a = a % b;
-    return a;
+  a = a % b;
+  return a;
 }
 
 export constexpr uint2_t& operator%=(uint2_t& a, const uint_t scalar)
 {
-    FND_ASSERT(scalar != 0);
+  FND_ASSERT(scalar != 0);
 
-    a = a % scalar;
-    return a;
+  a = a % scalar;
+  return a;
 }
 
 export constexpr uint2_t& operator%=(uint2_t& a, const int_t scalar)
 {
-    FND_ASSERT(scalar > 0);
+  FND_ASSERT(scalar > 0);
 
-    a = a % scalar;
-    return a;
+  a = a % scalar;
+  return a;
 }
 
 export constexpr uint2_t& operator/=(uint2_t& a, const uint2_t b)
 {
-    FND_ASSERT(all(b != 0u));
+  FND_ASSERT(all(b != 0u));
 
-    a = a / b;
-    return a;
+  a = a / b;
+  return a;
 }
 
 export constexpr uint2_t& operator/=(uint2_t& a, const uint_t scalar)
 {
-    FND_ASSERT(scalar != 0);
+  FND_ASSERT(scalar != 0);
 
-    a = a / scalar;
-    return a;
+  a = a / scalar;
+  return a;
 }
 
 export constexpr uint2_t& operator/=(uint2_t& a, const int_t scalar)
 {
-    FND_ASSERT(scalar > 0);
+  FND_ASSERT(scalar > 0);
 
-    a = a / scalar;
-    return a;
+  a = a / scalar;
+  return a;
 }
 
 export constexpr uint2_t& operator<<=(uint2_t& a, const uint2_t b)
 {
-    FND_ASSERT(all(b < 32u));
+  FND_ASSERT(all(b < 32u));
 
-    a = a << b;
-    return a;
+  a = a << b;
+  return a;
 }
 
 export constexpr uint2_t& operator<<=(uint2_t& a, const uint_t scalar)
 {
-    FND_ASSERT(scalar < 32);
+  FND_ASSERT(scalar < 32);
 
-    a = a << scalar;
-    return a;
+  a = a << scalar;
+  return a;
 }
 
 export constexpr uint2_t& operator<<=(uint2_t& a, const int_t scalar)
 {
-    FND_ASSERT(scalar >= 0 && scalar < 32);
+  FND_ASSERT(scalar >= 0 && scalar < 32);
 
-    a = a << scalar;
-    return a;
+  a = a << scalar;
+  return a;
 }
 
 export constexpr uint2_t& operator>>=(uint2_t& a, const uint2_t b)
 {
-    FND_ASSERT(all(b < 32u));
+  FND_ASSERT(all(b < 32u));
 
-    a = a >> b;
-    return a;
+  a = a >> b;
+  return a;
 }
 
 export constexpr uint2_t& operator>>=(uint2_t& a, const uint_t scalar)
 {
-    FND_ASSERT(scalar < 32);
+  FND_ASSERT(scalar < 32);
 
-    a = a >> scalar;
-    return a;
+  a = a >> scalar;
+  return a;
 }
 
 export constexpr uint2_t& operator>>=(uint2_t& a, const int_t scalar)
 {
-    FND_ASSERT(scalar >= 0 && scalar < 32);
+  FND_ASSERT(scalar >= 0 && scalar < 32);
 
-    a = a >> scalar;
-    return a;
+  a = a >> scalar;
+  return a;
 }
 
 export constexpr uint2_t& operator^=(uint2_t& a, const uint2_t b)
 {
-    a = a ^ b;
-    return a;
+  a = a ^ b;
+  return a;
 }
 
 export constexpr uint2_t& operator^=(uint2_t& a, const uint_t scalar)
 {
-    a = a ^ scalar;
-    return a;
+  a = a ^ scalar;
+  return a;
 }
 
 export constexpr uint2_t& operator^=(uint2_t& a, const int_t scalar)
 {
-    FND_ASSERT(scalar >= 0);
+  FND_ASSERT(scalar >= 0);
 
-    a = a ^ scalar;
-    return a;
+  a = a ^ scalar;
+  return a;
 }
 
 export constexpr uint2_t& operator|=(uint2_t& a, const uint2_t b)
 {
-    a = a | b;
-    return a;
+  a = a | b;
+  return a;
 }
 
 export constexpr uint2_t& operator|=(uint2_t& a, const uint_t scalar)
 {
-    a = a | scalar;
-    return a;
+  a = a | scalar;
+  return a;
 }
 
 export constexpr uint2_t& operator|=(uint2_t& a, const int_t scalar)
 {
-    FND_ASSERT(scalar >= 0);
+  FND_ASSERT(scalar >= 0);
 
-    a = a | scalar;
-    return a;
+  a = a | scalar;
+  return a;
 }
 
 export constexpr uint2_t clamp(
-    const uint2_t v, const uint2_t lower, const uint2_t upper)
+  const uint2_t v, const uint2_t lower, const uint2_t upper)
 {
-    FND_ASSERT(all(lower <= upper));
+  FND_ASSERT(all(lower <= upper));
 
-    return uint2_t{clamp(v.x, lower.x, upper.x), clamp(v.y, lower.y, upper.y)};
+  return uint2_t{clamp(v.x, lower.x, upper.x), clamp(v.y, lower.y, upper.y)};
 }
 
 export constexpr uint2_t clamp(
-    const uint2_t v, const uint2_t lower, const uint_t upper)
+  const uint2_t v, const uint2_t lower, const uint_t upper)
 {
-    FND_ASSERT(all(lower <= upper));
+  FND_ASSERT(all(lower <= upper));
 
-    return uint2_t{clamp(v.x, lower.x, upper), clamp(v.y, lower.y, upper)};
+  return uint2_t{clamp(v.x, lower.x, upper), clamp(v.y, lower.y, upper)};
 }
 
 export constexpr uint2_t clamp(
-    const uint2_t v, const uint_t lower, const uint2_t upper)
+  const uint2_t v, const uint_t lower, const uint2_t upper)
 {
-    FND_ASSERT(all(lower <= upper));
+  FND_ASSERT(all(lower <= upper));
 
-    return uint2_t{clamp(v.x, lower, upper.x), clamp(v.y, lower, upper.y)};
+  return uint2_t{clamp(v.x, lower, upper.x), clamp(v.y, lower, upper.y)};
 }
 
 export constexpr uint2_t clamp(
-    const uint2_t v, const uint_t lower, const uint_t upper)
+  const uint2_t v, const uint_t lower, const uint_t upper)
 {
-    FND_ASSERT(lower <= upper);
+  FND_ASSERT(lower <= upper);
 
-    return uint2_t{clamp(v.x, lower, upper), clamp(v.y, lower, upper)};
+  return uint2_t{clamp(v.x, lower, upper), clamp(v.y, lower, upper)};
 }
 
 export constexpr uint_t cmax(const uint2_t v)
 {
-    return max(v.x, v.y);
+  return max(v.x, v.y);
 }
 
 export constexpr uint_t cmin(const uint2_t v)
 {
-    return min(v.x, v.y);
+  return min(v.x, v.y);
 }
 
 export constexpr uint_t cmul(const uint2_t v)
 {
-    return v.x * v.y;
+  return v.x * v.y;
 }
 
 export constexpr uint_t csum(const uint2_t v)
 {
-    return v.x + v.y;
+  return v.x + v.y;
 }
 
 export constexpr uint2_t max(const uint2_t a, const uint2_t b)
 {
-    return uint2_t{max(a.x, b.x), max(a.y, b.y)};
+  return uint2_t{max(a.x, b.x), max(a.y, b.y)};
 }
 
 export constexpr uint2_t max(const uint2_t a, const uint_t scalar)
 {
-    return uint2_t{max(a.x, scalar), max(a.y, scalar)};
+  return uint2_t{max(a.x, scalar), max(a.y, scalar)};
 }
 
 export constexpr uint2_t max(const uint_t scalar, const uint2_t b)
 {
-    return uint2_t{max(scalar, b.x), max(scalar, b.y)};
+  return uint2_t{max(scalar, b.x), max(scalar, b.y)};
 }
 
 export constexpr uint2_t min(const uint2_t a, const uint2_t b)
 {
-    return uint2_t{min(a.x, b.x), min(a.y, b.y)};
+  return uint2_t{min(a.x, b.x), min(a.y, b.y)};
 }
 
 export constexpr uint2_t min(const uint2_t a, const uint_t scalar)
 {
-    return uint2_t{min(a.x, scalar), min(a.y, scalar)};
+  return uint2_t{min(a.x, scalar), min(a.y, scalar)};
 }
 
 export constexpr uint2_t min(const uint_t scalar, const uint2_t b)
 {
-    return uint2_t{min(scalar, b.x), min(scalar, b.y)};
+  return uint2_t{min(scalar, b.x), min(scalar, b.y)};
 }
 
 } // namespace fnd

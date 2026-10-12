@@ -42,8 +42,8 @@ namespace fnd {
 // and leaves no float between 2^31 - 128 and 2^31. C++ does not require
 // IEEE 754, so it is checked here.
 static_assert(
-    FLT_RADIX == 2 && FLT_MANT_DIG == 24 && FLT_MAX_EXP == 128,
-    "float_t must be IEEE 754 binary32");
+  FLT_RADIX == 2 && FLT_MANT_DIG == 24 && FLT_MAX_EXP == 128,
+  "float_t must be IEEE 754 binary32");
 
 constexpr float_t kFloatToIntTruncRangeStart = -0x1p31f;
 constexpr float_t kFloatToIntTruncRangeEnd = 0x1p31f; // exclusive
@@ -52,133 +52,133 @@ constexpr float_t kFloatToUIntTruncRangeEnd = 0x1p32f; // exclusive
 
 export constexpr byte_t abs(const byte_t x)
 {
-    // x is promoted to int before the negation, so -x cannot overflow and no
-    // unsigned arithmetic is needed. In builds without assertions abs(-128) is
-    // 128, which the cast back to byte_t wraps to -128, as in the other
-    // overloads.
-    FND_ASSERT(x != kByteMinValue);
+  // x is promoted to int before the negation, so -x cannot overflow and no
+  // unsigned arithmetic is needed. In builds without assertions abs(-128) is
+  // 128, which the cast back to byte_t wraps to -128, as in the other
+  // overloads.
+  FND_ASSERT(x != kByteMinValue);
 
-    return static_cast<byte_t>(x < 0 ? -x : x);
+  return static_cast<byte_t>(x < 0 ? -x : x);
 }
 
 export constexpr int_t abs(const int_t x)
 {
-    // NOTE:
-    // MinValue has no positive counterpart: abs(int_t{-2147483648}) would be
-    // 2147483648, but kIntMaxValue is 2147483647 (likewise for long_t).
-    // MinValue is therefore outside the domain of the integer overloads and is
-    // asserted.
-    //
-    // The negation is done in the unsigned domain, so that in builds without
-    // assertions abs(MinValue) wraps back to MinValue, as in HLSL, instead of
-    // being signed overflow (undefined behaviour in C++).
+  // NOTE:
+  // MinValue has no positive counterpart: abs(int_t{-2147483648}) would be
+  // 2147483648, but kIntMaxValue is 2147483647 (likewise for long_t).
+  // MinValue is therefore outside the domain of the integer overloads and is
+  // asserted.
+  //
+  // The negation is done in the unsigned domain, so that in builds without
+  // assertions abs(MinValue) wraps back to MinValue, as in HLSL, instead of
+  // being signed overflow (undefined behaviour in C++).
 
-    FND_ASSERT(x != kIntMinValue);
+  FND_ASSERT(x != kIntMinValue);
 
-    const uint_t ux = static_cast<uint_t>(x);
-    return static_cast<int_t>(x < 0 ? uint_t{0} - ux : ux);
+  const uint_t ux = static_cast<uint_t>(x);
+  return static_cast<int_t>(x < 0 ? uint_t{0} - ux : ux);
 }
 
 export constexpr long_t abs(const long_t x)
 {
-    FND_ASSERT(x != kLongMinValue);
+  FND_ASSERT(x != kLongMinValue);
 
-    const ulong_t ux = static_cast<ulong_t>(x);
-    return static_cast<long_t>(x < 0 ? ulong_t{0} - ux : ux);
+  const ulong_t ux = static_cast<ulong_t>(x);
+  return static_cast<long_t>(x < 0 ? ulong_t{0} - ux : ux);
 }
 
 export FND_INLINE float_t abs(const float_t x)
 {
-    return ::fabsf(x);
+  return ::fabsf(x);
 }
 
 export FND_INLINE double_t abs(const double_t x)
 {
-    return ::fabs(x);
+  return ::fabs(x);
 }
 
 export FND_INLINE bool_t approx_equal(
-    const float_t a, const float_t b, const float_t max_abs_diff = 1e-5f)
+  const float_t a, const float_t b, const float_t max_abs_diff = 1e-5f)
 {
-    FND_ASSERT(max_abs_diff >= 0);
+  FND_ASSERT(max_abs_diff >= 0);
 
-    // NOTE:
-    // inf - inf is NaN, and abs(NaN) <= max_abs_diff is false.
-    // Checking exact equality first makes approx_equal(inf, inf) true.
-    return a == b || abs(a - b) <= max_abs_diff;
+  // NOTE:
+  // inf - inf is NaN, and abs(NaN) <= max_abs_diff is false.
+  // Checking exact equality first makes approx_equal(inf, inf) true.
+  return a == b || abs(a - b) <= max_abs_diff;
 }
 
 export FND_INLINE bool_t approx_equal(
-    const double_t a, const double_t b, const double_t max_abs_diff = 1e-5)
+  const double_t a, const double_t b, const double_t max_abs_diff = 1e-5)
 {
-    FND_ASSERT(max_abs_diff >= 0);
+  FND_ASSERT(max_abs_diff >= 0);
 
-    return a == b || abs(a - b) <= max_abs_diff;
+  return a == b || abs(a - b) <= max_abs_diff;
 }
 
 export FND_INLINE bool_t can_trunc_to_int(const float_t x)
 {
-    // Not constexpr: MSVC's constant evaluator treats NaN < x and x < NaN as
-    // true, so a compile-time call with NaN would return true.
-    return kFloatToIntTruncRangeStart <= x && x < kFloatToIntTruncRangeEnd;
+  // Not constexpr: MSVC's constant evaluator treats NaN < x and x < NaN as
+  // true, so a compile-time call with NaN would return true.
+  return kFloatToIntTruncRangeStart <= x && x < kFloatToIntTruncRangeEnd;
 }
 
 export FND_INLINE bool_t can_trunc_to_uint(const float_t x)
 {
-    return kFloatToUIntTruncRangeStart <= x && x < kFloatToUIntTruncRangeEnd;
+  return kFloatToUIntTruncRangeStart <= x && x < kFloatToUIntTruncRangeEnd;
 }
 
 export FND_INLINE float_t ceil(const float_t x)
 {
-    return ::ceilf(x);
+  return ::ceilf(x);
 }
 
 export FND_INLINE double_t ceil(const double_t x)
 {
-    return ::ceil(x);
+  return ::ceil(x);
 }
 
 export FND_INLINE float_t floor(const float_t x)
 {
-    return ::floorf(x);
+  return ::floorf(x);
 }
 
 export FND_INLINE double_t floor(const double_t x)
 {
-    return ::floor(x);
+  return ::floor(x);
 }
 
 export FND_INLINE float_t fmod(const float_t x, const float_t y)
 {
-    return ::fmodf(x, y);
+  return ::fmodf(x, y);
 }
 
 export FND_INLINE double_t fmod(const double_t x, const double_t y)
 {
-    return ::fmod(x, y);
+  return ::fmod(x, y);
 }
 
 // True if x is 2^k for an integer k >= 0: exactly one bit is set. Zero and
 // negative numbers are not powers of two.
 export constexpr bool_t is_pow2(const int_t x)
 {
-    // x > 0 first: x - 1 cannot overflow then.
-    return x > 0 && (x & (x - 1)) == 0;
+  // x > 0 first: x - 1 cannot overflow then.
+  return x > 0 && (x & (x - 1)) == 0;
 }
 
 export constexpr bool_t is_pow2(const long_t x)
 {
-    return x > 0 && (x & (x - 1)) == 0;
+  return x > 0 && (x & (x - 1)) == 0;
 }
 
 export constexpr bool_t is_pow2(const uint_t x)
 {
-    return x != 0 && (x & (x - 1)) == 0;
+  return x != 0 && (x & (x - 1)) == 0;
 }
 
 export constexpr bool_t is_pow2(const ulong_t x)
 {
-    return x != 0 && (x & (x - 1)) == 0;
+  return x != 0 && (x & (x - 1)) == 0;
 }
 
 // True if x is 2^k for an integer k, negative k included (0.5, 0.25, ...,
@@ -186,199 +186,199 @@ export constexpr bool_t is_pow2(const ulong_t x)
 // two.
 export FND_INLINE bool_t is_pow2(const float_t x)
 {
-    // frexp splits x into m * 2^e with |m| in [0.5, 1), subnormals included;
-    // m is exactly 0.5 for a power of two. NaN and infinity come back as they
-    // are.
-    int_t exponent;
-    return ::frexpf(x, &exponent) == 0.5f;
+  // frexp splits x into m * 2^e with |m| in [0.5, 1), subnormals included;
+  // m is exactly 0.5 for a power of two. NaN and infinity come back as they
+  // are.
+  int_t exponent;
+  return ::frexpf(x, &exponent) == 0.5f;
 }
 
 export FND_INLINE bool_t is_pow2(const double_t x)
 {
-    int_t exponent;
-    return ::frexp(x, &exponent) == 0.5;
+  int_t exponent;
+  return ::frexp(x, &exponent) == 0.5;
 }
 
 export FND_INLINE bool_t isfinite(const float_t x)
 {
-    return ::isfinite(x);
+  return ::isfinite(x);
 }
 
 export FND_INLINE bool_t isfinite(const double_t x)
 {
-    return ::isfinite(x);
+  return ::isfinite(x);
 }
 
 export FND_INLINE bool_t isinf(const float_t x)
 {
-    return ::isinf(x);
+  return ::isinf(x);
 }
 
 export FND_INLINE bool_t isinf(const double_t x)
 {
-    return ::isinf(x);
+  return ::isinf(x);
 }
 
 export FND_INLINE bool_t isnan(const float_t x)
 {
-    return ::isnan(x);
+  return ::isnan(x);
 }
 
 export FND_INLINE bool_t isnan(const double_t x)
 {
-    return ::isnan(x);
+  return ::isnan(x);
 }
 
 export constexpr byte_t max(const byte_t a, const byte_t b)
 {
-    return a > b ? a : b;
+  return a > b ? a : b;
 }
 
 export constexpr int_t max(const int_t a, const int_t b)
 {
-    return a > b ? a : b;
+  return a > b ? a : b;
 }
 
 export constexpr long_t max(const long_t a, const long_t b)
 {
-    return a > b ? a : b;
+  return a > b ? a : b;
 }
 
 export constexpr ubyte_t max(const ubyte_t a, const ubyte_t b)
 {
-    return a > b ? a : b;
+  return a > b ? a : b;
 }
 
 export constexpr uint_t max(const uint_t a, const uint_t b)
 {
-    return a > b ? a : b;
+  return a > b ? a : b;
 }
 
 export constexpr ulong_t max(const ulong_t a, const ulong_t b)
 {
-    return a > b ? a : b;
+  return a > b ? a : b;
 }
 
 export FND_INLINE float_t max(const float_t a, const float_t b)
 {
-    return isnan(b) || a > b ? a : b;
+  return isnan(b) || a > b ? a : b;
 }
 
 export FND_INLINE double_t max(const double_t a, const double_t b)
 {
-    return isnan(b) || a > b ? a : b;
+  return isnan(b) || a > b ? a : b;
 }
 
 export constexpr byte_t min(const byte_t a, const byte_t b)
 {
-    return a < b ? a : b;
+  return a < b ? a : b;
 }
 
 export constexpr int_t min(const int_t a, const int_t b)
 {
-    return a < b ? a : b;
+  return a < b ? a : b;
 }
 
 export constexpr long_t min(const long_t a, const long_t b)
 {
-    return a < b ? a : b;
+  return a < b ? a : b;
 }
 
 export constexpr ubyte_t min(const ubyte_t a, const ubyte_t b)
 {
-    return a < b ? a : b;
+  return a < b ? a : b;
 }
 
 export constexpr uint_t min(const uint_t a, const uint_t b)
 {
-    return a < b ? a : b;
+  return a < b ? a : b;
 }
 
 export constexpr ulong_t min(const ulong_t a, const ulong_t b)
 {
-    return a < b ? a : b;
+  return a < b ? a : b;
 }
 
 export FND_INLINE float_t min(const float_t a, const float_t b)
 {
-    return isnan(b) || a < b ? a : b;
+  return isnan(b) || a < b ? a : b;
 }
 
 export FND_INLINE double_t min(const double_t a, const double_t b)
 {
-    return isnan(b) || a < b ? a : b;
+  return isnan(b) || a < b ? a : b;
 }
 
 export constexpr byte_t clamp(
-    const byte_t x, const byte_t lower, const byte_t upper)
+  const byte_t x, const byte_t lower, const byte_t upper)
 {
-    FND_ASSERT(lower <= upper);
-    return min(max(x, lower), upper);
+  FND_ASSERT(lower <= upper);
+  return min(max(x, lower), upper);
 }
 
 export constexpr int_t clamp(
-    const int_t x, const int_t lower, const int_t upper)
+  const int_t x, const int_t lower, const int_t upper)
 {
-    FND_ASSERT(lower <= upper);
-    return min(max(x, lower), upper);
+  FND_ASSERT(lower <= upper);
+  return min(max(x, lower), upper);
 }
 
 export constexpr long_t clamp(
-    const long_t x, const long_t lower, const long_t upper)
+  const long_t x, const long_t lower, const long_t upper)
 {
-    FND_ASSERT(lower <= upper);
-    return min(max(x, lower), upper);
+  FND_ASSERT(lower <= upper);
+  return min(max(x, lower), upper);
 }
 
 export constexpr ubyte_t clamp(
-    const ubyte_t x, const ubyte_t lower, const ubyte_t upper)
+  const ubyte_t x, const ubyte_t lower, const ubyte_t upper)
 {
-    FND_ASSERT(lower <= upper);
-    return min(max(x, lower), upper);
+  FND_ASSERT(lower <= upper);
+  return min(max(x, lower), upper);
 }
 
 export constexpr uint_t clamp(
-    const uint_t x, const uint_t lower, const uint_t upper)
+  const uint_t x, const uint_t lower, const uint_t upper)
 {
-    FND_ASSERT(lower <= upper);
-    return min(max(x, lower), upper);
+  FND_ASSERT(lower <= upper);
+  return min(max(x, lower), upper);
 }
 
 export constexpr ulong_t clamp(
-    const ulong_t x, const ulong_t lower, const ulong_t upper)
+  const ulong_t x, const ulong_t lower, const ulong_t upper)
 {
-    FND_ASSERT(lower <= upper);
-    return min(max(x, lower), upper);
+  FND_ASSERT(lower <= upper);
+  return min(max(x, lower), upper);
 }
 
 export FND_INLINE float_t clamp(
-    const float_t x, const float_t lower, const float_t upper)
+  const float_t x, const float_t lower, const float_t upper)
 {
-    // NOTE:
-    // The result of clamp(NaN, -1, 1) depends on how clamp is composed from min
-    // and max: it can be -1 or 1. Rather than committing to one of those, x is
-    // asserted to not be NaN.
-    FND_ASSERT(!isnan(x));
-    FND_ASSERT(lower <= upper);
-    return min(max(x, lower), upper);
+  // NOTE:
+  // The result of clamp(NaN, -1, 1) depends on how clamp is composed from min
+  // and max: it can be -1 or 1. Rather than committing to one of those, x is
+  // asserted to not be NaN.
+  FND_ASSERT(!isnan(x));
+  FND_ASSERT(lower <= upper);
+  return min(max(x, lower), upper);
 }
 
 export FND_INLINE double_t clamp(
-    const double_t x, const double_t lower, const double_t upper)
+  const double_t x, const double_t lower, const double_t upper)
 {
-    FND_ASSERT(!isnan(x));
-    FND_ASSERT(lower <= upper);
-    return min(max(x, lower), upper);
+  FND_ASSERT(!isnan(x));
+  FND_ASSERT(lower <= upper);
+  return min(max(x, lower), upper);
 }
 
 export FND_INLINE float_t modf(const float_t x, float_t& integer)
 {
-    return ::modff(x, &integer);
+  return ::modff(x, &integer);
 }
 
 export FND_INLINE double_t modf(const double_t x, double_t& integer)
 {
-    return ::modf(x, &integer);
+  return ::modf(x, &integer);
 }
 
 // Fractional part of |x|, in [0, 1).
@@ -386,69 +386,69 @@ export FND_INLINE double_t modf(const double_t x, double_t& integer)
 // fractional(+-inf) is 0 and fractional(NaN) is NaN;
 export FND_INLINE float_t fractional(const float_t x)
 {
-    // NOTE:
-    // Not implemented as x - floor(x), because that returns 1 for tiny negative
-    // x. For x = -1e-10f, floor(x) is -1, and x + 1 is 0.9999999999. That value
-    // doesn't fit in a float: the float just below 1 is 0.99999994f (1 -
-    // 2^-24), and 1.0f is closer, so the result rounds to 1.
+  // NOTE:
+  // Not implemented as x - floor(x), because that returns 1 for tiny negative
+  // x. For x = -1e-10f, floor(x) is -1, and x + 1 is 0.9999999999. That value
+  // doesn't fit in a float: the float just below 1 is 0.99999994f (1 -
+  // 2^-24), and 1.0f is closer, so the result rounds to 1.
 
-    float_t integer;
-    return abs(modf(x, integer));
+  float_t integer;
+  return abs(modf(x, integer));
 }
 
 export FND_INLINE double_t fractional(const double_t x)
 {
-    double_t integer;
-    return abs(modf(x, integer));
+  double_t integer;
+  return abs(modf(x, integer));
 }
 
 export FND_INLINE float_t saturate(const float_t x)
 {
-    return clamp(x, 0.0f, 1.0f);
+  return clamp(x, 0.0f, 1.0f);
 }
 
 export FND_INLINE double_t saturate(const double_t x)
 {
-    return clamp(x, 0.0, 1.0);
+  return clamp(x, 0.0, 1.0);
 }
 
 // Returns -1, 0 or 1 in the type of x. Both zeros and NaN give +0.
 export constexpr byte_t sign(const byte_t x)
 {
-    return static_cast<byte_t>((x > 0) - (x < 0));
+  return static_cast<byte_t>((x > 0) - (x < 0));
 }
 
 export constexpr int_t sign(const int_t x)
 {
-    return (x > 0) - (x < 0);
+  return (x > 0) - (x < 0);
 }
 
 export constexpr long_t sign(const long_t x)
 {
-    return (x > 0) - (x < 0);
+  return (x > 0) - (x < 0);
 }
 
 export FND_INLINE float_t sign(const float_t x)
 {
-    // NOTE:
-    // Not constexpr: MSVC 19.51's constant evaluator treats NaN < x and x < NaN
-    // as true, so a compile-time sign(NaN) would return -1 instead of 0.
-    return (x > 0.0f ? 1.0f : 0.0f) - (x < 0.0f ? 1.0f : 0.0f);
+  // NOTE:
+  // Not constexpr: MSVC 19.51's constant evaluator treats NaN < x and x < NaN
+  // as true, so a compile-time sign(NaN) would return -1 instead of 0.
+  return (x > 0.0f ? 1.0f : 0.0f) - (x < 0.0f ? 1.0f : 0.0f);
 }
 
 export FND_INLINE double_t sign(const double_t x)
 {
-    return (x > 0.0 ? 1.0 : 0.0) - (x < 0.0 ? 1.0 : 0.0);
+  return (x > 0.0 ? 1.0 : 0.0) - (x < 0.0 ? 1.0 : 0.0);
 }
 
 export FND_INLINE float_t trunc(const float_t x)
 {
-    return ::truncf(x);
+  return ::truncf(x);
 }
 
 export FND_INLINE double_t trunc(const double_t x)
 {
-    return ::trunc(x);
+  return ::trunc(x);
 }
 
 } // namespace fnd

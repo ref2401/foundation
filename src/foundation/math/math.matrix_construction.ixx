@@ -24,30 +24,30 @@ namespace fnd {
 // Right-handed: a positive angle_radians rotates
 // counter-clockwise when looking from the tip of axis toward the origin.
 export FND_INLINE float3x3_t make_float3x3_axis_angle(
-    const float3_t axis, const float_t angle_radians)
+  const float3_t axis, const float_t angle_radians)
 {
-    FND_ASSERT(is_normalized(axis));
+  FND_ASSERT(is_normalized(axis));
 
-    const float_t c = cos(angle_radians);
-    const float_t s = sin(angle_radians);
-    const float_t omc = 1.0f - c;
-    const float_t xx = axis.x * axis.x;
-    const float_t xy = axis.x * axis.y;
-    const float_t xz = axis.x * axis.z;
-    const float_t yy = axis.y * axis.y;
-    const float_t yz = axis.y * axis.z;
-    const float_t zz = axis.z * axis.z;
+  const float_t c = cos(angle_radians);
+  const float_t s = sin(angle_radians);
+  const float_t omc = 1.0f - c;
+  const float_t xx = axis.x * axis.x;
+  const float_t xy = axis.x * axis.y;
+  const float_t xz = axis.x * axis.z;
+  const float_t yy = axis.y * axis.y;
+  const float_t yz = axis.y * axis.z;
+  const float_t zz = axis.z * axis.z;
 
-    return float3x3_t{
-        float3_t{c + omc * xx, omc * xy + axis.z * s, omc * xz - axis.y * s},
-        float3_t{omc * xy - axis.z * s, c + omc * yy, omc * yz + axis.x * s},
-        float3_t{omc * xz + axis.y * s, omc * yz - axis.x * s, c + omc * zz}};
+  return float3x3_t{
+    float3_t{c + omc * xx, omc * xy + axis.z * s, omc * xz - axis.y * s},
+    float3_t{omc * xy - axis.z * s, c + omc * yy, omc * yz + axis.x * s},
+    float3_t{omc * xz + axis.y * s, omc * yz - axis.x * s, c + omc * zz}};
 }
 
 export constexpr float3x3_t make_float3x3_scale(const float3_t s)
 {
-    return float3x3_t{
-        float3_t{s.x, 0, 0}, float3_t{0, s.y, 0}, float3_t{0, 0, s.z}};
+  return float3x3_t{
+    float3_t{s.x, 0, 0}, float3_t{0, s.y, 0}, float3_t{0, 0, s.z}};
 }
 
 // ---------------------------------------------------------------------------
@@ -57,40 +57,40 @@ export constexpr float3x3_t make_float3x3_scale(const float3_t s)
 // Rotation about the normalized axis, with no translation; see
 // make_float3x3_axis_angle for the direction of a positive angle.
 export FND_INLINE float3x4_t make_float3x4_axis_angle(
-    const float3_t axis, const float_t angle_radians)
+  const float3_t axis, const float_t angle_radians)
 {
-    FND_ASSERT(is_normalized(axis));
+  FND_ASSERT(is_normalized(axis));
 
-    const float3x3_t rm = make_float3x3_axis_angle(axis, angle_radians);
-    return float3x4_t{rm.col0, rm.col1, rm.col2, float3_t::kZero};
+  const float3x3_t rm = make_float3x3_axis_angle(axis, angle_radians);
+  return float3x4_t{rm.col0, rm.col1, rm.col2, float3_t::kZero};
 }
 
 export constexpr float3x4_t make_float3x4_scale(const float3_t s)
 {
-    return float3x4_t{
-        float3_t{s.x, 0, 0}, float3_t{0, s.y, 0}, float3_t{0, 0, s.z},
-        float3_t::kZero};
+  return float3x4_t{
+    float3_t{s.x, 0, 0}, float3_t{0, s.y, 0}, float3_t{0, 0, s.z},
+    float3_t::kZero};
 }
 
 export constexpr float3x4_t make_float3x4_translation(const float3_t t)
 {
-    return float3x4_t{float3_t::kUnitX, float3_t::kUnitY, float3_t::kUnitZ, t};
+  return float3x4_t{float3_t::kUnitX, float3_t::kUnitY, float3_t::kUnitZ, t};
 }
 
 export constexpr float3x4_t make_float3x4_trs(
-    const float3_t t, const float3x3_t& mrs)
+  const float3_t t, const float3x3_t& mrs)
 {
-    return float3x4_t{mrs.col0, mrs.col1, mrs.col2, t};
+  return float3x4_t{mrs.col0, mrs.col1, mrs.col2, t};
 }
 
 export FND_INLINE float3x4_t make_float3x4_trs(
-    const float3_t t, const quat_t r, const float3_t s)
+  const float3_t t, const quat_t r, const float3_t s)
 {
-    FND_ASSERT(is_normalized(r));
+  FND_ASSERT(is_normalized(r));
 
-    // the scale is diagonal, so the columns of the rotation are scaled instead.
-    const float3x3_t rm = make_float3x3(r);
-    return float3x4_t{rm.col0 * s.x, rm.col1 * s.y, rm.col2 * s.z, t};
+  // the scale is diagonal, so the columns of the rotation are scaled instead.
+  const float3x3_t rm = make_float3x3(r);
+  return float3x4_t{rm.col0 * s.x, rm.col1 * s.y, rm.col2 * s.z, t};
 }
 
 // ---------------------------------------------------------------------------
@@ -98,14 +98,14 @@ export FND_INLINE float3x4_t make_float3x4_trs(
 // ---------------------------------------------------------------------------
 
 export FND_INLINE float4x4_t make_float4x4_axis_angle(
-    const float3_t axis, const float_t angle_radians)
+  const float3_t axis, const float_t angle_radians)
 {
-    FND_ASSERT(is_normalized(axis));
+  FND_ASSERT(is_normalized(axis));
 
-    const float3x3_t rm = make_float3x3_axis_angle(axis, angle_radians);
-    return float4x4_t{
-        float4(rm.col0, 0), float4(rm.col1, 0), float4(rm.col2, 0),
-        float4_t::kUnitW};
+  const float3x3_t rm = make_float3x3_axis_angle(axis, angle_radians);
+  return float4x4_t{
+    float4(rm.col0, 0), float4(rm.col1, 0), float4(rm.col2, 0),
+    float4_t::kUnitW};
 }
 
 // Orthographic projection from the right-handed view space (see
@@ -122,20 +122,20 @@ export FND_INLINE float4x4_t make_float4x4_axis_angle(
 // The OZ row mirrors the depth axis: that turns the right-handed view space
 // into the left-handed clip space.
 export constexpr float4x4_t make_float4x4_ortho_rh_to_dx12(
-    const float_t width_vs, const float_t height_vs, const float_t near_dist_vs,
-    const float_t far_dist_vs)
+  const float_t width_vs, const float_t height_vs, const float_t near_dist_vs,
+  const float_t far_dist_vs)
 {
-    FND_ASSERT(width_vs > 0);
-    FND_ASSERT(height_vs > 0);
-    // Negative or zero near_dist_vs is valid for orthographic projection:
-    // geometry behind the camera plane still projects.
-    FND_ASSERT(near_dist_vs < far_dist_vs);
+  FND_ASSERT(width_vs > 0);
+  FND_ASSERT(height_vs > 0);
+  // Negative or zero near_dist_vs is valid for orthographic projection:
+  // geometry behind the camera plane still projects.
+  FND_ASSERT(near_dist_vs < far_dist_vs);
 
-    // z_vs = -near_dist_vs goes to depth 0 and z_vs = -far_dist_vs to depth 1.
-    const float_t rcp_depth_vs = 1 / (near_dist_vs - far_dist_vs);
-    return float4x4_t{
-        2 / width_vs, 0, 0, 0, 0, 2 / height_vs, 0, 0, 0, 0, rcp_depth_vs, 0, 0,
-        0, near_dist_vs * rcp_depth_vs, 1};
+  // z_vs = -near_dist_vs goes to depth 0 and z_vs = -far_dist_vs to depth 1.
+  const float_t rcp_depth_vs = 1 / (near_dist_vs - far_dist_vs);
+  return float4x4_t{
+    2 / width_vs, 0, 0, 0, 0, 2 / height_vs, 0, 0, 0, 0, rcp_depth_vs, 0, 0, 0,
+    near_dist_vs * rcp_depth_vs, 1};
 }
 
 // Perspective projection from the right-handed view space (see
@@ -152,58 +152,58 @@ export constexpr float4x4_t make_float4x4_ortho_rh_to_dx12(
 // and y with the distance. The -1 in the OW row mirrors the depth axis: that
 // turns the right-handed view space into the left-handed clip space.
 export FND_INLINE float4x4_t make_float4x4_perspective_rh_to_dx12(
-    const float_t vert_fov_radians, const float_t wh_aspect,
-    const float_t near_dist_vs, const float_t far_dist_vs)
+  const float_t vert_fov_radians, const float_t wh_aspect,
+  const float_t near_dist_vs, const float_t far_dist_vs)
 {
-    FND_ASSERT(vert_fov_radians > 0);
-    FND_ASSERT(vert_fov_radians < kFloatPi);
-    FND_ASSERT(wh_aspect > 0);
-    // The divide by the distance needs the near plane in front of the camera.
-    FND_ASSERT(near_dist_vs > 0);
-    FND_ASSERT(near_dist_vs < far_dist_vs);
+  FND_ASSERT(vert_fov_radians > 0);
+  FND_ASSERT(vert_fov_radians < kFloatPi);
+  FND_ASSERT(wh_aspect > 0);
+  // The divide by the distance needs the near plane in front of the camera.
+  FND_ASSERT(near_dist_vs > 0);
+  FND_ASSERT(near_dist_vs < far_dist_vs);
 
-    // A point on the top plane of the frustum, y_vs = d * tan(fov / 2), goes
-    // to y_ndc = 1; the right plane is wh_aspect times wider.
-    const float_t scale_y = 1 / tan(0.5f * vert_fov_radians);
-    const float_t scale_x = scale_y / wh_aspect;
-    // z_vs = -near_dist_vs goes to depth 0 and z_vs = -far_dist_vs to depth 1.
-    const float_t depth_scale = far_dist_vs / (near_dist_vs - far_dist_vs);
-    return float4x4_t{
-        scale_x, 0, 0, 0, 0, scale_y, 0, 0, 0, 0, depth_scale, -1, 0, 0,
-        near_dist_vs * depth_scale, 0};
+  // A point on the top plane of the frustum, y_vs = d * tan(fov / 2), goes
+  // to y_ndc = 1; the right plane is wh_aspect times wider.
+  const float_t scale_y = 1 / tan(0.5f * vert_fov_radians);
+  const float_t scale_x = scale_y / wh_aspect;
+  // z_vs = -near_dist_vs goes to depth 0 and z_vs = -far_dist_vs to depth 1.
+  const float_t depth_scale = far_dist_vs / (near_dist_vs - far_dist_vs);
+  return float4x4_t{
+    scale_x, 0, 0, 0, 0, scale_y, 0, 0, 0, 0, depth_scale, -1, 0, 0,
+    near_dist_vs * depth_scale, 0};
 }
 
 export constexpr float4x4_t make_float4x4_scale(const float3_t s)
 {
-    return float4x4_t{
-        float4_t{s.x, 0, 0, 0}, float4_t{0, s.y, 0, 0}, float4_t{0, 0, s.z, 0},
-        float4_t::kUnitW};
+  return float4x4_t{
+    float4_t{s.x, 0, 0, 0}, float4_t{0, s.y, 0, 0}, float4_t{0, 0, s.z, 0},
+    float4_t::kUnitW};
 }
 
 export constexpr float4x4_t make_float4x4_translation(const float3_t t)
 {
-    return float4x4_t{
-        float4_t::kUnitX, float4_t::kUnitY, float4_t::kUnitZ, float4(t, 1)};
+  return float4x4_t{
+    float4_t::kUnitX, float4_t::kUnitY, float4_t::kUnitZ, float4(t, 1)};
 }
 
 export constexpr float4x4_t make_float4x4_trs(
-    const float3_t t, const float3x3_t& mrs)
+  const float3_t t, const float3x3_t& mrs)
 {
-    return float4x4_t{
-        float4(mrs.col0, 0), float4(mrs.col1, 0), float4(mrs.col2, 0),
-        float4(t, 1)};
+  return float4x4_t{
+    float4(mrs.col0, 0), float4(mrs.col1, 0), float4(mrs.col2, 0),
+    float4(t, 1)};
 }
 
 export FND_INLINE float4x4_t make_float4x4_trs(
-    const float3_t t, const quat_t r, const float3_t s)
+  const float3_t t, const quat_t r, const float3_t s)
 {
-    FND_ASSERT(is_normalized(r));
+  FND_ASSERT(is_normalized(r));
 
-    // the scale is diagonal, so the columns of the rotation are scaled instead.
-    const float3x3_t rm = make_float3x3(r);
-    return float4x4_t{
-        float4(rm.col0 * s.x, 0), float4(rm.col1 * s.y, 0),
-        float4(rm.col2 * s.z, 0), float4(t, 1)};
+  // the scale is diagonal, so the columns of the rotation are scaled instead.
+  const float3x3_t rm = make_float3x3(r);
+  return float4x4_t{
+    float4(rm.col0 * s.x, 0), float4(rm.col1 * s.y, 0),
+    float4(rm.col2 * s.z, 0), float4(t, 1)};
 }
 
 // The view matrix of a camera at position_ws looking at target_ws (gluLookAt):
@@ -213,26 +213,26 @@ export FND_INLINE float4x4_t make_float4x4_trs(
 //  It need not be normalized or perpendicular to target_ws - position_ws, only
 //  not parallel to it.
 export FND_INLINE float4x4_t make_float4x4_view_rh(
-    const float3_t position_ws, const float3_t target_ws, const float3_t up_ws)
+  const float3_t position_ws, const float3_t target_ws, const float3_t up_ws)
 {
-    // position_ws == target_ws
-    FND_ASSERT(length_sqr(target_ws - position_ws) > kFloatMinNormal);
+  // position_ws == target_ws
+  FND_ASSERT(length_sqr(target_ws - position_ws) > kFloatMinNormal);
 
-    const float3_t f_ws = normalize(target_ws - position_ws);
-    // up_ws is not parallel to f_ws
-    FND_ASSERT(length_sqr(cross(f_ws, up_ws)) > kFloatMinNormal);
+  const float3_t f_ws = normalize(target_ws - position_ws);
+  // up_ws is not parallel to f_ws
+  FND_ASSERT(length_sqr(cross(f_ws, up_ws)) > kFloatMinNormal);
 
-    // The camera's basis in world space: right r_ws and up u_ws, forward f_ws.
-    // The view matrix is the inverse of the camera's rotation
-    // [r_ws | u_ws | -f_ws] and translation position_ws: the transposed
-    // rotation, and -position_ws rotated by it.
-    const float3_t r_ws = normalize(cross(f_ws, up_ws));
-    const float3_t u_ws = cross(r_ws, f_ws);
+  // The camera's basis in world space: right r_ws and up u_ws, forward f_ws.
+  // The view matrix is the inverse of the camera's rotation
+  // [r_ws | u_ws | -f_ws] and translation position_ws: the transposed
+  // rotation, and -position_ws rotated by it.
+  const float3_t r_ws = normalize(cross(f_ws, up_ws));
+  const float3_t u_ws = cross(r_ws, f_ws);
 
-    return float4x4_t{
-        r_ws.x, u_ws.x, -f_ws.x, 0, r_ws.y, u_ws.y, -f_ws.y, 0, r_ws.z, u_ws.z,
-        -f_ws.z, 0, -dot(r_ws, position_ws), -dot(u_ws, position_ws),
-        dot(f_ws, position_ws), 1};
+  return float4x4_t{
+    r_ws.x, u_ws.x, -f_ws.x, 0, r_ws.y, u_ws.y, -f_ws.y, 0, r_ws.z, u_ws.z,
+    -f_ws.z, 0, -dot(r_ws, position_ws), -dot(u_ws, position_ws),
+    dot(f_ws, position_ws), 1};
 }
 
 } // namespace fnd

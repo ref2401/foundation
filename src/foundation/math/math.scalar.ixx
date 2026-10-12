@@ -13,271 +13,273 @@ export constexpr double_t kDoublePi{3.14159265358979323846};
 
 export constexpr double_t kDoubleToDegrees{57.29577951308232};
 export constexpr double_t kDoubleToRadians{0.017453292519943295};
-export constexpr float_t kFloatToDegrees
-    = static_cast<float_t>(kDoubleToDegrees);
-export constexpr float_t kFloatToRadians
-    = static_cast<float_t>(kDoubleToRadians);
+export constexpr float_t kFloatToDegrees =
+  static_cast<float_t>(kDoubleToDegrees);
+export constexpr float_t kFloatToRadians =
+  static_cast<float_t>(kDoubleToRadians);
 
 export FND_INLINE float_t acos(const float_t x)
 {
-    return ::acosf(x);
+  return ::acosf(x);
 }
 
 export FND_INLINE double_t acos(const double_t x)
 {
-    return ::acos(x);
+  return ::acos(x);
 }
 
 export FND_INLINE float_t asin(const float_t x)
 {
-    return ::asinf(x);
+  return ::asinf(x);
 }
 
 export FND_INLINE double_t asin(const double_t x)
 {
-    return ::asin(x);
+  return ::asin(x);
 }
 
 export FND_INLINE float_t atan(const float_t x)
 {
-    return ::atanf(x);
+  return ::atanf(x);
 }
 
 export FND_INLINE double_t atan(const double_t x)
 {
-    return ::atan(x);
+  return ::atan(x);
 }
 
 export FND_INLINE float_t atan2(const float_t y, const float_t x)
 {
-    return ::atan2f(y, x);
+  return ::atan2f(y, x);
 }
 
 export FND_INLINE double_t atan2(const double_t y, const double_t x)
 {
-    return ::atan2(y, x);
+  return ::atan2(y, x);
 }
 
 export FND_INLINE float_t cos(const float_t x)
 {
-    return ::cosf(x);
+  return ::cosf(x);
 }
 
 export FND_INLINE double_t cos(const double_t x)
 {
-    return ::cos(x);
+  return ::cos(x);
 }
 
 export constexpr float_t degrees(const float_t rads)
 {
-    return rads * kFloatToDegrees;
+  return rads * kFloatToDegrees;
 }
 
 export constexpr double_t degrees(const double_t rads)
 {
-    return rads * kDoubleToDegrees;
+  return rads * kDoubleToDegrees;
 }
 
 export FND_INLINE float_t exp(const float_t x)
 {
-    return ::expf(x);
+  return ::expf(x);
 }
 
 export FND_INLINE double_t exp(const double_t x)
 {
-    return ::exp(x);
+  return ::exp(x);
 }
 
 export FND_INLINE float_t exp2(const float_t x)
 {
-    return ::exp2f(x);
+  return ::exp2f(x);
 }
 
 export FND_INLINE double_t exp2(const double_t x)
 {
-    return ::exp2(x);
+  return ::exp2(x);
 }
 
 export FND_INLINE float_t lerp(
-    const float_t a, const float_t b, const float_t t)
+  const float_t a, const float_t b, const float_t t)
 {
-    // NOTE:
-    // Unclamped t outside [0, 1] extrapolates.
-    //
-    // a * (1 - t) + b * t returns exactly a when t == 0 and exactly b when
-    // t == 1. The alternative a + t * (b - a) is exact only at t == 0, but has
-    // benefits this form lacks:
-    // - Monotonic in t: when a <= b, a larger t never gives a smaller result.
-    //   Here a * (1 - t) shrinks while b * t grows, and each product is
-    //   rounded separately. For a tiny step in t the rounding errors can
-    //   outweigh the true change, and the result can step backwards.
-    // - lerp(a, a, t) == a for any t. Here a * (1 - t) + a * t can round
-    //   away from a.
-    // - One multiplication instead of two.
+  // NOTE:
+  // Unclamped t outside [0, 1] extrapolates.
+  //
+  // a * (1 - t) + b * t returns exactly a when t == 0 and exactly b when
+  // t == 1. The alternative a + t * (b - a) is exact only at t == 0, but has
+  // benefits this form lacks:
+  // - Monotonic in t: when a <= b, a larger t never gives a smaller result.
+  //   Here a * (1 - t) shrinks while b * t grows, and each product is
+  //   rounded separately. For a tiny step in t the rounding errors can
+  //   outweigh the true change, and the result can step backwards.
+  // - lerp(a, a, t) == a for any t. Here a * (1 - t) + a * t can round
+  //   away from a.
+  // - One multiplication instead of two.
 
-    return a * (1 - t) + b * t;
+  return a * (1 - t) + b * t;
 }
 
 export FND_INLINE double_t lerp(
-    const double_t a, const double_t b, const double_t t)
+  const double_t a, const double_t b, const double_t t)
 {
-    return a * (1 - t) + b * t;
+  return a * (1 - t) + b * t;
 }
 
 export FND_INLINE float_t log(const float_t x)
 {
-    FND_ASSERT(x > 0);
+  FND_ASSERT(x > 0);
 
-    return ::logf(x);
+  return ::logf(x);
 }
 
 export FND_INLINE double_t log(const double_t x)
 {
-    FND_ASSERT(x > 0);
+  FND_ASSERT(x > 0);
 
-    return ::log(x);
+  return ::log(x);
 }
 
 export FND_INLINE float_t log10(const float_t x)
 {
-    FND_ASSERT(x > 0);
+  FND_ASSERT(x > 0);
 
-    return ::log10f(x);
+  return ::log10f(x);
 }
 
 export FND_INLINE double_t log10(const double_t x)
 {
-    FND_ASSERT(x > 0);
+  FND_ASSERT(x > 0);
 
-    return ::log10(x);
+  return ::log10(x);
 }
 
 export FND_INLINE float_t log2(const float_t x)
 {
-    FND_ASSERT(x > 0);
+  FND_ASSERT(x > 0);
 
-    return ::log2f(x);
+  return ::log2f(x);
 }
 
 export FND_INLINE double_t log2(const double_t x)
 {
-    FND_ASSERT(x > 0);
+  FND_ASSERT(x > 0);
 
-    return ::log2(x);
+  return ::log2(x);
 }
 
 export FND_INLINE float_t pow(const float_t base, const float_t exponent)
 {
-    // NOTE:
-    // Domain errors as the C standard defines them for pow: a finite negative
-    // base with a finite non-integer exponent (the result would be complex),
-    // and 0 to the power 0.
-    FND_ASSERT(!(isfinite(base) && base < 0 && isfinite(exponent)
-        && trunc(exponent) != exponent));
-    FND_ASSERT(!(base == 0 && exponent == 0));
+  // NOTE:
+  // Domain errors as the C standard defines them for pow: a finite negative
+  // base with a finite non-integer exponent (the result would be complex),
+  // and 0 to the power 0.
+  FND_ASSERT(
+    !(isfinite(base) && base < 0 && isfinite(exponent)
+      && trunc(exponent) != exponent));
+  FND_ASSERT(!(base == 0 && exponent == 0));
 
-    return ::powf(base, exponent);
+  return ::powf(base, exponent);
 }
 
 export FND_INLINE double_t pow(const double_t base, const double_t exponent)
 {
-    FND_ASSERT(!(isfinite(base) && base < 0 && isfinite(exponent)
-        && trunc(exponent) != exponent));
-    FND_ASSERT(!(base == 0 && exponent == 0));
+  FND_ASSERT(
+    !(isfinite(base) && base < 0 && isfinite(exponent)
+      && trunc(exponent) != exponent));
+  FND_ASSERT(!(base == 0 && exponent == 0));
 
-    return ::pow(base, exponent);
+  return ::pow(base, exponent);
 }
 
 export constexpr float_t radians(const float_t degs)
 {
-    return degs * kFloatToRadians;
+  return degs * kFloatToRadians;
 }
 
 export constexpr double_t radians(const double_t degs)
 {
-    return degs * kDoubleToRadians;
+  return degs * kDoubleToRadians;
 }
 
 export FND_INLINE float_t rcp(const float_t x)
 {
-    FND_ASSERT(x != 0);
-    FND_ASSERT(!isnan(x));
+  FND_ASSERT(x != 0);
+  FND_ASSERT(!isnan(x));
 
-    return 1.0f / x;
+  return 1.0f / x;
 }
 
 export FND_INLINE double_t rcp(const double_t x)
 {
-    FND_ASSERT(x != 0);
-    FND_ASSERT(!isnan(x));
+  FND_ASSERT(x != 0);
+  FND_ASSERT(!isnan(x));
 
-    return 1.0 / x;
+  return 1.0 / x;
 }
 
 export FND_INLINE float_t rsqrt(const float_t x)
 {
-    FND_ASSERT(x > 0);
+  FND_ASSERT(x > 0);
 
-    return 1.0f / ::sqrtf(x);
+  return 1.0f / ::sqrtf(x);
 }
 
 export FND_INLINE double_t rsqrt(const double_t x)
 {
-    FND_ASSERT(x > 0);
+  FND_ASSERT(x > 0);
 
-    return 1.0 / ::sqrt(x);
+  return 1.0 / ::sqrt(x);
 }
 
 export FND_INLINE float_t sin(const float_t x)
 {
-    return ::sinf(x);
+  return ::sinf(x);
 }
 
 export FND_INLINE double_t sin(const double_t x)
 {
-    return ::sin(x);
+  return ::sin(x);
 }
 
 export FND_INLINE float_t smoothstep(
-    const float_t x, const float_t edge0, const float_t edge1)
+  const float_t x, const float_t edge0, const float_t edge1)
 {
-    FND_ASSERT(edge0 != edge1);
+  FND_ASSERT(edge0 != edge1);
 
-    const float_t t = saturate((x - edge0) / (edge1 - edge0));
-    return t * t * (3.0f - 2.0f * t);
+  const float_t t = saturate((x - edge0) / (edge1 - edge0));
+  return t * t * (3.0f - 2.0f * t);
 }
 
 export FND_INLINE double_t smoothstep(
-    const double_t x, const double_t edge0, const double_t edge1)
+  const double_t x, const double_t edge0, const double_t edge1)
 {
-    FND_ASSERT(edge0 != edge1);
+  FND_ASSERT(edge0 != edge1);
 
-    const double_t t = saturate((x - edge0) / (edge1 - edge0));
-    return t * t * (3.0 - 2.0 * t);
+  const double_t t = saturate((x - edge0) / (edge1 - edge0));
+  return t * t * (3.0 - 2.0 * t);
 }
 
 export FND_INLINE float_t sqrt(const float_t x)
 {
-    FND_ASSERT(x >= 0);
+  FND_ASSERT(x >= 0);
 
-    return ::sqrtf(x);
+  return ::sqrtf(x);
 }
 
 export FND_INLINE double_t sqrt(const double_t x)
 {
-    FND_ASSERT(x >= 0);
+  FND_ASSERT(x >= 0);
 
-    return ::sqrt(x);
+  return ::sqrt(x);
 }
 
 export FND_INLINE float_t tan(const float_t x)
 {
-    return ::tanf(x);
+  return ::tanf(x);
 }
 
 export FND_INLINE double_t tan(const double_t x)
 {
-    return ::tan(x);
+  return ::tan(x);
 }
 
 } // namespace fnd

@@ -22,24 +22,24 @@ namespace fnd::unittests {
 
 export void run_unittests_math()
 {
-    unittests_math_matrix_construction();
-    unittests_math_matrix_conversion();
-    unittests_math_matrix_float3x3();
-    unittests_math_matrix_float3x4();
-    unittests_math_matrix_float4x4();
-    unittests_math_scalar();
-    unittests_math_vector_bool();
-    unittests_math_vector_conversion();
-    unittests_math_vector_float2();
-    unittests_math_vector_float3();
-    unittests_math_vector_float4();
-    unittests_math_vector_int2();
-    unittests_math_vector_int3();
-    unittests_math_vector_int4();
-    unittests_math_vector_quat();
-    unittests_math_vector_uint2();
-    unittests_math_vector_uint3();
-    unittests_math_vector_uint4();
+  unittests_math_matrix_construction();
+  unittests_math_matrix_conversion();
+  unittests_math_matrix_float3x3();
+  unittests_math_matrix_float3x4();
+  unittests_math_matrix_float4x4();
+  unittests_math_scalar();
+  unittests_math_vector_bool();
+  unittests_math_vector_conversion();
+  unittests_math_vector_float2();
+  unittests_math_vector_float3();
+  unittests_math_vector_float4();
+  unittests_math_vector_int2();
+  unittests_math_vector_int3();
+  unittests_math_vector_int4();
+  unittests_math_vector_quat();
+  unittests_math_vector_uint2();
+  unittests_math_vector_uint3();
+  unittests_math_vector_uint4();
 }
 
 } // namespace fnd::unittests

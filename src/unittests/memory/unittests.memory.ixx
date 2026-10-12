@@ -5,7 +5,7 @@ namespace fnd::unittests {
 
 export void run_unittests_memory()
 {
-    unittests_memory_utility();
+  unittests_memory_utility();
 }
 
 } // namespace fnd::unittests

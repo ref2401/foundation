@@ -32,17 +32,17 @@ template<typename T> constexpr bool_t kIsConst = false;
 template<typename T> constexpr bool_t kIsConst<const T> = true;
 export template<typename T> constexpr bool_t is_const()
 {
-    return kIsConst<T>;
+  return kIsConst<T>;
 }
 
 export constexpr bool_t is_constant_evaluated()
 {
-    return __builtin_is_constant_evaluated();
+  return __builtin_is_constant_evaluated();
 }
 
 export template<typename TSrc, typename TDest> constexpr bool_t is_convertible()
 {
-    return __is_convertible_to(TSrc, TDest);
+  return __is_convertible_to(TSrc, TDest);
 }
 
 // ---------------------------------------------------------------------------
@@ -54,7 +54,7 @@ template<typename T, typename U> constexpr bool_t kIsSame = false;
 template<typename T> constexpr bool_t kIsSame<T, T> = true;
 export template<typename T, typename U> constexpr bool_t is_same()
 {
-    return kIsSame<T, U>;
+  return kIsSame<T, U>;
 }
 
 } // namespace fnd
