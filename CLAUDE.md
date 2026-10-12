@@ -88,18 +88,30 @@ and a `unittests` executable that tests them.
 - Matrices (structs of 16 bytes or more) are passed as `const T&` by default,
   by value where it measurably helps (say why in a `NOTE`). Vectors and scalars
   are passed by value.
+- Integer roles: sizes and alignments are `ulong_t`; an address used for bit
+  math (aligning, masking, `>>`) is `uptr_t`, unsigned on purpose (it wraps
+  instead of overflowing and orders like the address space); a signed
+  difference is `long_t`. Otherwise pointers stay pointers.
+  - `reinterpret_cast` only between a pointer and `uptr_t`; `static_cast`
+    between integer types.
+  - Signed difference of two addresses: subtract as `uptr_t`, then convert,
+    `static_cast<long_t>(p0 - p1)` (exact because pointers are 64-bit, as
+    `long_t` is). For two pointers into one allocation, subtract byte pointers
+    instead.
 
 ## Code
 
 - Parameters passed by value are `const`, pointers included:
   `abs(const int_t x)`, `const char_t* const filename`.
-- Every function, and every overload of it, asserts its own conditions with
-  `FND_ASSERT`, even when it only forwards to a callee that asserts the same
-  thing:
-  - preconditions at its top;
-  - postconditions right before it returns.
-  An assert that calls a non-`constexpr` function (`is_normalized`, `isnan`)
-  makes the function `FND_INLINE` instead of `constexpr`.
+- Every function, and every overload of it, asserts its own preconditions with
+  `FND_ASSERT` at its top, even when it only forwards to a callee that asserts
+  the same thing. An assert that calls a non-`constexpr` function
+  (`is_normalized`, `isnan`) makes the function `FND_INLINE` instead of
+  `constexpr`.
+- Postconditions are checked by unittests, not asserted. The exception is a
+  result produced by code the tests can't cover, such as a virtual
+  implementation behind an interface: the non-virtual wrapper asserts the
+  contract (`IAllocator::realloc` checks that the pointer is aligned).
 - Prefer brace initialization: `int_t a{1}`, `int_t* p{&a}`,
   `const float3_t v{normalize(a)}`. Use `=` with `auto`, and in generic code
   initializing a `T` from a single `T` (`T old_value = move(object);`).
