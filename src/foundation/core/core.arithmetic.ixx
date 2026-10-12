@@ -9,7 +9,7 @@ import :arithmetic_types;
 // NOTE:
 // Arithmetic functions on the built-in types are split between this partition
 // and foundation.math by one rule: a function lives here if its result is exact
-// (no rounding: min, clamp, abs, floor, fmod, isnan, bit casts, ...), and in
+// (no rounding: min, clamp, abs, floor, fmod, isnan, ...), and in
 // foundation.math if it approximates a real-valued function (sin, exp, log,
 // sqrt, lerp, degrees, ...).
 // The goal is that importing foundation.core alone
@@ -41,7 +41,8 @@ namespace fnd {
 // significand and exponents up to 2^127. That makes 2^31 and 2^32 exact floats
 // and leaves no float between 2^31 - 128 and 2^31. C++ does not require
 // IEEE 754, so it is checked here.
-static_assert(FLT_RADIX == 2 && FLT_MANT_DIG == 24 && FLT_MAX_EXP == 128,
+static_assert(
+    FLT_RADIX == 2 && FLT_MANT_DIG == 24 && FLT_MAX_EXP == 128,
     "float_t must be IEEE 754 binary32");
 
 constexpr float_t kFloatToIntTruncRangeStart = -0x1p31f;
@@ -113,14 +114,6 @@ export FND_INLINE bool_t approx_equal(
     FND_ASSERT(max_abs_diff >= 0);
 
     return a == b || abs(a - b) <= max_abs_diff;
-}
-
-export template<typename TDest, typename TSrc>
-requires(sizeof(TDest) == sizeof(TSrc) && __is_trivially_copyable(TDest)
-    && __is_trivially_copyable(TSrc))
-constexpr TDest bit_cast(const TSrc& x)
-{
-    return __builtin_bit_cast(TDest, x);
 }
 
 export FND_INLINE bool_t can_trunc_to_int(const float_t x)

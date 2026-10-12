@@ -15,6 +15,17 @@ import :type_traits;
 
 namespace fnd {
 
+// The bytes of x reinterpreted as a TDest of the same size, not a value
+// conversion: bit_cast<uint_t>(1.0f) is 0x3F800000, not 1.
+export template<typename TDest, typename TSrc>
+requires(
+    sizeof(TDest) == sizeof(TSrc) && __is_trivially_copyable(TDest)
+    && __is_trivially_copyable(TSrc))
+constexpr TDest bit_cast(const TSrc& x)
+{
+    return __builtin_bit_cast(TDest, x);
+}
+
 // Passes on a forwarding reference parameter (T&& value) as it was received:
 // forward<T>(value) is an lvalue for an lvalue argument and an rvalue for an
 // rvalue argument, with const and volatile kept.

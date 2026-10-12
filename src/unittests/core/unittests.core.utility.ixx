@@ -26,9 +26,18 @@ class MoveOnly final {
 
 // Tells how an int_t argument arrived: a non-const lvalue, a const lvalue or an
 // rvalue.
-constexpr int_t forward_test_category(int_t&) { return 1; }
-constexpr int_t forward_test_category(const int_t&) { return 2; }
-constexpr int_t forward_test_category(int_t&&) { return 3; }
+constexpr int_t forward_test_category(int_t&)
+{
+    return 1;
+}
+constexpr int_t forward_test_category(const int_t&)
+{
+    return 2;
+}
+constexpr int_t forward_test_category(int_t&&)
+{
+    return 3;
+}
 
 // Passes value on through a forwarding reference, as forward is meant to be
 // used, and without forward for comparison.
@@ -47,6 +56,137 @@ template<typename T> constexpr int_t forward_test_pass_named(T&& value)
 template<typename T> MoveOnly forward_test_make(T&& value)
 {
     return MoveOnly{forward<T>(value)};
+}
+
+void unittests_core_utility_bit_cast_int_to_float()
+{
+    FND_TEST_TRUE(bit_cast<float_t>(int_t{0}) == 0.0f);
+    FND_TEST_TRUE(bit_cast<float_t>(int_t{0x3F800000}) == 1.0f);
+    FND_TEST_TRUE(bit_cast<float_t>(static_cast<int_t>(0xBF800000u)) == -1.0f);
+    FND_TEST_TRUE(bit_cast<float_t>(int_t{0x7F800000}) == kFloatInfinity);
+    // Bits, not a value conversion: 1 is the smallest subnormal, not 1.0f.
+    FND_TEST_TRUE(bit_cast<float_t>(int_t{1}) == kFloatMinSubnormal);
+}
+
+void unittests_core_utility_bit_cast_uint_to_float()
+{
+    FND_TEST_TRUE(bit_cast<float_t>(0u) == 0.0f);
+    FND_TEST_TRUE(bit_cast<float_t>(0x3F800000u) == 1.0f);
+    FND_TEST_TRUE(bit_cast<float_t>(0xBF800000u) == -1.0f);
+    FND_TEST_TRUE(bit_cast<float_t>(0x7F800000u) == kFloatInfinity);
+    FND_TEST_TRUE(bit_cast<float_t>(0xFF800000u) == -kFloatInfinity);
+    FND_TEST_TRUE(bit_cast<float_t>(0x7F7FFFFFu) == kFloatMaxValue);
+    FND_TEST_TRUE(bit_cast<float_t>(0x00800000u) == kFloatMinNormal);
+    FND_TEST_TRUE(bit_cast<float_t>(1u) == kFloatMinSubnormal);
+}
+
+void unittests_core_utility_bit_cast_float_to_int()
+{
+    FND_TEST_TRUE(bit_cast<int_t>(0.0f) == 0);
+    FND_TEST_TRUE(bit_cast<int_t>(-0.0f) == kIntMinValue);
+    FND_TEST_TRUE(bit_cast<int_t>(1.0f) == 0x3F800000);
+    FND_TEST_TRUE(bit_cast<int_t>(-1.0f) == static_cast<int_t>(0xBF800000u));
+    FND_TEST_TRUE(bit_cast<int_t>(kFloatInfinity) == 0x7F800000);
+}
+
+void unittests_core_utility_bit_cast_uint_to_int()
+{
+    FND_TEST_TRUE(bit_cast<int_t>(0u) == 0);
+    FND_TEST_TRUE(bit_cast<int_t>(1u) == 1);
+    FND_TEST_TRUE(bit_cast<int_t>(0x7FFFFFFFu) == kIntMaxValue);
+    FND_TEST_TRUE(bit_cast<int_t>(0x80000000u) == kIntMinValue);
+    FND_TEST_TRUE(bit_cast<int_t>(0xFFFFFFFFu) == -1);
+}
+
+void unittests_core_utility_bit_cast_float_to_uint()
+{
+    FND_TEST_TRUE(bit_cast<uint_t>(0.0f) == 0u);
+    FND_TEST_TRUE(bit_cast<uint_t>(-0.0f) == 0x80000000u);
+    FND_TEST_TRUE(bit_cast<uint_t>(1.0f) == 0x3F800000u);
+    FND_TEST_TRUE(bit_cast<uint_t>(-1.0f) == 0xBF800000u);
+    FND_TEST_TRUE(bit_cast<uint_t>(kFloatInfinity) == 0x7F800000u);
+    FND_TEST_TRUE(bit_cast<uint_t>(-kFloatInfinity) == 0xFF800000u);
+    // NaN: all exponent bits set and a non-zero mantissa, whatever its sign.
+    FND_TEST_TRUE((bit_cast<uint_t>(kFloatNaN) & 0x7FFFFFFFu) > 0x7F800000u);
+    FND_TEST_TRUE(bit_cast<float_t>(bit_cast<uint_t>(1.5f)) == 1.5f);
+}
+
+void unittests_core_utility_bit_cast_int_to_uint()
+{
+    FND_TEST_TRUE(bit_cast<uint_t>(int_t{0}) == 0u);
+    FND_TEST_TRUE(bit_cast<uint_t>(int_t{1}) == 1u);
+    FND_TEST_TRUE(bit_cast<uint_t>(int_t{-1}) == 0xFFFFFFFFu);
+    FND_TEST_TRUE(bit_cast<uint_t>(kIntMaxValue) == 0x7FFFFFFFu);
+    FND_TEST_TRUE(bit_cast<uint_t>(kIntMinValue) == 0x80000000u);
+}
+
+void unittests_core_utility_bit_cast_long_to_double()
+{
+    FND_TEST_TRUE(bit_cast<double_t>(long_t{0}) == 0.0);
+    FND_TEST_TRUE(bit_cast<double_t>(long_t{0x3FF0000000000000}) == 1.0);
+    FND_TEST_TRUE(
+        bit_cast<double_t>(static_cast<long_t>(0xBFF0000000000000ull)) == -1.0);
+    FND_TEST_TRUE(
+        bit_cast<double_t>(long_t{0x7FF0000000000000}) == kDoubleInfinity);
+    // Bits, not a value conversion: 1 is the smallest subnormal, not 1.0.
+    FND_TEST_TRUE(bit_cast<double_t>(long_t{1}) == kDoubleMinSubnormal);
+}
+
+void unittests_core_utility_bit_cast_ulong_to_double()
+{
+    FND_TEST_TRUE(bit_cast<double_t>(0ull) == 0.0);
+    FND_TEST_TRUE(bit_cast<double_t>(0x3FF0000000000000ull) == 1.0);
+    FND_TEST_TRUE(bit_cast<double_t>(0xBFF0000000000000ull) == -1.0);
+    FND_TEST_TRUE(bit_cast<double_t>(0x7FF0000000000000ull) == kDoubleInfinity);
+    FND_TEST_TRUE(
+        bit_cast<double_t>(0xFFF0000000000000ull) == -kDoubleInfinity);
+    FND_TEST_TRUE(bit_cast<double_t>(0x7FEFFFFFFFFFFFFFull) == kDoubleMaxValue);
+    FND_TEST_TRUE(
+        bit_cast<double_t>(0x0010000000000000ull) == kDoubleMinNormal);
+    FND_TEST_TRUE(bit_cast<double_t>(1ull) == kDoubleMinSubnormal);
+}
+
+void unittests_core_utility_bit_cast_double_to_long()
+{
+    FND_TEST_TRUE(bit_cast<long_t>(0.0) == 0);
+    FND_TEST_TRUE(bit_cast<long_t>(-0.0) == kLongMinValue);
+    FND_TEST_TRUE(bit_cast<long_t>(1.0) == 0x3FF0000000000000);
+    FND_TEST_TRUE(
+        bit_cast<long_t>(-1.0) == static_cast<long_t>(0xBFF0000000000000ull));
+    FND_TEST_TRUE(bit_cast<long_t>(kDoubleInfinity) == 0x7FF0000000000000);
+}
+
+void unittests_core_utility_bit_cast_ulong_to_long()
+{
+    FND_TEST_TRUE(bit_cast<long_t>(0ull) == 0);
+    FND_TEST_TRUE(bit_cast<long_t>(1ull) == 1);
+    FND_TEST_TRUE(bit_cast<long_t>(0x7FFFFFFFFFFFFFFFull) == kLongMaxValue);
+    FND_TEST_TRUE(bit_cast<long_t>(0x8000000000000000ull) == kLongMinValue);
+    FND_TEST_TRUE(bit_cast<long_t>(0xFFFFFFFFFFFFFFFFull) == -1);
+}
+
+void unittests_core_utility_bit_cast_double_to_ulong()
+{
+    FND_TEST_TRUE(bit_cast<ulong_t>(0.0) == 0ull);
+    FND_TEST_TRUE(bit_cast<ulong_t>(-0.0) == 0x8000000000000000ull);
+    FND_TEST_TRUE(bit_cast<ulong_t>(1.0) == 0x3FF0000000000000ull);
+    FND_TEST_TRUE(bit_cast<ulong_t>(-1.0) == 0xBFF0000000000000ull);
+    FND_TEST_TRUE(bit_cast<ulong_t>(kDoubleInfinity) == 0x7FF0000000000000ull);
+    FND_TEST_TRUE(bit_cast<ulong_t>(-kDoubleInfinity) == 0xFFF0000000000000ull);
+    // NaN: all exponent bits set and a non-zero mantissa, whatever its sign.
+    FND_TEST_TRUE(
+        (bit_cast<ulong_t>(kDoubleNaN) & 0x7FFFFFFFFFFFFFFFull)
+        > 0x7FF0000000000000ull);
+    FND_TEST_TRUE(bit_cast<double_t>(bit_cast<ulong_t>(1.5)) == 1.5);
+}
+
+void unittests_core_utility_bit_cast_long_to_ulong()
+{
+    FND_TEST_TRUE(bit_cast<ulong_t>(long_t{0}) == 0ull);
+    FND_TEST_TRUE(bit_cast<ulong_t>(long_t{1}) == 1ull);
+    FND_TEST_TRUE(bit_cast<ulong_t>(long_t{-1}) == 0xFFFFFFFFFFFFFFFFull);
+    FND_TEST_TRUE(bit_cast<ulong_t>(kLongMaxValue) == 0x7FFFFFFFFFFFFFFFull);
+    FND_TEST_TRUE(bit_cast<ulong_t>(kLongMinValue) == 0x8000000000000000ull);
 }
 
 void unittests_core_utility_forward()
@@ -214,6 +354,18 @@ void unittests_core_utility_swap()
 
 void unittests_core_utility()
 {
+    unittests_core_utility_bit_cast_int_to_float();
+    unittests_core_utility_bit_cast_uint_to_float();
+    unittests_core_utility_bit_cast_float_to_int();
+    unittests_core_utility_bit_cast_uint_to_int();
+    unittests_core_utility_bit_cast_float_to_uint();
+    unittests_core_utility_bit_cast_int_to_uint();
+    unittests_core_utility_bit_cast_long_to_double();
+    unittests_core_utility_bit_cast_ulong_to_double();
+    unittests_core_utility_bit_cast_double_to_long();
+    unittests_core_utility_bit_cast_ulong_to_long();
+    unittests_core_utility_bit_cast_double_to_ulong();
+    unittests_core_utility_bit_cast_long_to_ulong();
     unittests_core_utility_forward();
     unittests_core_utility_move();
     unittests_core_utility_exchange();
