@@ -11,35 +11,35 @@ export void unittests_core_type_traits();
 
 void unittests_core_type_traits_pod_type()
 {
-    struct pod_test_t {
+    struct pod_test_t final {
         int_t i;
         float_t f;
     };
     // Constructors and default member initializers are allowed: copying stays
     // a plain copy of the bytes (like the math structs).
-    struct pod_with_ctor_t {
+    struct pod_with_ctor_t final {
         int_t i{0};
         constexpr pod_with_ctor_t() = default;
         constexpr explicit pod_with_ctor_t(int_t i) : i{i} {}
     };
     // Not trivially copyable: a user copy constructor or destructor.
-    struct user_copy_t {
+    struct user_copy_t final {
         int_t i;
         user_copy_t(const user_copy_t& other) : i{other.i} {}
     };
-    struct user_dtor_t {
+    struct user_dtor_t final {
         int_t i;
         ~user_dtor_t() {}
     };
     // Not standard layout: data members with different access, or a virtual
     // function (which adds a hidden vtable pointer).
-    struct mixed_access_t {
+    struct mixed_access_t final {
         int_t i;
 
     private:
         int_t j;
     };
-    struct virtual_t {
+    struct virtual_t final {
         int_t i;
         virtual void f() {}
     };
@@ -66,7 +66,7 @@ void unittests_core_type_traits_pod_type()
 
 void unittests_core_type_traits_unref()
 {
-    struct unref_test_t { int_t i; };
+    struct unref_test_t final { int_t i; };
 
     // A type that is not a reference stays as it is.
     static_assert(is_same<Unref<int_t>, int_t>());
@@ -104,7 +104,7 @@ void unittests_core_type_traits_unref()
 
 void unittests_core_type_traits_is_const()
 {
-    struct is_const_test_t { int_t i; };
+    struct is_const_test_t final { int_t i; };
 
     // const and const volatile types are const.
     static_assert(is_const<const int_t>());
@@ -143,14 +143,14 @@ void unittests_core_type_traits_is_convertible()
     struct base_t {
         int_t i;
     };
-    struct derived_t : base_t {
+    struct derived_t final : base_t {
         int_t j;
     };
-    struct implicit_t {
+    struct implicit_t final {
         int_t i;
         implicit_t(int_t i) : i{i} {}
     };
-    struct explicit_t {
+    struct explicit_t final {
         int_t i;
         explicit explicit_t(int_t i) : i{i} {}
     };
@@ -188,7 +188,7 @@ void unittests_core_type_traits_is_convertible()
 
 void unittests_core_type_traits_is_same()
 {
-    struct is_same_test_t { int_t i; };
+    struct is_same_test_t final { int_t i; };
     using is_same_test_alias_t = is_same_test_t;
 
     // A type is the same as itself and as its aliases.

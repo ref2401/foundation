@@ -607,7 +607,7 @@ void unittests_math_vector_float3_distance_matches_length()
 {
     // distance(a, b) must give the same result as length(a - b), and
     // distance_sqr(a, b) the same as length_sqr(a - b) and dot(a - b, a - b).
-    struct test_value {
+    struct test_value final {
         float3_t vec;
         float_t max_abs_diff;
     };

@@ -75,6 +75,9 @@ and a `unittests` executable that tests them.
 
 ## Types
 
+- Every struct is `final` by default (`export struct float3_t final {`), test
+  structs included; leave it out only when the struct is a base. A class is
+  `final` unless it is meant to be derived from (interfaces never are `final`).
 - POD structs are used "as in C": data members, constructors and static
   constants only. Accessors and helpers are free functions (`column0(m)`,
   `set_row1(m, r)`); only operators the language requires to be members

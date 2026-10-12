@@ -12,9 +12,9 @@ concept PodType = __is_standard_layout(T) && __is_trivially_copyable(T);
 
 // T without its reference: T& and T&& become T, any other type stays as it is.
 // const and volatile are kept: Unref<const int_t&> is const int_t.
-template<typename T> struct UnrefImpl { using type = T; };
-template<typename T> struct UnrefImpl<T&> { using type = T; };
-template<typename T> struct UnrefImpl<T&&> { using type = T; };
+template<typename T> struct UnrefImpl final { using type = T; };
+template<typename T> struct UnrefImpl<T&> final { using type = T; };
+template<typename T> struct UnrefImpl<T&&> final { using type = T; };
 export template<typename T> using Unref = typename UnrefImpl<T>::type;
 
 

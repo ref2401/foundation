@@ -10,7 +10,7 @@ namespace fnd::unittests {
 export void unittests_core_utility();
 
 // Cannot be copied: exchange and swap compile for it only if they never copy.
-class MoveOnly {
+class MoveOnly final {
   public:
     constexpr explicit MoveOnly(int_t value) : value_{value} {}
     MoveOnly(const MoveOnly&) = delete;
@@ -122,7 +122,7 @@ void unittests_core_utility_move()
 
 void unittests_core_utility_exchange()
 {
-    struct exchange_test_t {
+    struct exchange_test_t final {
         int_t x;
         int_t y;
     };
@@ -168,7 +168,7 @@ void unittests_core_utility_exchange()
 
 void unittests_core_utility_swap()
 {
-    struct swap_test_t {
+    struct swap_test_t final {
         int_t x;
         int_t y;
     };
