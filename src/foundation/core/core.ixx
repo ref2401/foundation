@@ -3,6 +3,7 @@ export import :arithmetic_types;
 export import :arithmetic;
 export import :span;
 export import :type_traits;
+export import :utility;
 
 namespace fnd {
 
