@@ -26,13 +26,13 @@ $ErrorActionPreference = 'Stop'
 # ---------------------------------------------------------------------------
 # Layout: <root>/{src,scripts,bin}
 # ---------------------------------------------------------------------------
-$rootDir   = Split-Path -Parent $PSScriptRoot
-$srcDir    = Join-Path $rootDir 'src'
-$outDir    = Join-Path (Join-Path $rootDir 'bin') $Configuration.ToLowerInvariant()
-$objDir    = Join-Path $outDir 'obj'
-$ifcDir    = Join-Path $outDir 'ifc'          # compiled module interfaces (.ifc)
-$asmDir    = Join-Path $outDir 'asm'          # /Fa assembly listings
-$exeFile   = Join-Path $outDir 'unittests.exe'
+$rootDir = Split-Path -Parent $PSScriptRoot
+$srcDir = Join-Path $rootDir 'src'
+$outDir = Join-Path (Join-Path $rootDir 'bin') $Configuration.ToLowerInvariant()
+$objDir = Join-Path $outDir 'obj'
+$ifcDir = Join-Path $outDir 'ifc'          # compiled module interfaces (.ifc)
+$asmDir = Join-Path $outDir 'asm'          # /Fa assembly listings
+$exeFile = Join-Path $outDir 'unittests.exe'
 
 if ($Clean -and (Test-Path -LiteralPath $outDir)) {
     Write-Host "Cleaning $Configuration -> $outDir" -ForegroundColor Cyan

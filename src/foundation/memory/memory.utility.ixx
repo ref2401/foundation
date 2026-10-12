@@ -1,4 +1,5 @@
 module;
+#include <string.h>
 #include "foundation/core/macros.h"
 
 export module foundation.memory:utility;
@@ -14,10 +15,11 @@ export FND_INLINE const void* align_up(
   FND_ASSERT(is_pow2(alignment));
 
   const uptr_t address{reinterpret_cast<uptr_t>(ptr)};
-  const uptr_t mask{alignment - 1};
-  FND_ASSERT(address + mask >= address); // overflow
+  const uptr_t offset{alignment - 1};
+  FND_ASSERT(address + offset >= address); // overflow
 
-  return reinterpret_cast<const void*>((address + mask) & ~mask);
+  const uptr_t mask{~offset};
+  return reinterpret_cast<const void*>((address + offset) & mask);
 }
 
 export FND_INLINE void* align_up(void* const ptr, const ulong_t alignment)
@@ -25,12 +27,29 @@ export FND_INLINE void* align_up(void* const ptr, const ulong_t alignment)
   FND_ASSERT(is_pow2(alignment));
 
   const uptr_t address{reinterpret_cast<uptr_t>(ptr)};
-  const uptr_t mask{alignment - 1};
-  FND_ASSERT(address + mask >= address); // overflow
+  const uptr_t offset{alignment - 1};
+  FND_ASSERT(address + offset >= address); // overflow
 
   // ptr is non-const, so casting the result back is safe. The static_cast
   // selects the const overload; without it this would call itself.
   return const_cast<void*>(align_up(static_cast<const void*>(ptr), alignment));
+}
+
+// Copies byte_count bytes from `from` to `to`; the ranges must not overlap.
+export FND_INLINE void copy_bytes(
+  const void* const from, void* const to, const ulong_t byte_count)
+{
+  FND_ASSERT(from != nullptr);
+  FND_ASSERT(to != nullptr);
+  FND_ASSERT(byte_count > 0);
+
+  const uptr_t p0{reinterpret_cast<uptr_t>(from)};
+  const uptr_t p1{reinterpret_cast<uptr_t>(to)};
+  FND_ASSERT(p0 + byte_count > p0);                           // overflow
+  FND_ASSERT(p1 + byte_count > p1);                           // overflow
+  FND_ASSERT(p0 - p1 >= byte_count && p1 - p0 >= byte_count); // overlap
+
+  ::memcpy(to, from, byte_count);
 }
 
 // count gibibytes (2^30 bytes) in bytes.

@@ -89,6 +89,77 @@ void unittests_memory_utility_align_up()
   FND_TEST_TRUE(align_up_test_address(~uptr_t{0}, 1) == ~uptr_t{0});
 }
 
+void unittests_memory_utility_copy_bytes()
+{
+  // Every byte value as the source: 0 and values above 127 are copied too.
+  ubyte_t from[256]{};
+  for (ulong_t i{0}; i < 256; ++i) {
+    from[i] = static_cast<ubyte_t>(i);
+  }
+
+  // The whole range.
+  ubyte_t to[256]{};
+  copy_bytes(from, to, 256);
+  for (ulong_t i{0}; i < 256; ++i) {
+    FND_TEST_TRUE(to[i] == from[i]);
+  }
+
+  // A part into the middle of a buffer: the bytes around it stay as they
+  // are.
+  constexpr ubyte_t kUntouchedValue{0xAB};
+  constexpr ulong_t kFromOffset{200};
+  constexpr ulong_t kToOffset{4};
+  constexpr ulong_t kByteCount{8};
+  constexpr ulong_t kPartLength{16};
+  ubyte_t part[kPartLength]{};
+  for (ubyte_t& b : part) {
+    b = kUntouchedValue;
+  }
+  copy_bytes(from + kFromOffset, part + kToOffset, kByteCount);
+  for (ulong_t i{0}; i < kPartLength; ++i) {
+    const bool_t is_copied{kToOffset <= i && i < kToOffset + kByteCount};
+    const ubyte_t expected_value{
+      is_copied ? from[kFromOffset + i - kToOffset] : kUntouchedValue};
+    FND_TEST_TRUE(part[i] == expected_value);
+  }
+
+  // Adjacent ranges do not overlap: the destination is right after the source
+  constexpr ulong_t kBufferLength{24};
+  ubyte_t buffer[kBufferLength]{};
+  for (ulong_t i{0}; i < kBufferLength; ++i) {
+    buffer[i] = static_cast<ubyte_t>(i);
+  }
+  copy_bytes(buffer, buffer + 8, 8);
+  for (ulong_t i{0}; i < 8; ++i) {
+    FND_TEST_TRUE(buffer[i] == i);     // the source is unchanged
+    FND_TEST_TRUE(buffer[8 + i] == i); // the copy
+    FND_TEST_TRUE(buffer[16 + i] == 16 + i);
+  }
+
+  // Adjacent ranges do not overlap: the destination is right before the source
+  copy_bytes(buffer + 16, buffer + 8, 8);
+  for (ulong_t i{0}; i < 8; ++i) {
+    FND_TEST_TRUE(buffer[i] == i);
+    FND_TEST_TRUE(buffer[8 + i] == 16 + i);
+    FND_TEST_TRUE(buffer[16 + i] == 16 + i);
+  }
+
+  // A single byte, and an object: its bytes are its value.
+  ubyte_t single{0};
+  copy_bytes(from + 255, &single, 1);
+  FND_TEST_TRUE(single == 255);
+
+  struct copy_test_t final {
+    int_t i;
+    float_t f;
+  };
+  constexpr copy_test_t kObject{-7, 2.5f};
+  copy_test_t object{};
+  copy_bytes(&kObject, &object, sizeof(copy_test_t));
+  FND_TEST_TRUE(object.i == kObject.i);
+  FND_TEST_TRUE(object.f == kObject.f);
+}
+
 void unittests_memory_utility_gibibytes()
 {
   FND_TEST_TRUE(gibibytes(0) == 0);
@@ -185,6 +256,7 @@ void unittests_memory_utility_mebibytes()
 void unittests_memory_utility()
 {
   unittests_memory_utility_align_up();
+  unittests_memory_utility_copy_bytes();
   unittests_memory_utility_gibibytes();
   unittests_memory_utility_is_aligned();
   unittests_memory_utility_kibibytes();
