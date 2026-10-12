@@ -1,5 +1,3 @@
-module;
-
 export module foundation.core:type_traits;
 import :arithmetic_types;
 
@@ -37,14 +35,14 @@ export template<typename T> constexpr bool_t is_const()
     return kIsConst<T>;
 }
 
-export template<typename TSrc, typename TDest> constexpr bool_t is_convertible()
-{
-    return __is_convertible_to(TSrc, TDest);
-}
-
 export constexpr bool_t is_constant_evaluated()
 {
     return __builtin_is_constant_evaluated();
+}
+
+export template<typename TSrc, typename TDest> constexpr bool_t is_convertible()
+{
+    return __is_convertible_to(TSrc, TDest);
 }
 
 // ---------------------------------------------------------------------------

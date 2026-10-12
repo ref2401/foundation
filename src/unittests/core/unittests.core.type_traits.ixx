@@ -9,6 +9,61 @@ namespace fnd::unittests {
 
 export void unittests_core_type_traits();
 
+void unittests_core_type_traits_pod_type()
+{
+    struct pod_test_t {
+        int_t i;
+        float_t f;
+    };
+    // Constructors and default member initializers are allowed: copying stays
+    // a plain copy of the bytes (like the math structs).
+    struct pod_with_ctor_t {
+        int_t i{0};
+        constexpr pod_with_ctor_t() = default;
+        constexpr explicit pod_with_ctor_t(int_t i) : i{i} {}
+    };
+    // Not trivially copyable: a user copy constructor or destructor.
+    struct user_copy_t {
+        int_t i;
+        user_copy_t(const user_copy_t& other) : i{other.i} {}
+    };
+    struct user_dtor_t {
+        int_t i;
+        ~user_dtor_t() {}
+    };
+    // Not standard layout: data members with different access, or a virtual
+    // function (which adds a hidden vtable pointer).
+    struct mixed_access_t {
+        int_t i;
+
+    private:
+        int_t j;
+    };
+    struct virtual_t {
+        int_t i;
+        virtual void f() {}
+    };
+
+    // Built-in types, pointers and arrays of them.
+    static_assert(PodType<int_t>);
+    static_assert(PodType<float_t>);
+    static_assert(PodType<bool_t>);
+    static_assert(PodType<int_t*>);
+    static_assert(PodType<const int_t*>);
+    static_assert(PodType<int_t[3]>);
+
+    // Plain structs, also with constructors, and arrays of them.
+    static_assert(PodType<pod_test_t>);
+    static_assert(PodType<pod_with_ctor_t>);
+    static_assert(PodType<pod_test_t[2]>);
+
+    // Either property missing is enough to fail.
+    static_assert(!PodType<user_copy_t>);
+    static_assert(!PodType<user_dtor_t>);
+    static_assert(!PodType<mixed_access_t>);
+    static_assert(!PodType<virtual_t>);
+}
+
 void unittests_core_type_traits_unref()
 {
     struct unref_test_t { int_t i; };
@@ -83,6 +138,54 @@ void unittests_core_type_traits_is_const()
     static_assert(!is_const<void(int_t)>());
 }
 
+void unittests_core_type_traits_is_convertible()
+{
+    struct base_t {
+        int_t i;
+    };
+    struct derived_t : base_t {
+        int_t j;
+    };
+    struct implicit_t {
+        int_t i;
+        implicit_t(int_t i) : i{i} {}
+    };
+    struct explicit_t {
+        int_t i;
+        explicit explicit_t(int_t i) : i{i} {}
+    };
+
+    // A type converts to itself; arithmetic types convert to each other,
+    // narrowing included.
+    static_assert(is_convertible<int_t, int_t>());
+    static_assert(is_convertible<int_t, float_t>());
+    static_assert(is_convertible<float_t, int_t>());
+    static_assert(is_convertible<int_t, bool_t>());
+
+    // Pointers: to a base class, to void and to const, not the other way.
+    static_assert(is_convertible<derived_t*, base_t*>());
+    static_assert(!is_convertible<base_t*, derived_t*>());
+    static_assert(is_convertible<int_t*, void*>());
+    static_assert(!is_convertible<void*, int_t*>());
+    static_assert(is_convertible<int_t*, const int_t*>());
+    static_assert(!is_convertible<const int_t*, int_t*>());
+    static_assert(is_convertible<decltype(nullptr), int_t*>());
+    static_assert(!is_convertible<int_t, int_t*>());
+
+    // A constructor converts only if it is not explicit.
+    static_assert(is_convertible<int_t, implicit_t>());
+    static_assert(!is_convertible<int_t, explicit_t>());
+
+    // TSrc is used as an rvalue: it binds to const T& but not to T&.
+    static_assert(is_convertible<int_t, const int_t&>());
+    static_assert(!is_convertible<int_t, int_t&>());
+    static_assert(is_convertible<int_t&, int_t&>());
+
+    // The order of the arguments matters.
+    static_assert(is_convertible<derived_t, base_t>());
+    static_assert(!is_convertible<base_t, derived_t>());
+}
+
 void unittests_core_type_traits_is_same()
 {
     struct is_same_test_t { int_t i; };
@@ -118,8 +221,10 @@ void unittests_core_type_traits_is_same()
 
 void unittests_core_type_traits()
 {
+    unittests_core_type_traits_pod_type();
     unittests_core_type_traits_unref();
     unittests_core_type_traits_is_const();
+    unittests_core_type_traits_is_convertible();
     unittests_core_type_traits_is_same();
 }
 

@@ -44,8 +44,8 @@ export template<typename T, typename U = T>
     return old_value;
 }
 
-// Swaps the values of a and b. swap(a, a) assigns a to itself through move
-// assignment, which must leave the object unchanged.
+// Swaps the values of a and b.
+// swap(a, a) move-assigns the moved-from a to itself, which must be safe;
 export template<typename T> constexpr void swap(T& a, T& b)
 {
     T temp = move(a);

@@ -24,6 +24,31 @@ class MoveOnly {
     int_t value_;
 };
 
+// Tells how an int_t argument arrived: a non-const lvalue, a const lvalue or an
+// rvalue.
+constexpr int_t forward_test_category(int_t&) { return 1; }
+constexpr int_t forward_test_category(const int_t&) { return 2; }
+constexpr int_t forward_test_category(int_t&&) { return 3; }
+
+// Passes value on through a forwarding reference, as forward is meant to be
+// used, and without forward for comparison.
+template<typename T> constexpr int_t forward_test_pass(T&& value)
+{
+    return forward_test_category(forward<T>(value));
+}
+
+template<typename T> constexpr int_t forward_test_pass_named(T&& value)
+{
+    return forward_test_category(value);
+}
+
+// Constructs a MoveOnly from a forwarded argument: compiles only if an rvalue
+// MoveOnly arrives as an rvalue (the copy constructor is deleted).
+template<typename T> MoveOnly forward_test_make(T&& value)
+{
+    return MoveOnly{forward<T>(value)};
+}
+
 void unittests_core_utility_forward()
 {
     int_t a{1};
@@ -43,6 +68,21 @@ void unittests_core_utility_forward()
     FND_TEST_TRUE(&lr == &a);
     FND_TEST_TRUE(&rr == &a);
     FND_TEST_TRUE(a == 1);
+
+    // Through a forwarding reference the callee sees the argument as the
+    // caller passed it: a non-const lvalue, a const lvalue or an rvalue.
+    FND_TEST_TRUE(forward_test_pass(a) == 1);
+    FND_TEST_TRUE(forward_test_pass(ca) == 2);
+    FND_TEST_TRUE(forward_test_pass(int_t{3}) == 3);
+    FND_TEST_TRUE(forward_test_pass(move(a)) == 3);
+    // Without forward a named parameter is always an lvalue: the rvalue
+    // arrives as a non-const lvalue.
+    FND_TEST_TRUE(forward_test_pass_named(int_t{3}) == 1);
+
+    // A forwarded rvalue reaches the move constructor.
+    MoveOnly m{forward_test_make(MoveOnly{5})};
+    FND_TEST_TRUE(m.value() == 5);
+    FND_TEST_TRUE(forward_test_make(move(m)).value() == 5);
 
     // Usable in constant expressions.
     static_assert([] {
