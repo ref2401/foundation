@@ -52,6 +52,22 @@ export FND_INLINE void copy_bytes(
   ::memcpy(to, from, byte_count);
 }
 
+// True if the byte_count bytes at ptr0 and ptr1 are equal.
+// The ranges may overlap.
+export FND_INLINE bool_t equal_bytes(
+  const void* const ptr0, const void* const ptr1, const ulong_t byte_count)
+{
+  FND_ASSERT(ptr0 != nullptr);
+  FND_ASSERT(ptr1 != nullptr);
+  FND_ASSERT(byte_count > 0);
+  const uptr_t p0{reinterpret_cast<uptr_t>(ptr0)};
+  const uptr_t p1{reinterpret_cast<uptr_t>(ptr1)};
+  FND_ASSERT(p0 + byte_count > p0); // overflow
+  FND_ASSERT(p1 + byte_count > p1); // overflow
+
+  return ::memcmp(ptr0, ptr1, byte_count) == 0;
+}
+
 // Sets byte_count bytes at ptr to value.
 export FND_INLINE void fill_bytes(
   void* const ptr, const ulong_t byte_count, const ubyte_t value)

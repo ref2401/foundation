@@ -160,6 +160,60 @@ void unittests_memory_utility_copy_bytes()
   FND_TEST_TRUE(object.f == kObject.f);
 }
 
+void unittests_memory_utility_equal_bytes()
+{
+  // Every byte value in both buffers.
+  constexpr ulong_t kLength{256};
+  ubyte_t a[kLength]{};
+  ubyte_t b[kLength]{};
+  for (ulong_t i{0}; i < kLength; ++i) {
+    a[i] = static_cast<ubyte_t>(i);
+    b[i] = static_cast<ubyte_t>(i);
+  }
+  FND_TEST_TRUE(equal_bytes(a, b, kLength));
+
+  // One different byte anywhere makes them unequal: the first, the last, and
+  // every one in between. Only the compared range counts.
+  for (ulong_t i{1}; i < kLength; ++i) {
+    b[i] = static_cast<ubyte_t>(b[i] + 1);
+    FND_TEST_FALSE(equal_bytes(a, b, kLength));
+    FND_TEST_TRUE(equal_bytes(a, b, i)); // the bytes before it
+    b[i] = a[i];
+  }
+
+  // The bytes are compared as unsigned values: 0x7F and 0x80 differ, and so
+  // do 0x00 and 0xFF.
+  constexpr ubyte_t kBelow128{0x7F};
+  constexpr ubyte_t kAbove127{0x80};
+  FND_TEST_FALSE(equal_bytes(&kBelow128, &kAbove127, 1));
+  FND_TEST_FALSE(equal_bytes(a, a + 255, 1));
+
+  // A single equal byte; a range compared with itself.
+  FND_TEST_TRUE(equal_bytes(a + 10, b + 10, 1));
+  FND_TEST_TRUE(equal_bytes(a, a, kLength));
+
+  // Overlapping ranges are allowed: a buffer of one repeated value equals
+  // itself shifted by one byte, a buffer of distinct values does not.
+  constexpr ulong_t kRepeatedLength{32};
+  ubyte_t repeated[kRepeatedLength]{};
+  for (ubyte_t& r : repeated) {
+    r = 0xAA;
+  }
+  FND_TEST_TRUE(equal_bytes(repeated, repeated + 1, kRepeatedLength - 1));
+  FND_TEST_FALSE(equal_bytes(a, a + 1, 31));
+
+  // Objects with the same bytes are equal.
+  struct equal_test_t final {
+    int_t i;
+    float_t f;
+  };
+  constexpr equal_test_t kObject0{-7, 2.5f};
+  constexpr equal_test_t kObject1{-7, 2.5f};
+  constexpr equal_test_t kObject2{-7, 3.5f};
+  FND_TEST_TRUE(equal_bytes(&kObject0, &kObject1, sizeof(equal_test_t)));
+  FND_TEST_FALSE(equal_bytes(&kObject0, &kObject2, sizeof(equal_test_t)));
+}
+
 void unittests_memory_utility_fill_bytes()
 {
   // The whole buffer, with 0, a value above 127 and the largest value.
@@ -303,6 +357,7 @@ void unittests_memory_utility()
 {
   unittests_memory_utility_align_up();
   unittests_memory_utility_copy_bytes();
+  unittests_memory_utility_equal_bytes();
   unittests_memory_utility_fill_bytes();
   unittests_memory_utility_gibibytes();
   unittests_memory_utility_is_aligned();

@@ -64,6 +64,22 @@ v
   `make_float3x3(const float3x4_t&)`, `make_quat(const float3x3_t&)`.
   Exception: vector conversions are `float4(...)`, `int3(...)`, also
   `float4(quat_t)` and `quat(float4_t)`.
+- Boolean functions and variables read as a yes/no question once the
+  arguments are filled in:
+  - a property or state of one subject: `is_` + adjective (`is_aligned(p, 16)`,
+    `is_empty(s)`, `is_normalized(v)`; variables `is_copied`, `is_visible`);
+  - an ability: `can_` + verb (`can_trunc_to_int(x)`);
+  - possession: `has_` + noun (`has_capacity(a, n)`);
+  - the subject does or relates to something: a third-person verb
+    (`contains(s, x)`, `overlaps(r0, r1)`, `starts_with(s, prefix)`);
+  - a symmetric relation between two operands of equal standing: the
+    relation's adjective alone (`approx_equal(a, b)`,
+    `equal_bytes(a, b, byte_count)`).
+
+  Never `does_`/`do_` (`does_overlap`), `is_` before a verb (`is_contains`), a
+  participle in place of the verb (`bytes_compared`), or a negated name
+  (`is_not_empty`, `no_overlap`). Names taken from C or `std` keep their
+  spelling: `isnan`, `isinf`, `isfinite`, `is_same`, `is_constant_evaluated`.
 - Parameters taking a scalar are named `scalar`.
 - Matrix variables use `m`: `m`, `m_inv`, `rm`/`mr` for rotations, `sm`/`ms`
   for scales.

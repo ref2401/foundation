@@ -26,6 +26,7 @@ export template<typename T> struct span_t final {
   }
 };
 
+
 export template<typename T>
 constexpr bool_t operator==(const span_t<T> a, const span_t<T> b)
 {
