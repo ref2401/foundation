@@ -52,6 +52,18 @@ export FND_INLINE void copy_bytes(
   ::memcpy(to, from, byte_count);
 }
 
+// Sets byte_count bytes at ptr to value.
+export FND_INLINE void fill_bytes(
+  void* const ptr, const ulong_t byte_count, const ubyte_t value)
+{
+  FND_ASSERT(ptr != nullptr);
+  FND_ASSERT(byte_count > 0);
+  const uptr_t p{reinterpret_cast<uptr_t>(ptr)};
+  FND_ASSERT(p + byte_count > p); // overflow
+
+  ::memset(ptr, value, byte_count);
+}
+
 // count gibibytes (2^30 bytes) in bytes.
 export constexpr ulong_t gibibytes(const ulong_t count)
 {
@@ -61,8 +73,8 @@ export constexpr ulong_t gibibytes(const ulong_t count)
   return count * kBytesPerGib;
 }
 
-// True if ptr is a multiple of alignment, a power of two. nullptr is aligned to
-// anything.
+// True if ptr is a multiple of alignment, a power of two.
+// nullptr is aligned to anything.
 export FND_INLINE bool_t is_aligned(
   const void* const ptr, const ulong_t alignment)
 {

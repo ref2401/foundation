@@ -145,9 +145,9 @@ void unittests_memory_utility_copy_bytes()
   }
 
   // A single byte, and an object: its bytes are its value.
-  ubyte_t single{0};
-  copy_bytes(from + 255, &single, 1);
-  FND_TEST_TRUE(single == 255);
+  ubyte_t single_byte_dest{0};
+  copy_bytes(from + 255, &single_byte_dest, 1);
+  FND_TEST_TRUE(single_byte_dest == 255);
 
   struct copy_test_t final {
     int_t i;
@@ -158,6 +158,52 @@ void unittests_memory_utility_copy_bytes()
   copy_bytes(&kObject, &object, sizeof(copy_test_t));
   FND_TEST_TRUE(object.i == kObject.i);
   FND_TEST_TRUE(object.f == kObject.f);
+}
+
+void unittests_memory_utility_fill_bytes()
+{
+  // The whole buffer, with 0, a value above 127 and the largest value.
+  constexpr ubyte_t kValues[]{0, 0xAB, 0xFF};
+  constexpr ulong_t kBufferLength{64};
+  ubyte_t buffer[kBufferLength]{};
+
+  for (const ubyte_t value : kValues) {
+    fill_bytes(buffer, kBufferLength, value);
+
+    for (const ubyte_t b : buffer) {
+      FND_TEST_TRUE(b == value);
+    }
+  }
+
+  // A part in the middle: the bytes around it stay as they are.
+  constexpr ubyte_t kUntouched{0x11};
+  constexpr ubyte_t kValue{0xCD};
+  constexpr ulong_t kOffset{5};
+  constexpr ulong_t kCount{7};
+  fill_bytes(buffer, kBufferLength, kUntouched);
+  fill_bytes(buffer + kOffset, kCount, kValue);
+
+  for (ulong_t i{0}; i < kBufferLength; ++i) {
+    const bool_t is_filled{kOffset <= i && i < kOffset + kCount};
+    const ubyte_t expected_value{is_filled ? kValue : kUntouched};
+    FND_TEST_TRUE(buffer[i] == expected_value);
+  }
+
+  // A single byte.
+  ubyte_t single_byte{0};
+  fill_bytes(&single_byte, 1, kValue);
+  FND_TEST_TRUE(single_byte == kValue);
+
+  // An object: every byte of it gets the value.
+  struct fill_test_t final {
+    uint_t u;
+    ubyte_t b;
+  };
+
+  fill_test_t object{1, 2};
+  fill_bytes(&object, sizeof(fill_test_t), 0xFF);
+  FND_TEST_TRUE(object.u == kUIntMaxValue);
+  FND_TEST_TRUE(object.b == 0xFF);
 }
 
 void unittests_memory_utility_gibibytes()
@@ -257,6 +303,7 @@ void unittests_memory_utility()
 {
   unittests_memory_utility_align_up();
   unittests_memory_utility_copy_bytes();
+  unittests_memory_utility_fill_bytes();
   unittests_memory_utility_gibibytes();
   unittests_memory_utility_is_aligned();
   unittests_memory_utility_kibibytes();
