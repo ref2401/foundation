@@ -80,6 +80,7 @@ $moduleNames = @(
     'foundation\math\math.matrix_construction.ixx'
     'foundation\math\math.ixx'
     'foundation\memory\memory.utility.ixx'
+    'foundation\memory\memory.block.ixx'
     'foundation\memory\memory.ixx'
     'unittests\core\unittests.core.arithmetic_types.ixx'
     'unittests\core\unittests.core.arithmetic.ixx'
@@ -107,6 +108,7 @@ $moduleNames = @(
     'unittests\math\unittests.math.matrix_construction.ixx'
     'unittests\math\unittests.math.ixx'
     'unittests\memory\unittests.memory.utility.ixx'
+    'unittests\memory\unittests.memory.block.ixx'
     'unittests\memory\unittests.memory.ixx'
 )
 

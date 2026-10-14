@@ -173,3 +173,6 @@ v
   of a test module (`kMatrixA3x3`, `kMatrixA4x4`).
 - Test-only types are defined inside the test function, or at file scope when
   several tests share them.
+- A local array's length is a named `constexpr` constant
+  (`constexpr ulong_t kBufferLength{16}; ubyte_t buffer[kBufferLength]{};`),
+  used wherever the code refers to that length.

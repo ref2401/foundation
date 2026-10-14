@@ -45,8 +45,6 @@ export FND_INLINE void copy_bytes(
 
   const uptr_t p0{reinterpret_cast<uptr_t>(from)};
   const uptr_t p1{reinterpret_cast<uptr_t>(to)};
-  FND_ASSERT(p0 + byte_count > p0);                           // overflow
-  FND_ASSERT(p1 + byte_count > p1);                           // overflow
   FND_ASSERT(p0 - p1 >= byte_count && p1 - p0 >= byte_count); // overlap
 
   ::memcpy(to, from, byte_count);
@@ -60,10 +58,6 @@ export FND_INLINE bool_t equal_bytes(
   FND_ASSERT(ptr0 != nullptr);
   FND_ASSERT(ptr1 != nullptr);
   FND_ASSERT(byte_count > 0);
-  const uptr_t p0{reinterpret_cast<uptr_t>(ptr0)};
-  const uptr_t p1{reinterpret_cast<uptr_t>(ptr1)};
-  FND_ASSERT(p0 + byte_count > p0); // overflow
-  FND_ASSERT(p1 + byte_count > p1); // overflow
 
   return ::memcmp(ptr0, ptr1, byte_count) == 0;
 }
@@ -74,8 +68,6 @@ export FND_INLINE void fill_bytes(
 {
   FND_ASSERT(ptr != nullptr);
   FND_ASSERT(byte_count > 0);
-  const uptr_t p{reinterpret_cast<uptr_t>(ptr)};
-  FND_ASSERT(p + byte_count > p); // overflow
 
   ::memset(ptr, value, byte_count);
 }
