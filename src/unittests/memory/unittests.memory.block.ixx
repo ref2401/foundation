@@ -209,6 +209,56 @@ void unittests_memory_block_overlaps()
     overlaps(memory_block_t{nullptr, 16}, memory_block_t{nullptr, 4}));
 }
 
+void unittests_memory_block_slice()
+{
+  constexpr ulong_t kBufferLength{32};
+  ubyte_t buffer[kBufferLength]{};
+  const memory_block_t block{buffer, kBufferLength};
+
+  // Every slice of the block: it starts byte_offset bytes into the block,
+  // has byte_count bytes, and lies within the block.
+  for (ulong_t offset{0}; offset < kBufferLength; ++offset) {
+    for (ulong_t count{1}; offset + count <= kBufferLength; ++count) {
+      const memory_block_t s{slice(block, offset, count)};
+      FND_TEST_TRUE(s.ptr == buffer + offset);
+      FND_TEST_TRUE(s.byte_count == count);
+      FND_TEST_TRUE(contains(block, s));
+    }
+  }
+
+  // The whole block, its first and its last byte.
+  FND_TEST_TRUE(slice(block, 0, kBufferLength) == block);
+  FND_TEST_TRUE(slice(block, 0, 1) == memory_block_t{buffer, 1});
+  const memory_block_t expected_last_byte{buffer + kBufferLength - 1, 1};
+  FND_TEST_TRUE(slice(block, kBufferLength - 1, 1) == expected_last_byte);
+
+  // A slice of a slice adds the offsets.
+  FND_TEST_TRUE(slice(slice(block, 8, 16), 4, 4) == slice(block, 12, 4));
+
+  // A slice refers to the block's memory, not to a copy.
+  memory_block_t s{slice(block, 5, 3)};
+  *s[1] = 0xAB;
+  FND_TEST_TRUE(buffer[6] == 0xAB);
+}
+
+void unittests_memory_block_slice_to_end()
+{
+  constexpr ulong_t kBufferLength{32};
+  ubyte_t buffer[kBufferLength]{};
+  const memory_block_t block{buffer, kBufferLength};
+
+  // Every offset: the slice runs from it to the end of the block.
+  for (ulong_t offset{0}; offset < kBufferLength; ++offset) {
+    const memory_block_t expected{slice(block, offset, kBufferLength - offset)};
+    FND_TEST_TRUE(slice(block, offset) == expected);
+  }
+
+  // From the start it is the whole block; from the last byte, one byte.
+  FND_TEST_TRUE(slice(block, 0) == block);
+  const memory_block_t expected_last_byte{buffer + kBufferLength - 1, 1};
+  FND_TEST_TRUE(slice(block, kBufferLength - 1) == expected_last_byte);
+}
+
 void unittests_memory_block()
 {
   unittests_memory_block_type();
@@ -219,6 +269,8 @@ void unittests_memory_block()
   unittests_memory_block_contains_block();
   unittests_memory_block_is_empty();
   unittests_memory_block_overlaps();
+  unittests_memory_block_slice();
+  unittests_memory_block_slice_to_end();
 }
 
 } // namespace fnd::unittests

@@ -104,4 +104,33 @@ export bool_t overlaps(const memory_block_t block0, const memory_block_t block1)
   return max(start0, start1) < min(end0, end1);
 }
 
+// The byte_count bytes of block that start at byte_offset. They must lie
+// within block and be at least one byte.
+export FND_INLINE memory_block_t slice(
+  const memory_block_t block, const ulong_t byte_offset,
+  const ulong_t byte_count)
+{
+  FND_ASSERT(!is_empty(block));
+  // Also keeps block.byte_count - byte_offset below from wrapping.
+  FND_ASSERT(byte_offset < block.byte_count);
+  FND_ASSERT(byte_count > 0);
+  FND_ASSERT(byte_count <= block.byte_count - byte_offset);
+
+  ubyte_t* const new_ptr{static_cast<ubyte_t*>(block.ptr) + byte_offset};
+
+  return memory_block_t{new_ptr, byte_count};
+}
+
+// The bytes of block from byte_offset to its end. At least one byte must
+// remain.
+export FND_INLINE memory_block_t slice(
+  const memory_block_t block, const ulong_t byte_offset)
+{
+  FND_ASSERT(!is_empty(block));
+  FND_ASSERT(byte_offset < block.byte_count);
+
+  const ulong_t byte_count{block.byte_count - byte_offset};
+  return slice(block, byte_offset, byte_count);
+}
+
 } // namespace fnd
