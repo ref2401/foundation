@@ -42,35 +42,35 @@ export constexpr bool2_t bool2(const bool4_t v)
   return bool2_t{v.x, v.y};
 }
 
-export FND_INLINE bool2_t bool2(const float_t scalar)
+export inline bool2_t bool2(const float_t scalar)
 {
   FND_ASSERT(!isnan(scalar));
 
   return bool2_t{scalar != 0.0f, scalar != 0.0f};
 }
 
-export FND_INLINE bool2_t bool2(const float_t x, const float_t y)
+export inline bool2_t bool2(const float_t x, const float_t y)
 {
   FND_ASSERT(!isnan(x) && !isnan(y));
 
   return bool2_t{x != 0.0f, y != 0.0f};
 }
 
-export FND_INLINE bool2_t bool2(const float2_t v)
+export inline bool2_t bool2(const float2_t v)
 {
   FND_ASSERT(all(!isnan(v)));
 
   return bool2_t{v.x != 0.0f, v.y != 0.0f};
 }
 
-export FND_INLINE bool2_t bool2(const float3_t v)
+export inline bool2_t bool2(const float3_t v)
 {
   FND_ASSERT(!isnan(v.x) && !isnan(v.y));
 
   return bool2_t{v.x != 0.0f, v.y != 0.0f};
 }
 
-export FND_INLINE bool2_t bool2(const float4_t v)
+export inline bool2_t bool2(const float4_t v)
 {
   FND_ASSERT(!isnan(v.x) && !isnan(v.y));
 
@@ -151,36 +151,35 @@ export constexpr bool3_t bool3(const bool4_t v)
   return bool3_t{v.x, v.y, v.z};
 }
 
-export FND_INLINE bool3_t bool3(const float_t scalar)
+export inline bool3_t bool3(const float_t scalar)
 {
   FND_ASSERT(!isnan(scalar));
 
   return bool3_t{scalar != 0.0f, scalar != 0.0f, scalar != 0.0f};
 }
 
-export FND_INLINE bool3_t bool3(
-  const float_t x, const float_t y, const float_t z)
+export inline bool3_t bool3(const float_t x, const float_t y, const float_t z)
 {
   FND_ASSERT(!isnan(x) && !isnan(y) && !isnan(z));
 
   return bool3_t{x != 0.0f, y != 0.0f, z != 0.0f};
 }
 
-export FND_INLINE bool3_t bool3(const float2_t v, const float_t z = 0)
+export inline bool3_t bool3(const float2_t v, const float_t z = 0)
 {
   FND_ASSERT(all(!isnan(v)) && !isnan(z));
 
   return bool3_t{v.x != 0.0f, v.y != 0.0f, z != 0.0f};
 }
 
-export FND_INLINE bool3_t bool3(const float3_t v)
+export inline bool3_t bool3(const float3_t v)
 {
   FND_ASSERT(all(!isnan(v)));
 
   return bool3_t{v.x != 0.0f, v.y != 0.0f, v.z != 0.0f};
 }
 
-export FND_INLINE bool3_t bool3(const float4_t v)
+export inline bool3_t bool3(const float4_t v)
 {
   FND_ASSERT(!isnan(v.x) && !isnan(v.y) && !isnan(v.z));
 
@@ -263,7 +262,7 @@ export constexpr bool4_t bool4(const bool3_t v, const bool_t w = false)
   return bool4_t{v.x, v.y, v.z, w};
 }
 
-export FND_INLINE bool4_t bool4(const float_t scalar)
+export inline bool4_t bool4(const float_t scalar)
 {
   FND_ASSERT(!isnan(scalar));
 
@@ -271,7 +270,7 @@ export FND_INLINE bool4_t bool4(const float_t scalar)
     scalar != 0.0f, scalar != 0.0f, scalar != 0.0f, scalar != 0.0f};
 }
 
-export FND_INLINE bool4_t bool4(
+export inline bool4_t bool4(
   const float_t x, const float_t y, const float_t z, const float_t w)
 {
   FND_ASSERT(!isnan(x) && !isnan(y) && !isnan(z) && !isnan(w));
@@ -279,7 +278,7 @@ export FND_INLINE bool4_t bool4(
   return bool4_t{x != 0.0f, y != 0.0f, z != 0.0f, w != 0.0f};
 }
 
-export FND_INLINE bool4_t bool4(
+export inline bool4_t bool4(
   const float2_t v, const float_t z = 0, const float_t w = 0)
 {
   FND_ASSERT(all(!isnan(v)) && !isnan(z) && !isnan(w));
@@ -287,14 +286,14 @@ export FND_INLINE bool4_t bool4(
   return bool4_t{v.x != 0.0f, v.y != 0.0f, z != 0.0f, w != 0.0f};
 }
 
-export FND_INLINE bool4_t bool4(const float3_t v, const float_t w = 0)
+export inline bool4_t bool4(const float3_t v, const float_t w = 0)
 {
   FND_ASSERT(all(!isnan(v)) && !isnan(w));
 
   return bool4_t{v.x != 0.0f, v.y != 0.0f, v.z != 0.0f, w != 0.0f};
 }
 
-export FND_INLINE bool4_t bool4(const float4_t v)
+export inline bool4_t bool4(const float4_t v)
 {
   FND_ASSERT(all(!isnan(v)));
 
@@ -359,36 +358,36 @@ export constexpr bool4_t bool4(const uint4_t v)
 // can_trunc_to()
 // ---------------------------------------------------------------------------
 
-export FND_INLINE bool2_t can_trunc_to_int(const float2_t v)
+export inline bool2_t can_trunc_to_int(const float2_t v)
 {
   return bool2_t{can_trunc_to_int(v.x), can_trunc_to_int(v.y)};
 }
 
-export FND_INLINE bool3_t can_trunc_to_int(const float3_t v)
+export inline bool3_t can_trunc_to_int(const float3_t v)
 {
   return bool3_t{
     can_trunc_to_int(v.x), can_trunc_to_int(v.y), can_trunc_to_int(v.z)};
 }
 
-export FND_INLINE bool4_t can_trunc_to_int(const float4_t v)
+export inline bool4_t can_trunc_to_int(const float4_t v)
 {
   return bool4_t{
     can_trunc_to_int(v.x), can_trunc_to_int(v.y), can_trunc_to_int(v.z),
     can_trunc_to_int(v.w)};
 }
 
-export FND_INLINE bool2_t can_trunc_to_uint(const float2_t v)
+export inline bool2_t can_trunc_to_uint(const float2_t v)
 {
   return bool2_t{can_trunc_to_uint(v.x), can_trunc_to_uint(v.y)};
 }
 
-export FND_INLINE bool3_t can_trunc_to_uint(const float3_t v)
+export inline bool3_t can_trunc_to_uint(const float3_t v)
 {
   return bool3_t{
     can_trunc_to_uint(v.x), can_trunc_to_uint(v.y), can_trunc_to_uint(v.z)};
 }
 
-export FND_INLINE bool4_t can_trunc_to_uint(const float4_t v)
+export inline bool4_t can_trunc_to_uint(const float4_t v)
 {
   return bool4_t{
     can_trunc_to_uint(v.x), can_trunc_to_uint(v.y), can_trunc_to_uint(v.z),
@@ -780,35 +779,35 @@ export constexpr int2_t int2(const bool4_t v)
   return int2_t{v.x ? 1 : 0, v.y ? 1 : 0};
 }
 
-export FND_INLINE int2_t int2(const float_t scalar)
+export inline int2_t int2(const float_t scalar)
 {
   FND_ASSERT(can_trunc_to_int(scalar));
 
   return int2_t{static_cast<int_t>(scalar), static_cast<int_t>(scalar)};
 }
 
-export FND_INLINE int2_t int2(const float_t x, const float_t y)
+export inline int2_t int2(const float_t x, const float_t y)
 {
   FND_ASSERT(can_trunc_to_int(x) && can_trunc_to_int(y));
 
   return int2_t{static_cast<int_t>(x), static_cast<int_t>(y)};
 }
 
-export FND_INLINE int2_t int2(const float2_t v)
+export inline int2_t int2(const float2_t v)
 {
   FND_ASSERT(all(can_trunc_to_int(v)));
 
   return int2_t{static_cast<int_t>(v.x), static_cast<int_t>(v.y)};
 }
 
-export FND_INLINE int2_t int2(const float3_t v)
+export inline int2_t int2(const float3_t v)
 {
   FND_ASSERT(can_trunc_to_int(v.x) && can_trunc_to_int(v.y));
 
   return int2_t{static_cast<int_t>(v.x), static_cast<int_t>(v.y)};
 }
 
-export FND_INLINE int2_t int2(const float4_t v)
+export inline int2_t int2(const float4_t v)
 {
   FND_ASSERT(can_trunc_to_int(v.x) && can_trunc_to_int(v.y));
 
@@ -905,7 +904,7 @@ export constexpr int3_t int3(const bool4_t v)
   return int3_t{v.x ? 1 : 0, v.y ? 1 : 0, v.z ? 1 : 0};
 }
 
-export FND_INLINE int3_t int3(const float_t scalar)
+export inline int3_t int3(const float_t scalar)
 {
   FND_ASSERT(can_trunc_to_int(scalar));
 
@@ -914,7 +913,7 @@ export FND_INLINE int3_t int3(const float_t scalar)
     static_cast<int_t>(scalar)};
 }
 
-export FND_INLINE int3_t int3(const float_t x, const float_t y, const float_t z)
+export inline int3_t int3(const float_t x, const float_t y, const float_t z)
 {
   FND_ASSERT(can_trunc_to_int(x) && can_trunc_to_int(y) && can_trunc_to_int(z));
 
@@ -922,7 +921,7 @@ export FND_INLINE int3_t int3(const float_t x, const float_t y, const float_t z)
     static_cast<int_t>(x), static_cast<int_t>(y), static_cast<int_t>(z)};
 }
 
-export FND_INLINE int3_t int3(const float2_t v, const float_t z = 0)
+export inline int3_t int3(const float2_t v, const float_t z = 0)
 {
   FND_ASSERT(all(can_trunc_to_int(v)) && can_trunc_to_int(z));
 
@@ -930,7 +929,7 @@ export FND_INLINE int3_t int3(const float2_t v, const float_t z = 0)
     static_cast<int_t>(v.x), static_cast<int_t>(v.y), static_cast<int_t>(z)};
 }
 
-export FND_INLINE int3_t int3(const float3_t v)
+export inline int3_t int3(const float3_t v)
 {
   FND_ASSERT(all(can_trunc_to_int(v)));
 
@@ -938,7 +937,7 @@ export FND_INLINE int3_t int3(const float3_t v)
     static_cast<int_t>(v.x), static_cast<int_t>(v.y), static_cast<int_t>(v.z)};
 }
 
-export FND_INLINE int3_t int3(const float4_t v)
+export inline int3_t int3(const float4_t v)
 {
   FND_ASSERT(
     can_trunc_to_int(v.x) && can_trunc_to_int(v.y) && can_trunc_to_int(v.z));
@@ -1047,7 +1046,7 @@ export constexpr int4_t int4(const bool4_t v)
   return int4_t{v.x ? 1 : 0, v.y ? 1 : 0, v.z ? 1 : 0, v.w ? 1 : 0};
 }
 
-export FND_INLINE int4_t int4(const float_t scalar)
+export inline int4_t int4(const float_t scalar)
 {
   FND_ASSERT(can_trunc_to_int(scalar));
 
@@ -1056,7 +1055,7 @@ export FND_INLINE int4_t int4(const float_t scalar)
     static_cast<int_t>(scalar), static_cast<int_t>(scalar)};
 }
 
-export FND_INLINE int4_t int4(
+export inline int4_t int4(
   const float_t x, const float_t y, const float_t z, const float_t w)
 {
   FND_ASSERT(
@@ -1068,7 +1067,7 @@ export FND_INLINE int4_t int4(
     static_cast<int_t>(w)};
 }
 
-export FND_INLINE int4_t int4(
+export inline int4_t int4(
   const float2_t v, const float_t z = 0, const float_t w = 0)
 {
   FND_ASSERT(
@@ -1079,7 +1078,7 @@ export FND_INLINE int4_t int4(
     static_cast<int_t>(w)};
 }
 
-export FND_INLINE int4_t int4(const float3_t v, const float_t w = 0)
+export inline int4_t int4(const float3_t v, const float_t w = 0)
 {
   FND_ASSERT(all(can_trunc_to_int(v)) && can_trunc_to_int(w));
 
@@ -1088,7 +1087,7 @@ export FND_INLINE int4_t int4(const float3_t v, const float_t w = 0)
     static_cast<int_t>(w)};
 }
 
-export FND_INLINE int4_t int4(const float4_t v)
+export inline int4_t int4(const float4_t v)
 {
   FND_ASSERT(all(can_trunc_to_int(v)));
 
@@ -1214,35 +1213,35 @@ export constexpr uint2_t uint2(const bool4_t v)
   return uint2_t{v.x ? 1u : 0u, v.y ? 1u : 0u};
 }
 
-export FND_INLINE uint2_t uint2(const float_t scalar)
+export inline uint2_t uint2(const float_t scalar)
 {
   FND_ASSERT(can_trunc_to_uint(scalar));
 
   return uint2_t{static_cast<uint_t>(scalar), static_cast<uint_t>(scalar)};
 }
 
-export FND_INLINE uint2_t uint2(const float_t x, const float_t y)
+export inline uint2_t uint2(const float_t x, const float_t y)
 {
   FND_ASSERT(can_trunc_to_uint(x) && can_trunc_to_uint(y));
 
   return uint2_t{static_cast<uint_t>(x), static_cast<uint_t>(y)};
 }
 
-export FND_INLINE uint2_t uint2(const float2_t v)
+export inline uint2_t uint2(const float2_t v)
 {
   FND_ASSERT(all(can_trunc_to_uint(v)));
 
   return uint2_t{static_cast<uint_t>(v.x), static_cast<uint_t>(v.y)};
 }
 
-export FND_INLINE uint2_t uint2(const float3_t v)
+export inline uint2_t uint2(const float3_t v)
 {
   FND_ASSERT(can_trunc_to_uint(v.x) && can_trunc_to_uint(v.y));
 
   return uint2_t{static_cast<uint_t>(v.x), static_cast<uint_t>(v.y)};
 }
 
-export FND_INLINE uint2_t uint2(const float4_t v)
+export inline uint2_t uint2(const float4_t v)
 {
   FND_ASSERT(can_trunc_to_uint(v.x) && can_trunc_to_uint(v.y));
 
@@ -1333,7 +1332,7 @@ export constexpr uint3_t uint3(const bool4_t v)
   return uint3_t{v.x ? 1u : 0u, v.y ? 1u : 0u, v.z ? 1u : 0u};
 }
 
-export FND_INLINE uint3_t uint3(const float_t scalar)
+export inline uint3_t uint3(const float_t scalar)
 {
   FND_ASSERT(can_trunc_to_uint(scalar));
 
@@ -1342,8 +1341,7 @@ export FND_INLINE uint3_t uint3(const float_t scalar)
     static_cast<uint_t>(scalar)};
 }
 
-export FND_INLINE uint3_t uint3(
-  const float_t x, const float_t y, const float_t z)
+export inline uint3_t uint3(const float_t x, const float_t y, const float_t z)
 {
   FND_ASSERT(
     can_trunc_to_uint(x) && can_trunc_to_uint(y) && can_trunc_to_uint(z));
@@ -1352,7 +1350,7 @@ export FND_INLINE uint3_t uint3(
     static_cast<uint_t>(x), static_cast<uint_t>(y), static_cast<uint_t>(z)};
 }
 
-export FND_INLINE uint3_t uint3(const float2_t v, const float_t z = 0)
+export inline uint3_t uint3(const float2_t v, const float_t z = 0)
 {
   FND_ASSERT(all(can_trunc_to_uint(v)) && can_trunc_to_uint(z));
 
@@ -1360,7 +1358,7 @@ export FND_INLINE uint3_t uint3(const float2_t v, const float_t z = 0)
     static_cast<uint_t>(v.x), static_cast<uint_t>(v.y), static_cast<uint_t>(z)};
 }
 
-export FND_INLINE uint3_t uint3(const float3_t v)
+export inline uint3_t uint3(const float3_t v)
 {
   FND_ASSERT(all(can_trunc_to_uint(v)));
 
@@ -1369,7 +1367,7 @@ export FND_INLINE uint3_t uint3(const float3_t v)
     static_cast<uint_t>(v.z)};
 }
 
-export FND_INLINE uint3_t uint3(const float4_t v)
+export inline uint3_t uint3(const float4_t v)
 {
   FND_ASSERT(
     can_trunc_to_uint(v.x) && can_trunc_to_uint(v.y) && can_trunc_to_uint(v.z));
@@ -1474,7 +1472,7 @@ export constexpr uint4_t uint4(const bool4_t v)
   return uint4_t{v.x ? 1u : 0u, v.y ? 1u : 0u, v.z ? 1u : 0u, v.w ? 1u : 0u};
 }
 
-export FND_INLINE uint4_t uint4(const float_t scalar)
+export inline uint4_t uint4(const float_t scalar)
 {
   FND_ASSERT(can_trunc_to_uint(scalar));
 
@@ -1483,7 +1481,7 @@ export FND_INLINE uint4_t uint4(const float_t scalar)
     static_cast<uint_t>(scalar), static_cast<uint_t>(scalar)};
 }
 
-export FND_INLINE uint4_t uint4(
+export inline uint4_t uint4(
   const float_t x, const float_t y, const float_t z, const float_t w)
 {
   FND_ASSERT(
@@ -1495,7 +1493,7 @@ export FND_INLINE uint4_t uint4(
     static_cast<uint_t>(w)};
 }
 
-export FND_INLINE uint4_t uint4(
+export inline uint4_t uint4(
   const float2_t v, const float_t z = 0, const float_t w = 0)
 {
   FND_ASSERT(
@@ -1506,7 +1504,7 @@ export FND_INLINE uint4_t uint4(
     static_cast<uint_t>(w)};
 }
 
-export FND_INLINE uint4_t uint4(const float3_t v, const float_t w = 0)
+export inline uint4_t uint4(const float3_t v, const float_t w = 0)
 {
   FND_ASSERT(all(can_trunc_to_uint(v)) && can_trunc_to_uint(w));
 
@@ -1515,7 +1513,7 @@ export FND_INLINE uint4_t uint4(const float3_t v, const float_t w = 0)
     static_cast<uint_t>(v.z), static_cast<uint_t>(w)};
 }
 
-export FND_INLINE uint4_t uint4(const float4_t v)
+export inline uint4_t uint4(const float4_t v)
 {
   FND_ASSERT(all(can_trunc_to_uint(v)));
 

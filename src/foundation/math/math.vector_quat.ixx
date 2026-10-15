@@ -95,7 +95,7 @@ export constexpr quat_t& operator+=(quat_t& a, const quat_t b)
   return a;
 }
 
-export FND_INLINE bool_t approx_equal(
+export inline bool_t approx_equal(
   const quat_t a, const quat_t b, const float_t max_abs_diff = 1e-5f)
 {
   FND_ASSERT(max_abs_diff >= 0);
@@ -117,19 +117,19 @@ export constexpr float_t dot(const quat_t a, const quat_t b)
 }
 
 // True if every component is finite: neither NaN nor infinity.
-export FND_INLINE bool_t isfinite(const quat_t q)
+export inline bool_t isfinite(const quat_t q)
 {
   return isfinite(q.x) && isfinite(q.y) && isfinite(q.z) && isfinite(q.w);
 }
 
 // True if any component is infinity, of either sign.
-export FND_INLINE bool_t isinf(const quat_t q)
+export inline bool_t isinf(const quat_t q)
 {
   return isinf(q.x) || isinf(q.y) || isinf(q.z) || isinf(q.w);
 }
 
 // True if any component is NaN.
-export FND_INLINE bool_t isnan(const quat_t q)
+export inline bool_t isnan(const quat_t q)
 {
   return isnan(q.x) || isnan(q.y) || isnan(q.z) || isnan(q.w);
 }
@@ -150,13 +150,13 @@ export constexpr quat_t inverse(const quat_t q)
   return inv_l2 * conjugate(q);
 }
 
-export FND_INLINE bool_t is_normalized(
+export inline bool_t is_normalized(
   const quat_t q, const float_t max_abs_diff = 1e-4f)
 {
   return approx_equal(length_sqr(q), 1.0f, max_abs_diff);
 }
 
-export FND_INLINE float_t length(const quat_t q)
+export inline float_t length(const quat_t q)
 {
   return sqrt(length_sqr(q));
 }
@@ -164,7 +164,7 @@ export FND_INLINE float_t length(const quat_t q)
 // The rotation by angle_radians about axis, which must be normalized.
 // Right-handed: a positive angle_radians rotates counter-clockwise when
 // looking from the tip of axis toward the origin.
-export FND_INLINE quat_t make_quat_axis_angle(
+export inline quat_t make_quat_axis_angle(
   const float3_t axis, const float_t angle_radians)
 {
   FND_ASSERT(is_normalized(axis));
@@ -175,7 +175,7 @@ export FND_INLINE quat_t make_quat_axis_angle(
 }
 
 // Rotates v by the unit quaternion q: q * v * conjugate(q).
-export FND_INLINE float3_t mul(const quat_t q, const float3_t v)
+export inline float3_t mul(const quat_t q, const float3_t v)
 {
   FND_ASSERT(is_normalized(q));
 
@@ -186,7 +186,7 @@ export FND_INLINE float3_t mul(const quat_t q, const float3_t v)
   return v + q.w * t + cross(u, t);
 }
 
-export FND_INLINE quat_t normalize(const quat_t q)
+export inline quat_t normalize(const quat_t q)
 {
   const float_t l2 = length_sqr(q);
   FND_ASSERT(l2 > kFloatMinNormal);
@@ -198,7 +198,7 @@ export FND_INLINE quat_t normalize(const quat_t q)
 // [0, 1] extrapolates. b is negated when dot(a, b) < 0, so the result takes
 // the shorter way between the rotations. The result is normalized; its
 // angular speed is not constant (see slerp).
-export FND_INLINE quat_t nlerp(const quat_t a, const quat_t b, const float_t t)
+export inline quat_t nlerp(const quat_t a, const quat_t b, const float_t t)
 {
   FND_ASSERT(is_normalized(a));
   FND_ASSERT(is_normalized(b));
@@ -208,7 +208,7 @@ export FND_INLINE quat_t nlerp(const quat_t a, const quat_t b, const float_t t)
 }
 
 // normalize(q), or default_value when q is too short to normalize.
-export FND_INLINE quat_t normalize_safe(
+export inline quat_t normalize_safe(
   const quat_t q, const quat_t default_value = quat_t::kIdentity)
 {
   FND_ASSERT(!isnan(q));
@@ -249,7 +249,7 @@ export FND_INLINE quat_t normalize_safe(
 // dot(a, b) < 0, so the result takes the shorter way between the rotations.
 // For unit a and b the result is a unit quaternion up to rounding; it is not
 // normalized again.
-export FND_INLINE quat_t slerp(const quat_t a, const quat_t b, const float_t t)
+export inline quat_t slerp(const quat_t a, const quat_t b, const float_t t)
 {
   FND_ASSERT(is_normalized(a));
   FND_ASSERT(is_normalized(b));

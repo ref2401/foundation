@@ -23,7 +23,7 @@ namespace fnd {
 // (Rodrigues' rotation formula).
 // Right-handed: a positive angle_radians rotates
 // counter-clockwise when looking from the tip of axis toward the origin.
-export FND_INLINE float3x3_t make_float3x3_axis_angle(
+export inline float3x3_t make_float3x3_axis_angle(
   const float3_t axis, const float_t angle_radians)
 {
   FND_ASSERT(is_normalized(axis));
@@ -56,7 +56,7 @@ export constexpr float3x3_t make_float3x3_scale(const float3_t s)
 
 // Rotation about the normalized axis, with no translation; see
 // make_float3x3_axis_angle for the direction of a positive angle.
-export FND_INLINE float3x4_t make_float3x4_axis_angle(
+export inline float3x4_t make_float3x4_axis_angle(
   const float3_t axis, const float_t angle_radians)
 {
   FND_ASSERT(is_normalized(axis));
@@ -83,7 +83,7 @@ export constexpr float3x4_t make_float3x4_trs(
   return float3x4_t{mrs.col0, mrs.col1, mrs.col2, t};
 }
 
-export FND_INLINE float3x4_t make_float3x4_trs(
+export inline float3x4_t make_float3x4_trs(
   const float3_t t, const quat_t r, const float3_t s)
 {
   FND_ASSERT(is_normalized(r));
@@ -97,7 +97,7 @@ export FND_INLINE float3x4_t make_float3x4_trs(
 // make_float4x4_*()
 // ---------------------------------------------------------------------------
 
-export FND_INLINE float4x4_t make_float4x4_axis_angle(
+export inline float4x4_t make_float4x4_axis_angle(
   const float3_t axis, const float_t angle_radians)
 {
   FND_ASSERT(is_normalized(axis));
@@ -151,7 +151,7 @@ export constexpr float4x4_t make_float4x4_ortho_rh_to_dx12(
 // w = -z_vs is the distance in front of the camera; dividing by it shrinks x
 // and y with the distance. The -1 in the OW row mirrors the depth axis: that
 // turns the right-handed view space into the left-handed clip space.
-export FND_INLINE float4x4_t make_float4x4_perspective_rh_to_dx12(
+export inline float4x4_t make_float4x4_perspective_rh_to_dx12(
   const float_t vert_fov_radians, const float_t wh_aspect,
   const float_t near_dist_vs, const float_t far_dist_vs)
 {
@@ -194,7 +194,7 @@ export constexpr float4x4_t make_float4x4_trs(
     float4(t, 1)};
 }
 
-export FND_INLINE float4x4_t make_float4x4_trs(
+export inline float4x4_t make_float4x4_trs(
   const float3_t t, const quat_t r, const float3_t s)
 {
   FND_ASSERT(is_normalized(r));
@@ -212,7 +212,7 @@ export FND_INLINE float4x4_t make_float4x4_trs(
 // up_ws gives the vertical direction:
 //  It need not be normalized or perpendicular to target_ws - position_ws, only
 //  not parallel to it.
-export FND_INLINE float4x4_t make_float4x4_view_rh(
+export inline float4x4_t make_float4x4_view_rh(
   const float3_t position_ws, const float3_t target_ws, const float3_t up_ws)
 {
   // position_ws == target_ws

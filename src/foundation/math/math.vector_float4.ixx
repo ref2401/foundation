@@ -114,62 +114,62 @@ export constexpr bool4_t operator!=(const float_t scalar, const float4_t b)
   return !(scalar == b);
 }
 
-export FND_INLINE bool4_t operator<(const float4_t a, const float4_t b)
+export inline bool4_t operator<(const float4_t a, const float4_t b)
 {
   return bool4_t{a.x < b.x, a.y < b.y, a.z < b.z, a.w < b.w};
 }
 
-export FND_INLINE bool4_t operator<(const float4_t a, const float_t scalar)
+export inline bool4_t operator<(const float4_t a, const float_t scalar)
 {
   return bool4_t{a.x < scalar, a.y < scalar, a.z < scalar, a.w < scalar};
 }
 
-export FND_INLINE bool4_t operator<(const float_t scalar, const float4_t b)
+export inline bool4_t operator<(const float_t scalar, const float4_t b)
 {
   return bool4_t{scalar < b.x, scalar < b.y, scalar < b.z, scalar < b.w};
 }
 
-export FND_INLINE bool4_t operator<=(const float4_t a, const float4_t b)
+export inline bool4_t operator<=(const float4_t a, const float4_t b)
 {
   return bool4_t{a.x <= b.x, a.y <= b.y, a.z <= b.z, a.w <= b.w};
 }
 
-export FND_INLINE bool4_t operator<=(const float4_t a, const float_t scalar)
+export inline bool4_t operator<=(const float4_t a, const float_t scalar)
 {
   return bool4_t{a.x <= scalar, a.y <= scalar, a.z <= scalar, a.w <= scalar};
 }
 
-export FND_INLINE bool4_t operator<=(const float_t scalar, const float4_t b)
+export inline bool4_t operator<=(const float_t scalar, const float4_t b)
 {
   return bool4_t{scalar <= b.x, scalar <= b.y, scalar <= b.z, scalar <= b.w};
 }
 
-export FND_INLINE bool4_t operator>(const float4_t a, const float4_t b)
+export inline bool4_t operator>(const float4_t a, const float4_t b)
 {
   return bool4_t{a.x > b.x, a.y > b.y, a.z > b.z, a.w > b.w};
 }
 
-export FND_INLINE bool4_t operator>(const float4_t a, const float_t scalar)
+export inline bool4_t operator>(const float4_t a, const float_t scalar)
 {
   return bool4_t{a.x > scalar, a.y > scalar, a.z > scalar, a.w > scalar};
 }
 
-export FND_INLINE bool4_t operator>(const float_t scalar, const float4_t b)
+export inline bool4_t operator>(const float_t scalar, const float4_t b)
 {
   return bool4_t{scalar > b.x, scalar > b.y, scalar > b.z, scalar > b.w};
 }
 
-export FND_INLINE bool4_t operator>=(const float4_t a, const float4_t b)
+export inline bool4_t operator>=(const float4_t a, const float4_t b)
 {
   return bool4_t{a.x >= b.x, a.y >= b.y, a.z >= b.z, a.w >= b.w};
 }
 
-export FND_INLINE bool4_t operator>=(const float4_t a, const float_t scalar)
+export inline bool4_t operator>=(const float4_t a, const float_t scalar)
 {
   return bool4_t{a.x >= scalar, a.y >= scalar, a.z >= scalar, a.w >= scalar};
 }
 
-export FND_INLINE bool4_t operator>=(const float_t scalar, const float4_t b)
+export inline bool4_t operator>=(const float_t scalar, const float4_t b)
 {
   return bool4_t{scalar >= b.x, scalar >= b.y, scalar >= b.z, scalar >= b.w};
 }
@@ -220,7 +220,7 @@ export constexpr float4_t operator-(const float_t scalar, const float4_t b)
 }
 
 // The result has the sign of the left operand, as fmod does.
-export FND_INLINE float4_t operator%(const float4_t a, const float4_t b)
+export inline float4_t operator%(const float4_t a, const float4_t b)
 {
   FND_ASSERT(b.x != 0.0f && b.y != 0.0f && b.z != 0.0f && b.w != 0.0f);
 
@@ -228,7 +228,7 @@ export FND_INLINE float4_t operator%(const float4_t a, const float4_t b)
     fmod(a.x, b.x), fmod(a.y, b.y), fmod(a.z, b.z), fmod(a.w, b.w)};
 }
 
-export FND_INLINE float4_t operator%(const float4_t a, const float_t scalar)
+export inline float4_t operator%(const float4_t a, const float_t scalar)
 {
   FND_ASSERT(scalar != 0.0f);
 
@@ -236,7 +236,7 @@ export FND_INLINE float4_t operator%(const float4_t a, const float_t scalar)
     fmod(a.x, scalar), fmod(a.y, scalar), fmod(a.z, scalar), fmod(a.w, scalar)};
 }
 
-export FND_INLINE float4_t operator%(const float_t scalar, const float4_t b)
+export inline float4_t operator%(const float_t scalar, const float4_t b)
 {
   FND_ASSERT(b.x != 0.0f && b.y != 0.0f && b.z != 0.0f && b.w != 0.0f);
 
@@ -301,7 +301,7 @@ export constexpr float4_t& operator-=(float4_t& a, const float_t scalar)
   return a;
 }
 
-export FND_INLINE float4_t& operator%=(float4_t& a, const float4_t b)
+export inline float4_t& operator%=(float4_t& a, const float4_t b)
 {
   FND_ASSERT(b.x != 0.0f && b.y != 0.0f && b.z != 0.0f && b.w != 0.0f);
 
@@ -309,7 +309,7 @@ export FND_INLINE float4_t& operator%=(float4_t& a, const float4_t b)
   return a;
 }
 
-export FND_INLINE float4_t& operator%=(float4_t& a, const float_t scalar)
+export inline float4_t& operator%=(float4_t& a, const float_t scalar)
 {
   FND_ASSERT(scalar != 0.0f);
 
@@ -333,17 +333,17 @@ export constexpr float4_t& operator/=(float4_t& a, const float_t scalar)
   return a;
 }
 
-export FND_INLINE float4_t abs(const float4_t v)
+export inline float4_t abs(const float4_t v)
 {
   return float4_t{abs(v.x), abs(v.y), abs(v.z), abs(v.w)};
 }
 
-export FND_INLINE float4_t acos(const float4_t v)
+export inline float4_t acos(const float4_t v)
 {
   return float4_t{acos(v.x), acos(v.y), acos(v.z), acos(v.w)};
 }
 
-export FND_INLINE bool4_t approx_equal(
+export inline bool4_t approx_equal(
   const float4_t a, const float4_t b, const float_t max_abs_diff = 1e-5f)
 {
   FND_ASSERT(max_abs_diff >= 0);
@@ -352,7 +352,7 @@ export FND_INLINE bool4_t approx_equal(
     approx_equal(a.z, b.z, max_abs_diff), approx_equal(a.w, b.w, max_abs_diff)};
 }
 
-export FND_INLINE bool4_t approx_equal(
+export inline bool4_t approx_equal(
   const float4_t a, const float_t scalar, const float_t max_abs_diff = 1e-5f)
 {
   FND_ASSERT(max_abs_diff >= 0);
@@ -363,7 +363,7 @@ export FND_INLINE bool4_t approx_equal(
     approx_equal(a.w, scalar, max_abs_diff)};
 }
 
-export FND_INLINE bool4_t approx_equal(
+export inline bool4_t approx_equal(
   const float_t scalar, const float4_t b, const float_t max_abs_diff = 1e-5f)
 {
   FND_ASSERT(max_abs_diff >= 0);
@@ -374,28 +374,28 @@ export FND_INLINE bool4_t approx_equal(
     approx_equal(scalar, b.w, max_abs_diff)};
 }
 
-export FND_INLINE float4_t asin(const float4_t v)
+export inline float4_t asin(const float4_t v)
 {
   return float4_t{asin(v.x), asin(v.y), asin(v.z), asin(v.w)};
 }
 
-export FND_INLINE float4_t atan(const float4_t v)
+export inline float4_t atan(const float4_t v)
 {
   return float4_t{atan(v.x), atan(v.y), atan(v.z), atan(v.w)};
 }
 
-export FND_INLINE float4_t atan2(const float4_t y, const float4_t x)
+export inline float4_t atan2(const float4_t y, const float4_t x)
 {
   return float4_t{
     atan2(y.x, x.x), atan2(y.y, x.y), atan2(y.z, x.z), atan2(y.w, x.w)};
 }
 
-export FND_INLINE float4_t ceil(const float4_t v)
+export inline float4_t ceil(const float4_t v)
 {
   return float4_t{ceil(v.x), ceil(v.y), ceil(v.z), ceil(v.w)};
 }
 
-export FND_INLINE float4_t clamp(
+export inline float4_t clamp(
   const float4_t v, const float4_t lower, const float4_t upper)
 {
   FND_ASSERT(all(lower <= upper));
@@ -405,7 +405,7 @@ export FND_INLINE float4_t clamp(
     clamp(v.z, lower.z, upper.z), clamp(v.w, lower.w, upper.w)};
 }
 
-export FND_INLINE float4_t clamp(
+export inline float4_t clamp(
   const float4_t v, const float4_t lower, const float_t upper)
 {
   FND_ASSERT(all(lower <= upper));
@@ -415,7 +415,7 @@ export FND_INLINE float4_t clamp(
     clamp(v.z, lower.z, upper), clamp(v.w, lower.w, upper)};
 }
 
-export FND_INLINE float4_t clamp(
+export inline float4_t clamp(
   const float4_t v, const float_t lower, const float4_t upper)
 {
   FND_ASSERT(all(lower <= upper));
@@ -425,7 +425,7 @@ export FND_INLINE float4_t clamp(
     clamp(v.z, lower, upper.z), clamp(v.w, lower, upper.w)};
 }
 
-export FND_INLINE float4_t clamp(
+export inline float4_t clamp(
   const float4_t v, const float_t lower, const float_t upper)
 {
   FND_ASSERT(lower <= upper);
@@ -435,12 +435,12 @@ export FND_INLINE float4_t clamp(
     clamp(v.z, lower, upper), clamp(v.w, lower, upper)};
 }
 
-export FND_INLINE float_t cmax(const float4_t v)
+export inline float_t cmax(const float4_t v)
 {
   return max(max(max(v.x, v.y), v.z), v.w);
 }
 
-export FND_INLINE float_t cmin(const float4_t v)
+export inline float_t cmin(const float4_t v)
 {
   return min(min(min(v.x, v.y), v.z), v.w);
 }
@@ -450,7 +450,7 @@ export constexpr float_t cmul(const float4_t v)
   return v.x * v.y * v.z * v.w;
 }
 
-export FND_INLINE float4_t cos(const float4_t v)
+export inline float4_t cos(const float4_t v)
 {
   return float4_t{cos(v.x), cos(v.y), cos(v.z), cos(v.w)};
 }
@@ -471,7 +471,7 @@ export constexpr float_t distance_sqr(const float4_t a, const float4_t b)
   return d.x * d.x + d.y * d.y + d.z * d.z + d.w * d.w;
 }
 
-export FND_INLINE float_t distance(const float4_t a, const float4_t b)
+export inline float_t distance(const float4_t a, const float4_t b)
 {
   const float_t d2 = distance_sqr(a, b);
   return sqrt(d2);
@@ -482,56 +482,56 @@ export constexpr float_t dot(const float4_t a, const float4_t b)
   return a.x * b.x + a.y * b.y + a.z * b.z + a.w * b.w;
 }
 
-export FND_INLINE float4_t exp(const float4_t v)
+export inline float4_t exp(const float4_t v)
 {
   return float4_t{exp(v.x), exp(v.y), exp(v.z), exp(v.w)};
 }
 
-export FND_INLINE float4_t exp2(const float4_t v)
+export inline float4_t exp2(const float4_t v)
 {
   return float4_t{exp2(v.x), exp2(v.y), exp2(v.z), exp2(v.w)};
 }
 
-export FND_INLINE float4_t floor(const float4_t v)
+export inline float4_t floor(const float4_t v)
 {
   return float4_t{floor(v.x), floor(v.y), floor(v.z), floor(v.w)};
 }
 
-export FND_INLINE float4_t fmod(const float4_t a, const float4_t b)
+export inline float4_t fmod(const float4_t a, const float4_t b)
 {
   return float4_t{
     fmod(a.x, b.x), fmod(a.y, b.y), fmod(a.z, b.z), fmod(a.w, b.w)};
 }
 
-export FND_INLINE float4_t fmod(const float4_t a, const float_t scalar)
+export inline float4_t fmod(const float4_t a, const float_t scalar)
 {
   return float4_t{
     fmod(a.x, scalar), fmod(a.y, scalar), fmod(a.z, scalar), fmod(a.w, scalar)};
 }
 
-export FND_INLINE float4_t fmod(const float_t scalar, const float4_t b)
+export inline float4_t fmod(const float_t scalar, const float4_t b)
 {
   return float4_t{
     fmod(scalar, b.x), fmod(scalar, b.y), fmod(scalar, b.z), fmod(scalar, b.w)};
 }
 
-export FND_INLINE float4_t fractional(const float4_t v)
+export inline float4_t fractional(const float4_t v)
 {
   return float4_t{
     fractional(v.x), fractional(v.y), fractional(v.z), fractional(v.w)};
 }
 
-export FND_INLINE bool4_t isfinite(const float4_t v)
+export inline bool4_t isfinite(const float4_t v)
 {
   return bool4_t{isfinite(v.x), isfinite(v.y), isfinite(v.z), isfinite(v.w)};
 }
 
-export FND_INLINE bool4_t isinf(const float4_t v)
+export inline bool4_t isinf(const float4_t v)
 {
   return bool4_t{isinf(v.x), isinf(v.y), isinf(v.z), isinf(v.w)};
 }
 
-export FND_INLINE bool4_t isnan(const float4_t v)
+export inline bool4_t isnan(const float4_t v)
 {
   return bool4_t{isnan(v.x), isnan(v.y), isnan(v.z), isnan(v.w)};
 }
@@ -541,25 +541,24 @@ export constexpr float_t length_sqr(const float4_t v)
   return v.x * v.x + v.y * v.y + v.z * v.z + v.w * v.w;
 }
 
-export FND_INLINE bool_t is_normalized(
+export inline bool_t is_normalized(
   const float4_t v, const float_t max_abs_diff = 1e-4f)
 {
   return approx_equal(length_sqr(v), 1.0f, max_abs_diff);
 }
 
-export FND_INLINE float_t length(const float4_t v)
+export inline float_t length(const float4_t v)
 {
   return sqrt(length_sqr(v));
 }
 
-export FND_INLINE float4_t lerp(
-  const float4_t a, const float4_t b, const float_t t)
+export inline float4_t lerp(const float4_t a, const float4_t b, const float_t t)
 {
   return float4_t{
     lerp(a.x, b.x, t), lerp(a.y, b.y, t), lerp(a.z, b.z, t), lerp(a.w, b.w, t)};
 }
 
-export FND_INLINE float4_t lerp(
+export inline float4_t lerp(
   const float4_t a, const float4_t b, const float4_t t)
 {
   return float4_t{
@@ -567,50 +566,50 @@ export FND_INLINE float4_t lerp(
     lerp(a.w, b.w, t.w)};
 }
 
-export FND_INLINE float4_t log(const float4_t v)
+export inline float4_t log(const float4_t v)
 {
   return float4_t{log(v.x), log(v.y), log(v.z), log(v.w)};
 }
 
-export FND_INLINE float4_t log10(const float4_t v)
+export inline float4_t log10(const float4_t v)
 {
   return float4_t{log10(v.x), log10(v.y), log10(v.z), log10(v.w)};
 }
 
-export FND_INLINE float4_t log2(const float4_t v)
+export inline float4_t log2(const float4_t v)
 {
   return float4_t{log2(v.x), log2(v.y), log2(v.z), log2(v.w)};
 }
 
-export FND_INLINE float4_t max(const float4_t a, const float4_t b)
+export inline float4_t max(const float4_t a, const float4_t b)
 {
   return float4_t{max(a.x, b.x), max(a.y, b.y), max(a.z, b.z), max(a.w, b.w)};
 }
 
-export FND_INLINE float4_t max(const float4_t a, const float_t scalar)
+export inline float4_t max(const float4_t a, const float_t scalar)
 {
   return float4_t{
     max(a.x, scalar), max(a.y, scalar), max(a.z, scalar), max(a.w, scalar)};
 }
 
-export FND_INLINE float4_t max(const float_t scalar, const float4_t b)
+export inline float4_t max(const float_t scalar, const float4_t b)
 {
   return float4_t{
     max(scalar, b.x), max(scalar, b.y), max(scalar, b.z), max(scalar, b.w)};
 }
 
-export FND_INLINE float4_t min(const float4_t a, const float4_t b)
+export inline float4_t min(const float4_t a, const float4_t b)
 {
   return float4_t{min(a.x, b.x), min(a.y, b.y), min(a.z, b.z), min(a.w, b.w)};
 }
 
-export FND_INLINE float4_t min(const float4_t a, const float_t scalar)
+export inline float4_t min(const float4_t a, const float_t scalar)
 {
   return float4_t{
     min(a.x, scalar), min(a.y, scalar), min(a.z, scalar), min(a.w, scalar)};
 }
 
-export FND_INLINE float4_t min(const float_t scalar, const float4_t b)
+export inline float4_t min(const float_t scalar, const float4_t b)
 {
   return float4_t{
     min(scalar, b.x), min(scalar, b.y), min(scalar, b.z), min(scalar, b.w)};
@@ -618,13 +617,13 @@ export FND_INLINE float4_t min(const float_t scalar, const float4_t b)
 
 // Splits each component into its fractional part (returned) and its integer
 // part (stored in vi). Both parts have the sign of the component.
-export FND_INLINE float4_t modf(const float4_t v, float4_t& vi)
+export inline float4_t modf(const float4_t v, float4_t& vi)
 {
   return float4_t{
     modf(v.x, vi.x), modf(v.y, vi.y), modf(v.z, vi.z), modf(v.w, vi.w)};
 }
 
-export FND_INLINE float4_t normalize(const float4_t v)
+export inline float4_t normalize(const float4_t v)
 {
   const float_t l2 = length_sqr(v);
   FND_ASSERT(l2 > kFloatMinNormal);
@@ -632,7 +631,7 @@ export FND_INLINE float4_t normalize(const float4_t v)
   return v * rsqrt(l2);
 }
 
-export FND_INLINE float4_t normalize_safe(
+export inline float4_t normalize_safe(
   const float4_t v, const float4_t default_value = float4_t{})
 {
   FND_ASSERT(all(!isnan(v)));
@@ -667,14 +666,14 @@ export FND_INLINE float4_t normalize_safe(
   return res_vec;
 }
 
-export FND_INLINE float4_t pow(const float4_t base, const float4_t exponent)
+export inline float4_t pow(const float4_t base, const float4_t exponent)
 {
   return float4_t{
     pow(base.x, exponent.x), pow(base.y, exponent.y), pow(base.z, exponent.z),
     pow(base.w, exponent.w)};
 }
 
-export FND_INLINE float4_t pow(const float4_t base, const float_t exponent)
+export inline float4_t pow(const float4_t base, const float_t exponent)
 {
   return float4_t{
     pow(base.x, exponent), pow(base.y, exponent), pow(base.z, exponent),
@@ -686,32 +685,32 @@ export constexpr float4_t radians(const float4_t v)
   return float4_t{radians(v.x), radians(v.y), radians(v.z), radians(v.w)};
 }
 
-export FND_INLINE float4_t rcp(const float4_t v)
+export inline float4_t rcp(const float4_t v)
 {
   return float4_t{rcp(v.x), rcp(v.y), rcp(v.z), rcp(v.w)};
 }
 
-export FND_INLINE float4_t rsqrt(const float4_t v)
+export inline float4_t rsqrt(const float4_t v)
 {
   return float4_t{rsqrt(v.x), rsqrt(v.y), rsqrt(v.z), rsqrt(v.w)};
 }
 
-export FND_INLINE float4_t saturate(const float4_t v)
+export inline float4_t saturate(const float4_t v)
 {
   return float4_t{saturate(v.x), saturate(v.y), saturate(v.z), saturate(v.w)};
 }
 
-export FND_INLINE float4_t sign(const float4_t v)
+export inline float4_t sign(const float4_t v)
 {
   return float4_t{sign(v.x), sign(v.y), sign(v.z), sign(v.w)};
 }
 
-export FND_INLINE float4_t sin(const float4_t v)
+export inline float4_t sin(const float4_t v)
 {
   return float4_t{sin(v.x), sin(v.y), sin(v.z), sin(v.w)};
 }
 
-export FND_INLINE float4_t smoothstep(
+export inline float4_t smoothstep(
   const float4_t x, const float4_t edge0, const float4_t edge1)
 {
   return float4_t{
@@ -719,7 +718,7 @@ export FND_INLINE float4_t smoothstep(
     smoothstep(x.z, edge0.z, edge1.z), smoothstep(x.w, edge0.w, edge1.w)};
 }
 
-export FND_INLINE float4_t smoothstep(
+export inline float4_t smoothstep(
   const float4_t x, const float_t edge0, const float_t edge1)
 {
   return float4_t{
@@ -727,17 +726,17 @@ export FND_INLINE float4_t smoothstep(
     smoothstep(x.z, edge0, edge1), smoothstep(x.w, edge0, edge1)};
 }
 
-export FND_INLINE float4_t sqrt(const float4_t v)
+export inline float4_t sqrt(const float4_t v)
 {
   return float4_t{sqrt(v.x), sqrt(v.y), sqrt(v.z), sqrt(v.w)};
 }
 
-export FND_INLINE float4_t tan(const float4_t v)
+export inline float4_t tan(const float4_t v)
 {
   return float4_t{tan(v.x), tan(v.y), tan(v.z), tan(v.w)};
 }
 
-export FND_INLINE float4_t trunc(const float4_t v)
+export inline float4_t trunc(const float4_t v)
 {
   return float4_t{trunc(v.x), trunc(v.y), trunc(v.z), trunc(v.w)};
 }

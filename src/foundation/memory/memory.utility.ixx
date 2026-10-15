@@ -9,7 +9,7 @@ namespace fnd {
 
 // ptr rounded up to the next multiple of alignment, a power of two;
 // ptr itself if it is aligned already.
-export FND_INLINE const void* align_up(
+export inline const void* align_up(
   const void* const ptr, const ulong_t alignment)
 {
   FND_ASSERT(is_pow2(alignment));
@@ -22,7 +22,7 @@ export FND_INLINE const void* align_up(
   return reinterpret_cast<const void*>((address + offset) & mask);
 }
 
-export FND_INLINE void* align_up(void* const ptr, const ulong_t alignment)
+export inline void* align_up(void* const ptr, const ulong_t alignment)
 {
   FND_ASSERT(is_pow2(alignment));
 
@@ -36,7 +36,7 @@ export FND_INLINE void* align_up(void* const ptr, const ulong_t alignment)
 }
 
 // Copies byte_count bytes from `from` to `to`; the ranges must not overlap.
-export FND_INLINE void copy_bytes(
+export inline void copy_bytes(
   const void* const from, void* const to, const ulong_t byte_count)
 {
   FND_ASSERT(from != nullptr);
@@ -52,7 +52,7 @@ export FND_INLINE void copy_bytes(
 
 // True if the byte_count bytes at ptr0 and ptr1 are equal.
 // The ranges may overlap.
-export FND_INLINE bool_t equal_bytes(
+export inline bool_t equal_bytes(
   const void* const ptr0, const void* const ptr1, const ulong_t byte_count)
 {
   FND_ASSERT(ptr0 != nullptr);
@@ -63,7 +63,7 @@ export FND_INLINE bool_t equal_bytes(
 }
 
 // Sets byte_count bytes at ptr to value.
-export FND_INLINE void fill_bytes(
+export inline void fill_bytes(
   void* const ptr, const ulong_t byte_count, const ubyte_t value)
 {
   FND_ASSERT(ptr != nullptr);
@@ -83,8 +83,7 @@ export constexpr ulong_t gibibytes(const ulong_t count)
 
 // True if ptr is a multiple of alignment, a power of two.
 // nullptr is aligned to anything.
-export FND_INLINE bool_t is_aligned(
-  const void* const ptr, const ulong_t alignment)
+export inline bool_t is_aligned(const void* const ptr, const ulong_t alignment)
 {
   FND_ASSERT(is_pow2(alignment));
 

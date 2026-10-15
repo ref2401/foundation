@@ -137,7 +137,7 @@ export constexpr float4x4_t& operator/=(float4x4_t& a, const float_t scalar)
   return a;
 }
 
-export FND_INLINE bool_t approx_equal(
+export inline bool_t approx_equal(
   const float4x4_t& a, const float4x4_t& b, const float_t max_abs_diff = 1e-5f)
 {
   return all(approx_equal(a.col0, b.col0, max_abs_diff))
@@ -148,14 +148,14 @@ export FND_INLINE bool_t approx_equal(
 
 // The largest of the sixteen components. A NaN component is ignored, as for
 // the float_t max.
-export FND_INLINE float_t cmax(const float4x4_t& m)
+export inline float_t cmax(const float4x4_t& m)
 {
   return max(max(cmax(m.col0), cmax(m.col1)), max(cmax(m.col2), cmax(m.col3)));
 }
 
 // The smallest of the sixteen components. A NaN component is ignored, as for
 // the float_t min.
-export FND_INLINE float_t cmin(const float4x4_t& m)
+export inline float_t cmin(const float4x4_t& m)
 {
   return min(min(cmin(m.col0), cmin(m.col1)), min(cmin(m.col2), cmin(m.col3)));
 }

@@ -16,13 +16,13 @@ export struct memory_block_t final {
   {
   }
 
-  FND_INLINE const ubyte_t* operator[](const ulong_t byte_idx) const
+  inline const ubyte_t* operator[](const ulong_t byte_idx) const
   {
     FND_ASSERT(byte_idx < byte_count);
     return static_cast<const ubyte_t*>(ptr) + byte_idx;
   }
 
-  FND_INLINE ubyte_t* operator[](const ulong_t byte_idx)
+  inline ubyte_t* operator[](const ulong_t byte_idx)
   {
     FND_ASSERT(byte_idx < byte_count);
     return const_cast<ubyte_t*>(
@@ -44,7 +44,7 @@ export constexpr bool_t operator!=(
 
 // Writes the addresses [out_start, out_end) that block covers. A block
 // without a pointer covers no addresses, whatever its byte_count.
-FND_INLINE void compute_address_range(
+inline void compute_address_range(
   const memory_block_t block, uptr_t& out_start, uptr_t& out_end)
 {
   out_start = reinterpret_cast<uptr_t>(block.ptr);
@@ -54,8 +54,7 @@ FND_INLINE void compute_address_range(
 
 // True if ptr points into [block.ptr, block.ptr + block.byte_count).
 // An empty block contains no pointer.
-export FND_INLINE bool_t contains(
-  const memory_block_t block, const void* const ptr)
+export inline bool_t contains(const memory_block_t block, const void* const ptr)
 {
   // Addresses are compared as integers: ptr may point outside the block,
   // and comparing unrelated pointers with < gives an unspecified result.
@@ -69,7 +68,7 @@ export FND_INLINE bool_t contains(
 
 // True if every byte of sub_block lies within block.
 // False if either block is empty.
-export FND_INLINE bool_t contains(
+export inline bool_t contains(
   const memory_block_t block, const memory_block_t sub_block)
 {
   // Addresses are compared as integers: sub_block may lie outside the block,
@@ -106,7 +105,7 @@ export bool_t overlaps(const memory_block_t block0, const memory_block_t block1)
 
 // The byte_count bytes of block that start at byte_offset. They must lie
 // within block and be at least one byte.
-export FND_INLINE memory_block_t slice(
+export inline memory_block_t slice(
   const memory_block_t block, const ulong_t byte_offset,
   const ulong_t byte_count)
 {
@@ -123,7 +122,7 @@ export FND_INLINE memory_block_t slice(
 
 // The bytes of block from byte_offset to its end. At least one byte must
 // remain.
-export FND_INLINE memory_block_t slice(
+export inline memory_block_t slice(
   const memory_block_t block, const ulong_t byte_offset)
 {
   FND_ASSERT(!is_empty(block));

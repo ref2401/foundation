@@ -120,7 +120,7 @@ export constexpr float3x3_t& operator/=(float3x3_t& a, const float_t scalar)
   return a;
 }
 
-export FND_INLINE bool_t approx_equal(
+export inline bool_t approx_equal(
   const float3x3_t& a, const float3x3_t& b, const float_t max_abs_diff = 1e-5f)
 {
   return all(approx_equal(a.col0, b.col0, max_abs_diff))
@@ -128,12 +128,12 @@ export FND_INLINE bool_t approx_equal(
     && all(approx_equal(a.col2, b.col2, max_abs_diff));
 }
 
-export FND_INLINE float_t cmax(const float3x3_t& m)
+export inline float_t cmax(const float3x3_t& m)
 {
   return max(max(cmax(m.col0), cmax(m.col1)), cmax(m.col2));
 }
 
-export FND_INLINE float_t cmin(const float3x3_t& m)
+export inline float_t cmin(const float3x3_t& m)
 {
   return min(min(cmin(m.col0), cmin(m.col1)), cmin(m.col2));
 }

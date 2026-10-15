@@ -26,12 +26,6 @@
   #define FND_ASSERT_MSG(condition, message) __noop(condition, message)
 #endif // defined(FND_DEBUG)
 
-// ---------------------------------------------------------------------------
-// FND_INLINE
-// ---------------------------------------------------------------------------
-
-#define FND_INLINE
-
 namespace fnd {
 
 void print_assert_message(

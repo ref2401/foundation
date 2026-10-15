@@ -108,62 +108,62 @@ export constexpr bool3_t operator!=(const float_t scalar, const float3_t b)
   return !(scalar == b);
 }
 
-export FND_INLINE bool3_t operator<(const float3_t a, const float3_t b)
+export inline bool3_t operator<(const float3_t a, const float3_t b)
 {
   return bool3_t{a.x < b.x, a.y < b.y, a.z < b.z};
 }
 
-export FND_INLINE bool3_t operator<(const float3_t a, const float_t scalar)
+export inline bool3_t operator<(const float3_t a, const float_t scalar)
 {
   return bool3_t{a.x < scalar, a.y < scalar, a.z < scalar};
 }
 
-export FND_INLINE bool3_t operator<(const float_t scalar, const float3_t b)
+export inline bool3_t operator<(const float_t scalar, const float3_t b)
 {
   return bool3_t{scalar < b.x, scalar < b.y, scalar < b.z};
 }
 
-export FND_INLINE bool3_t operator<=(const float3_t a, const float3_t b)
+export inline bool3_t operator<=(const float3_t a, const float3_t b)
 {
   return bool3_t{a.x <= b.x, a.y <= b.y, a.z <= b.z};
 }
 
-export FND_INLINE bool3_t operator<=(const float3_t a, const float_t scalar)
+export inline bool3_t operator<=(const float3_t a, const float_t scalar)
 {
   return bool3_t{a.x <= scalar, a.y <= scalar, a.z <= scalar};
 }
 
-export FND_INLINE bool3_t operator<=(const float_t scalar, const float3_t b)
+export inline bool3_t operator<=(const float_t scalar, const float3_t b)
 {
   return bool3_t{scalar <= b.x, scalar <= b.y, scalar <= b.z};
 }
 
-export FND_INLINE bool3_t operator>(const float3_t a, const float3_t b)
+export inline bool3_t operator>(const float3_t a, const float3_t b)
 {
   return bool3_t{a.x > b.x, a.y > b.y, a.z > b.z};
 }
 
-export FND_INLINE bool3_t operator>(const float3_t a, const float_t scalar)
+export inline bool3_t operator>(const float3_t a, const float_t scalar)
 {
   return bool3_t{a.x > scalar, a.y > scalar, a.z > scalar};
 }
 
-export FND_INLINE bool3_t operator>(const float_t scalar, const float3_t b)
+export inline bool3_t operator>(const float_t scalar, const float3_t b)
 {
   return bool3_t{scalar > b.x, scalar > b.y, scalar > b.z};
 }
 
-export FND_INLINE bool3_t operator>=(const float3_t a, const float3_t b)
+export inline bool3_t operator>=(const float3_t a, const float3_t b)
 {
   return bool3_t{a.x >= b.x, a.y >= b.y, a.z >= b.z};
 }
 
-export FND_INLINE bool3_t operator>=(const float3_t a, const float_t scalar)
+export inline bool3_t operator>=(const float3_t a, const float_t scalar)
 {
   return bool3_t{a.x >= scalar, a.y >= scalar, a.z >= scalar};
 }
 
-export FND_INLINE bool3_t operator>=(const float_t scalar, const float3_t b)
+export inline bool3_t operator>=(const float_t scalar, const float3_t b)
 {
   return bool3_t{scalar >= b.x, scalar >= b.y, scalar >= b.z};
 }
@@ -214,21 +214,21 @@ export constexpr float3_t operator-(const float_t scalar, const float3_t b)
 }
 
 // The result has the sign of the left operand, as fmod does.
-export FND_INLINE float3_t operator%(const float3_t a, const float3_t b)
+export inline float3_t operator%(const float3_t a, const float3_t b)
 {
   FND_ASSERT(b.x != 0.0f && b.y != 0.0f && b.z != 0.0f);
 
   return float3_t{fmod(a.x, b.x), fmod(a.y, b.y), fmod(a.z, b.z)};
 }
 
-export FND_INLINE float3_t operator%(const float3_t a, const float_t scalar)
+export inline float3_t operator%(const float3_t a, const float_t scalar)
 {
   FND_ASSERT(scalar != 0.0f);
 
   return float3_t{fmod(a.x, scalar), fmod(a.y, scalar), fmod(a.z, scalar)};
 }
 
-export FND_INLINE float3_t operator%(const float_t scalar, const float3_t b)
+export inline float3_t operator%(const float_t scalar, const float3_t b)
 {
   FND_ASSERT(b.x != 0.0f && b.y != 0.0f && b.z != 0.0f);
 
@@ -292,7 +292,7 @@ export constexpr float3_t& operator-=(float3_t& a, const float_t scalar)
   return a;
 }
 
-export FND_INLINE float3_t& operator%=(float3_t& a, const float3_t b)
+export inline float3_t& operator%=(float3_t& a, const float3_t b)
 {
   FND_ASSERT(b.x != 0.0f && b.y != 0.0f && b.z != 0.0f);
 
@@ -300,7 +300,7 @@ export FND_INLINE float3_t& operator%=(float3_t& a, const float3_t b)
   return a;
 }
 
-export FND_INLINE float3_t& operator%=(float3_t& a, const float_t scalar)
+export inline float3_t& operator%=(float3_t& a, const float_t scalar)
 {
   FND_ASSERT(scalar != 0.0f);
 
@@ -324,17 +324,17 @@ export constexpr float3_t& operator/=(float3_t& a, const float_t scalar)
   return a;
 }
 
-export FND_INLINE float3_t abs(const float3_t v)
+export inline float3_t abs(const float3_t v)
 {
   return float3_t{abs(v.x), abs(v.y), abs(v.z)};
 }
 
-export FND_INLINE float3_t acos(const float3_t v)
+export inline float3_t acos(const float3_t v)
 {
   return float3_t{acos(v.x), acos(v.y), acos(v.z)};
 }
 
-export FND_INLINE bool3_t approx_equal(
+export inline bool3_t approx_equal(
   const float3_t a, const float3_t b, const float_t max_abs_diff = 1e-5f)
 {
   FND_ASSERT(max_abs_diff >= 0);
@@ -343,7 +343,7 @@ export FND_INLINE bool3_t approx_equal(
     approx_equal(a.z, b.z, max_abs_diff)};
 }
 
-export FND_INLINE bool3_t approx_equal(
+export inline bool3_t approx_equal(
   const float3_t a, const float_t scalar, const float_t max_abs_diff = 1e-5f)
 {
   FND_ASSERT(max_abs_diff >= 0);
@@ -353,7 +353,7 @@ export FND_INLINE bool3_t approx_equal(
     approx_equal(a.z, scalar, max_abs_diff)};
 }
 
-export FND_INLINE bool3_t approx_equal(
+export inline bool3_t approx_equal(
   const float_t scalar, const float3_t b, const float_t max_abs_diff = 1e-5f)
 {
   FND_ASSERT(max_abs_diff >= 0);
@@ -363,27 +363,27 @@ export FND_INLINE bool3_t approx_equal(
     approx_equal(scalar, b.z, max_abs_diff)};
 }
 
-export FND_INLINE float3_t asin(const float3_t v)
+export inline float3_t asin(const float3_t v)
 {
   return float3_t{asin(v.x), asin(v.y), asin(v.z)};
 }
 
-export FND_INLINE float3_t atan(const float3_t v)
+export inline float3_t atan(const float3_t v)
 {
   return float3_t{atan(v.x), atan(v.y), atan(v.z)};
 }
 
-export FND_INLINE float3_t atan2(const float3_t y, const float3_t x)
+export inline float3_t atan2(const float3_t y, const float3_t x)
 {
   return float3_t{atan2(y.x, x.x), atan2(y.y, x.y), atan2(y.z, x.z)};
 }
 
-export FND_INLINE float3_t ceil(const float3_t v)
+export inline float3_t ceil(const float3_t v)
 {
   return float3_t{ceil(v.x), ceil(v.y), ceil(v.z)};
 }
 
-export FND_INLINE float3_t clamp(
+export inline float3_t clamp(
   const float3_t v, const float3_t lower, const float3_t upper)
 {
   FND_ASSERT(all(lower <= upper));
@@ -393,7 +393,7 @@ export FND_INLINE float3_t clamp(
     clamp(v.z, lower.z, upper.z)};
 }
 
-export FND_INLINE float3_t clamp(
+export inline float3_t clamp(
   const float3_t v, const float3_t lower, const float_t upper)
 {
   FND_ASSERT(all(lower <= upper));
@@ -403,7 +403,7 @@ export FND_INLINE float3_t clamp(
     clamp(v.z, lower.z, upper)};
 }
 
-export FND_INLINE float3_t clamp(
+export inline float3_t clamp(
   const float3_t v, const float_t lower, const float3_t upper)
 {
   FND_ASSERT(all(lower <= upper));
@@ -413,7 +413,7 @@ export FND_INLINE float3_t clamp(
     clamp(v.z, lower, upper.z)};
 }
 
-export FND_INLINE float3_t clamp(
+export inline float3_t clamp(
   const float3_t v, const float_t lower, const float_t upper)
 {
   FND_ASSERT(lower <= upper);
@@ -423,12 +423,12 @@ export FND_INLINE float3_t clamp(
     clamp(v.z, lower, upper)};
 }
 
-export FND_INLINE float_t cmax(const float3_t v)
+export inline float_t cmax(const float3_t v)
 {
   return max(max(v.x, v.y), v.z);
 }
 
-export FND_INLINE float_t cmin(const float3_t v)
+export inline float_t cmin(const float3_t v)
 {
   return min(min(v.x, v.y), v.z);
 }
@@ -438,7 +438,7 @@ export constexpr float_t cmul(const float3_t v)
   return v.x * v.y * v.z;
 }
 
-export FND_INLINE float3_t cos(const float3_t v)
+export inline float3_t cos(const float3_t v)
 {
   return float3_t{cos(v.x), cos(v.y), cos(v.z)};
 }
@@ -466,7 +466,7 @@ export constexpr float_t distance_sqr(const float3_t a, const float3_t b)
   return d.x * d.x + d.y * d.y + d.z * d.z;
 }
 
-export FND_INLINE float_t distance(const float3_t a, const float3_t b)
+export inline float_t distance(const float3_t a, const float3_t b)
 {
   const float_t d2 = distance_sqr(a, b);
   return sqrt(d2);
@@ -477,52 +477,52 @@ export constexpr float_t dot(const float3_t a, const float3_t b)
   return a.x * b.x + a.y * b.y + a.z * b.z;
 }
 
-export FND_INLINE float3_t exp(const float3_t v)
+export inline float3_t exp(const float3_t v)
 {
   return float3_t{exp(v.x), exp(v.y), exp(v.z)};
 }
 
-export FND_INLINE float3_t exp2(const float3_t v)
+export inline float3_t exp2(const float3_t v)
 {
   return float3_t{exp2(v.x), exp2(v.y), exp2(v.z)};
 }
 
-export FND_INLINE float3_t floor(const float3_t v)
+export inline float3_t floor(const float3_t v)
 {
   return float3_t{floor(v.x), floor(v.y), floor(v.z)};
 }
 
-export FND_INLINE float3_t fmod(const float3_t a, const float3_t b)
+export inline float3_t fmod(const float3_t a, const float3_t b)
 {
   return float3_t{fmod(a.x, b.x), fmod(a.y, b.y), fmod(a.z, b.z)};
 }
 
-export FND_INLINE float3_t fmod(const float3_t a, const float_t scalar)
+export inline float3_t fmod(const float3_t a, const float_t scalar)
 {
   return float3_t{fmod(a.x, scalar), fmod(a.y, scalar), fmod(a.z, scalar)};
 }
 
-export FND_INLINE float3_t fmod(const float_t scalar, const float3_t b)
+export inline float3_t fmod(const float_t scalar, const float3_t b)
 {
   return float3_t{fmod(scalar, b.x), fmod(scalar, b.y), fmod(scalar, b.z)};
 }
 
-export FND_INLINE float3_t fractional(const float3_t v)
+export inline float3_t fractional(const float3_t v)
 {
   return float3_t{fractional(v.x), fractional(v.y), fractional(v.z)};
 }
 
-export FND_INLINE bool3_t isfinite(const float3_t v)
+export inline bool3_t isfinite(const float3_t v)
 {
   return bool3_t{isfinite(v.x), isfinite(v.y), isfinite(v.z)};
 }
 
-export FND_INLINE bool3_t isinf(const float3_t v)
+export inline bool3_t isinf(const float3_t v)
 {
   return bool3_t{isinf(v.x), isinf(v.y), isinf(v.z)};
 }
 
-export FND_INLINE bool3_t isnan(const float3_t v)
+export inline bool3_t isnan(const float3_t v)
 {
   return bool3_t{isnan(v.x), isnan(v.y), isnan(v.z)};
 }
@@ -532,83 +532,82 @@ export constexpr float_t length_sqr(const float3_t v)
   return v.x * v.x + v.y * v.y + v.z * v.z;
 }
 
-export FND_INLINE bool_t is_normalized(
+export inline bool_t is_normalized(
   const float3_t v, const float_t max_abs_diff = 1e-4f)
 {
   return approx_equal(length_sqr(v), 1.0f, max_abs_diff);
 }
 
-export FND_INLINE float_t length(const float3_t v)
+export inline float_t length(const float3_t v)
 {
   return sqrt(length_sqr(v));
 }
 
-export FND_INLINE float3_t lerp(
-  const float3_t a, const float3_t b, const float_t t)
+export inline float3_t lerp(const float3_t a, const float3_t b, const float_t t)
 {
   return float3_t{lerp(a.x, b.x, t), lerp(a.y, b.y, t), lerp(a.z, b.z, t)};
 }
 
-export FND_INLINE float3_t lerp(
+export inline float3_t lerp(
   const float3_t a, const float3_t b, const float3_t t)
 {
   return float3_t{
     lerp(a.x, b.x, t.x), lerp(a.y, b.y, t.y), lerp(a.z, b.z, t.z)};
 }
 
-export FND_INLINE float3_t log(const float3_t v)
+export inline float3_t log(const float3_t v)
 {
   return float3_t{log(v.x), log(v.y), log(v.z)};
 }
 
-export FND_INLINE float3_t log10(const float3_t v)
+export inline float3_t log10(const float3_t v)
 {
   return float3_t{log10(v.x), log10(v.y), log10(v.z)};
 }
 
-export FND_INLINE float3_t log2(const float3_t v)
+export inline float3_t log2(const float3_t v)
 {
   return float3_t{log2(v.x), log2(v.y), log2(v.z)};
 }
 
-export FND_INLINE float3_t max(const float3_t a, const float3_t b)
+export inline float3_t max(const float3_t a, const float3_t b)
 {
   return float3_t{max(a.x, b.x), max(a.y, b.y), max(a.z, b.z)};
 }
 
-export FND_INLINE float3_t max(const float3_t a, const float_t scalar)
+export inline float3_t max(const float3_t a, const float_t scalar)
 {
   return float3_t{max(a.x, scalar), max(a.y, scalar), max(a.z, scalar)};
 }
 
-export FND_INLINE float3_t max(const float_t scalar, const float3_t b)
+export inline float3_t max(const float_t scalar, const float3_t b)
 {
   return float3_t{max(scalar, b.x), max(scalar, b.y), max(scalar, b.z)};
 }
 
-export FND_INLINE float3_t min(const float3_t a, const float3_t b)
+export inline float3_t min(const float3_t a, const float3_t b)
 {
   return float3_t{min(a.x, b.x), min(a.y, b.y), min(a.z, b.z)};
 }
 
-export FND_INLINE float3_t min(const float3_t a, const float_t scalar)
+export inline float3_t min(const float3_t a, const float_t scalar)
 {
   return float3_t{min(a.x, scalar), min(a.y, scalar), min(a.z, scalar)};
 }
 
-export FND_INLINE float3_t min(const float_t scalar, const float3_t b)
+export inline float3_t min(const float_t scalar, const float3_t b)
 {
   return float3_t{min(scalar, b.x), min(scalar, b.y), min(scalar, b.z)};
 }
 
 // Splits each component into its fractional part (returned) and its integer
 // part (stored in vi). Both parts have the sign of the component.
-export FND_INLINE float3_t modf(const float3_t v, float3_t& vi)
+export inline float3_t modf(const float3_t v, float3_t& vi)
 {
   return float3_t{modf(v.x, vi.x), modf(v.y, vi.y), modf(v.z, vi.z)};
 }
 
-export FND_INLINE float3_t normalize(const float3_t v)
+export inline float3_t normalize(const float3_t v)
 {
   const float_t l2 = length_sqr(v);
   FND_ASSERT(l2 > kFloatMinNormal);
@@ -616,7 +615,7 @@ export FND_INLINE float3_t normalize(const float3_t v)
   return v * rsqrt(l2);
 }
 
-export FND_INLINE float3_t normalize_safe(
+export inline float3_t normalize_safe(
   const float3_t v, const float3_t default_value = float3_t{})
 {
   FND_ASSERT(all(!isnan(v)));
@@ -651,13 +650,13 @@ export FND_INLINE float3_t normalize_safe(
   return res_vec;
 }
 
-export FND_INLINE float3_t pow(const float3_t base, const float3_t exponent)
+export inline float3_t pow(const float3_t base, const float3_t exponent)
 {
   return float3_t{
     pow(base.x, exponent.x), pow(base.y, exponent.y), pow(base.z, exponent.z)};
 }
 
-export FND_INLINE float3_t pow(const float3_t base, const float_t exponent)
+export inline float3_t pow(const float3_t base, const float_t exponent)
 {
   return float3_t{
     pow(base.x, exponent), pow(base.y, exponent), pow(base.z, exponent)};
@@ -668,32 +667,32 @@ export constexpr float3_t radians(const float3_t v)
   return float3_t{radians(v.x), radians(v.y), radians(v.z)};
 }
 
-export FND_INLINE float3_t rcp(const float3_t v)
+export inline float3_t rcp(const float3_t v)
 {
   return float3_t{rcp(v.x), rcp(v.y), rcp(v.z)};
 }
 
-export FND_INLINE float3_t rsqrt(const float3_t v)
+export inline float3_t rsqrt(const float3_t v)
 {
   return float3_t{rsqrt(v.x), rsqrt(v.y), rsqrt(v.z)};
 }
 
-export FND_INLINE float3_t saturate(const float3_t v)
+export inline float3_t saturate(const float3_t v)
 {
   return float3_t{saturate(v.x), saturate(v.y), saturate(v.z)};
 }
 
-export FND_INLINE float3_t sign(const float3_t v)
+export inline float3_t sign(const float3_t v)
 {
   return float3_t{sign(v.x), sign(v.y), sign(v.z)};
 }
 
-export FND_INLINE float3_t sin(const float3_t v)
+export inline float3_t sin(const float3_t v)
 {
   return float3_t{sin(v.x), sin(v.y), sin(v.z)};
 }
 
-export FND_INLINE float3_t smoothstep(
+export inline float3_t smoothstep(
   const float3_t x, const float3_t edge0, const float3_t edge1)
 {
   return float3_t{
@@ -701,7 +700,7 @@ export FND_INLINE float3_t smoothstep(
     smoothstep(x.z, edge0.z, edge1.z)};
 }
 
-export FND_INLINE float3_t smoothstep(
+export inline float3_t smoothstep(
   const float3_t x, const float_t edge0, const float_t edge1)
 {
   return float3_t{
@@ -709,17 +708,17 @@ export FND_INLINE float3_t smoothstep(
     smoothstep(x.z, edge0, edge1)};
 }
 
-export FND_INLINE float3_t sqrt(const float3_t v)
+export inline float3_t sqrt(const float3_t v)
 {
   return float3_t{sqrt(v.x), sqrt(v.y), sqrt(v.z)};
 }
 
-export FND_INLINE float3_t tan(const float3_t v)
+export inline float3_t tan(const float3_t v)
 {
   return float3_t{tan(v.x), tan(v.y), tan(v.z)};
 }
 
-export FND_INLINE float3_t trunc(const float3_t v)
+export inline float3_t trunc(const float3_t v)
 {
   return float3_t{trunc(v.x), trunc(v.y), trunc(v.z)};
 }

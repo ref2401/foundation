@@ -130,7 +130,7 @@
 - Every function, and every overload of it, asserts its own preconditions with
   `FND_ASSERT` at its top, even when it only forwards to a callee that asserts
   the same thing. An assert that calls a non-`constexpr` function
-  (`is_normalized`, `isnan`) makes the function `FND_INLINE` instead of
+  (`is_normalized`, `isnan`) makes the function `inline` instead of
   `constexpr`.
 - Postconditions are checked by unittests, not asserted. The exception is a
   result produced by code the tests can't cover, such as a virtual
@@ -143,7 +143,7 @@
   `kUnitX{1, 0, 0}`, not `0.0f`/`0u`. Keep the suffix where it changes meaning
   (`1 / 3`, `-0.0f`, `0.5f`, overloaded arguments, `auto`/template deduction).
 - MSVC 19.51 bug: in constant evaluation `NaN < x` and `x < NaN` are true. Float
-  functions whose NaN behavior matters are `FND_INLINE`, not `constexpr`, and
+  functions whose NaN behavior matters are `inline`, not `constexpr`, and
   their NaN cases are tested at runtime.
 - `[[msvc::intrinsic]]` (`FND_CAST_FUNCTION`) only on functions whose body is a
   single cast, such as `move` and `forward`.

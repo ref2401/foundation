@@ -87,17 +87,17 @@ export constexpr long_t abs(const long_t x)
   return static_cast<long_t>(x < 0 ? ulong_t{0} - ux : ux);
 }
 
-export FND_INLINE float_t abs(const float_t x)
+export inline float_t abs(const float_t x)
 {
   return ::fabsf(x);
 }
 
-export FND_INLINE double_t abs(const double_t x)
+export inline double_t abs(const double_t x)
 {
   return ::fabs(x);
 }
 
-export FND_INLINE bool_t approx_equal(
+export inline bool_t approx_equal(
   const float_t a, const float_t b, const float_t max_abs_diff = 1e-5f)
 {
   FND_ASSERT(max_abs_diff >= 0);
@@ -108,7 +108,7 @@ export FND_INLINE bool_t approx_equal(
   return a == b || abs(a - b) <= max_abs_diff;
 }
 
-export FND_INLINE bool_t approx_equal(
+export inline bool_t approx_equal(
   const double_t a, const double_t b, const double_t max_abs_diff = 1e-5)
 {
   FND_ASSERT(max_abs_diff >= 0);
@@ -116,44 +116,44 @@ export FND_INLINE bool_t approx_equal(
   return a == b || abs(a - b) <= max_abs_diff;
 }
 
-export FND_INLINE bool_t can_trunc_to_int(const float_t x)
+export inline bool_t can_trunc_to_int(const float_t x)
 {
   // Not constexpr: MSVC's constant evaluator treats NaN < x and x < NaN as
   // true, so a compile-time call with NaN would return true.
   return kFloatToIntTruncRangeStart <= x && x < kFloatToIntTruncRangeEnd;
 }
 
-export FND_INLINE bool_t can_trunc_to_uint(const float_t x)
+export inline bool_t can_trunc_to_uint(const float_t x)
 {
   return kFloatToUIntTruncRangeStart <= x && x < kFloatToUIntTruncRangeEnd;
 }
 
-export FND_INLINE float_t ceil(const float_t x)
+export inline float_t ceil(const float_t x)
 {
   return ::ceilf(x);
 }
 
-export FND_INLINE double_t ceil(const double_t x)
+export inline double_t ceil(const double_t x)
 {
   return ::ceil(x);
 }
 
-export FND_INLINE float_t floor(const float_t x)
+export inline float_t floor(const float_t x)
 {
   return ::floorf(x);
 }
 
-export FND_INLINE double_t floor(const double_t x)
+export inline double_t floor(const double_t x)
 {
   return ::floor(x);
 }
 
-export FND_INLINE float_t fmod(const float_t x, const float_t y)
+export inline float_t fmod(const float_t x, const float_t y)
 {
   return ::fmodf(x, y);
 }
 
-export FND_INLINE double_t fmod(const double_t x, const double_t y)
+export inline double_t fmod(const double_t x, const double_t y)
 {
   return ::fmod(x, y);
 }
@@ -184,7 +184,7 @@ export constexpr bool_t is_pow2(const ulong_t x)
 // True if x is 2^k for an integer k, negative k included (0.5, 0.25, ...,
 // the subnormals). Zero, negative numbers, infinity and NaN are not powers of
 // two.
-export FND_INLINE bool_t is_pow2(const float_t x)
+export inline bool_t is_pow2(const float_t x)
 {
   // frexp splits x into m * 2^e with |m| in [0.5, 1), subnormals included;
   // m is exactly 0.5 for a power of two. NaN and infinity come back as they
@@ -193,38 +193,38 @@ export FND_INLINE bool_t is_pow2(const float_t x)
   return ::frexpf(x, &exponent) == 0.5f;
 }
 
-export FND_INLINE bool_t is_pow2(const double_t x)
+export inline bool_t is_pow2(const double_t x)
 {
   int_t exponent;
   return ::frexp(x, &exponent) == 0.5;
 }
 
-export FND_INLINE bool_t isfinite(const float_t x)
+export inline bool_t isfinite(const float_t x)
 {
   return ::isfinite(x);
 }
 
-export FND_INLINE bool_t isfinite(const double_t x)
+export inline bool_t isfinite(const double_t x)
 {
   return ::isfinite(x);
 }
 
-export FND_INLINE bool_t isinf(const float_t x)
+export inline bool_t isinf(const float_t x)
 {
   return ::isinf(x);
 }
 
-export FND_INLINE bool_t isinf(const double_t x)
+export inline bool_t isinf(const double_t x)
 {
   return ::isinf(x);
 }
 
-export FND_INLINE bool_t isnan(const float_t x)
+export inline bool_t isnan(const float_t x)
 {
   return ::isnan(x);
 }
 
-export FND_INLINE bool_t isnan(const double_t x)
+export inline bool_t isnan(const double_t x)
 {
   return ::isnan(x);
 }
@@ -259,12 +259,12 @@ export constexpr ulong_t max(const ulong_t a, const ulong_t b)
   return a > b ? a : b;
 }
 
-export FND_INLINE float_t max(const float_t a, const float_t b)
+export inline float_t max(const float_t a, const float_t b)
 {
   return isnan(b) || a > b ? a : b;
 }
 
-export FND_INLINE double_t max(const double_t a, const double_t b)
+export inline double_t max(const double_t a, const double_t b)
 {
   return isnan(b) || a > b ? a : b;
 }
@@ -299,12 +299,12 @@ export constexpr ulong_t min(const ulong_t a, const ulong_t b)
   return a < b ? a : b;
 }
 
-export FND_INLINE float_t min(const float_t a, const float_t b)
+export inline float_t min(const float_t a, const float_t b)
 {
   return isnan(b) || a < b ? a : b;
 }
 
-export FND_INLINE double_t min(const double_t a, const double_t b)
+export inline double_t min(const double_t a, const double_t b)
 {
   return isnan(b) || a < b ? a : b;
 }
@@ -351,7 +351,7 @@ export constexpr ulong_t clamp(
   return min(max(x, lower), upper);
 }
 
-export FND_INLINE float_t clamp(
+export inline float_t clamp(
   const float_t x, const float_t lower, const float_t upper)
 {
   // NOTE:
@@ -363,7 +363,7 @@ export FND_INLINE float_t clamp(
   return min(max(x, lower), upper);
 }
 
-export FND_INLINE double_t clamp(
+export inline double_t clamp(
   const double_t x, const double_t lower, const double_t upper)
 {
   FND_ASSERT(!isnan(x));
@@ -371,12 +371,12 @@ export FND_INLINE double_t clamp(
   return min(max(x, lower), upper);
 }
 
-export FND_INLINE float_t modf(const float_t x, float_t& integer)
+export inline float_t modf(const float_t x, float_t& integer)
 {
   return ::modff(x, &integer);
 }
 
-export FND_INLINE double_t modf(const double_t x, double_t& integer)
+export inline double_t modf(const double_t x, double_t& integer)
 {
   return ::modf(x, &integer);
 }
@@ -384,7 +384,7 @@ export FND_INLINE double_t modf(const double_t x, double_t& integer)
 // Fractional part of |x|, in [0, 1).
 // fractional(-1e-10f) = 1e-10f;
 // fractional(+-inf) is 0 and fractional(NaN) is NaN;
-export FND_INLINE float_t fractional(const float_t x)
+export inline float_t fractional(const float_t x)
 {
   // NOTE:
   // Not implemented as x - floor(x), because that returns 1 for tiny negative
@@ -396,18 +396,18 @@ export FND_INLINE float_t fractional(const float_t x)
   return abs(modf(x, integer));
 }
 
-export FND_INLINE double_t fractional(const double_t x)
+export inline double_t fractional(const double_t x)
 {
   double_t integer;
   return abs(modf(x, integer));
 }
 
-export FND_INLINE float_t saturate(const float_t x)
+export inline float_t saturate(const float_t x)
 {
   return clamp(x, 0.0f, 1.0f);
 }
 
-export FND_INLINE double_t saturate(const double_t x)
+export inline double_t saturate(const double_t x)
 {
   return clamp(x, 0.0, 1.0);
 }
@@ -428,7 +428,7 @@ export constexpr long_t sign(const long_t x)
   return (x > 0) - (x < 0);
 }
 
-export FND_INLINE float_t sign(const float_t x)
+export inline float_t sign(const float_t x)
 {
   // NOTE:
   // Not constexpr: MSVC 19.51's constant evaluator treats NaN < x and x < NaN
@@ -436,17 +436,17 @@ export FND_INLINE float_t sign(const float_t x)
   return (x > 0.0f ? 1.0f : 0.0f) - (x < 0.0f ? 1.0f : 0.0f);
 }
 
-export FND_INLINE double_t sign(const double_t x)
+export inline double_t sign(const double_t x)
 {
   return (x > 0.0 ? 1.0 : 0.0) - (x < 0.0 ? 1.0 : 0.0);
 }
 
-export FND_INLINE float_t trunc(const float_t x)
+export inline float_t trunc(const float_t x)
 {
   return ::truncf(x);
 }
 
-export FND_INLINE double_t trunc(const double_t x)
+export inline double_t trunc(const double_t x)
 {
   return ::trunc(x);
 }

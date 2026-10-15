@@ -87,7 +87,7 @@ export constexpr float3x3_t make_float3x3(const float4x4_t& m)
   return float3x3_t{float3(m.col0), float3(m.col1), float3(m.col2)};
 }
 
-export FND_INLINE float3x3_t make_float3x3(const quat_t q)
+export inline float3x3_t make_float3x3(const quat_t q)
 {
   return make_rotation_matrix<float3x3_t>(q);
 }
@@ -109,7 +109,7 @@ export constexpr float3x4_t make_float3x4(const float4x4_t& m)
     float3(m.col0), float3(m.col1), float3(m.col2), float3(m.col3)};
 }
 
-export FND_INLINE float3x4_t make_float3x4(const quat_t q)
+export inline float3x4_t make_float3x4(const quat_t q)
 {
   return make_rotation_matrix<float3x4_t>(q);
 }
@@ -132,7 +132,7 @@ export constexpr float4x4_t make_float4x4(const float3x4_t& m)
     float4(m.col0, 0), float4(m.col1, 0), float4(m.col2, 0), float4(m.col3, 1)};
 }
 
-export FND_INLINE float4x4_t make_float4x4(const quat_t q)
+export inline float4x4_t make_float4x4(const quat_t q)
 {
   return make_rotation_matrix<float4x4_t>(q);
 }
@@ -145,7 +145,7 @@ export FND_INLINE float4x4_t make_float4x4(const quat_t q)
 // axis: its columns are normalized first. They must be orthogonal and form a
 // right-handed basis (determinant > 0): a reflection is not a rotation, and
 // no quaternion represents it.
-export FND_INLINE quat_t make_quat(const float3x3_t& m)
+export inline quat_t make_quat(const float3x3_t& m)
 {
   const float3_t c0 = normalize(m.col0);
   const float3_t c1 = normalize(m.col1);
@@ -193,12 +193,12 @@ export FND_INLINE quat_t make_quat(const float3x3_t& m)
   return res_quat;
 }
 
-export FND_INLINE quat_t make_quat(const float3x4_t& m)
+export inline quat_t make_quat(const float3x4_t& m)
 {
   return make_quat(make_float3x3(m));
 }
 
-export FND_INLINE quat_t make_quat(const float4x4_t& m)
+export inline quat_t make_quat(const float4x4_t& m)
 {
   return make_quat(make_float3x3(m));
 }
