@@ -2,32 +2,19 @@
     "version": "0.2.0",
     "configurations": [
         {
+            // Runs the launch target in the variant (Debug or Release) picked
+            // with "CMake: Select Variant"; CMake Tools builds it first.
             "name": "unittests",
             "type": "cppvsdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/build/bin/debug/unittests.exe",
+            "program": "${command:cmake.launchTargetPath}",
             "args": [],
             "stopAtEntry": false,
-            "cwd": "${workspaceFolder}/build/bin/debug/",
+            "cwd": "${command:cmake.getLaunchTargetDirectory}",
             "environment": [],
             "console": "internalConsole",
             "internalConsoleOptions": "openOnSessionStart",
             "requireExactSource": true,
-            "preLaunchTask": "Build Debug",
-        },
-        {
-            "name": "unittests_release",
-            "type": "cppvsdbg",
-            "request": "launch",
-            "program": "${workspaceFolder}/build/bin/release/unittests.exe",
-            "args": [],
-            "stopAtEntry": false,
-            "cwd": "${workspaceFolder}/build/bin/release/",
-            "environment": [],
-            "console": "internalConsole",
-            "internalConsoleOptions": "openOnSessionStart",
-            "requireExactSource": true,
-            "preLaunchTask": "Build Release",
         },
     ]
 }

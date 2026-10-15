@@ -22,13 +22,19 @@
   compiler and linker flag is listed there; CMake's defaults are cleared.
   Sources are globbed, so a new `.ixx` or `.cpp` needs no build edit; CMake
   scans module imports for the build order.
-- `cmake` is not on the PATH; the VS 2026 developer environment adds it.
-  Generate once into `build/` (again only after deleting it), then build:
+- `cmake` is the one bundled with VS 2026, on the user PATH
+  (`C:\Program Files\Microsoft Visual Studio\18\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin`;
+  use the full path if a shell doesn't find it). No developer environment is
+  needed. Generate once into `build/` (again only after deleting it), then
+  build:
 
   ```
-  cmd /c '"C:\Program Files\Microsoft Visual Studio\18\Community\VC\Auxiliary\Build\vcvars64.bat" >nul 2>&1 && cmake -S . -B build -G "Visual Studio 18 2026"'
-  cmd /c '"C:\Program Files\Microsoft Visual Studio\18\Community\VC\Auxiliary\Build\vcvars64.bat" >nul 2>&1 && cmake --build build --config Debug'
+  cmake -S . -B build -G "Visual Studio 18 2026"
+  cmake --build build --config Debug
   ```
+
+  In VS Code the CMake Tools extension does the same (`cmake.generator` is set
+  in `.vscode/settings.json`; kit `[Unspecified]`) and provides IntelliSense.
 
   Then run `build\bin\debug\unittests.exe` (or `build\bin\release\`). Build
   both configurations before claiming that something compiles or passes.

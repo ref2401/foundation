@@ -1,5 +1,6 @@
 {
-    "C_Cpp.default.compilerPath": "cl.exe",
+    // IntelliSense takes its flags from CMakeLists.txt through CMake Tools.
+    "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
     // Keep IntelliSense and the file watcher out of the generated project and
     // build outputs.
     "C_Cpp.files.exclude": {
@@ -8,5 +9,11 @@
     "files.watcherExclude": {
         "build/**": true
     },
-    "cmake.generator": "Visual Studio 18 2026"
+    "cmake.generator": "Visual Studio 18 2026",
+    // Show the Debug/Release selector in the status bar.
+    "cmake.options.advanced": {
+        "variant": {
+            "statusBarVisibility": "visible"
+        }
+    }
 }
