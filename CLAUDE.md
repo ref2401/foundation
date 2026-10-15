@@ -17,16 +17,24 @@
   Community (`C:\Program Files\Microsoft Visual Studio\18\Community`, instance
   `b1500950`). Visual Studio 2022 (MSVC 19.41, instance `cbc839fd`) is also
   installed; don't build with it.
-- `cl.exe` is not on the PATH. Load the VS 2026 developer environment first,
-  then run the build script (`-Configuration Debug|Release`, optional `-Clean`):
+- The build is `CMakeLists.txt` (targets `fndlib`, a static library of
+  `src/foundation`, and `unittests`, an executable of `src/unittests`). Every
+  compiler and linker flag is listed there; CMake's defaults are cleared.
+  Sources are globbed, so a new `.ixx` or `.cpp` needs no build edit; CMake
+  scans module imports for the build order.
+- `cmake` is not on the PATH; the VS 2026 developer environment adds it.
+  Generate once into `build/` (again only after deleting it), then build:
 
   ```
-  cmd /c '"C:\Program Files\Microsoft Visual Studio\18\Community\VC\Auxiliary\Build\vcvars64.bat" >nul 2>&1 && powershell -NoProfile -ExecutionPolicy Bypass -File scripts\build_unittests.ps1 -Configuration Debug'
+  cmd /c '"C:\Program Files\Microsoft Visual Studio\18\Community\VC\Auxiliary\Build\vcvars64.bat" >nul 2>&1 && cmake -S . -B build -G "Visual Studio 18 2026"'
+  cmd /c '"C:\Program Files\Microsoft Visual Studio\18\Community\VC\Auxiliary\Build\vcvars64.bat" >nul 2>&1 && cmake --build build --config Debug'
   ```
 
-  Then run `bin\debug\unittests.exe` (or `bin\release\`). Build both
-  configurations before claiming that something compiles or passes.
-  `bin\<config>\asm\` holds `/Fa` assembly listings per translation unit.
+  Then run `build\bin\debug\unittests.exe` (or `build\bin\release\`). Build
+  both configurations before claiming that something compiles or passes.
+  `build\bin\<config>\asm\` holds `/Fa` assembly listings per translation unit.
+- Don't edit the generated `.vcxproj`/`.sln` in `build/`; CMake overwrites
+  them. Change `CMakeLists.txt` instead.
 - No exceptions (`/EH` is absent), no RTTI (`/GR-`). `FND_DEBUG` is defined in
   Debug only; it turns `FND_ASSERT` into a real check (`__noop` in Release).
 - The traditional MSVC preprocessor is used (no `/Zc:preprocessor`):
@@ -42,9 +50,7 @@
 - Tests mirror them: `src/unittests/<module>/unittests.<module>.<name>.ixx`
   declaring `unittests.<module>:<name>`, with one exported runner
   `unittests_<module>_<name>()` called from `run_unittests_<module>()`.
-- A new `.ixx` must be added to `$moduleNames` in `scripts/build_unittests.ps1`,
-  after every unit it imports.
-- Math partition order (imports and build): vectors -> vector_quat ->
+- Math partition order (imports): vectors -> vector_quat ->
   vector_conversion -> matrix_float3x3 -> matrix_float3x4 -> matrix_float4x4 ->
   matrix_conversion -> matrix_construction.
   - A type's own file holds only the type and its algebra.

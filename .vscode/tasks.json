@@ -1,72 +1,59 @@
 {
     "version": "2.0.0",
+    "options": {
+        "cwd": "${workspaceFolder}"
+    },
     "tasks": [
         {
-            "label": "Build Unittests (Debug)",
-            "type": "shell",
-            "command": "powershell ",
-            "args": [
-                "-ExecutionPolicy",
-                "Bypass",
-                "-File",
-                "${workspaceFolder}/scripts/build_unittests.ps1",
-                "Debug"
-            ],
-            "options": {
-                "cwd": "${workspaceFolder}"
-            },
-            "problemMatcher": [
-                "$msCompile"
-            ],
+            "label": "Generate",
+            "type": "process",
+            "command": "cmake",
+            "args": ["-S", ".", "-B", "build", "-G", "Visual Studio 18 2026"],
+            "problemMatcher": [],
+            "detail": "Generates the Visual Studio solution into build/"
+        },
+        {
+            "label": "Build Debug",
+            "type": "process",
+            "command": "cmake",
+            "args": ["--build", "build", "--config", "Debug"],
+            "problemMatcher": ["$msCompile"],
             "group": {
                 "kind": "build",
                 "isDefault": true
-            },
-            "detail": "compiler: cl.exe"
+            }
         },
-
         {
-            "label": "Rebuild Unittests (Debug)",
-            "type": "shell",
-            "command": "powershell ",
-            "args": [
-                "-ExecutionPolicy",
-                "Bypass",
-                "-File",
-                "${workspaceFolder}/scripts/build_unittests.ps1",
-                "Debug",
-                "-Clean"
-            ],
-            "options": {
-                "cwd": "${workspaceFolder}"
-            },
-            "problemMatcher": [
-                "$msCompile"
-            ],
-            "group": "build",
-            "detail": "compiler: cl.exe"
+            "label": "Build Release",
+            "type": "process",
+            "command": "cmake",
+            "args": ["--build", "build", "--config", "Release"],
+            "problemMatcher": ["$msCompile"],
+            "group": "build"
         },
-
         {
-            "label": "Build Unittests (Release)",
-            "type": "shell",
-            "command": "powershell ",
-            "args": [
-                "-ExecutionPolicy",
-                "Bypass",
-                "-File",
-                "${workspaceFolder}/scripts/build_unittests.ps1",
-                "Release",
-                "-Clean"
-            ],
-            "options": {
-                "cwd": "${workspaceFolder}"
-            },
-            "problemMatcher": [
-                "$msCompile"
-            ],
-            "group": "build",
-            "detail": "compiler: cl.exe"
+            "label": "Rebuild Debug",
+            "type": "process",
+            "command": "cmake",
+            "args": ["--build", "build", "--config", "Debug", "--clean-first"],
+            "problemMatcher": ["$msCompile"],
+            "group": "build"
         },
+        {
+            "label": "Rebuild Release",
+            "type": "process",
+            "command": "cmake",
+            "args": ["--build", "build", "--config", "Release", "--clean-first"],
+            "problemMatcher": ["$msCompile"],
+            "group": "build"
+        },
+        {
+            "label": "Delete build folder",
+            "type": "process",
+            "command": "cmake",
+            "args": ["-E", "rm", "-rf", "build"],
+            "problemMatcher": [],
+            "detail": "Removes the generated project and all outputs; run Generate afterwards"
+        }
     ]
 }

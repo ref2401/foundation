@@ -42,7 +42,7 @@ export constexpr bool_t operator!=(
   return !(a == b);
 }
 
-// Writes the addresses [out_start, out_end) that block covers. A block
+// Writes the addresses [out_start, out_end) that block covers. A block 
 // without a pointer covers no addresses, whatever its byte_count.
 inline void compute_address_range(
   const memory_block_t block, uptr_t& out_start, uptr_t& out_end)

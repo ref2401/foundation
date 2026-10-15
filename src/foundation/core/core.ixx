@@ -25,4 +25,6 @@ export consteval source_location_t make_source_location(
   return {filename, function_name, line};
 }
 
+void foo() {}
+
 } // namespace fnd
