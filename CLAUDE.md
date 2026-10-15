@@ -1,5 +1,16 @@
 # foundation
 
+## Principles
+
+- YAGNI and KISS: build what a real caller needs today, in the simplest form
+  that meets it. No features, overloads or abstractions for callers that don't
+  exist yet; in reviews, speculative generality is a finding. Complexity the
+  problem itself has (overflow checks, empty ranges) stays.
+- Prefer a checked assumption (`static_assert`, `FND_ASSERT`) to generalizing
+  past it: pointers are 64-bit, asserted rather than abstracted.
+- Decisions that are expensive to undo (public API shape, naming conventions,
+  data formats) still get thought up front.
+
 ## Building and formatting
 
 - The project's compiler is MSVC 19.51 (toolset 14.51) from Visual Studio 2026
@@ -8,7 +19,7 @@
   installed; don't build with it.
 - `cl.exe` is not on the PATH. Load the VS 2026 developer environment first,
   then run the build script (`-Configuration Debug|Release`, optional `-Clean`):
-v
+
   ```
   cmd /c '"C:\Program Files\Microsoft Visual Studio\18\Community\VC\Auxiliary\Build\vcvars64.bat" >nul 2>&1 && powershell -NoProfile -ExecutionPolicy Bypass -File scripts\build_unittests.ps1 -Configuration Debug'
   ```
