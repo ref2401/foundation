@@ -1,0 +1,19 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            // Ctrl+Shift+B: builds the variant (Debug or Release) picked with
+            // "CMake: Select Variant". CMake Tools puts errors in the Problems
+            // panel itself, so there is no problem matcher.
+            "label": "CMake: build",
+            "type": "cmake",
+            "command": "build",
+            "targets": ["all"],
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        }
+    ]
+}

@@ -144,10 +144,7 @@
   the same thing. An assert that calls a non-`constexpr` function
   (`is_normalized`, `isnan`) makes the function `inline` instead of
   `constexpr`.
-- Postconditions are checked by unittests, not asserted. The exception is a
-  result produced by code the tests can't cover, such as a virtual
-  implementation behind an interface: the non-virtual wrapper asserts the
-  contract (`IAllocator::realloc` checks that the pointer is aligned).
+- Postconditions are checked by unittests, not asserted.
 - Prefer brace initialization: `int_t a{1}`, `int_t* p{&a}`,
   `const float3_t v{normalize(a)}`. Use `=` with `auto`, and in generic code
   initializing a `T` from a single `T` (`T old_value = move(object);`).
