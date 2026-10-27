@@ -157,12 +157,11 @@ export inline double_t log2(const double_t x)
   return ::log2(x);
 }
 
+// A finite negative base needs an integer exponent: (-8)^(1/3) has no real
+// result.
+// pow(0, 0) is asserted
 export inline float_t pow(const float_t base, const float_t exponent)
 {
-  // NOTE:
-  // Domain errors as the C standard defines them for pow: a finite negative
-  // base with a finite non-integer exponent (the result would be complex),
-  // and 0 to the power 0.
   FND_ASSERT(
     !(isfinite(base) && base < 0 && isfinite(exponent)
       && trunc(exponent) != exponent));
