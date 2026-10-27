@@ -222,7 +222,7 @@ export constexpr float4_t operator-(const float_t scalar, const float4_t b)
 // The result has the sign of the left operand, as fmod does.
 export inline float4_t operator%(const float4_t a, const float4_t b)
 {
-  FND_ASSERT(b.x != 0.0f && b.y != 0.0f && b.z != 0.0f && b.w != 0.0f);
+  FND_ASSERT(all(b != 0));
 
   return float4_t{
     fmod(a.x, b.x), fmod(a.y, b.y), fmod(a.z, b.z), fmod(a.w, b.w)};
@@ -238,7 +238,7 @@ export inline float4_t operator%(const float4_t a, const float_t scalar)
 
 export inline float4_t operator%(const float_t scalar, const float4_t b)
 {
-  FND_ASSERT(b.x != 0.0f && b.y != 0.0f && b.z != 0.0f && b.w != 0.0f);
+  FND_ASSERT(all(b != 0));
 
   return float4_t{
     fmod(scalar, b.x), fmod(scalar, b.y), fmod(scalar, b.z), fmod(scalar, b.w)};
@@ -246,7 +246,7 @@ export inline float4_t operator%(const float_t scalar, const float4_t b)
 
 export constexpr float4_t operator/(const float4_t a, const float4_t b)
 {
-  FND_ASSERT(b.x != 0.0f && b.y != 0.0f && b.z != 0.0f && b.w != 0.0f);
+  FND_ASSERT(all(b != 0));
 
   return float4_t{a.x / b.x, a.y / b.y, a.z / b.z, a.w / b.w};
 }
@@ -260,7 +260,7 @@ export constexpr float4_t operator/(const float4_t a, const float_t scalar)
 
 export constexpr float4_t operator/(const float_t scalar, const float4_t b)
 {
-  FND_ASSERT(b.x != 0.0f && b.y != 0.0f && b.z != 0.0f && b.w != 0.0f);
+  FND_ASSERT(all(b != 0));
 
   return float4_t{scalar / b.x, scalar / b.y, scalar / b.z, scalar / b.w};
 }
@@ -303,7 +303,7 @@ export constexpr float4_t& operator-=(float4_t& a, const float_t scalar)
 
 export inline float4_t& operator%=(float4_t& a, const float4_t b)
 {
-  FND_ASSERT(b.x != 0.0f && b.y != 0.0f && b.z != 0.0f && b.w != 0.0f);
+  FND_ASSERT(all(b != 0));
 
   a = a % b;
   return a;
@@ -319,7 +319,7 @@ export inline float4_t& operator%=(float4_t& a, const float_t scalar)
 
 export constexpr float4_t& operator/=(float4_t& a, const float4_t b)
 {
-  FND_ASSERT(b.x != 0.0f && b.y != 0.0f && b.z != 0.0f && b.w != 0.0f);
+  FND_ASSERT(all(b != 0));
 
   a = a / b;
   return a;

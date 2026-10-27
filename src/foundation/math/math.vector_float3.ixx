@@ -216,7 +216,7 @@ export constexpr float3_t operator-(const float_t scalar, const float3_t b)
 // The result has the sign of the left operand, as fmod does.
 export inline float3_t operator%(const float3_t a, const float3_t b)
 {
-  FND_ASSERT(b.x != 0.0f && b.y != 0.0f && b.z != 0.0f);
+  FND_ASSERT(all(b != 0));
 
   return float3_t{fmod(a.x, b.x), fmod(a.y, b.y), fmod(a.z, b.z)};
 }
@@ -230,14 +230,14 @@ export inline float3_t operator%(const float3_t a, const float_t scalar)
 
 export inline float3_t operator%(const float_t scalar, const float3_t b)
 {
-  FND_ASSERT(b.x != 0.0f && b.y != 0.0f && b.z != 0.0f);
+  FND_ASSERT(all(b != 0));
 
   return float3_t{fmod(scalar, b.x), fmod(scalar, b.y), fmod(scalar, b.z)};
 }
 
 export constexpr float3_t operator/(const float3_t a, const float3_t b)
 {
-  FND_ASSERT(b.x != 0.0f && b.y != 0.0f && b.z != 0.0f);
+  FND_ASSERT(all(b != 0));
 
   return float3_t{a.x / b.x, a.y / b.y, a.z / b.z};
 }
@@ -251,7 +251,7 @@ export constexpr float3_t operator/(const float3_t a, const float_t scalar)
 
 export constexpr float3_t operator/(const float_t scalar, const float3_t b)
 {
-  FND_ASSERT(b.x != 0.0f && b.y != 0.0f && b.z != 0.0f);
+  FND_ASSERT(all(b != 0));
 
   return float3_t{scalar / b.x, scalar / b.y, scalar / b.z};
 }
@@ -294,7 +294,7 @@ export constexpr float3_t& operator-=(float3_t& a, const float_t scalar)
 
 export inline float3_t& operator%=(float3_t& a, const float3_t b)
 {
-  FND_ASSERT(b.x != 0.0f && b.y != 0.0f && b.z != 0.0f);
+  FND_ASSERT(all(b != 0));
 
   a = a % b;
   return a;
@@ -310,7 +310,7 @@ export inline float3_t& operator%=(float3_t& a, const float_t scalar)
 
 export constexpr float3_t& operator/=(float3_t& a, const float3_t b)
 {
-  FND_ASSERT(b.x != 0.0f && b.y != 0.0f && b.z != 0.0f);
+  FND_ASSERT(all(b != 0));
 
   a = a / b;
   return a;
