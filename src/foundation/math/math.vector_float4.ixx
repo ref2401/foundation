@@ -687,6 +687,8 @@ export constexpr float4_t radians(const float4_t v)
 
 export inline float4_t rcp(const float4_t v)
 {
+  FND_ASSERT(all(v != 0));
+
   return float4_t{rcp(v.x), rcp(v.y), rcp(v.z), rcp(v.w)};
 }
 

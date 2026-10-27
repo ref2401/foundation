@@ -915,6 +915,8 @@ void unittests_math_vector_float2_pow()
 void unittests_math_vector_float2_rcp_sqrt_rsqrt()
 {
   FND_TEST_TRUE(test_components(rcp(float2_t{2, -4}), 0.5f, -0.25f));
+  FND_TEST_TRUE(
+    equal_or_both_nan(rcp(float2_t{kFloatNaN, 2}), float2_t{kFloatNaN, 0.5f}));
   FND_TEST_TRUE(test_components(sqrt(float2_t{4.0f, 2.25f}), 2.0f, 1.5f));
   FND_TEST_TRUE(test_components(sqrt(float2_t{2, 3}), sqrt(2.0f), sqrt(3.0f)));
   FND_TEST_TRUE(test_components(rsqrt(float2_t{4.0f, 0.25f}), 0.5f, 2.0f));

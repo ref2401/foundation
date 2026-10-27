@@ -303,6 +303,7 @@ void unittests_math_scalar_rcp_float()
   FND_TEST_TRUE(rcp(2.0f) == 0.5f);
   FND_TEST_TRUE(rcp(-4.0f) == -0.25f);
   FND_TEST_TRUE(rcp(kFloatInfinity) == 0.0f);
+  FND_TEST_TRUE(isnan(rcp(kFloatNaN)));
 }
 
 void unittests_math_scalar_rcp_double()
@@ -311,6 +312,7 @@ void unittests_math_scalar_rcp_double()
   FND_TEST_TRUE(rcp(2.0) == 0.5);
   FND_TEST_TRUE(rcp(-4.0) == -0.25);
   FND_TEST_TRUE(rcp(kDoubleInfinity) == 0.0);
+  FND_TEST_TRUE(isnan(rcp(kDoubleNaN)));
 }
 
 void unittests_math_scalar_rsqrt_float()

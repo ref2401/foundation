@@ -1145,6 +1145,9 @@ void unittests_math_vector_float4_rcp_sqrt_rsqrt()
 {
   FND_TEST_TRUE(test_components(
     rcp(float4_t{2.0f, -4.0f, 0.5f, -0.125f}), 0.5f, -0.25f, 2.0f, -8.0f));
+  FND_TEST_TRUE(equal_or_both_nan(
+    rcp(float4_t{kFloatNaN, 2, kFloatNaN, -4}),
+    float4_t{kFloatNaN, 0.5f, kFloatNaN, -0.25f}));
   FND_TEST_TRUE(test_components(
     sqrt(float4_t{4.0f, 2.25f, 0.25f, 16.0f}), 2.0f, 1.5f, 0.5f, 4.0f));
   FND_TEST_TRUE(test_components(

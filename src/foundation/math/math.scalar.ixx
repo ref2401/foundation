@@ -193,7 +193,6 @@ export constexpr double_t radians(const double_t degs)
 export inline float_t rcp(const float_t x)
 {
   FND_ASSERT(x != 0);
-  FND_ASSERT(!isnan(x));
 
   return 1.0f / x;
 }
@@ -201,7 +200,6 @@ export inline float_t rcp(const float_t x)
 export inline double_t rcp(const double_t x)
 {
   FND_ASSERT(x != 0);
-  FND_ASSERT(!isnan(x));
 
   return 1.0 / x;
 }
