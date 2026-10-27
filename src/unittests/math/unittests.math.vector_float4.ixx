@@ -925,6 +925,13 @@ void unittests_math_vector_float4_lerp()
   const float4_t b{10, 20, 4, -1};
   FND_TEST_TRUE(test_components(lerp(a, b, 0.0f), 0.0f, 10.0f, -4.0f, 1.0f));
   FND_TEST_TRUE(test_components(lerp(a, b, 1.0f), 10.0f, 20.0f, 4.0f, -1.0f));
+  // Exactly b at t == 1, even when a is much larger than b.
+  FND_TEST_TRUE(test_components(
+    lerp(float4_t{10}, float4_t{1e-8f, 20, 4, -1}, 1.0f), 1e-8f, 20.0f, 4.0f,
+    -1.0f));
+  FND_TEST_TRUE(test_components(
+    lerp(float4_t{10}, float4_t{1e-8f, 20, 4, -1}, float4_t{1}), 1e-8f, 20.0f,
+    4.0f, -1.0f));
   FND_TEST_TRUE(test_components(lerp(a, b, 0.25f), 2.5f, 12.5f, -2.0f, 0.5f));
   // t outside [0, 1] extrapolates.
   FND_TEST_TRUE(test_components(lerp(a, b, 2.0f), 20.0f, 30.0f, 12.0f, -3.0f));

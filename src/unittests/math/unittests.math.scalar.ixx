@@ -167,8 +167,10 @@ void unittests_math_scalar_exp2_double()
 
 void unittests_math_scalar_lerp_float()
 {
-  FND_TEST_TRUE(lerp(0.0f, 10.0f, 0.0f) == 0.0f);
-  FND_TEST_TRUE(lerp(0.0f, 10.0f, 1.0f) == 10.0f);
+  FND_TEST_TRUE(lerp(1e-8f, 10.0f, 0.0f) == 1e-8f);
+  FND_TEST_TRUE(lerp(1e-8f, 10.0f, 1.0f) == 10.0f);
+  FND_TEST_TRUE(lerp(10.0f, 1e-8f, 0.0f) == 10.0f);
+  FND_TEST_TRUE(lerp(10.0f, 1e-8f, 1.0f) == 1e-8f);
   FND_TEST_TRUE(lerp(0.0f, 10.0f, 0.5f) == 5.0f);
   FND_TEST_TRUE(lerp(2.0f, 4.0f, 0.25f) == 2.5f);
   FND_TEST_TRUE(lerp(10.0f, 0.0f, 0.25f) == 7.5f);
@@ -180,8 +182,10 @@ void unittests_math_scalar_lerp_float()
 
 void unittests_math_scalar_lerp_double()
 {
-  FND_TEST_TRUE(lerp(0.0, 10.0, 0.0) == 0.0);
-  FND_TEST_TRUE(lerp(0.0, 10.0, 1.0) == 10.0);
+  FND_TEST_TRUE(lerp(1e-20, 10.0, 0.0) == 1e-20);
+  FND_TEST_TRUE(lerp(1e-20, 10.0, 1.0) == 10.0);
+  FND_TEST_TRUE(lerp(10.0, 1e-20, 0.0) == 10.0);
+  FND_TEST_TRUE(lerp(10.0, 1e-20, 1.0) == 1e-20);
   FND_TEST_TRUE(lerp(0.0, 10.0, 0.5) == 5.0);
   FND_TEST_TRUE(lerp(2.0, 4.0, 0.25) == 2.5);
   FND_TEST_TRUE(lerp(10.0, 0.0, 0.25) == 7.5);
