@@ -98,13 +98,12 @@ export inline double_t exp2(const double_t x)
   return ::exp2(x);
 }
 
+// Unclamped t outside [0, 1] extrapolates
 export inline float_t lerp(const float_t a, const float_t b, const float_t t)
 {
   // NOTE:
-  // Unclamped t outside [0, 1] extrapolates.
-  //
-  // a * (1 - t) + b * t returns exactly a when t == 0 and exactly b when
-  // t == 1. The alternative a + t * (b - a) is exact only at t == 0, but has
+  // a*(1 - t) + b*t returns exactly a when t == 0 and exactly b when t == 1.
+  // The alternative a + t*(b - a) is exact only at t == 0, but has
   // benefits this form lacks:
   // - Monotonic in t: when a <= b, a larger t never gives a smaller result.
   //   Here a * (1 - t) shrinks while b * t grows, and each product is

@@ -351,14 +351,10 @@ export constexpr ulong_t clamp(
   return min(max(x, lower), upper);
 }
 
+// clamp(NaN, lower, upper) is lower, as in HLSL.
 export inline float_t clamp(
   const float_t x, const float_t lower, const float_t upper)
 {
-  // NOTE:
-  // The result of clamp(NaN, -1, 1) depends on how clamp is composed from min
-  // and max: it can be -1 or 1. Rather than committing to one of those, x is
-  // asserted to not be NaN.
-  FND_ASSERT(!isnan(x));
   FND_ASSERT(lower <= upper);
   return min(max(x, lower), upper);
 }
@@ -366,7 +362,6 @@ export inline float_t clamp(
 export inline double_t clamp(
   const double_t x, const double_t lower, const double_t upper)
 {
-  FND_ASSERT(!isnan(x));
   FND_ASSERT(lower <= upper);
   return min(max(x, lower), upper);
 }
@@ -402,6 +397,7 @@ export inline double_t fractional(const double_t x)
   return abs(modf(x, integer));
 }
 
+// saturate(NaN) is 0, as in HLSL.
 export inline float_t saturate(const float_t x)
 {
   return clamp(x, 0.0f, 1.0f);

@@ -463,6 +463,17 @@ void unittests_math_vector_float3_clamp()
     test_components(clamp(float3_t{-20}, 0.0f, upper), 0.0f, 0.0f, 0.0f));
   FND_TEST_TRUE(
     test_components(clamp(float3_t{20, 3, 6}, 0.0f, upper), 10.0f, 3.0f, 2.0f));
+
+  // A NaN component gives its lower bound, as in HLSL.
+  FND_TEST_TRUE(test_components(
+    clamp(float3_t{kFloatNaN, 3, kFloatNaN}, lower, upper), -10.0f, 3.0f,
+    1.0f));
+  FND_TEST_TRUE(test_components(
+    clamp(float3_t{kFloatNaN, 9.5f, 0.5f}, 0.0f, 1.0f), 0.0f, 1.0f, 0.5f));
+  FND_TEST_TRUE(test_components(
+    clamp(float3_t{kFloatNaN, 20, 3}, lower, 5.0f), -10.0f, 5.0f, 3.0f));
+  FND_TEST_TRUE(test_components(
+    clamp(float3_t{3, kFloatNaN, 6}, 0.0f, upper), 3.0f, 0.0f, 2.0f));
 }
 
 void unittests_math_vector_float3_cmax()
@@ -1061,6 +1072,9 @@ void unittests_math_vector_float3_saturate()
   FND_TEST_TRUE(test_components(
     saturate(float3_t{-kFloatInfinity, kFloatInfinity, -1.0f}), 0.0f, 1.0f,
     0.0f));
+  // NaN gives 0, as in HLSL.
+  FND_TEST_TRUE(test_components(
+    saturate(float3_t{kFloatNaN, 0.5f, kFloatNaN}), 0.0f, 0.5f, 0.0f));
 }
 
 void unittests_math_vector_float3_sign()

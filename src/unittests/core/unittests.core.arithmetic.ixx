@@ -800,6 +800,9 @@ void unittests_core_arithmetic_clamp_float()
   FND_TEST_TRUE(clamp(2.0f, 0.5f, 0.5f) == 0.5f);
   FND_TEST_TRUE(clamp(kFloatInfinity, -1.0f, 1.0f) == 1.0f);
   FND_TEST_TRUE(clamp(-kFloatInfinity, -1.0f, 1.0f) == -1.0f);
+  // NaN x gives lower, as in HLSL.
+  FND_TEST_TRUE(clamp(kFloatNaN, -1.0f, 1.0f) == -1.0f);
+  FND_TEST_TRUE(clamp(-kFloatNaN, -1.0f, 1.0f) == -1.0f);
 }
 
 void unittests_core_arithmetic_clamp_double()
@@ -812,6 +815,9 @@ void unittests_core_arithmetic_clamp_double()
   FND_TEST_TRUE(clamp(2.0, 0.5, 0.5) == 0.5);
   FND_TEST_TRUE(clamp(kDoubleInfinity, -1.0, 1.0) == 1.0);
   FND_TEST_TRUE(clamp(-kDoubleInfinity, -1.0, 1.0) == -1.0);
+  // NaN x gives lower, as in HLSL.
+  FND_TEST_TRUE(clamp(kDoubleNaN, -1.0, 1.0) == -1.0);
+  FND_TEST_TRUE(clamp(-kDoubleNaN, -1.0, 1.0) == -1.0);
 }
 
 void unittests_core_arithmetic_modf_float()
@@ -925,6 +931,7 @@ void unittests_core_arithmetic_saturate_float()
   FND_TEST_TRUE(saturate(2.0f) == 1.0f);
   FND_TEST_TRUE(saturate(kFloatInfinity) == 1.0f);
   FND_TEST_TRUE(saturate(-kFloatInfinity) == 0.0f);
+  FND_TEST_TRUE(saturate(kFloatNaN) == 0.0f);
 }
 
 void unittests_core_arithmetic_saturate_double()
@@ -936,6 +943,7 @@ void unittests_core_arithmetic_saturate_double()
   FND_TEST_TRUE(saturate(2.0) == 1.0);
   FND_TEST_TRUE(saturate(kDoubleInfinity) == 1.0);
   FND_TEST_TRUE(saturate(-kDoubleInfinity) == 0.0);
+  FND_TEST_TRUE(saturate(kDoubleNaN) == 0.0);
 }
 
 void unittests_core_arithmetic_sign_byte()

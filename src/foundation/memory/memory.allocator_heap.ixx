@@ -44,7 +44,7 @@ public:
     }
 
     const long_t offset{aligned_ptr - ptr};
-    FND_ASSERT(1 <= offset && offset <= alignment);
+    FND_ASSERT(1 <= offset && offset <= kMaxAlignment);
     aligned_ptr[-1] = static_cast<ubyte_t>(offset);
 
     return memory_block_t{aligned_ptr, byte_count};
