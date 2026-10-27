@@ -7,15 +7,23 @@ import :block;
 
 namespace fnd {
 
+// Hands out and takes back raw memory. Each implementation asserts the
+// preconditions below, plus any limits of its own (such as a maximum
+// alignment); thread safety is up to each implementation.
 export class IAllocator {
 public:
-  virtual void* allocate(
+  // A block of exactly byte_count bytes whose ptr is a multiple of
+  // alignment, a power of two. byte_count 0 gives the empty block.
+  // On failure, returns the empty block.
+  virtual memory_block_t allocate(
     const ulong_t byte_count, const ulong_t alignment,
-    const source_location_t srcloc) = 0;
+    const source_location_t srcloc = make_source_location()) = 0;
 
+  // Takes back a block that allocate of this allocator returned, unchanged
+  // (same ptr and byte_count). The empty block is ignored.
   virtual void free(
-    void* const ptr, const ulong_t byte_count,
-    const source_location_t srcloc) = 0;
+    const memory_block_t block,
+    const source_location_t srcloc = make_source_location()) = 0;
 
 protected:
   IAllocator() = default;
@@ -25,28 +33,5 @@ protected:
   IAllocator& operator=(const IAllocator&) = default;
   IAllocator& operator=(IAllocator&&) = default;
 };
-
-
-export inline memory_block_t allocate_block(
-  IAllocator& allocator, const ulong_t byte_count, const ulong_t alignment,
-  const source_location_t srcloc = make_source_location())
-{
-  FND_ASSERT(byte_count > 0);
-  FND_ASSERT(is_pow2(alignment));
-
-  void* const ptr{allocator.allocate(byte_count, alignment, srcloc)};
-  return memory_block_t{ptr, ptr ? byte_count : 0};
-}
-
-export inline void free_block(
-  IAllocator& allocator, const memory_block_t block,
-  const source_location_t srcloc = make_source_location())
-{
-  FND_ASSERT(is_well_formed(block));
-
-  if (!is_empty(block)) {
-    allocator.free(block.ptr, block.byte_count, srcloc);
-  }
-}
 
 } // namespace fnd

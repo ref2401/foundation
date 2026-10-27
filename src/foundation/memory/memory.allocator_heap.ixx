@@ -11,6 +11,7 @@ namespace fnd {
 
 export class HeapAllocator final : public IAllocator {
 public:
+  // Largest alignment allocate accepts.
   static constexpr ulong_t kMaxAlignment{256};
 
   HeapAllocator() = default;
@@ -21,7 +22,7 @@ public:
   HeapAllocator& operator=(HeapAllocator&&) = delete;
 
 
-  void* allocate(
+  memory_block_t allocate(
     const ulong_t byte_count, const ulong_t alignment,
     const source_location_t srcloc = make_source_location()) override
   {
@@ -29,12 +30,12 @@ public:
     FND_ASSERT(alignment <= kMaxAlignment);
     FND_ASSERT(byte_count + alignment >= byte_count);
 
-    if (byte_count == 0) return nullptr;
+    if (byte_count == 0) return memory_block_t{};
 
     const ulong_t actual_byte_count{byte_count + alignment};
     ubyte_t* const ptr{static_cast<ubyte_t*>(::malloc(actual_byte_count))};
     if (!ptr) {
-      return nullptr;
+      return memory_block_t{};
     }
 
     ubyte_t* aligned_ptr{static_cast<ubyte_t*>(align_up(ptr, alignment))};
@@ -43,19 +44,21 @@ public:
     }
 
     const long_t offset{aligned_ptr - ptr};
-    FND_ASSERT(1 <= offset && offset <= kMaxAlignment);
+    FND_ASSERT(1 <= offset && offset <= alignment);
     aligned_ptr[-1] = static_cast<ubyte_t>(offset);
 
-    return aligned_ptr;
+    return memory_block_t{aligned_ptr, byte_count};
   }
 
   void free(
-    void* const ptr, const ulong_t byte_count,
+    const memory_block_t& block,
     const source_location_t srcloc = make_source_location()) override
   {
-    if (!ptr) return;
+    FND_ASSERT(is_well_formed(block));
 
-    ubyte_t* const aligned_ptr{static_cast<ubyte_t*>(ptr)};
+    if (is_empty(block)) return;
+
+    ubyte_t* const aligned_ptr{static_cast<ubyte_t*>(block.ptr)};
     ulong_t offset{aligned_ptr[-1]};
     if (offset == 0) offset = kMaxAlignment;
 
