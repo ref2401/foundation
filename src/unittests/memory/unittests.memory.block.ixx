@@ -163,6 +163,25 @@ void unittests_memory_block_is_empty()
   static_assert(is_empty(memory_block_t{}));
 }
 
+void unittests_memory_block_is_well_formed()
+{
+  constexpr ulong_t kBufferLength{16};
+  ubyte_t buffer[kBufferLength]{};
+
+  // No pointer and no bytes, or a pointer and some bytes.
+  FND_TEST_TRUE(is_well_formed(memory_block_t{}));
+  FND_TEST_TRUE(is_well_formed(memory_block_t{buffer, kBufferLength}));
+  FND_TEST_TRUE(is_well_formed(memory_block_t{buffer, 1}));
+
+  // A pointer without bytes, or bytes without a pointer.
+  FND_TEST_FALSE(is_well_formed(memory_block_t{buffer, 0}));
+  FND_TEST_FALSE(is_well_formed(memory_block_t{nullptr, kBufferLength}));
+  FND_TEST_FALSE(is_well_formed(memory_block_t{nullptr, 1}));
+
+  // Usable in constant expressions.
+  static_assert(is_well_formed(memory_block_t{}));
+}
+
 void unittests_memory_block_overlaps()
 {
   constexpr ulong_t kBufferLength{32};
@@ -268,6 +287,7 @@ void unittests_memory_block()
   unittests_memory_block_contains_pointer();
   unittests_memory_block_contains_block();
   unittests_memory_block_is_empty();
+  unittests_memory_block_is_well_formed();
   unittests_memory_block_overlaps();
   unittests_memory_block_slice();
   unittests_memory_block_slice_to_end();

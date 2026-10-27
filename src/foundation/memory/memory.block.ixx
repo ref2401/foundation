@@ -30,6 +30,7 @@ export struct memory_block_t final {
   }
 };
 
+
 export constexpr bool_t operator==(
   const memory_block_t a, const memory_block_t b)
 {
@@ -42,7 +43,7 @@ export constexpr bool_t operator!=(
   return !(a == b);
 }
 
-// Writes the addresses [out_start, out_end) that block covers. A block 
+// Writes the addresses [out_start, out_end) that block covers. A block
 // without a pointer covers no addresses, whatever its byte_count.
 inline void compute_address_range(
   const memory_block_t block, uptr_t& out_start, uptr_t& out_end)
@@ -87,6 +88,13 @@ export inline bool_t contains(
 export constexpr bool_t is_empty(const memory_block_t block)
 {
   return block.ptr == nullptr || block.byte_count == 0;
+}
+
+// no pointer -> no bytes
+// a pointer -> some bytes
+export constexpr bool_t is_well_formed(const memory_block_t block)
+{
+  return (block.ptr == nullptr) == (block.byte_count == 0);
 }
 
 // True if block0 and block1 share at least one byte.
