@@ -475,11 +475,6 @@ void unittests_math_vector_quat_normalize_safe()
   // Zero gives default_value: the identity unless given.
   FND_TEST_TRUE(normalize_safe(quat_t::kZero) == quat_t::kIdentity);
   FND_TEST_TRUE(normalize_safe(quat_t::kZero, kQuatK) == kQuatK);
-
-  // Components whose squares overflow are still normalized.
-  FND_TEST_TRUE(approx_equal(
-    normalize_safe(quat_t(1e20f, 1e20f, 1e20f, 1e20f)),
-    quat_t(0.5f, 0.5f, 0.5f, 0.5f)));
 }
 
 void unittests_math_vector_quat_slerp()

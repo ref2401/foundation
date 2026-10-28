@@ -615,39 +615,16 @@ export inline float3_t normalize(const float3_t v)
   return v * rsqrt(l2);
 }
 
+// normalize(v), or default_value when v is too short to normalize.
 export inline float3_t normalize_safe(
   const float3_t v, const float3_t default_value = float3_t{})
 {
-  FND_ASSERT(all(!isnan(v)));
+  FND_ASSERT(all(!isnan(default_value)));
 
-  float3_t res_vec = default_value;
   const float_t l2 = length_sqr(v);
+  FND_ASSERT(isfinite(l2));
 
-  if (isinf(l2)) {
-    // NOTE:
-    // l2 is infinity (e.g. v = {1e20f, 1, 1}).
-    // v should be rescaled so there is no overflow.
-    // Rescaling is ok because normalize(v) == normalize(v * s), s > 0
-    //
-    // Scaling by cmax(abs(v)) needs no constant, but costs abs,
-    // max and division instead of multiplication.
-    //
-    // 0x1p-66f is 2^-66. A power of two is exact: multiplying by it
-    // lowers the exponent of each component by 66 and does not round.
-    // Any 2^-k with 65 <= k <= 126 works:
-    // - k >= 65: the scaled squares of three kFloatMaxValue components
-    //      do not overflow;
-    // - k <= 126: the scaled l2 stays a normal float.
-
-    const float3_t scaled_vec = v * 0x1p-66f;
-    res_vec = scaled_vec * rsqrt(length_sqr(scaled_vec));
-  }
-  else if (l2 > kFloatMinNormal) {
-    res_vec = v * rsqrt(l2);
-  }
-
-  FND_ASSERT(all(!isnan(res_vec))); // post condition
-  return res_vec;
+  return l2 > kFloatMinNormal ? v * rsqrt(l2) : default_value;
 }
 
 export inline float3_t pow(const float3_t base, const float3_t exponent)

@@ -211,37 +211,12 @@ export inline quat_t nlerp(const quat_t a, const quat_t b, const float_t t)
 export inline quat_t normalize_safe(
   const quat_t q, const quat_t default_value = quat_t::kIdentity)
 {
-  FND_ASSERT(!isnan(q));
+  FND_ASSERT(!isnan(default_value));
 
-  quat_t res_quat = default_value;
   const float_t l2 = length_sqr(q);
+  FND_ASSERT(isfinite(l2));
 
-  if (isinf(l2)) {
-    // NOTE:
-    // l2 is infinity (e.g. q = {1e20f, 1, 1, 1}).
-    // q should be rescaled so there is no overflow.
-    // Rescaling is ok because normalize(q) == normalize(q * s), s > 0
-    //
-    // Scaling by the largest absolute component needs no constant, but
-    // costs abs, max and division instead of multiplication.
-    //
-    // 0x1p-66f is 2^-66. A power of two is exact: multiplying by it
-    // lowers the exponent of each component by 66 and does not round.
-    // Any 2^-k with 65 <= k <= 126 works:
-    // - k >= 65: the scaled squares of four kFloatMaxValue components
-    //      do not overflow;
-    // - k <= 126: the scaled l2 stays a normal float.
-
-    const quat_t scaled_quat = q * 0x1p-66f;
-    res_quat = scaled_quat * rsqrt(length_sqr(scaled_quat));
-  }
-  else if (l2 > kFloatMinNormal) {
-    res_quat = q * rsqrt(l2);
-  }
-
-  // post condition
-  FND_ASSERT(!isnan(res_quat));
-  return res_quat;
+  return l2 > kFloatMinNormal ? q * rsqrt(l2) : default_value;
 }
 
 // Spherical linear interpolation from a (t = 0) to b (t = 1) at constant
