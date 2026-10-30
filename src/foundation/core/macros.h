@@ -3,6 +3,17 @@
 #include <stdint.h>
 
 // ---------------------------------------------------------------------------
+// FND_ARCH_X64
+// ---------------------------------------------------------------------------
+
+// Defined when the target CPU is x64 (Windows x64, Xbox, PS5).
+// MSVC also defines _M_X64 for ARM64EC, whose code runs on an ARM64 CPU, so
+// that is excluded.
+#if defined(_M_X64) && !defined(_M_ARM64EC)
+  #define FND_ARCH_X64
+#endif
+
+// ---------------------------------------------------------------------------
 // FND_ASSERT & FND_ASSERT_MSG
 // ---------------------------------------------------------------------------
 

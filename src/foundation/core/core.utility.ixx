@@ -1,4 +1,5 @@
 module;
+#include "foundation/core/macros.h"
 
 // For a function whose body is a single cast of its parameter, such as move and
 // forward: MSVC replaces each call with the cast itself, in Debug builds too.
@@ -11,9 +12,39 @@ module;
 #endif
 
 export module foundation.core:utility;
+import :arithmetic_types;
+import :arithmetic;
 import :type_traits;
 
 namespace fnd {
+
+// ptr rounded up to the next multiple of alignment, a power of two;
+// ptr itself if it is aligned already.
+export inline const void* align_up(
+  const void* const ptr, const ulong_t alignment)
+{
+  FND_ASSERT(is_pow2(alignment));
+
+  const uptr_t address{reinterpret_cast<uptr_t>(ptr)};
+  const uptr_t offset{alignment - 1};
+  FND_ASSERT(address + offset >= address); // overflow
+
+  const uptr_t mask{~offset};
+  return reinterpret_cast<const void*>((address + offset) & mask);
+}
+
+export inline void* align_up(void* const ptr, const ulong_t alignment)
+{
+  FND_ASSERT(is_pow2(alignment));
+
+  const uptr_t address{reinterpret_cast<uptr_t>(ptr)};
+  const uptr_t offset{alignment - 1};
+  FND_ASSERT(address + offset >= address); // overflow
+
+  // ptr is non-const, so casting the result back is safe. The static_cast
+  // selects the const overload; without it this would call itself.
+  return const_cast<void*>(align_up(static_cast<const void*>(ptr), alignment));
+}
 
 // The bytes of x reinterpreted as a TDest of the same size, not a value
 // conversion: bit_cast<uint_t>(1.0f) is 0x3F800000, not 1.
@@ -42,6 +73,16 @@ export template<typename T>
   // would be a reference to a temporary.
   static_assert(!is_same<T, Unref<T>&>());
   return static_cast<T&&>(value);
+}
+
+// True if ptr is a multiple of alignment, a power of two.
+// nullptr is aligned to anything.
+export inline bool_t is_aligned(
+  const volatile void* const ptr, const ulong_t alignment)
+{
+  FND_ASSERT(is_pow2(alignment));
+
+  return (reinterpret_cast<uptr_t>(ptr) & (alignment - 1)) == 0;
 }
 
 // value as an rvalue, so that a move constructor or move assignment is chosen.
