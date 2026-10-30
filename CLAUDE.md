@@ -75,6 +75,7 @@
 | POD struct | `snake_case_t` | `float3_t`, `span_t` |
 | Class (keeps an invariant, has member functions) | `PascalCase` | `Array<T>`, `UniquePtr<T>` |
 | Interface (pure virtual) | `I` + `PascalCase` | `IAllocator` |
+| Enum (`enum class`) | `E` + `PascalCase`; enumerators `kPascalCase` | `EMemoryOrder::kWriteRelease` |
 | Concept | `PascalCase` | `PodType` |
 | Type trait (yields a type) | `PascalCase` alias, named as the resulting type | `Unref<T>`, later `Unqual<T>` |
 | Value trait (yields a value) | `snake_case` constexpr function | `is_same<T, U>()`, `is_const<T>()` |
@@ -128,8 +129,6 @@
   math (aligning, masking, `>>`) is `uptr_t`, unsigned on purpose (it wraps
   instead of overflowing and orders like the address space); a signed
   difference is `long_t`. Otherwise pointers stay pointers.
-  - `reinterpret_cast` only between a pointer and `uptr_t`; `static_cast`
-    between integer types.
   - Signed difference of two addresses: subtract as `uptr_t`, then convert,
     `static_cast<long_t>(p0 - p1)` (exact because pointers are 64-bit, as
     `long_t` is). For two pointers into one allocation, subtract byte pointers
@@ -163,6 +162,27 @@
   local form can't work (a template, a member template, a partial
   specialization, an overload set, recursion), the helper stays next to its
   function, as in Source order.
+
+## Atomics
+
+Memory ordering is discussed and specified only in terms of these four
+semantics. Whatever a semantic guarantees, both the compiler and the CPU must
+keep.
+
+- Relaxed: no barrier, for either the compiler or the CPU. The operation is
+  atomic (never seen half-written), and all threads agree on the order of
+  writes to that one location. No ordering against any other read or write.
+- Read-Acquire: no read or write that occurs after it can move before it.
+  Reads and writes that occur before it may move after it.
+- Write-Release: no read or write that occurs before it can move after it.
+  Reads and writes that occur after it may move before it.
+- Full fence: no read or write that occurs before or after it can move past
+  it, in either direction.
+
+Acquire and release work in pairs: a thread whose acquire read sees the value
+written by a release also sees everything that occurred before that release.
+A release write followed by an acquire read of another location may swap
+places; only a full fence prevents that.
 
 ## Source order
 

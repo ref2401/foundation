@@ -68,7 +68,7 @@ export template<typename T, typename U = T>
 // swap(a, a) move-assigns the moved-from a to itself, which must be safe;
 export template<typename T> constexpr void swap(T& a, T& b)
 {
-  T temp = move(a);
+  T temp{move(a)};
   a = move(b);
   b = move(temp);
 }

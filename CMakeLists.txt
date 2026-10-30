@@ -52,6 +52,7 @@ target_compile_options(fndlib PUBLIC
   /Zc:wchar_t
   /Zc:forScope
   /Zc:inline
+  /volatile:iso    # volatile has no acquire/release semantics (x64 default is /volatile:ms)
   /FAs             # assembly listings with source
   /FAu             # ...UTF-8 encoded
   /Fa${output_dir}/asm/
