@@ -20,10 +20,23 @@ static_assert(alignof(atomic_ulong_t) == 8);
 static_assert(is_same<ulong_t, unsigned __int64>()); // ulong_t <-> __int64
 
 
+// Replaces atomic's value with new_value if it equals expected, as one full
+// fence. Returns the value before the call. Never fails spuriously.
+export inline ulong_t compare_exchange(
+  atomic_ulong_t& atomic, const ulong_t expected, const ulong_t new_value)
+{
+  FND_ASSERT(is_aligned(&atomic.value, alignof(atomic_ulong_t)));
+
+  const __int64 prev{_InterlockedCompareExchange64(
+    reinterpret_cast<volatile __int64*>(&atomic.value),
+    static_cast<__int64>(new_value), static_cast<__int64>(expected))};
+  return static_cast<ulong_t>(prev);
+}
+
 // atomic's value, read in one untorn access with memory order Order (a full
 // fence by default). kWriteRelease is rejected: a load can't release.
 export template<EMemoryOrder Order = EMemoryOrder::kFullFence>
-ulong_t load(const atomic_ulong_t& atomic)
+constexpr ulong_t load(const atomic_ulong_t& atomic)
 {
   static_assert(
     Order != EMemoryOrder::kWriteRelease,
@@ -45,10 +58,10 @@ ulong_t load(const atomic_ulong_t& atomic)
   return v;
 }
 
-// Writes value to atomic in one untorn access with memory order Order (a full
-// fence by default). kReadAcquire is rejected: a store can't acquire.
+// Writes new_value to atomic in one untorn access with memory order Order (a
+// full fence by default). kReadAcquire is rejected: a store can't acquire.
 export template<EMemoryOrder Order = EMemoryOrder::kFullFence>
-void store(atomic_ulong_t& atomic, const ulong_t value)
+constexpr void store(atomic_ulong_t& atomic, const ulong_t new_value)
 {
   static_assert(
     Order != EMemoryOrder::kReadAcquire,
@@ -58,7 +71,7 @@ void store(atomic_ulong_t& atomic, const ulong_t value)
   if constexpr (Order == EMemoryOrder::kFullFence) {
     _InterlockedExchange64(
       reinterpret_cast<volatile __int64*>(&atomic.value),
-      static_cast<__int64>(value));
+      static_cast<__int64>(new_value));
   }
   else {
     if constexpr (Order == EMemoryOrder::kWriteRelease) {
@@ -67,7 +80,7 @@ void store(atomic_ulong_t& atomic, const ulong_t value)
 
     __iso_volatile_store64(
       reinterpret_cast<volatile __int64*>(&atomic.value),
-      static_cast<__int64>(value));
+      static_cast<__int64>(new_value));
   }
 }
 
