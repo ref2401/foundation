@@ -71,6 +71,83 @@ void unittests_atomics_atomic_ulong_compare_exchange()
   FND_TEST_TRUE(counter.value == 42);
 }
 
+void unittests_atomics_atomic_ulong_fetch_add()
+{
+  for (const ulong_t current : kAtomicULongValues) {
+    for (const ulong_t x : kAtomicULongValues) {
+      atomic_ulong_t atomic{current};
+      FND_TEST_TRUE(fetch_add(atomic, x) == current);
+      FND_TEST_TRUE(atomic.value == current + x);
+    }
+  }
+
+  // Overflow wraps.
+  atomic_ulong_t atomic{kULongMaxValue};
+  FND_TEST_TRUE(fetch_add(atomic, 1) == kULongMaxValue);
+  FND_TEST_TRUE(atomic.value == 0);
+}
+
+void unittests_atomics_atomic_ulong_fetch_and()
+{
+  for (const ulong_t current : kAtomicULongValues) {
+    for (const ulong_t x : kAtomicULongValues) {
+      atomic_ulong_t atomic{current};
+      FND_TEST_TRUE(fetch_and(atomic, x) == current);
+      FND_TEST_TRUE(atomic.value == (current & x));
+    }
+  }
+}
+
+void unittests_atomics_atomic_ulong_fetch_or()
+{
+  for (const ulong_t current : kAtomicULongValues) {
+    for (const ulong_t x : kAtomicULongValues) {
+      atomic_ulong_t atomic{current};
+      FND_TEST_TRUE(fetch_or(atomic, x) == current);
+      FND_TEST_TRUE(atomic.value == (current | x));
+    }
+  }
+}
+
+void unittests_atomics_atomic_ulong_fetch_sub()
+{
+  for (const ulong_t current : kAtomicULongValues) {
+    for (const ulong_t x : kAtomicULongValues) {
+      atomic_ulong_t atomic{current};
+      FND_TEST_TRUE(fetch_sub(atomic, x) == current);
+      FND_TEST_TRUE(atomic.value == current - x);
+    }
+  }
+
+  // Going below zero wraps.
+  atomic_ulong_t atomic{0};
+  FND_TEST_TRUE(fetch_sub(atomic, 1) == 0);
+  FND_TEST_TRUE(atomic.value == kULongMaxValue);
+
+  // x = 2^63, whose negation as an __int64 would overflow: subtracting it
+  // flips the top bit.
+  constexpr ulong_t kTopBit{0x8000000000000000};
+  atomic_ulong_t top_bit_atomic{0};
+  FND_TEST_TRUE(fetch_sub(top_bit_atomic, kTopBit) == 0);
+  FND_TEST_TRUE(top_bit_atomic.value == kTopBit);
+  FND_TEST_TRUE(fetch_sub(top_bit_atomic, kTopBit) == kTopBit);
+  FND_TEST_TRUE(top_bit_atomic.value == 0);
+  store(top_bit_atomic, kULongMaxValue);
+  FND_TEST_TRUE(fetch_sub(top_bit_atomic, kTopBit) == kULongMaxValue);
+  FND_TEST_TRUE(top_bit_atomic.value == 0x7FFFFFFFFFFFFFFF);
+}
+
+void unittests_atomics_atomic_ulong_fetch_xor()
+{
+  for (const ulong_t current : kAtomicULongValues) {
+    for (const ulong_t x : kAtomicULongValues) {
+      atomic_ulong_t atomic{current};
+      FND_TEST_TRUE(fetch_xor(atomic, x) == current);
+      FND_TEST_TRUE(atomic.value == (current ^ x));
+    }
+  }
+}
+
 void unittests_atomics_atomic_ulong_load()
 {
   // Every order a load accepts returns the value, through a const atomic too.
@@ -119,6 +196,11 @@ void unittests_atomics_atomic_ulong()
   unittests_atomics_atomic_ulong_type();
   unittests_atomics_atomic_ulong_constructors();
   unittests_atomics_atomic_ulong_compare_exchange();
+  unittests_atomics_atomic_ulong_fetch_add();
+  unittests_atomics_atomic_ulong_fetch_and();
+  unittests_atomics_atomic_ulong_fetch_or();
+  unittests_atomics_atomic_ulong_fetch_sub();
+  unittests_atomics_atomic_ulong_fetch_xor();
   unittests_atomics_atomic_ulong_load();
   unittests_atomics_atomic_ulong_store();
 }
