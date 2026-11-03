@@ -1,7 +1,9 @@
 #include "foundation/core/macros.h"
 #include "foundation/unittests.h"
+import foundation.atomics;
 import foundation.core;
 import foundation.math;
+import unittests.atomics;
 import unittests.core;
 import unittests.math;
 import unittests.memory;
@@ -13,6 +15,7 @@ int main()
 
   initialize();
   run_unittests_core();
+  run_unittests_atomics();
   run_unittests_math();
   run_unittests_memory();
   print_last_run_report();

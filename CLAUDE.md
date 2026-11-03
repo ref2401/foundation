@@ -166,12 +166,21 @@
 ## Atomics
 
 Memory ordering is discussed and specified only in terms of these four
-semantics. Whatever a semantic guarantees, both the compiler and the CPU must
-keep.
+semantics. Reads and writes are reordered by three sources, and whatever a
+semantic guarantees, all three must keep:
+
+- the compiler: it moves, merges or removes accesses while compiling;
+- the CPU's execution: a core executes reads and writes out of program order;
+- visibility order: a core's writes become visible to other cores in a
+  different order than it made them, or to some cores sooner than others
+  (store buffers, invalidation queues).
+
+The four semantics:
 
 - Relaxed: no barrier, for either the compiler or the CPU. The operation is
   atomic (never seen half-written), and all threads agree on the order of
-  writes to that one location. No ordering against any other read or write.
+  writes to that one location (coherency). No ordering against any other read
+  or write.
 - Read-Acquire: no read or write that occurs after it can move before it.
   Reads and writes that occur before it may move after it.
 - Write-Release: no read or write that occurs before it can move after it.

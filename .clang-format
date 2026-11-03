@@ -12,7 +12,7 @@ FixNamespaceComments: true
 
 AllowShortFunctionsOnASingleLine: Inline
 AllowShortIfStatementsOnASingleLine: WithoutElse
-AllowShortRecordOnASingleLine: Always
+AllowShortRecordOnASingleLine: Empty
 
 PointerAlignment: Left
 SpaceAfterTemplateKeyword: false

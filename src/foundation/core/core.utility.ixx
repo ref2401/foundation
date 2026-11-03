@@ -98,7 +98,7 @@ export template<typename T>
 
 // Assigns new_value to object and returns object's previous value.
 export template<typename T, typename U = T>
-[[nodiscard]] constexpr T exchange(T& object, U&& new_value)
+constexpr T exchange(T& object, U&& new_value)
 {
   T old_value = move(object);
   object = forward<U>(new_value);
