@@ -1,11 +1,24 @@
 module;
 #include <string.h>
+#include <new>
 #include "foundation/core/macros.h"
 
 export module foundation.memory:utility;
 import foundation.core;
 
 namespace fnd {
+
+// Constructs T{args...} at ptr and returns it. ptr must be non-null, aligned
+// for T and point to at least sizeof(T) bytes holding no live object.
+// Destroy the object with p->~T().
+export template<typename T, typename... Args>
+inline T* construct_at(void* const ptr, Args&&... args)
+{
+  FND_ASSERT(ptr != nullptr);
+  FND_ASSERT(is_aligned(ptr, alignof(T)));
+
+  return ::new (ptr) T{forward<Args>(args)...};
+}
 
 // Copies byte_count bytes from `from` to `to`; the ranges must not overlap.
 export inline void copy_bytes(

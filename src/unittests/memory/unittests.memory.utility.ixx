@@ -9,6 +9,78 @@ namespace fnd::unittests {
 
 export void unittests_memory_utility();
 
+void unittests_memory_utility_construct_at()
+{
+  constexpr ubyte_t kGarbage{0xAB};
+  constexpr ulong_t kBufferByteCount{32};
+  alignas(16) ubyte_t buffer[kBufferByteCount]{};
+
+  // No arguments: value-initialized, so zero even over nonzero bytes.
+  fill_bytes(buffer, kBufferByteCount, kGarbage);
+  FND_TEST_TRUE(*construct_at<int_t>(buffer) == 0);
+
+  struct construct_test_t final {
+    int_t i;
+    float_t f;
+  };
+  fill_bytes(buffer, kBufferByteCount, kGarbage);
+  const construct_test_t* const zero{construct_at<construct_test_t>(buffer)};
+  FND_TEST_TRUE(zero->i == 0);
+  FND_TEST_TRUE(zero->f == 0);
+
+  // An aggregate from several values: brace initialization, member by member.
+  const construct_test_t* const object{
+    construct_at<construct_test_t>(buffer, -7, 2.5f)};
+  FND_TEST_TRUE(object->i == -7);
+  FND_TEST_TRUE(object->f == 2.5f);
+
+  // A scalar from a value, at ptr: only its bytes change, the bytes around it
+  // stay as they are.
+  fill_bytes(buffer, kBufferByteCount, kGarbage);
+  constexpr ulong_t kOffset{8};
+  const int_t* const p{construct_at<int_t>(buffer + kOffset, -7)};
+  FND_TEST_TRUE(static_cast<const void*>(p) == buffer + kOffset);
+  FND_TEST_TRUE(*p == -7);
+
+  for (ulong_t i{0}; i < kBufferByteCount; ++i) {
+    const bool_t is_constructed{kOffset <= i && i < kOffset + sizeof(int_t)};
+    if (!is_constructed) {
+      FND_TEST_TRUE(buffer[i] == kGarbage);
+    }
+  }
+
+  // A constructor gets each argument as it was passed: an lvalue as an
+  // lvalue, an rvalue as an rvalue.
+  struct construct_arg_t final {
+    int_t value;
+  };
+  struct construct_sink_t final {
+    int_t value;
+    bool_t is_moved;
+
+    construct_sink_t(const construct_arg_t& source)
+        : value{source.value}, is_moved{false}
+    {
+    }
+
+    construct_sink_t(construct_arg_t&& source)
+        : value{source.value}, is_moved{true}
+    {
+    }
+  };
+  construct_arg_t arg{5};
+
+  const construct_sink_t* const from_lvalue{
+    construct_at<construct_sink_t>(buffer, arg)};
+  FND_TEST_TRUE(from_lvalue->value == 5);
+  FND_TEST_FALSE(from_lvalue->is_moved);
+
+  const construct_sink_t* const from_rvalue{
+    construct_at<construct_sink_t>(buffer, move(arg))};
+  FND_TEST_TRUE(from_rvalue->value == 5);
+  FND_TEST_TRUE(from_rvalue->is_moved);
+}
+
 void unittests_memory_utility_copy_bytes()
 {
   // Every byte value as the source: 0 and values above 127 are copied too.
@@ -234,6 +306,7 @@ void unittests_memory_utility_mebibytes()
 
 void unittests_memory_utility()
 {
+  unittests_memory_utility_construct_at();
   unittests_memory_utility_copy_bytes();
   unittests_memory_utility_equal_bytes();
   unittests_memory_utility_fill_bytes();
