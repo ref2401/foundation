@@ -7,6 +7,8 @@ export import :utility;
 
 namespace fnd {
 
+export using nullptr_t = decltype(nullptr);
+
 // ---------------------------------------------------------------------------
 // source_location_t
 // ---------------------------------------------------------------------------

@@ -65,8 +65,11 @@
   - Matrix builders (`_axis_angle`, `_scale`, `_translation`, `_trs`,
     projection, view) go to `matrix_construction`.
 - The project provides its own `move`, `forward`, `exchange`, `swap`
-  (`foundation.core:utility`), type traits (`foundation.core:type_traits`) and
-  placement new; don't use the C++ standard library for these.
+  (`foundation.core:utility`) and type traits (`foundation.core:type_traits`);
+  don't use the C++ standard library for these.
+- Objects are constructed in raw memory with `construct_at<T>(ptr, args...)`
+  (`foundation.memory:utility`). It is the only placement new: `<new>` is
+  included in that partition's global module fragment and nowhere else.
 
 ## Naming
 
@@ -80,8 +83,9 @@
 | Type trait (yields a type) | `PascalCase` alias, named as the resulting type | `Unref<T>`, later `Unqual<T>` |
 | Value trait (yields a value) | `snake_case` constexpr function | `is_same<T, U>()`, `is_const<T>()` |
 | Constant | `kPascalCase` | `kUnitX`, `kItemCount` |
-| Data member of a class | `snake_case_` | `data_`, `count_` |
-| Function, variable, parameter | `snake_case` | `make_quat`, `position_ws` |
+| Private data member of a class | `snake_case_` | `data_`, `count_` |
+| Public data member of a class | `snake_case` | `destroy_count`, `value` |
+| Function, member function (any access), variable, parameter | `snake_case` | `make_quat`, `destroy_and_free`, `position_ws` |
 
 - Struct-producing functions are `make_<struct without _t>[_<what it is built
   from>]`: `make_float3x3_axis_angle`, `make_float3x4_trs`, and conversions
@@ -116,7 +120,9 @@
   structs included; leave it out only when the struct is a base. A class is
   `final` unless it is meant to be derived from (interfaces never are `final`).
 - POD structs are used "as in C": data members, constructors and static
-  constants only. Accessors and helpers are free functions (`column0(m)`,
+  constants only. Every struct satisfies the `PodType` concept (standard
+  layout, trivially copyable): it has no user-written destructor, copy or move
+  constructor, or copy or move assignment (`= default` is fine). Accessors and helpers are free functions (`column0(m)`,
   `set_row1(m, r)`); only operators the language requires to be members
   (`operator[]`, `operator=`, ...) go inside.
 - Classes keep invariants and have member functions. Their move assignment must
@@ -141,8 +147,18 @@
 - Every function, and every overload of it, asserts its own preconditions with
   `FND_ASSERT` at its top, even when it only forwards to a callee that asserts
   the same thing. An assert that calls a non-`constexpr` function
-  (`is_normalized`, `isnan`) makes the function `inline` instead of
-  `constexpr`.
+  (`is_normalized`, `isnan`) rules out `constexpr`; the function is then
+  `inline` if the next rule allows it, otherwise neither.
+- `inline` marks a function whose body costs about as much as the call: a few
+  statements, no loops, and at most one call to a function that isn't itself
+  small (accessors, forwarding wrappers, small operators, `destroy()` calling
+  `set()`). A function that does heavy work itself (a loop, several branches,
+  a virtual call, a call into the CRT or OS, running `T`'s destructor) is not
+  `inline`, however short it is; the compiler may still inline it. The same
+  rule applies to members and free functions; in a named module, a member
+  defined inside its class is not implicitly `inline`, so write the keyword.
+  Templates follow the rule too, though for them `inline` changes nothing.
+  `constexpr` implies `inline`: never write both.
 - Postconditions are checked by unittests, not asserted.
 - Prefer brace initialization: `int_t a{1}`, `int_t* p{&a}`,
   `const float3_t v{normalize(a)}`. Use `=` with `auto`, and in generic code
@@ -151,8 +167,8 @@
   `kUnitX{1, 0, 0}`, not `0.0f`/`0u`. Keep the suffix where it changes meaning
   (`1 / 3`, `-0.0f`, `0.5f`, overloaded arguments, `auto`/template deduction).
 - MSVC 19.51 bug: in constant evaluation `NaN < x` and `x < NaN` are true. Float
-  functions whose NaN behavior matters are `inline`, not `constexpr`, and
-  their NaN cases are tested at runtime.
+  functions whose NaN behavior matters are not `constexpr` (`inline` per the
+  rule above), and their NaN cases are tested at runtime.
 - `[[msvc::intrinsic]]` (`FND_CAST_FUNCTION`) only on functions whose body is a
   single cast, such as `move` and `forward`.
 - A helper that belongs to one function lives inside it: a lambda
@@ -204,8 +220,10 @@ places; only a full fence prevents that.
     (`==`, `!=`, `<`, `<=`, `>`, `>=`); then binary `& * + - % / << >> ^ |`;
     then compound assignments in the same order, implemented as
     `a = a op b; return a;` but repeating the binary operator's asserts.
-- Functions: if A calls B, B goes first (calls inside `FND_ASSERT` count); ties
-  are broken alphabetically by plain character order.
+- Functions are in alphabetical order (plain character order) unless the
+  language requires otherwise: a free function must be declared before it is
+  called, so `void b() {}` goes before `void a() { b(); }` (calls inside
+  `FND_ASSERT` count).
 
 ## Unittests
 

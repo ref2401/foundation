@@ -3,6 +3,7 @@
 import foundation.atomics;
 import foundation.core;
 import foundation.math;
+import foundation.memory;
 import unittests.atomics;
 import unittests.core;
 import unittests.math;

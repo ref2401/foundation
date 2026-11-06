@@ -37,12 +37,6 @@ export constexpr bool_t operator==(
   return a.ptr == b.ptr && a.byte_count == b.byte_count;
 }
 
-export constexpr bool_t operator!=(
-  const memory_block_t a, const memory_block_t b)
-{
-  return !(a == b);
-}
-
 // Writes the addresses [out_start, out_end) that block covers. A block
 // without a pointer covers no addresses, whatever its byte_count.
 inline void compute_address_range(
@@ -99,7 +93,8 @@ export constexpr bool_t is_well_formed(const memory_block_t block)
 
 // True if block0 and block1 share at least one byte.
 // False if either block is empty.
-export bool_t overlaps(const memory_block_t block0, const memory_block_t block1)
+export inline bool_t overlaps(
+  const memory_block_t block0, const memory_block_t block1)
 {
   uptr_t start0;
   uptr_t end0;

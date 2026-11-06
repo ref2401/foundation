@@ -50,9 +50,7 @@ public:
     return memory_block_t{aligned_ptr, byte_count};
   }
 
-  void free(
-    const memory_block_t& block,
-    const source_location_t srcloc = make_source_location()) override
+  void free(const memory_block_t& block) override
   {
     FND_ASSERT(is_well_formed(block));
 

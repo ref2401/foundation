@@ -21,9 +21,7 @@ public:
 
   // Takes back a block that allocate of this allocator returned, unchanged
   // (same ptr and byte_count). The empty block is ignored.
-  virtual void free(
-    const memory_block_t& block,
-    const source_location_t srcloc = make_source_location()) = 0;
+  virtual void free(const memory_block_t& block) = 0;
 
 protected:
   IAllocator() = default;
